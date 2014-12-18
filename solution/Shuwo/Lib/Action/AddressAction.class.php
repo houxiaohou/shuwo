@@ -4,7 +4,6 @@ class AddressAction extends Action {
         $this->display();
     }
     public function edit(){
-        $this->display();
     }
     public function table(){
         $this->display();
