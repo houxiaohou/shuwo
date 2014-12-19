@@ -1,0 +1,29 @@
+*{
+	padding:0;
+	margin:0;
+}
+form{
+	margin:0px auto;
+	border:px solid gray;
+	width:300px;
+	padding:200px;
+}
+a,h1{
+	color:pink;
+	text-decoration:none;
+}
+input{
+	color:#FF1FCC;
+}
+input{
+	background:#01FFFF;
+	border:1px solid #01FFFF;
+	padding:5px;
+}
+img{
+	position:relative;
+	top:7px;
+}
+.delu,.zc{
+	cursor:pointer;
+}
