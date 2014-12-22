@@ -1,7 +1,11 @@
 <?php
-// 本类由系统自动生成，仅供测试用途
+require 'DAL/ProductManager.php';
 class IndexAction extends Action {
     public function index(){
-      $this->redirect('Product/detail');
+    	$productmanager = new ProductManager();
+    	$this->data =  $productmanager->GetAllProduct();
+    	$this->display();
     }
 }
+
+

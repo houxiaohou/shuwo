@@ -1,6 +1,6 @@
 <?php
 class ProductAction extends Action {
-    public function detail(){        
+    public function detail($id){   
         $this->display();
     }
 }
