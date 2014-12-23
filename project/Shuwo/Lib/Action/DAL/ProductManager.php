@@ -5,16 +5,37 @@ class ProductManager implements  IProductManageer
 
 	public function GetAllProduct()
 	{
-		$product = M("product");
+		try 
+		{
+			$product = M("product");
 		$data = $product->select();
 		return  $data;
+		}
+		catch (Exception $ex)
+		{
+			//log 
+			throw $ex;
+		}
 	}
 	
 	public function  GetProductByID($id)
 	{
-		$product = M("product");
-		$data = $product->select();
-		return  $data;
+
+	}
+	
+	public  function UpdateProduct(Product $prodcut)
+	{
+		
+	}
+	
+	public function  AddProduct(Product $prodcut)
+	{
+		
+	}
+
+	public  function  DeleteProduct($id)
+	{
+		
 	}
 
 }
