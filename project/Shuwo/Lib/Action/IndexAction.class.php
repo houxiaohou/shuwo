@@ -1,13 +1,13 @@
 <?php
-require 'DAL/ProductManager.php';
-require 'DAL/UserManager.php';
-require 'Model/User.php';
+require 'DAL/ProductDAL.php';
+require 'DAL/UserDAL.php';
+require 'DAL/Model/User.php';
 require 'Utilities/UserConst.php';
 require 'Utilities/WeixinAuthorizer.php';
 
 class IndexAction extends Action {
     public function index(){
-    	$usermanager = new UserManager();
+    	$usermanager = new UserDAL();
     	$user  =new User();
     	
     	if (WeixinAuthorizer::AuthorizUser() != null)
@@ -19,7 +19,7 @@ class IndexAction extends Action {
     		session(UserConst::USERID) = $userid;
     	}
     	
-    	$productmanager = new ProductManager();
+    	$productmanager = new ProductDAL();
     	$this->data =  $productmanager->GetAllProduct();
     	$this->display();
     }
