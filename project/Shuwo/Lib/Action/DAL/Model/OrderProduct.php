@@ -1,5 +1,5 @@
 <?php
-class OrderProduct
+class orderproduct
 {
 	public $ID;
 	public $OrderID;

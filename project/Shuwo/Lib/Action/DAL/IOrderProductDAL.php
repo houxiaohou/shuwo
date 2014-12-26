@@ -1,8 +1,8 @@
 <?php
-require 'Model/OrderProduct.php';
+require 'Model/orderproduct.php';
 interface  IOrderProductDAL
 {
-	public  function  AddOrderProduct(OrderProduct $orderproduct);
+	public  function  AddOrderProduct(orderproduct $orderproduct);
 	
 	public  function  GetAllProductByOrderID($orderID);
 	

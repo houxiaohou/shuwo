@@ -1,5 +1,5 @@
 <?php
-class OrderExpress
+class orderexpress
 {
 	public  $ID;
 	public  $ExpressID;

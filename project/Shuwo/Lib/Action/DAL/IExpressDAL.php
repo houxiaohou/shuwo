@@ -1,12 +1,12 @@
 <?php
-require 'Model/Express.php';
+require 'Model/express.php';
 interface IExpressDAL
 {
 	public  function GetAllExpress();
 	
-	public function AddExpress(Express $express);
+	public function AddExpress(express $express);
 	
 	public function DeleteExprese($expressid);
 	
-	public function UpdateExpress(Express $express);
+	public function UpdateExpress(express $express);
 }

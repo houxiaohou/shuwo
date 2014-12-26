@@ -1,10 +1,10 @@
 <?php
-require 'Model/Order.php';
+require 'Model/order.php';
 interface  IOrderDAL
 {
-	public function AddOrder(Order $order);
+	public function AddOrder(order $order);
 	
-	public  function UpdateOrder(Order $order);
+	public  function UpdateOrder(order $order);
 	
 	public function  GetOrderByOrderStatus($userid,$orderstatus);
 	

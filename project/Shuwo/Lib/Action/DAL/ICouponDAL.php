@@ -1,5 +1,5 @@
 <?php
-require 'Model/Coupon.php';
+require 'Model/coupon.php';
 
 interface  ICouponDAL
 {
@@ -7,7 +7,7 @@ interface  ICouponDAL
 	
 	public  function GetAllUnValidCouponsByUserID($userid);
 	
-	public function AddCoupon(Coupon $coupon);
+	public function AddCoupon(coupon $coupon);
 	
 	public function GetCouponByID($couponid);
 	

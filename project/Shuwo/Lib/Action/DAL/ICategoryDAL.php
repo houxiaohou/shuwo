@@ -1,14 +1,14 @@
 <?php
-require 'Model/Category.php';
+require 'Model/category.php';
 interface  ICategoryDAL
 {
 	//
 	public function GetAllCategory();
 	//
-	public  function  AddCategory(Category $category);
+	public  function  AddCategory(category $category);
 	//
     public  function DelectCategory($id);
     //
-    public function  UpdateCategory(Category $category);
+    public function  UpdateCategory(category $category);
     
 }

@@ -1,12 +1,12 @@
 <?php
-require "Model/BankType.php";
+require "Model/banktype.php";
 interface IBankTypeDAL
 {
 	public function GetAllBankType();
 	
-	public function AddBankType(BankType $banktype);
+	public function AddBankType(banktype $banktype);
 	
-	public function UpdateBankType(BankType $banktype);
+	public function UpdateBankType(banktype $banktype);
 	
 	public function DeleteBankType($id);
 }

@@ -1,8 +1,8 @@
 <?php
-require 'Model/OrderExpress.php';
+require 'Model/orderexpress.php';
 interface  IOrderExpressDAL
 {
-	public function AddOrderExpress(OrderExpress $orderExpress);
+	public function AddOrderExpress(orderexpress $orderExpress);
 	
-	public function UpdateOrderExpress(OrderExpress $orderExpress);
+	public function UpdateOrderExpress(orderexpress $orderExpress);
 }
