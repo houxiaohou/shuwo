@@ -7,12 +7,12 @@ class BankTypeDAL implements IBankTypeDAL
 		
 	}
 	
-	public function AddBankType(BankType $banktype)
+	public function AddBankType(banktypeModel $banktype)
 	{
 		
 	}
 	
-	public function UpdateBankType(BankType $banktype)
+	public function UpdateBankType(banktypeModel $banktype)
 	{
 		
 	}

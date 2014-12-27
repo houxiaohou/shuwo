@@ -4,9 +4,9 @@ class ExpressDAL implements IExpressDAL
 {
 	public  function GetAllExpress();
 	
-	public function AddExpress(Express $express);
+	public function AddExpress(expressModel $express);
 	
 	public function DeleteExprese($expressid);
 	
-	public function UpdateExpress(Express $express);
+	public function UpdateExpress(expressModel $express);
 }

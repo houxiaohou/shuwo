@@ -1,5 +1,5 @@
 <?php
-class express
+class expressModel
 {
 	public  $ExpressID;
 	public  $ExpCompanny;

@@ -21,12 +21,12 @@ class ProductDAL implements  IProductDAL
 
 	}
 	
-	public  function UpdateProduct(Product $prodcut)
+	public  function UpdateProduct(productModel $prodcut)
 	{
 		
 	}
 	
-	public function  AddProduct(Product $prodcut)
+	public function  AddProduct(productModel $prodcut)
 	{
 		
 	}

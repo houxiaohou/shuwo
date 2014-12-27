@@ -1,5 +1,5 @@
 <?php
-Class coupon
+class couponModel
 {
 	public $CouponID;
 	public $UserID;

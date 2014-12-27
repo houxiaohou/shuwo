@@ -1,9 +1,9 @@
 <?php
 class ShippingAddressDAL implements IShippingAddressDAL
 {
-	public function AddShippingAddress(shippingaddress $shippingaddress)
+	public function AddShippingAddress(shippingaddressModel $shippingaddress)
 	{}
-	public function UpdateShippingAddress(shippingaddress $shippingaddress)
+	public function UpdateShippingAddress(shippingaddressModel $shippingaddress)
 	{}
 	public function DeleteShippingAddress($said)
 	{}

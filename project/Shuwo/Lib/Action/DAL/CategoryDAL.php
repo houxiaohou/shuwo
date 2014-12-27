@@ -7,7 +7,7 @@ class CategoryManaeger implements  ICategoryDAL
 		
 	}
 	
-	public  function  AddCategory(Category $category)
+	public  function  AddCategory(categoryModel $category)
 	{
 	  
 	}
@@ -17,7 +17,7 @@ class CategoryManaeger implements  ICategoryDAL
 		
 	}
 	//
-	public function  UpdateCategory(Category $category)
+	public function  UpdateCategory(categoryModel $category)
 	{
 		
 	}

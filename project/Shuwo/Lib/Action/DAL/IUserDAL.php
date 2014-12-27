@@ -1,12 +1,12 @@
 <?php
-require "Model/user.php";
+require "../../Model/userModel.class.php";
 interface  IUserDAL
 {
 	public  function GetUserByID($userid);
 	//
 	public function GetAllUser();
 	//
-	public function InsertUser(user $user);
+	public function InsertUser(userModel $user);
 	//
-	public function  UpdaterUser(user $user);
+	public function  UpdaterUser(userModel $user);
 }

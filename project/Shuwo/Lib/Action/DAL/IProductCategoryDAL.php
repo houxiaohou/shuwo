@@ -1,9 +1,9 @@
 <?php
-require 'Model/productcategory.php';
+require '../../Model/productcategoryModel.class.php';
 interface  IProductCategoryDAL
 {
-	public function AddProductCategory(productcategory $productcategory);
-	public function UpdateProductCategory(productcategory $productcategory);
+	public function AddProductCategory(productcategoryModel $productcategory);
+	public function UpdateProductCategory(productcategoryModel $productcategory);
 	public function GetAllProductByCategoryID($categoryid); 
 	
 }

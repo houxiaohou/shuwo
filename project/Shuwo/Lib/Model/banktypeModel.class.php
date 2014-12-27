@@ -1,5 +1,5 @@
 <?php
-class banktype
+class banktypeModel
 {
 	public $BankTypeID;
 	public $BankName;

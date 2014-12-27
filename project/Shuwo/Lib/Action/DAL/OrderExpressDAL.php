@@ -2,10 +2,10 @@
 require 'IOrderExpressDAL.php';
 class  OrderExpressDAL implements  IOrderExpressDAL
 {
-	public function AddOrderExpress(OrderExpress $orderExpress)
+	public function AddOrderExpress(orderexpressModel $orderExpress)
 	{}
 	
-	public function UpdateOrderExpress(OrderExpress $orderExpress)
+	public function UpdateOrderExpress(orderexpressModel $orderExpress)
 	{
 		
 	}

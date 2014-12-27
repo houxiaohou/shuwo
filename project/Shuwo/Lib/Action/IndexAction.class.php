@@ -1,14 +1,9 @@
 <?php
-require 'DAL/ProductDAL.php';
-require 'DAL/UserDAL.php';
-require 'DAL/Model/user.php';
-require 'Utilities/UserConst.php';
-require 'Utilities/WeixinAuthorizer.php';
 
 class IndexAction extends Action {
     public function index(){
     	$usermanager = new UserDAL();
-    	$user  =new user();
+    	
     	
     	if (WeixinAuthorizer::AuthorizUser() != null)
     	{
