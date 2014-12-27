@@ -1,5 +1,5 @@
 <?php
-class  user
+class  userModel
 {
 	public $UserID;
 	//

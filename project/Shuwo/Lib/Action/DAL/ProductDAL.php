@@ -7,7 +7,11 @@ class ProductDAL implements  IProductDAL
 	{
 		try 
 		{
-
+		    $data = D('Product');
+		    
+		    
+		    $data->create();
+		    $data1 = $data->select();
 		}
 		catch (Exception $ex)
 		{
