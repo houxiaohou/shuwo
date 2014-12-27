@@ -1,5 +1,4 @@
 <?php
-require "../../Model/userModel.class.php";
 interface  IUserDAL
 {
 	public  function GetUserByID($userid);

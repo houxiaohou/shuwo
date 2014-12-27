@@ -3,7 +3,7 @@ interface  ICouponDAL
 {
 	public function GetValidCouponsByUserID($userid);
 	
-	public  function GetAllUnValidCouponsByUserID($userid);
+	public  function GetUnValidCouponsByUserID($userid);
 	
 	public function AddCoupon(couponModel $coupon);
 	

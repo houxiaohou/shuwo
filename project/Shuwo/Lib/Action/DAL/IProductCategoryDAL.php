@@ -1,5 +1,4 @@
 <?php
-require '../../Model/productcategoryModel.class.php';
 interface  IProductCategoryDAL
 {
 	public function AddProductCategory(productcategoryModel $productcategory);
