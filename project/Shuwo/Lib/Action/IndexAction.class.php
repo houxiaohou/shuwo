@@ -13,9 +13,10 @@ class IndexAction extends Action {
     		
     		session(UserConst::USERID) = $userid;
     	}
-    	
+    	$test = D("Test");
+    	$test->Name = 'User1';
     	$productmanager = new ProductDAL();
-    	$this->data =  $productmanager->GetAllProduct();
+    	$this->data =  $productmanager->AddProduct($test);
     	$this->display();
     }
 }
