@@ -1,22 +1,20 @@
 <?php
-
+require_once 'DAL/UserDAL.php';
+require_once 'DAL/ProductDAL.php';
+require_once "Utilities/WeixinAuthorizer.php";
+require_once 'Utilities/UserConst.php';
 class IndexAction extends Action {
     public function index(){
-    	$usermanager = new UserDAL();
-    	
-    	
-    	if (WeixinAuthorizer::AuthorizUser() != null)
+    	$userdal= new UserDAL();
+    	$user = M('user');
+    	if (WeixinAuthorizer::AuthorizUser())
     	{
-    		$user = WeixinAuthorizer::AuthorizUser() ;
-
-    		$userid =  $usermanager->InsertUser($user);
-    		
-    		session(UserConst::USERID) = $userid;
-    	}
-    	$test = D("Test");
-    	$test->Name = 'User1';
-    	$productmanager = new ProductDAL();
-    	$this->data =  $productmanager->AddProduct($test);
+    		$user = WeixinAuthorizer::AuthorizUser();
+    		$userid =  $userdal->InsertUser($user);
+     	   
+    	} $_SESSION[UserConst::USERID]=$userid;
+    	$productdal = new ProductDAL();
+    	$this->data = $productdal->GetAllProduct();
     	$this->display();
     }
 }

@@ -7,10 +7,10 @@ interface IBankTypeDAL
 	//插入banktype
 	//banktype：banktype对象
 	//return bankytypeid 
-	public function AddBankType(banktypeModel $banktype);
+	public function AddBankType(BankType $banktype);
 	
 	//
-	public function UpdateBankType(banktypeModel $banktype);
+	public function UpdateBankType(BankType $banktype);
 	
 	public function DeleteBankType($id);
 }

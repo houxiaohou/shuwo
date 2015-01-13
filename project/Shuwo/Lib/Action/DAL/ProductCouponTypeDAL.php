@@ -1,8 +1,10 @@
 <?php
 class  ProductCouponTypeDAL implements IProductCouponTypeDAL
 {
-	public  function  AddProductCouponType(productcoupontypeModel $productcoupontype)
+	public  function  AddProductCouponType(ProductCouponType $productcoupontype)
 	{}
-	public  function  UpdateProductCouponType(productcoupontypeModel $productcoupontype)
+	public  function  UpdateProductCouponType(ProductCouponType $productcoupontype)
+	{}
+	public  function DeleteProductCouponType($id)
 	{}
 }

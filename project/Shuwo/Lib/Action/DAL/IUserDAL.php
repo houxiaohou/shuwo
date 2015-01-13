@@ -5,7 +5,7 @@ interface  IUserDAL
 	//
 	public function GetAllUser();
 	//
-	public function InsertUser(userModel $user);
+	public function InsertUser(User $user);
 	//
-	public function  UpdaterUser(userModel $user);
+	public function  UpdaterUser(User $user);
 }

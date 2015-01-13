@@ -1,5 +1,5 @@
 <?php
-class orderexpressModel
+class orderexpressModel extends Model
 {
 	public  $ID;
 	public  $ExpressID;

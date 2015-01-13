@@ -1,5 +1,5 @@
 <?php
-class shippingaddressModel extends Model
+class ShippingAddress
 {
 	public $SAID;
 	public $UserID;

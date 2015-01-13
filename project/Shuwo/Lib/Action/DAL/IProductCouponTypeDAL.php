@@ -1,7 +1,7 @@
 <?php
 interface  IProductCouponTypeDAL
 {
-	public  function  AddProductCouponType(productcoupontypeModel $productcoupontype);
-	public  function  UpdateProductCouponType(productcoupontypeModel $productcoupontype);
-	public   function  DeleteProductCouponType($id);
+	public  function  AddProductCouponType(ProductCouponType $productcoupontype);
+	public  function  UpdateProductCouponType(ProductCouponType $productcoupontype);
+	public  function  DeleteProductCouponType($id);
 }

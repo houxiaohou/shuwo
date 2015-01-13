@@ -1,5 +1,4 @@
 <?php
-require '../../Model/expressModel.class.php';
 interface IExpressDAL
 {
 	public  function GetAllExpress();

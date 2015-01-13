@@ -2,10 +2,10 @@
 require 'IOrderDAL.php';
 class OrderDAL implements  IOrderDAL
 {
-    public function AddOrder(orderModel $order)
+    public function AddOrder(Order $order)
     {}
 	
-	public  function UpdateOrder(orderModel $order)
+	public  function UpdateOrder(Order $order)
 	{}
 	
 	public function  GetOrderByOrderStatus($userid,$orderstatus)

@@ -1,5 +1,5 @@
 <?php
-class couponModel extends Model
+class Coupon
 {
 	public $CouponID;
 	public $UserID;

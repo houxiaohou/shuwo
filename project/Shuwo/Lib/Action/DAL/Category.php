@@ -1,5 +1,5 @@
 <?php
-class categoryModel extends  Model
+class Category
 {
 	public $CategoryID;
 	

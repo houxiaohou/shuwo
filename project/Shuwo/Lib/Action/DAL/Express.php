@@ -1,5 +1,5 @@
 <?php
-class expressModel extends Model
+class Express
 {
 	public  $ExpressID;
 	public  $ExpCompanny;

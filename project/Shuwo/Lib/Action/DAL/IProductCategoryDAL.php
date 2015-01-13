@@ -1,8 +1,8 @@
 <?php
 interface  IProductCategoryDAL
 {
-	public function AddProductCategory(productcategoryModel $productcategory);
-	public function UpdateProductCategory(productcategoryModel $productcategory);
+	public function AddProductCategory(ProductCategory $productcategory);
+	public function UpdateProductCategory(ProductCategory $productcategory);
 	public function GetAllProductByCategoryID($categoryid); 
 	
 }

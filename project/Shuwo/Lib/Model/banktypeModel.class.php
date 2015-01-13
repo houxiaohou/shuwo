@@ -1,6 +1,4 @@
 <?php
-class banktypeModel
+class banktypeModel extends Model
 {
-	public $BankTypeID;
-	public $BankName;
 }

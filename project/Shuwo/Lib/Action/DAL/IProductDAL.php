@@ -6,9 +6,9 @@ interface IProductDAL
 	//
 	public function GetProductByID($id); 
 	//
-    public  function UpdateProduct(productModel $prodcut);
+    public  function UpdateProduct(Product $prodcut);
     //
-    public function  AddProduct(productModel $prodcut);
+    public function  AddProduct(Product $prodcut);
     //
     public  function  DeleteProduct($id);
    

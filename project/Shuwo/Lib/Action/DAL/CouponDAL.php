@@ -7,12 +7,12 @@ class CouponDAL implements ICouponDAL
   		
   	}
 	
-	public  function GetAllUnValidCouponsByUserID($userid)
+	public  function GetUnValidCouponsByUserID($userid)
 	{
 		
 	}
 	
-	public function AddCoupon(couponModel $coupon)
+	public function AddCoupon(Coupon $coupon)
 	{
 		
 	}

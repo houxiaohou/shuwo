@@ -1,5 +1,5 @@
 <?php
-require 'IProductDAL.php';
+require_once  'IProductDAL.php';
 class ProductDAL implements  IProductDAL
 {
 
@@ -7,11 +7,7 @@ class ProductDAL implements  IProductDAL
 	{
 		try 
 		{
-		    $data = D('Product');
-		    
-		    
-		    $data->create();
-		    $data1 = $data->select();
+
 		}
 		catch (Exception $ex)
 		{
@@ -25,12 +21,12 @@ class ProductDAL implements  IProductDAL
 
 	}
 	
-	public  function UpdateProduct(productModel $prodcut)
+	public  function UpdateProduct(Product $prodcut)
 	{
 		
 	}
 	
-	public function  AddProduct(productModel $prodcut)
+	public function  AddProduct(Product $prodcut)
 	{
 		
 	}
