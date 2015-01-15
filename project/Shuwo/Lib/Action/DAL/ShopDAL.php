@@ -7,9 +7,11 @@ class ShopDAL
     public  function GetShopByID($shopid)
     {
        $shop = M("shop");
-       $condition = "ShopID="+shopid;
+       $condition = 'ShopID="'.$shopid.'"';
        $data = $shop->where($condition)->find();
        
        return $data;
     }
+    
+    
 }
