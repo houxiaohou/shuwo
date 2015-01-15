@@ -1,5 +1,5 @@
 <?php
-require_once 'IShippingAddress.php';
+require_once 'IShippingAddressDAL.php';
 class ShippingAddressDAL implements IShippingAddressDAL
 {
 	public function AddShippingAddress(ShippingAddress $shippingaddress)
