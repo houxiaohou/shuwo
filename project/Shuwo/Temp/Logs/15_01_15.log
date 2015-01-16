@@ -1,0 +1,42 @@
+[ 2015-01-15T16:33:13+08:00 ] 0.0.0.0 /shuwo/project/index.php/Shop/modify/id/1
+ERR: 模板不存在[./Shuwo/Tpl/Shop/modify.html]
+
+[ 2015-01-15T16:33:13+08:00 ] 0.0.0.0 /shuwo/project/index.php/Shop/modify/id/1
+ERR: 模板不存在[./Shuwo/Tpl/Shop/modify.html]
+
+[ 2015-01-15T16:43:47+08:00 ] 0.0.0.0 /shuwo/project/index.php/Shop/modifyArray
+ERR: 非法操作:modifyArray
+
+[ 2015-01-15T16:47:24+08:00 ] 0.0.0.0 /shuwo/project/index.php/Shop/modify
+ERR: 模板不存在[./Shuwo/Tpl/Shop/modify.html]
+
+[ 2015-01-15T16:47:24+08:00 ] 0.0.0.0 /shuwo/project/index.php/Shop/modify
+ERR: 模板不存在[./Shuwo/Tpl/Shop/modify.html]
+
+[ 2015-01-15T21:09:06+08:00 ] 0.0.0.0 /shuwo/project/index.php/Shop/create
+ERR: 无法加载模块:Shop
+
+[ 2015-01-15T21:09:13+08:00 ] 0.0.0.0 /shuwo/project/index.php/Shop/create
+ERR: 无法加载模块:Shop
+
+[ 2015-01-15T21:09:19+08:00 ] 0.0.0.0 /shuwo/project/index.php/Shop/create
+ERR: 无法加载模块:Shop
+
+[ 2015-01-15T21:09:57+08:00 ] 0.0.0.0 /shuwo/project/index.php/Shop/modify/id/7
+ERR: 无法加载模块:Shop
+
+[ 2015-01-15T21:34:32+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/index
+ERR: 非法操作:index
+
+[ 2015-01-15T21:34:42+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/modify
+ERR: 非法操作:modify
+
+[ 2015-01-15T21:35:41+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/modify
+ERR: 非法操作:modify
+
+[ 2015-01-15T21:39:42+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/modify/id/S_1
+ERR: 非法操作:modify
+
+[ 2015-01-15T21:40:35+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/modify/id/S_1
+ERR: 非法操作:modify
+

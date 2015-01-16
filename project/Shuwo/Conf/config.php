@@ -1,7 +1,7 @@
 <?php
 return array(
 	//'配置项'=>'配置值'
-    'TMPL_EXCEPTION_FILE'   => './Shuwo/Tpl/Public/error.html', // 定义公共错误模板
+//     'TMPL_EXCEPTION_FILE'   => './Shuwo/Tpl/Public/error.html', // 定义公共错误模板
 	'URL_PATHINFO_DEPR'     => '/',	// PATHINFO模式下，各参数之间的分割符号
 	'TMPL_L_DELIM'			=> '{',//修改左定界符
 	'TMPL_R_DELIM'			=> '}',//修改右定界符
