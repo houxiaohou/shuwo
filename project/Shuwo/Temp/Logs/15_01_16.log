@@ -1,0 +1,213 @@
+[ 2015-01-16T13:40:40+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/damin
+ERR: 非法操作:damin
+
+[ 2015-01-16T13:40:45+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/
+ERR: 非法操作:index
+
+[ 2015-01-16T14:49:49+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/js//jquery.js
+ERR: 非法操作:js
+
+[ 2015-01-16T14:49:49+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/js/area.js
+ERR: 非法操作:js
+
+[ 2015-01-16T14:49:49+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/js/location.js
+ERR: 非法操作:js
+
+[ 2015-01-16T14:49:49+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/js/select2.js
+ERR: 非法操作:js
+
+[ 2015-01-16T14:49:49+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/css/common.css
+ERR: 非法操作:css
+
+[ 2015-01-16T14:49:49+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/js/select2_locale_zh-CN.js
+ERR: 非法操作:js
+
+[ 2015-01-16T14:49:49+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/css/select2.css
+ERR: 非法操作:css
+
+[ 2015-01-16T14:49:49+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/css/common.css
+ERR: 非法操作:css
+
+[ 2015-01-16T14:53:53+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/jquery.js
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:53:53+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/css/common.css
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:53:53+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/area.js
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:53:53+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Css__/select2.css
+ERR: 非法操作:__Css__
+
+[ 2015-01-16T14:53:54+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/select2_locale_zh-CN.js
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:53:54+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/select2.js
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:53:54+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Css__/select2.css
+ERR: 非法操作:__Css__
+
+[ 2015-01-16T14:53:54+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/css/common.css
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:53:56+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Css__/select2.css
+ERR: 非法操作:__Css__
+
+[ 2015-01-16T14:53:56+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/jquery.js
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:53:56+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/select2_locale_zh-CN.js
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:53:56+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/css/common.css
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:53:56+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/area.js
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:53:56+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/select2.js
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:53:56+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Css__/select2.css
+ERR: 非法操作:__Css__
+
+[ 2015-01-16T14:53:56+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/css/common.css
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:53:56+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/select2_locale_zh-CN.js
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:53:56+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Css__/select2.css
+ERR: 非法操作:__Css__
+
+[ 2015-01-16T14:53:56+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/area.js
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:53:56+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/css/common.css
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:53:56+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/select2.js
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:53:57+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/jquery.js
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:53:57+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Css__/select2.css
+ERR: 非法操作:__Css__
+
+[ 2015-01-16T14:53:57+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/css/common.css
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:53:57+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/select2.js
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:53:57+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/jquery.js
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:53:57+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/css/common.css
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:53:57+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/select2_locale_zh-CN.js
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:53:57+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/area.js
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:53:57+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Css__/select2.css
+ERR: 非法操作:__Css__
+
+[ 2015-01-16T14:53:57+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/css/common.css
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:54:07+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/css/common.css
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:54:07+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/jquery.js
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:54:07+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/area.js
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:54:07+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/select2_locale_zh-CN.js
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:54:08+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/select2.js
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T14:54:08+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Css__/select2.css
+ERR: 非法操作:__Css__
+
+[ 2015-01-16T14:54:08+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/__Js__/css/common.css
+ERR: 非法操作:__Js__
+
+[ 2015-01-16T16:12:29+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/js/jquery.js
+ERR: 非法操作:js
+
+[ 2015-01-16T16:12:29+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/js/location.js
+ERR: 非法操作:js
+
+[ 2015-01-16T16:12:29+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/js/select2.js
+ERR: 非法操作:js
+
+[ 2015-01-16T16:12:29+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/js/area.js
+ERR: 非法操作:js
+
+[ 2015-01-16T16:12:29+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/css/common.css
+ERR: 非法操作:css
+
+[ 2015-01-16T16:12:29+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/js/select2_locale_zh-CN.js
+ERR: 非法操作:js
+
+[ 2015-01-16T16:12:29+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/css/select2.css
+ERR: 非法操作:css
+
+[ 2015-01-16T16:12:29+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/css/common.css
+ERR: 非法操作:css
+
+[ 2015-01-16T16:49:32+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/js/area.js
+ERR: 非法操作:js
+
+[ 2015-01-16T16:49:32+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/js/location.js
+ERR: 非法操作:js
+
+[ 2015-01-16T16:49:32+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/js/jquery.js
+ERR: 非法操作:js
+
+[ 2015-01-16T16:49:32+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/js/select2_locale_zh-CN.js
+ERR: 非法操作:js
+
+[ 2015-01-16T16:49:32+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/js/select2.js
+ERR: 非法操作:js
+
+[ 2015-01-16T16:49:32+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/css/common.css
+ERR: 非法操作:css
+
+[ 2015-01-16T16:49:32+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/css/select2.css
+ERR: 非法操作:css
+
+[ 2015-01-16T17:02:17+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/js/jquery.js
+ERR: 非法操作:js
+
+[ 2015-01-16T17:02:17+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/js/location.js
+ERR: 非法操作:js
+
+[ 2015-01-16T17:02:17+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/css/common.css
+ERR: 非法操作:css
+
+[ 2015-01-16T17:02:17+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/js/area.js
+ERR: 非法操作:js
+
+[ 2015-01-16T17:02:17+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/js/select2_locale_zh-CN.js
+ERR: 非法操作:js
+
+[ 2015-01-16T17:02:17+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/js/select2.js
+ERR: 非法操作:js
+
+[ 2015-01-16T17:02:17+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/css/select2.css
+ERR: 非法操作:css
+
+[ 2015-01-16T17:02:17+08:00 ] 0.0.0.0 /shuwo/project/index.php/Admin/css/common.css
+ERR: 非法操作:css
+

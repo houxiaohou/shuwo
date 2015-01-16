@@ -46,13 +46,14 @@ class AdminAction extends Action {
         $data['ContactPhone']=$_POST['ContactPhone'];
         $data['Latitude']=$_POST['Latitude'];
         $data['Longitude']=$_POST['Longitude'];
-        $data['City']=$_POST['City'];
-        $data['Distinct']=$_POST['Distinct'];
-        $data['Province']=$_POST['Province'];
+        $data['City']=$_POST['City_1'];
+        $data['Distinct']=$_POST['Distinct_1'];
+        $data['Province']=$_POST['Province_1'];
 		if($db->save($data)){
 			$this->success("数据修改成功",'shop');
 		}else{
-   			$this->error("数据修改失败");
+		    dump($_POST);
+//    			$this->error("数据修改失败");
 		}
     }
     /*
@@ -62,6 +63,7 @@ class AdminAction extends Action {
          $geoHash  = new Geohash();  
         $latitude=$_POST['Latitude'];
         $longitude=$_POST['Longitude'];
+        $ContactPhone=$_POST['ContactPhone'];
         $geoHashCode = $geoHash->encode($latitude,$longitude);         
         $db=M('shop');//链接数据库
         $db->ShopID=$_POST['ShopID'];
@@ -72,9 +74,9 @@ class AdminAction extends Action {
         $db->Latitude=$latitude;
         $db->Longitude=$longitude;
         $db->GeoHash = $geoHashCode;
-        $db->City=$_POST['City'];
-        $db->Distinct=$_POST['Distinct'];
-        $db->Province=$_POST['Province'];
+        $db->City=$_POST['City_1'];
+        $db->Distinct=$_POST['Distinct_1'];
+        $db->Province=$_POST['Province_1'];
         if($db->add()){
             $this->success('数据添加成功','shop');
         }else{
