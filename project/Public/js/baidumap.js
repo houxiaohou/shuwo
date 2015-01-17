@@ -24,11 +24,11 @@
 
       var cityIndex = document.getElementById("loc_city").selectedIndex;
     	var city = document.getElementById("loc_city").options[cityIndex].text;
-    	document.getElementById("City_1").value = province;
+    	document.getElementById("City_1").value = city;
 
       var distinctIndex = document.getElementById("loc_town").selectedIndex;
     	var distinct = document.getElementById("loc_town").options[distinctIndex].text;
-    	document.getElementById("Distinct_1").value = province;
+    	document.getElementById("Distinct_1").value = distinct;
       
     	var shopAddress = document.getElementById("ShopAddress").value;
     	var keyword = province + city + distinct + shopAddress;
