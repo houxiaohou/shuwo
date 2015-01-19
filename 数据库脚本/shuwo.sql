@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-01-19 09:44:23
+Date: 2015-01-19 17:07:55
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -80,7 +80,7 @@ CREATE TABLE `shippingaddress` (
   `isdefault` tinyint(3) unsigned DEFAULT '1',
   PRIMARY KEY (`said`),
   KEY `shippingaddress_ibfk_userid` (`userid`),
-  CONSTRAINT `shippingaddress_ibfk_userid` FOREIGN KEY (`UserID`) REFERENCES `user` (`UserID`) ON DELETE CASCADE
+  CONSTRAINT `shippingaddress_ibfk_userid` FOREIGN KEY (`userid`) REFERENCES `user` (`userid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -88,7 +88,7 @@ CREATE TABLE `shippingaddress` (
 -- ----------------------------
 DROP TABLE IF EXISTS `shop`;
 CREATE TABLE `shop` (
-  `shopid` varchar(16) NOT NULL,
+  `shopid` varchar(16) NOT NULL DEFAULT '',
   `shopaddress` varchar(255) DEFAULT NULL,
   `shopname` varchar(32) DEFAULT NULL,
   `contactname` varchar(8) DEFAULT NULL,
@@ -100,7 +100,9 @@ CREATE TABLE `shop` (
   `distinct` varchar(16) DEFAULT NULL,
   `province` varchar(16) DEFAULT NULL,
   `annoucement` text,
-  PRIMARY KEY (`shopid`)
+  `uniqueid` int(11) NOT NULL AUTO_INCREMENT,
+  `shopunionid` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`uniqueid`,`shopid`,`shopunionid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
