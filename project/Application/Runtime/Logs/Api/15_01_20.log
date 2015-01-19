@@ -1,0 +1,6 @@
+[ 2015-01-20T00:02:28+08:00 ] ::1 /shuwo/project/index.php/Api/shops?lat=31.297073&long=121.341961
+ERR: SQLSTATE[42S22]: Column not found: 1054 Champ 'distance' inconnu dans where clause
+
+[ 2015-01-20T00:11:18+08:00 ] ::1 /shuwo/project/index.php/Api/shops?lat=31.297073&long=121.341961
+ERR: SQLSTATE[42S22]: Column not found: 1054 Champ 'distance' inconnu dans where clause
+

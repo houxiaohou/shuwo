@@ -24,11 +24,19 @@ public function getshopbyid() {
 // 通过经纬度得到周围的店铺
 public function getshops()
 {
+	$shop =M("shop");
+	$geohash = new Geohash();
 	$lat = I('get.lat');
 	$long =I('get.long');
-	
-	$data["lat"] = $lat;
-	
+    
+	if ($lat&$long)
+	{
+		$geohashcode = $geohash->encode($lat, $long);
+		$sql = "SELECT *,GETDISTANCE(latitude,longitude,".$lat.",".$long.") AS distance FROM  
+				shop where 1 HAVING distance<2000 ORDER BY distance ASC";
+		$data = $shop->query($sql);	
+	}
+
 	$this->response($data,"json");
 }
 
@@ -42,7 +50,8 @@ public function addshop()
 {
 	$shop =M("shop");
 	$ranchar = chr(rand(97,122)).chr(rand(97,122));
-   $this->response($data,"json");
+	$data["id"] = "1";
+    $this->response($data,"json");
 }
 public function updateshop()
 {
