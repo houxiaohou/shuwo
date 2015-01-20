@@ -4,3 +4,57 @@ ERR: SQLSTATE[42S22]: Column not found: 1054 Champ 'distance' inconnu dans where
 [ 2015-01-20T00:11:18+08:00 ] ::1 /shuwo/project/index.php/Api/shops?lat=31.297073&long=121.341961
 ERR: SQLSTATE[42S22]: Column not found: 1054 Champ 'distance' inconnu dans where clause
 
+[ 2015-01-20T15:50:47+08:00 ] ::1 /shuwo/project/index.php/Api/category
+ERR: 非法操作:getallcategorys
+
+[ 2015-01-20T15:50:58+08:00 ] ::1 /shuwo/project/index.php/Api/category
+ERR: 非法操作:getallcategorys
+
+[ 2015-01-20T15:50:59+08:00 ] ::1 /shuwo/project/index.php/Api/category
+ERR: 非法操作:getallcategorys
+
+[ 2015-01-20T15:51:00+08:00 ] ::1 /shuwo/project/index.php/Api/category
+ERR: 非法操作:getallcategorys
+
+[ 2015-01-20T15:52:09+08:00 ] ::1 /shuwo/project/index.php/Api/category
+ERR: 非法操作:getallcategorys
+
+[ 2015-01-20T16:13:09+08:00 ] ::1 /shuwo/project/index.php/Api/category/
+ERR: 无法加载控制器:Category
+
+[ 2015-01-20T16:17:23+08:00 ] ::1 /shuwo/project/index.php/Api/shop/
+ERR: 无法加载控制器:Shop
+
+[ 2015-01-20T16:18:32+08:00 ] ::1 /shuwo/project/index.php/Api/category/
+ERR: 无法加载控制器:Category
+
+[ 2015-01-20T16:54:36+08:00 ] ::1 /shuwo/project/index.php/Api/
+ERR: 无法加载控制器:Index
+
+[ 2015-01-20T16:54:54+08:00 ] ::1 /shuwo/project/index.php/Api/catecory
+ERR: 无法加载控制器:Catecory
+
+[ 2015-01-20T16:54:58+08:00 ] ::1 /shuwo/project/index.php/Api/category
+ERR: 无法加载控制器:Category
+
+[ 2015-01-20T17:03:45+08:00 ] ::1 /shuwo/project/index.php/Api/category%E3%80%811
+ERR: 无法加载控制器:Category、1
+
+[ 2015-01-20T17:21:47+08:00 ] ::1 /shuwo/project/index.php/Api/category
+ERR: 无法加载控制器:Category
+
+[ 2015-01-20T17:27:50+08:00 ] ::1 /shuwo/project/index.php/Api/category
+ERR: 无法加载控制器:Category
+
+[ 2015-01-20T17:28:00+08:00 ] ::1 /shuwo/project/index.php/Api/category/
+ERR: 无法加载控制器:Category
+
+[ 2015-01-20T17:41:48+08:00 ] ::1 /shuwo/project/index.php/Api/category
+ERR: 无法加载控制器:Category
+
+[ 2015-01-20T17:43:32+08:00 ] ::1 /shuwo/project/index.php/Api/category
+ERR: 无法加载控制器:Category
+
+[ 2015-01-20T17:43:37+08:00 ] ::1 /shuwo/project/index.php/Api/category/
+ERR: 无法加载控制器:Category
+
