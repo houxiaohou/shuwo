@@ -47,7 +47,7 @@ public  function getproducts()
 {
 	$product =M("product");
 	$shopid = $_GET["id"];
-	$data = $product->join("")->select();
+	$data = $product->join("shopproduct ON shopproduct.productid=product.productid")->where("shopid=".$shopid)->select();
 	$this->response($data,'json');  
 }
 public function addshop()
