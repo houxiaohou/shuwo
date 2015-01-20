@@ -4,3 +4,48 @@ ERR: SQLSTATE[42S22]: Column not found: 1054 Champ 'distance' inconnu dans where
 [ 2015-01-20T00:11:18+08:00 ] ::1 /shuwo/project/index.php/Api/shops?lat=31.297073&long=121.341961
 ERR: SQLSTATE[42S22]: Column not found: 1054 Champ 'distance' inconnu dans where clause
 
+[ 2015-01-20T18:17:01+08:00 ] ::1 /shuwo/project/index.php/Api/shop/1/products
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1066 Table/alias: 'shopproduct' non unique
+
+[ 2015-01-20T18:27:00+08:00 ] ::1 /shuwo/project/index.php/Api/shop/1/products
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1066 Table/alias: 'product' non unique
+
+[ 2015-01-20T18:28:17+08:00 ] ::1 /shuwo/project/index.php/Api/shop/1/products
+ERR: SQLSTATE[42S22]: Column not found: 1054 Champ 'shopproduct.proudctid' inconnu dans on clause
+
+[ 2015-01-20T18:28:17+08:00 ] ::1 /shuwo/project/index.php/Api/shop/1/products
+ERR: SQLSTATE[42S22]: Column not found: 1054 Champ 'shopproduct.proudctid' inconnu dans on clause
+
+[ 2015-01-20T18:28:18+08:00 ] ::1 /shuwo/project/index.php/Api/shop/1/products
+ERR: SQLSTATE[42S22]: Column not found: 1054 Champ 'shopproduct.proudctid' inconnu dans on clause
+
+[ 2015-01-20T18:28:18+08:00 ] ::1 /shuwo/project/index.php/Api/shop/1/products
+ERR: SQLSTATE[42S22]: Column not found: 1054 Champ 'shopproduct.proudctid' inconnu dans on clause
+
+[ 2015-01-20T18:30:00+08:00 ] ::1 /shuwo/project/index.php/Api/shop/1/products
+ERR: SQLSTATE[23000]: Integrity constraint violation: 1052 Champ: 'productid' dans on clause est ambigu
+
+[ 2015-01-20T18:43:28+08:00 ] ::1 /shuwo/project/index.php/Api/getproducts/1
+ERR: 无法加载控制器:Getproducts
+
+[ 2015-01-20T18:43:29+08:00 ] ::1 /shuwo/project/index.php/Api/getproducts/1
+ERR: 无法加载控制器:Getproducts
+
+[ 2015-01-20T18:43:30+08:00 ] ::1 /shuwo/project/index.php/Api/getproducts/1
+ERR: 无法加载控制器:Getproducts
+
+[ 2015-01-20T18:43:31+08:00 ] ::1 /shuwo/project/index.php/Api/getproducts/1
+ERR: 无法加载控制器:Getproducts
+
+[ 2015-01-20T18:43:31+08:00 ] ::1 /shuwo/project/index.php/Api/getproducts/1
+ERR: 无法加载控制器:Getproducts
+
+[ 2015-01-20T18:45:39+08:00 ] ::1 /shuwo/project/index.php/Api/products/1
+ERR: 无法加载控制器:Products
+
+[ 2015-01-20T18:49:00+08:00 ] ::1 /shuwo/project/index.php/Api/products/1
+ERR: 无法加载控制器:Products
+
+[ 2015-01-20T18:50:34+08:00 ] ::1 /shuwo/project/index.php/Api/shop/1
+ERR: 无法加载控制器:Shop
+

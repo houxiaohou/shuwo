@@ -15,8 +15,8 @@ public function getallshops() {
 //通过id查询店铺
 public function getshopbyid() {
 	$shop =M("shop");
-	$shopid  = I('get.id');
-	$sql = ShopConst::SHOPID.'="'.$shopid.'"';
+	$id  = I('get.id');
+	$sql = ShopConst::ID.'="'.$id.'"';
 	$data = $shop->where($sql)->find();
 	$this->response($data,"json"); 
 }
@@ -28,13 +28,16 @@ public function getshops()
 	$geohash = new Geohash();
 	$lat = I('get.lat');
 	$long =I('get.long');
-    
+	$start =I('get.start');
+	$count =I('get.count');
+	$n = 5;
 	if ($lat&$long)
 	{
 		$geohashcode = $geohash->encode($lat, $long);
+		$likegeo = substr($geohashcode, 0,$n); 
 		$sql = "SELECT *,GETDISTANCE(latitude,longitude,".$lat.",".$long.") AS distance FROM  
-				shop where 1 HAVING distance<2000 ORDER BY distance ASC";
-		$data = $shop->query($sql);	
+				shop where geohash like".$likegeo."% and 1 HAVING distance<2000 ORDER BY distance ASC";
+		$data = $shop->page($start,$count)->query($sql);	
 	}
 
 	$this->response($data,"json");
@@ -42,25 +45,56 @@ public function getshops()
 
 public  function getproducts()
 {
-	$shop =M("shop");
-	$data["shopid"]  = $_GET["id"];
-	$this->response($data,"json");
+	$product =M("product");
+	$shopid = $_GET["id"];
+	$data = $product->join("")->select();
+	$this->response($data,'json');  
 }
 public function addshop()
 {
 	$shop =M("shop");
+	$geohash = new Geohash();
+	$data[ShopConst::SHOPNAME] = I('post.spn');
+	$data[ShopConst::SHOPADDRESS]=I('post.spadr');
+	$data[ShopConst::CONTACTNAME] =I('post.ctn');
+	$data[ShopConst::CONTACTPHONE] = I('post.ctp');
+	$data[ShopConst::CITY] = I('post.city');
+	$data[ShopConst::PROVINCE] =I('post.prv');
+	$data[ShopConst::DISTINCT] =I('post.dst');
+	$lat = $data[ShopConst::LATITUDE] = I('post.lat');
+	$long  = $data[ShopConst::LONGITUDE] = I('post.long');
+	$data[ShopConst::GEOHASH] = $geohash->encode($lat, $long);
+	$data[ShopConst::NOTICE] = I('post.ntc');
+	$id =  $shop->add($data);
 	$ranchar = chr(rand(97,122)).chr(rand(97,122));
-	$data["id"] = "1";
-    $this->response($data,"json");
+	$shopid = $ranchar.$id;
+	$s["shopid"] = $shopid;
+	$shop->where('id='.$id)->setField('shopid',$shopid);
+	$this->response($s,"json");
+		
 }
 public function updateshop()
 {
+	$shop =M("shop");
 	$data["id"]  = $_GET["id"];
-	$data["name"] = "update";
-	$this->response($data,"json");
+	$geohash = new Geohash();
+	$data[ShopConst::SHOPNAME] = I('post.spn');
+	$data[ShopConst::SHOPADDRESS]=I('post.spadr');
+	$data[ShopConst::CONTACTNAME] =I('post.ctn');
+	$data[ShopConst::CONTACTPHONE] = I('post.ctp');
+	$data[ShopConst::CITY] = I('post.city');
+	$data[ShopConst::PROVINCE] =I('post.prv');
+	$data[ShopConst::DISTINCT] =I('post.dst');
+	$lat = $data[ShopConst::LATITUDE] = I('post.lat');
+	$long  = $data[ShopConst::LONGITUDE] = I('post.long');
+	$data[ShopConst::GEOHASH] = $geohash->encode($lat, $long);
+	$data[ShopConst::NOTICE] = I('post.ntc');
+	$shop->save($data);
 }
 public function deleteshop()
 {
-	$data["id"]  = $_GET["id"];
+	$shop =M("shop");
+	$id  = $_GET["id"];
+	$shop->where('id='.$id)->delete();
 }
 }
