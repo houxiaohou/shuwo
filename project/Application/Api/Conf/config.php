@@ -20,7 +20,6 @@ return array(
         array('category/:id','CategoryApi/updatecategory', '', array('method' => 'POST')),//更新水果类型，以（POST）传参，‘name‘=种类名称，’atr‘=种类属性。1代表（个）计量，2代表（斤/克）,3代表（根），4代表（盒）
         array('category','CategoryApi/addcategory', '', array('method' => 'POST')),//添加水果类型，以（POST）传参
         array('category/:id','CategoryApi/deletecategory', '', array('method' => 'DELETE')),   //删除水果类型
-		
-        
+    
 )
 );

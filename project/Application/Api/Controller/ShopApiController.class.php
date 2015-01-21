@@ -2,7 +2,7 @@
 namespace Api\Controller;
 use Think\Controller\RestController;
 require_once 'ShopConst.php';
-require_once 'BAL\GeoHash.php';
+require_once 'GeoHash.php';
 class ShopApiController extends RestController {
 
 	//返回所有店铺
