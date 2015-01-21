@@ -22,8 +22,12 @@ public function getcategorybyid(){
  //添加种类
   public function addcategory(){
       $category =M("category");
+      if(I('post.name') != null ){
       $data[CategoryConst::CATEGORYNAME]=I('post.name');
+      }
+      if(I('post.atr') != null ){
       $data[CategoryConst::ATTRIBUTE]=I('post.atr');
+      }
       $category->add($data);
       $this->response($data,"json");
   }
@@ -31,8 +35,12 @@ public function getcategorybyid(){
  public function updatecategory(){
      $category=M('category');
      $data[CategoryConst::CATEGORYID]=I('get.id');
+     if(I('post.name') != null){
      $data[CategoryConst::CATEGORYNAME]=I('post.name');
+     }
+     if(I('post.atr') != null ){
      $data[CategoryConst::ATTRIBUTE]=I('post.atr');
+     }
      $category->save($data);
      $this->response($data,"json");
  }
