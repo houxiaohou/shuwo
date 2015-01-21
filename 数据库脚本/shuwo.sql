@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-01-20 21:16:41
+Date: 2015-01-21 15:48:11
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -31,11 +31,29 @@ CREATE TABLE `category` (
 -- ----------------------------
 DROP TABLE IF EXISTS `order`;
 CREATE TABLE `order` (
-  `orderid` varchar(32) NOT NULL,
+  `orderid` int(11) NOT NULL AUTO_INCREMENT,
+  `ordernum` varchar(32) NOT NULL DEFAULT '',
   `orderstatus` int(10) unsigned zerofill NOT NULL,
   `userid` int(11) NOT NULL,
   `createdtime` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`orderid`)
+  `paystatus` int(11) DEFAULT NULL,
+  `totalprice` decimal(10,0) DEFAULT NULL,
+  `shopid` int(11) NOT NULL,
+  `useraddresss` varchar(255) DEFAULT NULL,
+  `userphone` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`orderid`,`ordernum`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for orderproduct
+-- ----------------------------
+DROP TABLE IF EXISTS `orderproduct`;
+CREATE TABLE `orderproduct` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `orderid` int(11) DEFAULT NULL,
+  `productid` int(11) DEFAULT NULL,
+  `quanlity` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -81,7 +99,7 @@ CREATE TABLE `shippingaddress` (
   `isdefault` tinyint(3) unsigned DEFAULT '1',
   PRIMARY KEY (`said`),
   KEY `shippingaddress_ibfk_userid` (`userid`),
-  CONSTRAINT `shippingaddress_ibfk_userid` FOREIGN KEY (`userid`) REFERENCES `user` (`UserID`) ON DELETE CASCADE
+  CONSTRAINT `shippingaddress_ibfk_userid` FOREIGN KEY (`userid`) REFERENCES `user` (`userid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
