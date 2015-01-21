@@ -1,0 +1,33 @@
+[ 2015-01-21T13:51:18+08:00 ] ::1 /shuwo/project/index.php/Api/category
+ERR: 无法加载控制器:Category
+
+[ 2015-01-21T15:13:53+08:00 ] ::1 /shuwo/project/index.php/Api/product
+ERR: 无法加载控制器:Product
+
+[ 2015-01-21T15:16:47+08:00 ] ::1 /shuwo/project/index.php/Api/product
+ERR: 无法加载控制器:Product
+
+[ 2015-01-21T15:18:05+08:00 ] ::1 /shuwo/project/index.php/Api/category
+ERR: 无法加载控制器:Category
+
+[ 2015-01-21T15:35:18+08:00 ] ::1 /shuwo/project/index.php/Api/product
+ERR: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicata du champ '0' pour la clef 'PRIMARY'
+
+[ 2015-01-21T15:36:35+08:00 ] ::1 /shuwo/project/index.php/Api/product
+ERR: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicata du champ '0' pour la clef 'PRIMARY'
+
+[ 2015-01-21T15:36:57+08:00 ] ::1 /shuwo/project/index.php/Api/product
+ERR: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicata du champ '0' pour la clef 'PRIMARY'
+
+[ 2015-01-21T15:42:16+08:00 ] ::1 /shuwo/project/index.php/Api/product
+ERR: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicata du champ '0' pour la clef 'PRIMARY'
+
+[ 2015-01-21T16:22:43+08:00 ] ::1 /shuwo/project/index.php/Api/updateproduct/0
+ERR: 无法加载控制器:Updateproduct
+
+[ 2015-01-21T16:24:36+08:00 ] ::1 /shuwo/project/index.php/Api/addproduct
+ERR: 无法加载控制器:Addproduct
+
+[ 2015-01-21T16:27:05+08:00 ] ::1 /shuwo/project/index.php/Api/product
+ERR: 无法加载控制器:Product
+

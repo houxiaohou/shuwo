@@ -6,12 +6,18 @@ return array(
 		array('allshops', 'ShopApi/getallshops', '', array('method' => 'GET')),
 		array('shops', 'ShopApi/getshops', '', array('method' => 'GET')),
 		array('shop/:id/products', 'ShopApi/getproducts', '', array('method' => 'GET')),
-		array('shop/:id', 'ShopApi/getshopsbyid', '', array('method' => 'GET')),
+		array('shop/:id', 'ShopApi/getshopbyid', '', array('method' => 'GET')),
 		array('shop/:id','ShopApi/updateshop', '', array('method' => 'POST')),
 		array('shop','ShopApi/addshop', '', array('method' => 'POST')),
         array('shop/:id','ShopApi/deleteshop', '', array('method' => 'DELETE')),
 		
 		//产品URL配置 
+		array('allproducts', 'ProductApi/getallproducts', '', array('method' => 'GET')),
+		array('product/:id', 'ProductApi/getproductbyid', '', array('method' => 'GET')),
+		array('product/:id', 'ProductApi/updateproduct', '', array('method' => 'POST')),
+		array('product', 'ProductApi/addproduct', '', array('method' => 'POST')),
+		array('product/:id', 'ProductApi/deleteproduct', '', array('method' => 'DELETE')),
+		
 		
         //类别URL配置
         array('allcategory','CategoryApi/getallcategorys','',array('method'=>'GET')),//查询所有的种类
