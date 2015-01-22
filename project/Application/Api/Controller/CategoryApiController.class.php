@@ -2,7 +2,6 @@
 namespace Api\Controller;
 use Think\Controller\RestController;
 require_once 'CategoryConst.php';
-require_once 'GeoHash.php';
 class CategoryApiController extends RestController {
 
 //返回所有店铺
@@ -22,11 +21,13 @@ public function getcategorybyid(){
  //添加种类
   public function addcategory(){
       $category =M("category");
-      if(I('post.categoryname') != null ){
-      $data[CategoryConst::CATEGORYNAME]=I('post.categoryname');
+      if(I('post.categoryname') != null )
+      {
+      	$data[CategoryConst::CATEGORYNAME]=I('post.categoryname');
       }
-      if(I('post.attribute') != null ){
-      $data[CategoryConst::ATTRIBUTE]=I('post.attribute');
+      if(I('post.attribute') != null )
+      {
+      	$data[CategoryConst::ATTRIBUTE]=I('post.attribute');
       }
       $category->add($data);
       $this->response($data,"json");

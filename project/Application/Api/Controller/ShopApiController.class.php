@@ -5,20 +5,26 @@ require_once 'ShopConst.php';
 require_once 'GeoHash.php';
 class ShopApiController extends RestController {
 
-	//返回所有店铺
+//返回所有店铺
 public function getallshops() {
 		$shop =M("shop");
 		$data =$shop->select();
-		$this->response($data,"json");
+		if(count($data))
+		{
+			$this->response($data,"json");
+		}
 }
 
 //通过id查询店铺
 public function getshopbyid() {
 	$shop =M("shop");
-	$id  = I('get.id');
-	$sql = ShopConst::ID.'="'.$id.'"';
-	$data = $shop->where($sql)->find();
-	$this->response($data,"json"); 
+	$id  = intval(I('get.id',0));
+	if ($id)
+	{
+        $sql = ShopConst::SHOPID.'="'.$id.'"';
+        $data = $shop->where($sql)->find();
+        $this->response($data,"json"); 
+	}
 }
 
 // 通过经纬度得到周围的店铺
@@ -26,89 +32,117 @@ public function getshops()
 {
 	$shop =M("shop");
 	$geohash = new Geohash();
-	$lat = I('get.lat');
-	$long =I('get.long');
-	$start =I('get.start')-1;
-	$count =I('get.count');
+	$lat = doubleval(I('get.lat',0));
+	$long =doubleval(I('get.long',0));
+	$start =intval(I('get.start',0))-1;
+	$count =intval(I('get.count',0));
 	$n = 4;
-	if ($lat&$long)
+	if ($lat>0&$long>0&$start>=0&$count>0)
 	{
 		$geohashcode = $geohash->encode($lat, $long);
-		$likegeo = substr($geohashcode, 0,$n); 
-		$sql = 'SELECT *,GETDISTANCE(latitude,longitude,'.$lat.','.$long.') AS distance FROM  
+		$likegeo = substr($geohashcode,0,$n); 
+		$sql = 'SELECT *,GETDISTANCE(lat,long,'.$lat.','.$long.') AS distance FROM  
 				shop where geohash like "'.$likegeo.'%" AND 1 HAVING distance<=2000 ORDER BY distance ASC LIMIT '.$start.','.$count;
 		$data = $shop->query($sql);	
+		$this->response($data,"json");
 	}
 
-	$this->response($data,"json");
+
 }
 //通过店铺id得到所有的产品
 public  function getallproducts()
 {
 	$product =M("product");
-	$shopid = $_GET["id"];
+	$shopid = intval(I('get.id',0));
+	if($shopid)
+	{
 	$data = $product->join("shopproduct ON shopproduct.productid=product.productid")->
 	                  join("productcategory ON productcategory.productid=product.productid")->
 	                  join("category ON productcategory.categoryid = category.categoryid")->
 	                  where("shopid=".$shopid)->select();
-	$this->response($data,'json');  
+	if(count($data))
+	{
+		$this->response($data,'json');  
+	}
+	}
 }
 
 public  function getsaleproducts()
 {
 	$product =M("product");
-	$shopid = $_GET["id"];
-	$data = $product->join("shopproduct ON shopproduct.productid=product.productid")->
+	$shopid = intval(I('get.id',0));
+	if($shopid)
+	{
+		$data = $product->join("shopproduct ON shopproduct.productid=product.productid")->
 	                  join("productcategory ON productcategory.productid=product.productid")->
 	                  join("category ON productcategory.categoryid = category.categoryid")->
 	                  where("shopid=".$shopid." AND issale=1")->order('num desc')->select();
-	$this->response($data,'json');
+		$this->response($data,'json');
+	}
 }
 public function addshop()
 {
+	$post ='post';
 	$shop =M("shop");
+	$id = 0;
 	$geohash = new Geohash();
-	$data[ShopConst::SHOPNAME] = I('post.spn');
-	$data[ShopConst::SHOPADDRESS]=I('post.spadr');
-	$data[ShopConst::CONTACTNAME] =I('post.ctn');
-	$data[ShopConst::CONTACTPHONE] = I('post.ctp');
-	$data[ShopConst::CITY] = I('post.city');
-	$data[ShopConst::PROVINCE] =I('post.prv');
-	$data[ShopConst::DISTINCT] =I('post.dst');
-	$lat = $data[ShopConst::LATITUDE] = I('post.lat');
-	$long  = $data[ShopConst::LONGITUDE] = I('post.long');
+	$data[ShopConst::SHOPNAME] = I($post.ShopConst::SHOPNAME);
+	$data[ShopConst::SHOPADDRESS]=I($post.ShopConst::SHOPADDRESS);
+	$data[ShopConst::SHOPIMGURL] = I($post.ShopConst::SHOPIMGURL);
+	$data[ShopConst::CONTACTNAME] =I($post.ShopConst::CONTACTNAME);
+	$data[ShopConst::CONTACTPHONE] = I($post.ShopConst::CONTACTPHONE);
+	$data[ShopConst::CITY] = I($post.ShopConst::CITY);
+	$data[ShopConst::PROVINCE] =I($post.ShopConst::PROVINCE);
+	$data[ShopConst::DISTINCT] =I($post.ShopConst::DISTINCT);
+	$lat = $data[ShopConst::LATITUDE] = I($post.ShopConst::LATITUDE);
+	$long  = $data[ShopConst::LONGITUDE] = I($post.ShopConst::LONGITUDE);
 	$data[ShopConst::GEOHASH] = $geohash->encode($lat, $long);
-	$data[ShopConst::NOTICE] = I('post.ntc');
+	$data[ShopConst::NOTICE] = I($post.ShopConst::NOTICE);
+	$data[ShopConst::LIMITEPRICE]=I($post.ShopConst::LIMITEPRICE);
 	$id =  $shop->add($data);
-	$ranchar = chr(rand(97,122)).chr(rand(97,122));
-	$shopid = $ranchar.$id;
-	$s["shopid"] = $shopid;
-	$shop->where('id='.$id)->setField('shopid',$shopid);
-	$this->response($s,"json");
+	if($id>0)
+	{
+		$ranchar = chr(rand(97,122)).chr(rand(97,122));
+		$shopsn = $ranchar.$id;
+		$s["shopsn"] = $shopsn;
+		$shop->where('shopid='.$id)->setField('shopsn',$shopsn);
+		$this->response($s,"json");
+	}
 		
 }
 public function updateshop()
 {
-	$shop =M("shop");
-	$data["id"]  = $_GET["id"];
-	$geohash = new Geohash();
-	$data[ShopConst::SHOPNAME] = I('post.spn');
-	$data[ShopConst::SHOPADDRESS]=I('post.spadr');
-	$data[ShopConst::CONTACTNAME] =I('post.ctn');
-	$data[ShopConst::CONTACTPHONE] = I('post.ctp');
-	$data[ShopConst::CITY] = I('post.city');
-	$data[ShopConst::PROVINCE] =I('post.prv');
-	$data[ShopConst::DISTINCT] =I('post.dst');
-	$lat = $data[ShopConst::LATITUDE] = I('post.lat');
-	$long  = $data[ShopConst::LONGITUDE] = I('post.long');
-	$data[ShopConst::GEOHASH] = $geohash->encode($lat, $long);
-	$data[ShopConst::NOTICE] = I('post.ntc');
-	$shop->save($data);
+     $post ='post';
+	 $id  = intval(I('get.id',0));
+	 if($id)
+	 {
+	 	$shop =M("shop");
+	 	$data["shopid"] = $id;
+		$geohash = new Geohash();
+		$data[ShopConst::SHOPNAME] = I($post.ShopConst::SHOPNAME);
+		$data[ShopConst::SHOPADDRESS]=I($post.ShopConst::SHOPADDRESS);
+		$data[ShopConst::SHOPIMGURL] = I($post.ShopConst::SHOPIMGURL);
+		$data[ShopConst::CONTACTNAME] =I($post.CONTACTNAME);
+		$data[ShopConst::CONTACTPHONE] = I($post.ShopConst::CONTACTPHONE);
+		$data[ShopConst::CITY] = I($post.ShopConst::CITY);
+		$data[ShopConst::PROVINCE] =I($post.ShopConst::PROVINCE);
+		$data[ShopConst::DISTRICT] =I($post.ShopConst::DISTRICT);
+		$lat = $data[ShopConst::LATITUDE] = I($post.ShopConst::LATITUDE);
+		$long  = $data[ShopConst::LONGITUDE] = I($post.ShopConst::LONGITUDE);
+		$data[ShopConst::GEOHASH] = $geohash->encode($lat, $long);
+		$data[ShopConst::NOTICE] = I($post.ShopConst::NOTICE);
+		$data[ShopConst::LIMITEPRICE]=I($post.ShopConst::LIMITEPRICE);
+		$data[ShopConst::GEOHASH] = $geohash->encode($lat, $long);
+		$shop->save($data);
+	}
 }
 public function deleteshop()
 {
-	$shop =M("shop");
-	$id  = $_GET["id"];
-	$shop->where('id='.$id)->delete();
+    $id  = intval(I('get.id',0));
+    if($id)
+    {
+    	$shop =M("shop");
+		$shop->where('shopid='.$id)->delete();
+    }
 }
 }

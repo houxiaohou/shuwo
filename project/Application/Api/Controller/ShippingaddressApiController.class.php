@@ -2,7 +2,6 @@
 namespace Api\Controller;
 use Think\Controller\RestController;
 require_once 'ShippingaddressConst.php';
-require_once 'GeoHash.php';
 class ShippingaddressApiController extends RestController {
     //返回所有的用户地址
     public function getalladdress(){
@@ -37,7 +36,8 @@ class ShippingaddressApiController extends RestController {
             $data[ShippingaddressConst::CITY]=I('post.city');
         }
         if(I('post.distint') != null ){
-            $data[ShippingaddressConst::DISTINT]=I('post.distint');
+            $data[ShippingaddressConst::DISTRICT]=I('post.district');
+            
         }
         if(I('post.address') != null ){
             $data[ShippingaddressConst::ADDRESS]=I('post.address');
@@ -70,7 +70,7 @@ class ShippingaddressApiController extends RestController {
             $data[ShippingaddressConst::CITY]=I('post.city');
         }
         if(I('post.distint') != null ){
-            $data[ShippingaddressConst::DISTINT]=I('post.distint');
+            $data[ShippingaddressConst::DISTRICT]=I('post.district');
         }
         if(I('post.address') != null ){
             $data[ShippingaddressConst::ADDRESS]=I('post.address');
@@ -79,7 +79,7 @@ class ShippingaddressApiController extends RestController {
             $data[ShippingaddressConst::MOBILE]=I('post.mobile');
         }
         if(I('post.isdefault') != null ){
-            $data[ShippingaddressConst::ISDEFAULT]=I('post.isdefault');
+            $data[ShippingaddressConst::ISDEFAULT]=1;
         }
         $said=$address->add($data);
         if($said){
