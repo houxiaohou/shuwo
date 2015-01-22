@@ -49,6 +49,5 @@ public function getcategorybyid(){
      $category=M('category');
      $id=I('get.id');
      $category->where('id  ='.$id)->delete();
-     $this->response($id,"json");
     }
 }
