@@ -28,5 +28,8 @@ return array(
         array('category','CategoryApi/addcategory', '', array('method' => 'POST')),//添加水果类型，以（POST）传参
         array('category/:id','CategoryApi/deletecategory', '', array('method' => 'DELETE')),   //删除水果类型
     
-)
+        //用户地址URL配置
+        array('alladdress','ShippingaddressApi/getalladdress','',array('method'=>'GET')),
+    
+    )
 );

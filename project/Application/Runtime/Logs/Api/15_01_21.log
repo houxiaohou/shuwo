@@ -31,3 +31,6 @@ ERR: 无法加载控制器:Addproduct
 [ 2015-01-21T16:27:05+08:00 ] ::1 /shuwo/project/index.php/Api/product
 ERR: 无法加载控制器:Product
 
+[ 2015-01-21T22:06:58+08:00 ] ::1 /shuwo/project/index.php/Api/getaddress
+ERR: 无法加载控制器:Getaddress
+
