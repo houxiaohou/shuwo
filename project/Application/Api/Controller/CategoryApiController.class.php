@@ -41,7 +41,7 @@ public function getcategorybyid(){
      if(I('post.attribute') != null ){
      $data[CategoryConst::ATTRIBUTE]=I('post.attribute');
      }
-     $category->save($data);
+     $data=$category->save($data);
      $this->response($data,"json");
  }
  //删除种类

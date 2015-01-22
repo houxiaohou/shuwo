@@ -88,3 +88,162 @@ ERR: 无法加载控制器:'category
 [ 2015-01-22T11:08:54+08:00 ] ::1 /shuwo/project/index.php/Api/'category/1
 ERR: 无法加载控制器:'category
 
+[ 2015-01-22T11:40:24+08:00 ] ::1 /shuwo/project/index.php/Api/alladdress%E3%80%812
+ERR: 无法加载控制器:Alladdress、2
+
+[ 2015-01-22T11:40:57+08:00 ] ::1 /shuwo/project/index.php/Api/address/2
+ERR: 无法加载控制器:ShippingaddressApiApi
+
+[ 2015-01-22T13:46:17+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'said !=3 )' at line 1
+
+[ 2015-01-22T13:46:45+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'said !=3 )' at line 1
+
+[ 2015-01-22T13:46:46+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'said !=3 )' at line 1
+
+[ 2015-01-22T13:46:46+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'said !=3 )' at line 1
+
+[ 2015-01-22T13:46:47+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'said !=3 )' at line 1
+
+[ 2015-01-22T13:46:47+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'said !=3 )' at line 1
+
+[ 2015-01-22T13:46:47+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'said !=3 )' at line 1
+
+[ 2015-01-22T13:47:27+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'said !=3 )' at line 1
+
+[ 2015-01-22T13:47:28+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'said !=3 )' at line 1
+
+[ 2015-01-22T13:47:28+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'said !=3 )' at line 1
+
+[ 2015-01-22T13:47:28+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'said !=3 )' at line 1
+
+[ 2015-01-22T13:47:28+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'said !=3 )' at line 1
+
+[ 2015-01-22T13:47:28+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'said !=3 )' at line 1
+
+[ 2015-01-22T13:47:43+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:47:43+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:47:44+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:47:44+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:47:44+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:47:44+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:47:44+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:47:45+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:49:26+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:49:27+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:49:27+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:49:27+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:49:27+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:49:28+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:49:28+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:49:28+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:49:28+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:49:28+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:49:29+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:49:29+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:49:29+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:49:29+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:49:30+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:49:30+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:49:30+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:49:30+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:49:31+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:49:31+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:49:31+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:49:31+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 3' at line 1
+
+[ 2015-01-22T13:50:56+08:00 ] ::1 /shuwo/project/index.php/Api/address/2
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE `said` = 2' at line 1
+
+[ 2015-01-22T14:02:31+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'NEQ 3 )' at line 1
+
+[ 2015-01-22T14:08:49+08:00 ] ::1 /shuwo/project/index.php/Api/address/2
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'said !=2 )' at line 1
+
+[ 2015-01-22T14:08:58+08:00 ] ::1 /shuwo/project/index.php/Api/address/2
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'said !=2 )' at line 1
+
+[ 2015-01-22T14:24:09+08:00 ] ::1 /shuwo/project/index.php/Api/address/2
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'said !=2 )' at line 1
+
+[ 2015-01-22T14:28:30+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'and said !=3 )' at line 1
+
+[ 2015-01-22T15:23:26+08:00 ] ::1 /shuwo/project/index.php/Api/address/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'said !=3 )' at line 1
+
+[ 2015-01-22T15:40:53+08:00 ] ::1 /shuwo/project/index.php/Api/address
+ERR: 无法加载控制器:Address
+

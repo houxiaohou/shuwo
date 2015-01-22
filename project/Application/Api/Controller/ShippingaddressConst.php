@@ -8,7 +8,7 @@ class ShippingaddressConst
 	const USERNAME  = "username";
 	const PROVINCE = "province";
 	const CITY = "city";
-    const DISTINCT = "distinct";
+    const DISTINT = "distint";
 	const ADDRESS = "address";
 	const MOBILE = "mobile";
 	const ISDEFAULT  = 'isdefault';

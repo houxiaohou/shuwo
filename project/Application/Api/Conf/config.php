@@ -30,9 +30,9 @@ return array(
     
         //用户地址URL配置
         array('alladdress','ShippingaddressApi/getalladdress','',array('method'=>'GET')),//查询所有的用户地址
-        array('assress/:id','CategoryApi/getcategorybyid', '', array('method' => 'GET')),//根据GET传的id查询对应的地址信息
-        array('address/:id','CategoryApi/updatecategory', '', array('method' => 'POST')),//更新地址类型，以（POST）传参
-        array('category','CategoryApi/addcategory', '', array('method' => 'POST')),//添加水果类型，以（POST）传参
-        array('category/:id','CategoryApi/deletecategory', '', array('method' => 'DELETE')),   //删除水果类型
+        array('address/:id','ShippingaddressApi/getaddressbyid', '', array('method' => 'GET')),//根据GET传的id查询对应的地址信息
+        array('address/:id','ShippingaddressApi/updateaddress', '', array('method' => 'POST')),//更新地址类型，以（POST）传参
+        array('address','ShippingaddressApi/addaddress', '', array('method' => 'POST')),//添加地址，以（POST）传参
+        array('address/:id','ShippingaddressApi/deleteaddress', '', array('method' => 'DELETE')),   //删除地址
     )
 );
