@@ -14,7 +14,7 @@ public function getallcategorys() {
 //通过ID查询种类
 public function getcategorybyid(){
         $category=M("category");
-        $categoryid  = I('get.id');
+        $categoryid  = I('get.categoryid');
         $sql = CategoryConst::CATEGORYID.'="'.$categoryid.'"';
         $data = $category->where($sql)->find();
         $this->response($data,"json");
@@ -22,11 +22,11 @@ public function getcategorybyid(){
  //添加种类
   public function addcategory(){
       $category =M("category");
-      if(I('post.name') != null ){
-      $data[CategoryConst::CATEGORYNAME]=I('post.name');
+      if(I('post.categoryname') != null ){
+      $data[CategoryConst::CATEGORYNAME]=I('post.categoryname');
       }
-      if(I('post.atr') != null ){
-      $data[CategoryConst::ATTRIBUTE]=I('post.atr');
+      if(I('post.attribute') != null ){
+      $data[CategoryConst::ATTRIBUTE]=I('post.attribute');
       }
       $category->add($data);
       $this->response($data,"json");
@@ -34,12 +34,12 @@ public function getcategorybyid(){
  //更新种类
  public function updatecategory(){
      $category=M('category');
-     $data[CategoryConst::CATEGORYID]=I('get.id');
-     if(I('post.name') != null){
-     $data[CategoryConst::CATEGORYNAME]=I('post.name');
+     $data[CategoryConst::CATEGORYID]=I('get.categoryid');
+     if(I('post.categoryname') != null){
+     $data[CategoryConst::CATEGORYNAME]=I('post.categoryname');
      }
-     if(I('post.atr') != null ){
-     $data[CategoryConst::ATTRIBUTE]=I('post.atr');
+     if(I('post.attribute') != null ){
+     $data[CategoryConst::ATTRIBUTE]=I('post.attribute');
      }
      $category->save($data);
      $this->response($data,"json");
@@ -47,7 +47,7 @@ public function getcategorybyid(){
  //删除种类
  public function deletecategory(){
      $category=M('category');
-     $id=I('get.id');
+     $id=I('get.categoryid');
      $category->where('id  ='.$id)->delete();
     }
 }
