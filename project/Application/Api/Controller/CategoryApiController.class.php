@@ -14,7 +14,7 @@ public function getallcategorys() {
 //通过ID查询种类
 public function getcategorybyid(){
         $category=M("category");
-        $categoryid  = I('get.categoryid');
+        $categoryid  = I('get.id');
         $sql = CategoryConst::CATEGORYID.'="'.$categoryid.'"';
         $data = $category->where($sql)->find();
         $this->response($data,"json");
