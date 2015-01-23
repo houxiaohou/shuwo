@@ -13,10 +13,12 @@ public function getallcategorys() {
 //通过ID查询种类
 public function getcategorybyid(){
         $category=M("category");
-        $categoryid  = I('get.id');
+        $categoryid  = intval(I('get.id',0));
+        if(categoryid){
         $sql = CategoryConst::CATEGORYID.'="'.$categoryid.'"';
         $data = $category->where($sql)->find();
         $this->response($data,"json");
+        }
     }   
  //添加种类
   public function addcategory(){
@@ -35,7 +37,10 @@ public function getcategorybyid(){
  //更新种类
  public function updatecategory(){
      $category=M('category');
-     $data[CategoryConst::CATEGORYID]=I('get.id');
+     $id=intval(I('get.id',0));
+     if($id){
+     $data[CategoryConst::CATEGORYID]=$id;
+     }
      if(I('post.categoryname') != null){
      $data[CategoryConst::CATEGORYNAME]=I('post.categoryname');
      }
@@ -48,7 +53,9 @@ public function getcategorybyid(){
  //删除种类
  public function deletecategory(){
      $category=M('category');
-     $id=I('get.id');
+     $id=intval(I('get.id',0));
+     if($id){
      $category->where('categoryid  ='.$id)->delete();
+     }
     }
 }

@@ -7,20 +7,27 @@ class ShippingaddressApiController extends RestController {
     public function getalladdress(){
         $address=M('shippingaddress');
         $data=$address->select();
-        $this->response($data,'json');
+        if(count($data))
+        {
+            $this->response($data,'json');
+        }
     }
     //根据id查询对应的用户地址
     public function getaddressbyid(){
         $address=M('shippingaddress');
-        $said  = I('get.id');
-        $sql = ShippingaddressConst::SAID.'="'.$said.'"';
-        $data = $address->where($sql)->find();
-        $this->response($data,"json");
+        $said  =intval( I('get.id',0));
+        if($said)
+        {
+            $sql = ShippingaddressConst::SAID.'="'.$said.'"';
+            $data = $address->where($sql)->find();
+            $this->response($data,"json");
+        }
     }
     //更新用户地址
     public function updateaddress(){
         $address=M('shippingaddress');
-        $said=I('get.id');
+        $said=intval( I('get.id',0));
+        if($said){
         $userid=I('post.userid');
         $data[ShippingaddressConst::SAID]=$said;
          if($userid){
@@ -52,6 +59,7 @@ class ShippingaddressApiController extends RestController {
            $address->where("userid = {$userid}  and said !=".$said)->setField('isdefault',0); 
         }
           $this->response($data,'json');       
+        }
     }
     //添加用户地址
     public function addaddress(){
@@ -79,7 +87,7 @@ class ShippingaddressApiController extends RestController {
             $data[ShippingaddressConst::MOBILE]=I('post.mobile');
         }
         if(I('post.isdefault') != null ){
-            $data[ShippingaddressConst::ISDEFAULT]=1;
+            $data[ShippingaddressConst::ISDEFAULT]=I('post.isdefault');
         }
         $said=$address->add($data);
         if($said){
@@ -90,7 +98,9 @@ class ShippingaddressApiController extends RestController {
     //删除用户地址
     public function deleteaddress(){
         $address=M('shippingaddress');
-        $said=I('get.id');
+        $said=intval( I('get.id',0));
+        if($said){
         $address->where('said  ='.$said)->delete();
+        }
     }
 }
