@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-01-23 10:40:30
+Date: 2015-01-23 15:11:00
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -71,7 +71,7 @@ CREATE TABLE `product` (
   `unit` varchar(255) DEFAULT '',
   `unitweight` int(6) DEFAULT '0',
   PRIMARY KEY (`productid`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for shippingaddress
@@ -105,7 +105,7 @@ CREATE TABLE `shop` (
   `contacts` varchar(8) DEFAULT '',
   `phone` varchar(16) DEFAULT '',
   `lat` double NOT NULL DEFAULT '0',
-  `long` double NOT NULL DEFAULT '0',
+  `lng` double NOT NULL DEFAULT '0',
   `geohash` varchar(32) NOT NULL DEFAULT '',
   `city` varchar(16) DEFAULT '',
   `district` varchar(16) DEFAULT '',
@@ -114,7 +114,7 @@ CREATE TABLE `shop` (
   `dlprice` int(3) DEFAULT '0',
   `isopen` tinyint(2) DEFAULT '0',
   PRIMARY KEY (`shopid`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for shopproduct
@@ -125,7 +125,7 @@ CREATE TABLE `shopproduct` (
   `shopid` int(11) NOT NULL,
   `productid` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for user
@@ -164,7 +164,7 @@ DECLARE radLng1 DOUBLE;
  
 DECLARE radLng2 DOUBLE;
  
-DECLARE s DOUBLE;
+DECLARE s INT;
  
 SET RAD = PI() / 180.0;
  

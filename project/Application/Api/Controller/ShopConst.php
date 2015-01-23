@@ -3,8 +3,8 @@ namespace Api\Controller;
 
 class ShopConst
 {
-	const SHOPID= 'shopid';
-	const SHOPSN ='shopsn';
+	const SHOPID= "shopid";
+	const SHOPSN ="shopsn";
 	const SHOPUNIONID  = "spunid";
 	const SHOPADDRESS = "spadr";
 	const SHOPNAME = "spn";
@@ -15,8 +15,9 @@ class ShopConst
 	const CONTACTNAME = "contacts";
 	const CONTACTPHONE = "phone";
 	const LATITUDE  = 'lat';
-	const LONGITUDE = 'long';
+	const LONGITUDE = 'lng';
 	const GEOHASH ="geohash";
 	const NOTICE ="notice";
-	const LIMITEPRICE ="limit";
+	const DELIVERYPRICE ="dlprice";
+	const ISOPEN = "isopen";
 }
