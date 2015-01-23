@@ -10,9 +10,10 @@ class ImgApiController extends RestController
 		$accessKey = 'cPFlOFgcJIsgQVjhEH9AIPwjlQ8YI05aLHFWeHfD';
 		$secretKey = 'FOGl8RpKFJUaYkJAJgXWbnsRGgO2JrUk44o4UuFo';
 		
-// 		\Qiniu_SetKeys($accessKey, $secretKey);
-// 		$putPolicy = new \Qiniu_RS_GetPolicy($bucket);
-// 		$upToken = $putPolicy->Token(null);
-// 		$this->response($upToken,'json');
+	    \Qiniu_SetKeys($accessKey, $secretKey);
+	    $putPolicy = new \Qiniu_RS_PutPolicy($bucket);
+	    $upToken = $putPolicy->Token(null);
+	    $data["uptoken"] = $upToken;
+	    $this->response($data,'json');
 	}
 }

@@ -13,7 +13,7 @@ return array(
 		array('shop','ShopApi/addshop', '', array('method' => 'POST')),
         array('shop/:id','ShopApi/deleteshop', '', array('method' => 'DELETE')),
 		
-		//上传图片七牛token
+		//请求上传图片七牛token
 		array('uptoken', 'ImgApi/getuptoken', '', array('method' => 'GET')),
 		
 		//产品URL配置 
