@@ -4,7 +4,7 @@ use Think\Controller\RestController;
 require_once 'CategoryConst.php';
 class CategoryApiController extends RestController {
 
-//返回所有店铺
+//返回所有种类
 public function getallcategorys() {
 		$category =M("category");
 		$data =$category->select();
