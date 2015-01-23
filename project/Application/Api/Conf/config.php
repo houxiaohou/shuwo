@@ -37,9 +37,7 @@ return array(
         array('address/:id','ShippingaddressApi/updateaddress', '', array('method' => 'POST')),//更新地址，以（POST）传参
         array('address','ShippingaddressApi/addaddress', '', array('method' => 'POST')),//添加地址，以（POST）传参
         array('address/:id','ShippingaddressApi/deleteaddress', '', array('method' => 'DELETE')),   //删除地址
-
-     //更新默认地址
-       array('isdefault/:id','IsdefaultApi/updateisdefault', '', array('method' => 'POST')),//更新地址，以（POST）传参
+        array('isdefault/:id','ShippingaddressApi/updateisdefault', '', array('method' => 'POST')),//局部更新地址，以（POST）传参
 
 )
 );
