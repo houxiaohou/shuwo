@@ -6,14 +6,17 @@ class ImgApiController extends RestController
 {
 	public  function getuptoken()
 	{
-		$bucket = 'phpsdk';
+		$bucket = 'shuwo';
 		$accessKey = 'cPFlOFgcJIsgQVjhEH9AIPwjlQ8YI05aLHFWeHfD';
 		$secretKey = 'FOGl8RpKFJUaYkJAJgXWbnsRGgO2JrUk44o4UuFo';
-		
+		$data=[];
 	    \Qiniu_SetKeys($accessKey, $secretKey);
 	    $putPolicy = new \Qiniu_RS_PutPolicy($bucket);
 	    $upToken = $putPolicy->Token(null);
-	    $data["uptoken"] = $upToken;
+	    if($upToken!=null)
+	    {
+	    	$data["uptoken"] = $upToken;
+	    }
 	    $this->response($data,'json');
 	}
 }

@@ -13,6 +13,11 @@ public function getallshops() {
 		{
 			$this->response($data,"json");
 		}
+		else 
+		{
+			$data = [];
+			$this->response($data,"json");
+		}
 }
 
 //通过id查询店铺
@@ -23,7 +28,15 @@ public function getshopbyid() {
 	{
         $sql = ShopConst::SHOPID.'="'.$id.'"';
         $data = $shop->where($sql)->find();
-        $this->response($data,"json"); 
+        if(count($data))
+        {
+        	$this->response($data,"json"); 
+        }
+        else 
+        {
+        	$data = [];
+        	$this->response($data,"json");
+        }
 	}
 }
 
@@ -45,6 +58,19 @@ public function getshops()
 		$sql = 'SELECT *,GETDISTANCE(lat,lng,'.$lat.','.$lng.') AS distance FROM  
 				shop where geohash like "'.$likegeo.'%" AND 1 HAVING distance<=2000 AND isopen =true ORDER BY distance ASC LIMIT '.$start.','.$count;
 		$data = $shop->query($sql);	
+		if(count($data))
+		{
+			$this->response($data,"json");
+		}	
+		else
+		{
+			$data = [];
+			$this->response($data,"json");
+		}	
+	}
+	else 
+	{
+		$data = [];
 		$this->response($data,"json");
 	}
 
@@ -65,6 +91,11 @@ public  function getallproducts()
 		{
 			$this->response($data,'json');  
 		}
+		else
+		{
+			$data = [];
+			$this->response($data,'json');
+		}
 	}
 }
 
@@ -78,6 +109,19 @@ public  function getsaleproducts()
 		$data = $product->join("shopproduct ON shopproduct.productid=product.productid")->
 	                  join("category ON category.categoryid = product.categoryid")->
 	                  where("shopid=".$shopid." AND issale=1")->order('num desc')->select();
+		if(count($data))
+		{
+			$this->response($data,'json');
+		}
+		else
+		{
+		  $data = [];
+		  $this->response($data,'json');
+		}
+	}
+	else
+	{
+		$data = [];
 		$this->response($data,'json');
 	}
 }
