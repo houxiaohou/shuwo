@@ -72,20 +72,35 @@ class ProductApiController extends RestController{
 		$id  = intval(I('get.id', 0));
 		if ($id){
 			
-			if (I('post.pname') != null) {
-			    $data[ProductConst::PRODUCTNAME] = I('post.pname');
+			if (I('post.productname') != null) {
+			    $data[ProductConst::PRODUCTNAME] = I('post.productname');
+			}
+			if (I('post.pimgurl') != null) {
+				$data[ProductConst::PIMGURL] = I('post.pimgurl');
+			}
+			if (I('post.issale') != null) {
+				$data[ProductConst::ISSALE] = I('post.issale');
+			}
+			if (I('post.num') != null) {
+				$data[ProductConst::NUM] = I('post.num');
 			}
 			if (I('post.price') != null) {
 			    $data[ProductConst::PRICE] = I('post.price');
 			}
-			if (I('post.dprice') != null) {
-			    $data[ProductConst::DISCOUNTPRICE] = I('post.dprice');
+			if (I('post.discount') != null) {
+			    $data[ProductConst::DISCOUNT] = I('post.discount');
 			}
-			if (I('post.issale') != null) {
-			    $data[ProductConst::ISSALE] = I('post.issale');
+			if (I('post.attribute') != null) {
+				$data[ProductConst::ATTRIBUTE] = I('post.attribute');
 			}
-			if (I('post.num') != null) {
-			    $data[ProductConst::NUM] = I('post.num');
+			if (I('post.categoryid') != null) {
+				$data[ProductConst::CATEGORYID] = I('post.categoryid');
+			}
+			if (I('post.unit') != null) {
+				$data[ProductConst::UNIT] = I('post.unit');
+			}
+			if (I('post.unitweight') != null) {
+				$data[ProductConst::UNITWEIGHT] = I('post.unitweight');
 			}
 		}
 		$products->save($data);
