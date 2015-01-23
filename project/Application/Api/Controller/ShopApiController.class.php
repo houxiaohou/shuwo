@@ -180,16 +180,24 @@ public function updateshop()
 	    {
 			$data[ShopConst::DELIVERYPRICE]=I($post.ShopConst::DELIVERYPRICE);
 	    }
-	    if (intval(I($post.ShopConst::ISOPEN)))
+	    if (I($post.ShopConst::ISOPEN)!=null)
 	    {
-			$data[ShopConst::ISOPEN] = I($post.ShopConst::ISOPEN);
+	    	$isopen =intval(I($post.ShopConst::ISOPEN));
+	    	if ($isopen)
+			{
+				$data[ShopConst::ISOPEN] = 1;
+			}
+			else
+			{
+				$data[ShopConst::ISOPEN] = 0;
+			}
 	    }
 		$shop->save($data);
 	}
 }
 
-//更新店铺是否营业
-public function updateshopisopen()
+	//更新店铺是否营业
+	public function updateshopisopen()
 	{
 		$shop =M("shop");
 		$post ='post.';

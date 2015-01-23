@@ -7,12 +7,14 @@ return array(
 		array('shops', 'ShopApi/getshops', '', array('method' => 'GET')),
 		array('shop/:id/allproducts', 'ShopApi/getallproducts', '', array('method' => 'GET')),
 		array('shop/:id/products', 'ShopApi/getsaleproducts', '', array('method' => 'GET')),
-		array('shop/:id', 'ShopApi/getshopbyid', '', array('method' => 'GET')),
+        array('shop/:id', 'ShopApi/getshopbyid', '', array('method' => 'GET')),
 		array('shop/:id/isopen','ShopApi/updateshopisopen', '', array('method' => 'POST')),
 		array('shop/:id','ShopApi/updateshop', '', array('method' => 'POST')),
 		array('shop','ShopApi/addshop', '', array('method' => 'POST')),
-		
         array('shop/:id','ShopApi/deleteshop', '', array('method' => 'DELETE')),
+		
+		//上传图片七牛token
+		array('uptoken', 'ImgApi/getuptoken', '', array('method' => 'GET')),
 		
 		//产品URL配置 
 		array('allproducts', 'ProductApi/getallproducts', '', array('method' => 'GET')),
