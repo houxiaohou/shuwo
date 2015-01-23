@@ -12,6 +12,9 @@ class ProductApiController extends RestController{
 		$data = $products->select();
 		if (count($data)){
 			$this->response($data,'json');
+		}else{
+			$data = [];
+			$this->response($data, 'json');
 		}
 	}
 	
@@ -22,7 +25,16 @@ class ProductApiController extends RestController{
 		if ($id){
 			$sql = ProductConst::PRODUCTID.'="'.$id.'"';
 			$data = $products->where($sql)->find();
-			$this->response($data, 'json');
+			if (count($data)){
+				$this->response($data, 'json');
+			}else {
+				$data = [];
+				$this->response($data, 'json');
+			}
+			
+		} else {
+			$data = [];
+			$this->response($data,'json');
 		}
 		
 	}
