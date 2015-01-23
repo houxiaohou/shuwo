@@ -43,7 +43,7 @@ public function getshops()
 		$geohashcode = $geohash->encode($lat, $lng);
 		$likegeo = substr($geohashcode,0,$n); 
 		$sql = 'SELECT *,GETDISTANCE(lat,lng,'.$lat.','.$lng.') AS distance FROM  
-				shop where geohash like "'.$likegeo.'%" AND 1 HAVING distance<=2000 ORDER BY distance ASC LIMIT '.$start.','.$count;
+				shop where geohash like "'.$likegeo.'%" AND 1 HAVING distance<=2000 AND isopen =true ORDER BY distance ASC LIMIT '.$start.','.$count;
 		$data = $shop->query($sql);	
 		$this->response($data,"json");
 	}
