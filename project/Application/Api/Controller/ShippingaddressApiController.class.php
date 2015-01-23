@@ -10,17 +10,28 @@ class ShippingaddressApiController extends RestController {
         if(count($data))
         {
             $this->response($data,'json');
+        }else{
+            $data = [];
+            $this->response($data, “json”);
         }
     }
     //根据id查询对应的用户地址
     public function getaddressbyid(){
         $address=M('shippingaddress');
         $said  =intval( I('get.id',0));
-        if($said)
+        if(count($said))
         {
             $sql = ShippingaddressConst::SAID.'="'.$said.'"';
             $data = $address->where($sql)->find();
+            if(count($data)){
             $this->response($data,"json");
+            }else{
+                $data = [];
+                $this->response($data, “json”);
+            }
+        }else{
+            $data = [];
+            $this->response($data, “json”);            
         }
     }
     //更新用户地址
@@ -104,7 +115,6 @@ class ShippingaddressApiController extends RestController {
         }
     }
     //局部更新
-    //更新种类
     public function updateisdefault(){
         $address=M('shippingaddress');
         $said=intval( I('get.id',0));
