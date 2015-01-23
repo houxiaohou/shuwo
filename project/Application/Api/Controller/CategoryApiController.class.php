@@ -48,7 +48,11 @@ public function getcategorybyid(){
      $category=M('category');
      $id=intval(I('get.id',0));
      if($id){
-     $category->where('categoryid  ='.$id)->delete();
+     $categoryid=$category->where('categoryid  ='.$id)->delete();
+     if($categoryid){
+         $product=M('product');
+         $product->where('categoryid  ='.$id)->delete();
+        }
      }
-    }
+   }
 }
