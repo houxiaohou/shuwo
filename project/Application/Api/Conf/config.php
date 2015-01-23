@@ -19,6 +19,7 @@ return array(
 		//产品URL配置 
 		array('allproducts', 'ProductApi/getallproducts', '', array('method' => 'GET')),
 		array('product/:id', 'ProductApi/getproductbyid', '', array('method' => 'GET')),
+		array('product/:id/issale', 'ProductApi/updateproductissale', '', array('method' => 'POST')),
 		array('product/:id', 'ProductApi/updateproduct', '', array('method' => 'POST')),
 		array('product', 'ProductApi/addproduct', '', array('method' => 'POST')),
 		array('product/:id', 'ProductApi/deleteproduct', '', array('method' => 'DELETE')),

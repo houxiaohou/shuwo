@@ -27,6 +27,24 @@ class ProductApiController extends RestController{
 		
 	}
 	
+	//通过给定id号更新产品上下架
+	public function updateproductissale() {
+		$product = M('Product');
+		$post = 'post.';
+		$id = intval(I('get.id', 0));
+		$issale = intval(I($post.ProductConst::ISSALE));
+		if ($id) {
+			$data[ProductConst::PRODUCTID] = $id;
+			if ($issale){
+				$data[ProductConst::ISSALE] = 1;
+			}else {
+				$data[ProductConst::ISSALE] = 0;
+			}
+			$product->save($data);
+		}
+		
+	}
+	
 	//增加产品 
 	public function addproduct() {
 		$product = M('product');
@@ -71,7 +89,7 @@ class ProductApiController extends RestController{
 		$products = M('product');
 		$id  = intval(I('get.id', 0));
 		if ($id){
-			
+			$data[ProductConst::PRODUCTID] = $id;
 			if (I('post.productname') != null) {
 			    $data[ProductConst::PRODUCTNAME] = I('post.productname');
 			}
