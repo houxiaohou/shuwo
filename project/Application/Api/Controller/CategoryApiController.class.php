@@ -27,10 +27,6 @@ public function getcategorybyid(){
       {
       	$data[CategoryConst::CATEGORYNAME]=I('post.categoryname');
       }
-      if(I('post.attribute') != null )
-      {
-      	$data[CategoryConst::ATTRIBUTE]=I('post.attribute');
-      }
       $category->add($data);
       $this->response($data,"json");
   }
@@ -43,9 +39,6 @@ public function getcategorybyid(){
      }
      if(I('post.categoryname') != null){
      $data[CategoryConst::CATEGORYNAME]=I('post.categoryname');
-     }
-     if(I('post.attribute') != null ){
-     $data[CategoryConst::ATTRIBUTE]=I('post.attribute');
      }
      $data=$category->save($data);
      $this->response($data,"json");
