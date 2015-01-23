@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-01-22 18:10:10
+Date: 2015-01-23 10:40:30
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -22,7 +22,6 @@ DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
   `categoryid` int(11) NOT NULL AUTO_INCREMENT,
   `categoryname` varchar(255) DEFAULT '',
-  `attribute` int(2) DEFAULT '0',
   PRIMARY KEY (`categoryid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
@@ -32,13 +31,13 @@ CREATE TABLE `category` (
 DROP TABLE IF EXISTS `order`;
 CREATE TABLE `order` (
   `orderid` varchar(32) NOT NULL,
-  `orderstatus` int(10) unsigned zerofill NOT NULL,
+  `orderstatus` int(3) NOT NULL DEFAULT '0',
   `userid` int(11) NOT NULL,
-  `shopid` int(11) NOT NULL,
-  `paystatus` int(11) unsigned zerofill DEFAULT NULL,
-  `totalprice` decimal(10,0) DEFAULT NULL,
+  `shopid` int(11) NOT NULL DEFAULT '0',
+  `paystatus` int(11) DEFAULT '0',
+  `totalprice` decimal(8,2) DEFAULT '0.00',
   `address` text,
-  `phone` varchar(255) DEFAULT NULL,
+  `phone` varchar(255) DEFAULT '',
   `createdtime` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`orderid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -67,21 +66,12 @@ CREATE TABLE `product` (
   `num` int(11) DEFAULT '0',
   `price` decimal(5,2) DEFAULT '0.00',
   `discount` decimal(5,2) DEFAULT '0.00',
+  `attribute` int(3) DEFAULT '0',
+  `categoryid` int(11) DEFAULT '0',
+  `unit` varchar(255) DEFAULT '',
+  `unitweight` int(6) DEFAULT '0',
   PRIMARY KEY (`productid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Table structure for productcategory
--- ----------------------------
-DROP TABLE IF EXISTS `productcategory`;
-CREATE TABLE `productcategory` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `productid` int(11) NOT NULL,
-  `categoryid` int(11) NOT NULL,
-  `unitweight` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `productid` (`productid`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for shippingaddress
@@ -121,9 +111,10 @@ CREATE TABLE `shop` (
   `district` varchar(16) DEFAULT '',
   `province` varchar(16) DEFAULT '',
   `notice` text,
-  `limit` int(3) DEFAULT '0',
+  `dlprice` int(3) DEFAULT '0',
+  `isopen` tinyint(2) DEFAULT '0',
   PRIMARY KEY (`shopid`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for shopproduct
@@ -142,14 +133,14 @@ CREATE TABLE `shopproduct` (
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `userid` int(11) NOT NULL AUTO_INCREMENT,
-  `unionid` varchar(255) NOT NULL,
-  `name` varchar(32) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `mobile` varchar(16) DEFAULT NULL,
-  `sex` int(11) unsigned zerofill DEFAULT '00000000000',
-  `city` varchar(16) DEFAULT NULL,
-  `province` varchar(16) DEFAULT NULL,
-  `country` varchar(16) DEFAULT NULL,
+  `unionid` varchar(255) NOT NULL DEFAULT '',
+  `name` varchar(32) DEFAULT '',
+  `password` varchar(255) DEFAULT '',
+  `mobile` varchar(16) DEFAULT '',
+  `sex` tinyint(1) unsigned zerofill DEFAULT '0',
+  `city` varchar(16) DEFAULT '',
+  `province` varchar(16) DEFAULT '',
+  `country` varchar(16) DEFAULT '',
   `createdtime` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`userid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
