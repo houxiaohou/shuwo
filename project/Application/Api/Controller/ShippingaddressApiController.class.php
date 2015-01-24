@@ -7,32 +7,26 @@ class ShippingaddressApiController extends RestController {
     public function getalladdress(){
         $address=M('shippingaddress');
         $data=$address->select();
-        if(count($data))
+        if(!count($data))
         {
-            $this->response($data,'json');
-        }else{
             $data = [];
-            $this->response($data, “json”);
         }
+        $this->response($data, "json");
     }
     //根据id查询对应的用户地址
     public function getaddressbyid(){
         $address=M('shippingaddress');
         $said  =intval( I('get.id',0));
-        if(count($said))
+        if(!count($said))
         {
-            $sql = ShippingaddressConst::SAID.'="'.$said.'"';
-            $data = $address->where($sql)->find();
-            if(count($data)){
-            $this->response($data,"json");
-            }else{
-                $data = [];
-                $this->response($data, “json”);
-            }
-        }else{
-            $data = [];
-            $this->response($data, “json”);            
+            $data = [];         
         }
+        $sql = ShippingaddressConst::SAID.'="'.$said.'"';
+        $data = $address->where($sql)->find();
+        if(!count($data)){
+            $data = [];
+        }
+        $this->response($data,"json");
     }
     //更新用户地址
     public function updateaddress(){

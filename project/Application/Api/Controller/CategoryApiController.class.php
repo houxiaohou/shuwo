@@ -8,30 +8,24 @@ class CategoryApiController extends RestController {
 public function getallcategorys() {
 		$category =M("category");
 		$data =$category->select();
-		if(count($data)){
-		$this->response($data,"json");
-		}else{
-		$data = [];
-		$this->response($data, “json”);
+		if(!count($data)){
+        $data = [];
 		}
+		$this->response($data,"json");
     }  
 //通过ID查询种类
 public function getcategorybyid(){
         $category=M("category");
         $categoryid  = intval(I('get.id',0));
-        if(count(categoryid)){
+        if(!count(categoryid)){         
+         $data = [];             
+        }
         $sql = CategoryConst::CATEGORYID.'="'.$categoryid.'"';
         $data = $category->where($sql)->find();
-            if(count($data)){
-                    $this->response($data,"json");
-            }else{                
-                      $data = [];                
-                      $this->response($data, “json”);
-            }            
-        }else{            
-         $data = [];         
-         $this->response($data, “json”);         
+        if(!count($data)){
+            $data = [];
         }
+        $this->response($data, "json");
     }   
  //添加种类
   public function addcategory(){
