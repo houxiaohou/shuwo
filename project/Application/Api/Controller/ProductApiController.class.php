@@ -10,12 +10,10 @@ class ProductApiController extends RestController{
 	public function getallproducts() {
 		$products = M('product');
 		$data = $products->select();
-		if (count($data)){
-			$this->response($data,'json');
-		}else{
+		if (!count($data)){
 			$data = [];
-			$this->response($data, 'json');
 		}
+		$this->response($data, 'json');
 	}
 	
 	//通过id查询产品
@@ -25,17 +23,13 @@ class ProductApiController extends RestController{
 		if ($id){
 			$sql = ProductConst::PRODUCTID.'="'.$id.'"';
 			$data = $products->where($sql)->find();
-			if (count($data)){
-				$this->response($data, 'json');
-			}else {
+			if (!count($data)){
 				$data = [];
-				$this->response($data, 'json');
 			}
-			
 		} else {
 			$data = [];
-			$this->response($data,'json');
 		}
+		$this->response($data,'json');
 		
 	}
 	
