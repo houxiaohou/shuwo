@@ -17,14 +17,13 @@ class ShippingaddressApiController extends RestController {
     public function getaddressbyid(){
         $address=M('shippingaddress');
         $said  =intval( I('get.id',0));
-        if(!count($said))
+        if($said)
         {
-            $data = [];         
-        }
-        $sql = ShippingaddressConst::SAID.'="'.$said.'"';
-        $data = $address->where($sql)->find();
-        if(!count($data)){
-            $data = [];
+        	$sql = ShippingaddressConst::SAID.'="'.$said.'"';
+        	$data = $address->where($sql)->find();
+        	if(!count($data)){
+           	 	$data = [];
+        	}
         }
         $this->response($data,"json");
     }
