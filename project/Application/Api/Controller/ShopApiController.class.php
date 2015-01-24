@@ -9,34 +9,44 @@ class ShopApiController extends RestController {
 public function getallshops() {
 		$shop =M("shop");
 		$data =$shop->select();
-		if(count($data))
-		{
-			$this->response($data,"json");
-		}
-		else 
+		if(!count($data))
 		{
 			$data = [];
-			$this->response($data,"json");
-		}
+		}	
+		$this->response($data,"json");
+
 }
 
 //通过id查询店铺
 public function getshopbyid() {
+	$get = 'get.';
 	$shop =M("shop");
 	$id  = intval(I('get.id',0));
+	$lat = doubleval(I($get.ShopConst::LATITUDE,0));
+	$lng = doubleval(I($get.ShopConst::LONGITUDE,0));
+	$sql = '';
+	
 	if ($id)
 	{
-        $sql = ShopConst::SHOPID.'="'.$id.'"';
-        $data = $shop->where($sql)->find();
-        if(count($data))
-        {
-        	$this->response($data,"json"); 
-        }
-        else 
+		if($lat>0&$lng>0)
+		{
+            $sql = 'select *,GETDISTANCE(lat,lng,'.$lat.','.$lng.') AS distance FROM shop WHERE shopid='.$id;
+		}
+		else
+		{
+			$sql = 'select *,-1 AS distance FROM shop WHERE shopid='.$id;
+		}
+		$data = $shop->query($sql);
+        if(!count($data))
         {
         	$data = [];
-        	$this->response($data,"json");
         }
+        $this->response($data,"json");
+	}
+	else
+	{ 
+		$data = [];
+		$this->response($data,"json");
 	}
 }
 
@@ -58,23 +68,17 @@ public function getshops()
 		$sql = 'SELECT *,GETDISTANCE(lat,lng,'.$lat.','.$lng.') AS distance FROM  
 				shop where geohash like "'.$likegeo.'%" AND 1 HAVING distance<=2000 AND isopen =true ORDER BY distance ASC LIMIT '.$start.','.$count;
 		$data = $shop->query($sql);	
-		if(count($data))
-		{
-			$this->response($data,"json");
-		}	
-		else
+		if(!count($data))
 		{
 			$data = [];
-			$this->response($data,"json");
-		}	
+		}
 	}
 	else 
 	{
 		$data = [];
-		$this->response($data,"json");
+		
 	}
-
-
+	$this->response($data,"json");
 }
 
 //通过店铺id得到所有的上架商品
@@ -87,15 +91,11 @@ public  function getallproducts()
 		$data = $product->join("shopproduct ON shopproduct.productid=product.productid")->
 	                  join("category ON category.categoryid = product.categoryid")->
 	                  where("shopid=".$shopid)->select();
-		if(count($data))
-		{
-			$this->response($data,'json');  
-		}
-		else
+		if(!count($data))
 		{
 			$data = [];
-			$this->response($data,'json');
 		}
+		$this->response($data,'json');
 	}
 }
 
@@ -109,21 +109,17 @@ public  function getsaleproducts()
 		$data = $product->join("shopproduct ON shopproduct.productid=product.productid")->
 	                  join("category ON category.categoryid = product.categoryid")->
 	                  where("shopid=".$shopid." AND issale=1")->order('num desc')->select();
-		if(count($data))
+		if(!count($data))
 		{
-			$this->response($data,'json');
-		}
-		else
-		{
-		  $data = [];
-		  $this->response($data,'json');
+			 $data = [];
 		}
 	}
 	else
 	{
 		$data = [];
-		$this->response($data,'json');
+		
 	}
+	$this->response($data,'json');
 }
 
 //添加商铺
