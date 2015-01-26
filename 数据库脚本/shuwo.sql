@@ -1,33 +1,37 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost
-Source Server Version : 50617
+Source Server         : localhost_3306
+Source Server Version : 50612
 Source Host           : localhost:3306
 Source Database       : shuwo
 
 Target Server Type    : MYSQL
-Target Server Version : 50617
+Target Server Version : 50612
 File Encoding         : 65001
 
-Date: 2015-01-26 12:27:53
+Date: 2015-01-26 13:48:59
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for admin
+-- Table structure for `admin`
 -- ----------------------------
 DROP TABLE IF EXISTS `admin`;
 CREATE TABLE `admin` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT '',
   `password` varchar(255) DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for category
+-- Records of admin
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `category`
 -- ----------------------------
 DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
@@ -37,7 +41,11 @@ CREATE TABLE `category` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for order
+-- Records of category
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `order`
 -- ----------------------------
 DROP TABLE IF EXISTS `order`;
 CREATE TABLE `order` (
@@ -55,7 +63,11 @@ CREATE TABLE `order` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for orderproduct
+-- Records of order
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `orderproduct`
 -- ----------------------------
 DROP TABLE IF EXISTS `orderproduct`;
 CREATE TABLE `orderproduct` (
@@ -68,7 +80,11 @@ CREATE TABLE `orderproduct` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for product
+-- Records of orderproduct
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `product`
 -- ----------------------------
 DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
@@ -87,7 +103,11 @@ CREATE TABLE `product` (
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for shippingaddress
+-- Records of product
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `shippingaddress`
 -- ----------------------------
 DROP TABLE IF EXISTS `shippingaddress`;
 CREATE TABLE `shippingaddress` (
@@ -105,7 +125,11 @@ CREATE TABLE `shippingaddress` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for shop
+-- Records of shippingaddress
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `shop`
 -- ----------------------------
 DROP TABLE IF EXISTS `shop`;
 CREATE TABLE `shop` (
@@ -131,7 +155,11 @@ CREATE TABLE `shop` (
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for shopproduct
+-- Records of shop
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `shopproduct`
 -- ----------------------------
 DROP TABLE IF EXISTS `shopproduct`;
 CREATE TABLE `shopproduct` (
@@ -142,7 +170,11 @@ CREATE TABLE `shopproduct` (
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for user
+-- Records of shopproduct
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `user`
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
@@ -155,87 +187,11 @@ CREATE TABLE `user` (
   `city` varchar(16) DEFAULT '',
   `province` varchar(16) DEFAULT '',
   `country` varchar(16) DEFAULT '',
-  `createdtime` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `createdtime` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
   `openid` varchar(255) DEFAULT '',
   PRIMARY KEY (`userid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Function structure for GETDISTANCE
+-- Records of user
 -- ----------------------------
-DROP FUNCTION IF EXISTS `GETDISTANCE`;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` FUNCTION `GETDISTANCE`(lat1 DOUBLE, lng1 DOUBLE, lat2 DOUBLE, lng2 DOUBLE) RETURNS double
-BEGIN
-	DECLARE RAD DOUBLE;
- 
-DECLARE EARTH_RADIUS DOUBLE DEFAULT 6378137;
- 
-DECLARE radLat1 DOUBLE;
- 
-DECLARE radLat2 DOUBLE;
- 
-DECLARE radLng1 DOUBLE;
- 
-DECLARE radLng2 DOUBLE;
- 
-DECLARE s INT;
- 
-SET RAD = PI() / 180.0;
- 
-SET radLat1 = lat1 * RAD;
- 
-SET radLat2 = lat2 * RAD;
- 
-SET radLng1 = lng1 * RAD;
- 
-SET radLng2 = lng2 * RAD;
- 
-SET s = ACOS(COS(radLat1)*COS(radLat2)*COS(radLng1-radLng2)+SIN(radLat1)*SIN(radLat2))*EARTH_RADIUS;
- 
-SET s = ROUND(s * 10000) / 10000;
- 
-RETURN s;
-END
-;;
-DELIMITER ;
-
--- ----------------------------
--- Function structure for NewProc
--- ----------------------------
-DROP FUNCTION IF EXISTS `NewProc`;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` FUNCTION `NewProc`(lat1 DOUBLE, lng1 DOUBLE, lat2 DOUBLE, lng2 DOUBLE) RETURNS double
-BEGIN
-	DECLARE RAD DOUBLE;
- 
-DECLARE EARTH_RADIUS DOUBLE DEFAULT 6378137;
- 
-DECLARE radLat1 DOUBLE;
- 
-DECLARE radLat2 DOUBLE;
- 
-DECLARE radLng1 DOUBLE;
- 
-DECLARE radLng2 DOUBLE;
- 
-DECLARE s DOUBLE;
- 
-SET RAD = PI() / 180.0;
- 
-SET radLat1 = lat1 * RAD;
- 
-SET radLat2 = lat2 * RAD;
- 
-SET radLng1 = lng1 * RAD;
- 
-SET radLng2 = lng2 * RAD;
- 
-SET s = ACOS(COS(radLat1)*COS(radLat2)*COS(radLng1-radLng2)+SIN(radLat1)*SIN(radLat2))*EARTH_RADIUS;
- 
-SET s = ROUND(s * 10000) / 10000;
-
-	RETURN s;
-END
-;;
-DELIMITER ;

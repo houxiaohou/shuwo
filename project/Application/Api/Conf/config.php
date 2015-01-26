@@ -28,7 +28,7 @@ return array(
         //产品类别URL配置
         array('allcategory','CategoryApi/getallcategorys','',array('method'=>'GET')),//查询所有的种类
         array('category/:id','CategoryApi/getcategorybyid', '', array('method' => 'GET')),//根据GET传的id查询对应的水果种类信息
-        array('category/:id','CategoryApi/updatecategory', '', array('method' => 'POST')),//更新水果类型，以（POST）传参，‘name‘=种类名称，’atr‘=种类属性。1代表（个）计量，2代表（斤/克）,3代表（根），4代表（盒）
+        array('category/:id','CategoryApi/updatecategory', '', array('method' => 'POST')),//更新水果类型，以（POST）传参
         array('category','CategoryApi/addcategory', '', array('method' => 'POST')),//添加水果类型，以（POST）传参
         array('category/:id','CategoryApi/deletecategory', '', array('method' => 'DELETE')),   //删除水果类型
     
@@ -40,5 +40,9 @@ return array(
         array('address/:id','ShippingaddressApi/deleteaddress', '', array('method' => 'DELETE')),   //删除地址
         array('isdefault/:id','ShippingaddressApi/updateisdefault', '', array('method' => 'POST')),//局部更新地址，以（POST）传参
 
+       //用户账号密码URL配置
+       array('alladmin','AdminApi/getalladmin','',array('method'=>'GET')),//查询所有用户
+       array('admin/:id','AdminApi/updateadmin', '', array('method' => 'POST')),//更新地址，以（POST）传参
+       array('admin','AdminApi/addadmin', '', array('method' => 'POST')),//添加地址，以（POST）传参
 )
 );
