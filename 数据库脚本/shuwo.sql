@@ -1,51 +1,32 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost_3306
-Source Server Version : 50612
+Source Server         : localhost
+Source Server Version : 50617
 Source Host           : localhost:3306
 Source Database       : shuwo
 
 Target Server Type    : MYSQL
-Target Server Version : 50612
+Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-01-26 13:48:59
+Date: 2015-01-26 23:18:57
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for `admin`
--- ----------------------------
-DROP TABLE IF EXISTS `admin`;
-CREATE TABLE `admin` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT '',
-  `password` varchar(255) DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of admin
--- ----------------------------
-
--- ----------------------------
--- Table structure for `category`
+-- Table structure for category
 -- ----------------------------
 DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
   `categoryid` int(11) NOT NULL AUTO_INCREMENT,
   `categoryname` varchar(255) DEFAULT '',
   PRIMARY KEY (`categoryid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of category
--- ----------------------------
-
--- ----------------------------
--- Table structure for `order`
+-- Table structure for order
 -- ----------------------------
 DROP TABLE IF EXISTS `order`;
 CREATE TABLE `order` (
@@ -54,37 +35,31 @@ CREATE TABLE `order` (
   `userid` int(11) NOT NULL,
   `shopid` int(11) NOT NULL DEFAULT '0',
   `paystatus` int(11) DEFAULT '0',
-  `totalprice` decimal(8,2) DEFAULT '0.00',
+  `totalprice` decimal(10,2) DEFAULT '0.00',
   `address` text,
   `phone` varchar(255) DEFAULT '',
   `createdtime` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `realprice` decimal(10,2) DEFAULT '0.00',
+  `rtotalprice` decimal(10,2) DEFAULT '0.00',
+  `dltime` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`orderid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of order
--- ----------------------------
-
--- ----------------------------
--- Table structure for `orderproduct`
+-- Table structure for orderproduct
 -- ----------------------------
 DROP TABLE IF EXISTS `orderproduct`;
 CREATE TABLE `orderproduct` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `orderid` int(11) DEFAULT NULL,
-  `productid` int(11) DEFAULT NULL,
-  `quanlity` int(11) DEFAULT NULL,
-  `realweight` double DEFAULT '0',
+  `orderid` int(11) DEFAULT '0',
+  `productid` int(11) DEFAULT '0',
+  `quanlity` int(11) DEFAULT '0',
+  `realweight` int(10) DEFAULT '0',
+  `realprice` decimal(10,2) DEFAULT '0.00',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of orderproduct
--- ----------------------------
-
--- ----------------------------
--- Table structure for `product`
+-- Table structure for product
 -- ----------------------------
 DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
@@ -100,14 +75,10 @@ CREATE TABLE `product` (
   `unit` varchar(255) DEFAULT '',
   `unitweight` int(6) DEFAULT '0',
   PRIMARY KEY (`productid`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of product
--- ----------------------------
-
--- ----------------------------
--- Table structure for `shippingaddress`
+-- Table structure for shippingaddress
 -- ----------------------------
 DROP TABLE IF EXISTS `shippingaddress`;
 CREATE TABLE `shippingaddress` (
@@ -125,11 +96,7 @@ CREATE TABLE `shippingaddress` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of shippingaddress
--- ----------------------------
-
--- ----------------------------
--- Table structure for `shop`
+-- Table structure for shop
 -- ----------------------------
 DROP TABLE IF EXISTS `shop`;
 CREATE TABLE `shop` (
@@ -150,16 +117,11 @@ CREATE TABLE `shop` (
   `notice` text,
   `dlprice` int(3) DEFAULT '0',
   `isopen` tinyint(2) DEFAULT '0',
-  `spopenid` varchar(255) DEFAULT '',
   PRIMARY KEY (`shopid`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of shop
--- ----------------------------
-
--- ----------------------------
--- Table structure for `shopproduct`
+-- Table structure for shopproduct
 -- ----------------------------
 DROP TABLE IF EXISTS `shopproduct`;
 CREATE TABLE `shopproduct` (
@@ -167,14 +129,10 @@ CREATE TABLE `shopproduct` (
   `shopid` int(11) NOT NULL,
   `productid` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of shopproduct
--- ----------------------------
-
--- ----------------------------
--- Table structure for `user`
+-- Table structure for user
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
@@ -187,11 +145,116 @@ CREATE TABLE `user` (
   `city` varchar(16) DEFAULT '',
   `province` varchar(16) DEFAULT '',
   `country` varchar(16) DEFAULT '',
-  `createdtime` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-  `openid` varchar(255) DEFAULT '',
+  `createdtime` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `openid` varchar(255) DEFAULT NULL,
+  `headimgurl` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`userid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of user
+-- Table structure for weixinshop
 -- ----------------------------
+DROP TABLE IF EXISTS `weixinshop`;
+CREATE TABLE `weixinshop` (
+  `appid` varchar(255) DEFAULT '',
+  `appsecret` varchar(255) DEFAULT '',
+  `accesstoken` text,
+  `weiid` varchar(255) DEFAULT '',
+  `expires` varchar(255) DEFAULT '',
+  `id` int(11) unsigned zerofill NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for weixinuser
+-- ----------------------------
+DROP TABLE IF EXISTS `weixinuser`;
+CREATE TABLE `weixinuser` (
+  `appid` varchar(255) DEFAULT '',
+  `appsecret` varchar(255) DEFAULT '',
+  `accesstoken` text,
+  `weiid` varchar(255) DEFAULT '',
+  `expires` varchar(255) DEFAULT '',
+  `id` int(11) unsigned zerofill NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Function structure for GETDISTANCE
+-- ----------------------------
+DROP FUNCTION IF EXISTS `GETDISTANCE`;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `GETDISTANCE`(lat1 DOUBLE, lng1 DOUBLE, lat2 DOUBLE, lng2 DOUBLE) RETURNS double
+BEGIN
+	DECLARE RAD DOUBLE;
+ 
+DECLARE EARTH_RADIUS DOUBLE DEFAULT 6378137;
+ 
+DECLARE radLat1 DOUBLE;
+ 
+DECLARE radLat2 DOUBLE;
+ 
+DECLARE radLng1 DOUBLE;
+ 
+DECLARE radLng2 DOUBLE;
+ 
+DECLARE s INT;
+ 
+SET RAD = PI() / 180.0;
+ 
+SET radLat1 = lat1 * RAD;
+ 
+SET radLat2 = lat2 * RAD;
+ 
+SET radLng1 = lng1 * RAD;
+ 
+SET radLng2 = lng2 * RAD;
+ 
+SET s = ACOS(COS(radLat1)*COS(radLat2)*COS(radLng1-radLng2)+SIN(radLat1)*SIN(radLat2))*EARTH_RADIUS;
+ 
+SET s = ROUND(s * 10000) / 10000;
+ 
+RETURN s;
+END
+;;
+DELIMITER ;
+
+-- ----------------------------
+-- Function structure for NewProc
+-- ----------------------------
+DROP FUNCTION IF EXISTS `NewProc`;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `NewProc`(lat1 DOUBLE, lng1 DOUBLE, lat2 DOUBLE, lng2 DOUBLE) RETURNS double
+BEGIN
+	DECLARE RAD DOUBLE;
+ 
+DECLARE EARTH_RADIUS DOUBLE DEFAULT 6378137;
+ 
+DECLARE radLat1 DOUBLE;
+ 
+DECLARE radLat2 DOUBLE;
+ 
+DECLARE radLng1 DOUBLE;
+ 
+DECLARE radLng2 DOUBLE;
+ 
+DECLARE s DOUBLE;
+ 
+SET RAD = PI() / 180.0;
+ 
+SET radLat1 = lat1 * RAD;
+ 
+SET radLat2 = lat2 * RAD;
+ 
+SET radLng1 = lng1 * RAD;
+ 
+SET radLng2 = lng2 * RAD;
+ 
+SET s = ACOS(COS(radLat1)*COS(radLat2)*COS(radLng1-radLng2)+SIN(radLat1)*SIN(radLat2))*EARTH_RADIUS;
+ 
+SET s = ROUND(s * 10000) / 10000;
+
+	RETURN s;
+END
+;;
+DELIMITER ;
