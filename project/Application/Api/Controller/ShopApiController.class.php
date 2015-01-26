@@ -41,7 +41,7 @@ public function getshopbyid() {
         {
         	$data = [];
         }
-        $this->response($data,"json");
+        $this->response($data[0],"json");
 	}
 	else
 	{ 
