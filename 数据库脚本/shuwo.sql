@@ -10,10 +10,21 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-01-23 15:11:00
+Date: 2015-01-26 11:34:57
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for admin
+-- ----------------------------
+DROP TABLE IF EXISTS `admin`;
+CREATE TABLE `admin` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) DEFAULT '',
+  `password` varchar(255) DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for category
@@ -39,6 +50,7 @@ CREATE TABLE `order` (
   `address` text,
   `phone` varchar(255) DEFAULT '',
   `createdtime` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `realprice` decimal(10,2) DEFAULT '0.00',
   PRIMARY KEY (`orderid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -51,6 +63,7 @@ CREATE TABLE `orderproduct` (
   `orderid` int(11) DEFAULT NULL,
   `productid` int(11) DEFAULT NULL,
   `quanlity` int(11) DEFAULT NULL,
+  `realweight` double DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -113,6 +126,7 @@ CREATE TABLE `shop` (
   `notice` text,
   `dlprice` int(3) DEFAULT '0',
   `isopen` tinyint(2) DEFAULT '0',
+  `spopenid` varchar(255) DEFAULT '',
   PRIMARY KEY (`shopid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
@@ -134,7 +148,7 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `userid` int(11) NOT NULL AUTO_INCREMENT,
   `unionid` varchar(255) NOT NULL DEFAULT '',
-  `name` varchar(32) DEFAULT '',
+  `nickname` varchar(32) DEFAULT '',
   `password` varchar(255) DEFAULT '',
   `mobile` varchar(16) DEFAULT '',
   `sex` tinyint(1) unsigned zerofill DEFAULT '0',
@@ -142,6 +156,7 @@ CREATE TABLE `user` (
   `province` varchar(16) DEFAULT '',
   `country` varchar(16) DEFAULT '',
   `createdtime` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `openid` varchar(255) DEFAULT '',
   PRIMARY KEY (`userid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
