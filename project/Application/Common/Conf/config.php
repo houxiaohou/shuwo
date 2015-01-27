@@ -24,4 +24,11 @@ return array(
         '__JS__'              =>__ROOT__.'/public/js',
         '__IMAGES__'          =>__ROOT__.'/public/images',
     		),	
+		/***微信***/
+		"wx_appID" => "",
+		"wx_appsecret" => "",
+		"weixin_token" => "",
+		/**OAuth2.0授权后跳转到的默认页面**/
+		"wx_webauth_callback_url" => urlencode(""),
+		"wx_webauth_expire" => 6500,
 );

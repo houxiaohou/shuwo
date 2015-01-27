@@ -58,7 +58,7 @@ public function getshops()
 	$geohash = new Geohash();
 	$lat = doubleval(I($get.ShopConst::LATITUDE,0));
 	$lng =doubleval(I($get.ShopConst::LONGITUDE,0));
-	$start =intval(I('get.start',0))-1;
+	$start =intval(I('get.start',0));
 	$count =intval(I('get.count',0));
 	$n = 4;
 	if ($lat>0&$lng>0&$start>=0&$count>0)
