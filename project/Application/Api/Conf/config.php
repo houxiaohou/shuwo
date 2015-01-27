@@ -44,5 +44,12 @@ return array(
        array('alladmin','AdminApi/getalladmin','',array('method'=>'GET')),//查询所有用户
        array('admin/:id','AdminApi/updateadmin', '', array('method' => 'POST')),//更新地址，以（POST）传参
        array('admin','AdminApi/addadmin', '', array('method' => 'POST')),//添加地址，以（POST）传参
+
+       //订单URL配置
+      array('allorder','OrderApi/getallorder','',array('method'=>'GET')),//查询所有的订单
+      array('order/:id','OrderApi/getorderbyid', '', array('method' => 'GET')),//根据GET传的id查询对应的订单
+      array('ordershop/:id','OrderApi/getordershopbyid', '', array('method' => 'GET')),//根据GET传的shopid查询对应店铺的的订单
+      array('order/:id','OrderApi/deleteorder', '', array('method' => 'DELETE')),   //删除订单
+
 )
 );

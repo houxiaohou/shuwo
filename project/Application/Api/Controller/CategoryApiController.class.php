@@ -17,7 +17,7 @@ public function getallcategorys() {
 public function getcategorybyid(){
         $category=M("category");
         $categoryid  = intval(I('get.id',0));
-        if(!count(categoryid)){         
+        if(!$categoryid){         
          $data = [];             
         }
         $sql = CategoryConst::CATEGORYID.'="'.$categoryid.'"';
@@ -25,7 +25,7 @@ public function getcategorybyid(){
         if(!count($data)){
             $data = [];
         }
-        $this->response($data[0], "json");
+        $this->response($data['categoryid'], "json");
     }   
  //添加种类
   public function addcategory(){
@@ -52,13 +52,13 @@ public function getcategorybyid(){
  }
  //删除种类
  public function deletecategory(){
-     $category=M('category');
      $id=intval(I('get.id',0));
      if($id){
+     $category=M('category');
      $categoryid=$category->where('categoryid  ='.$id)->delete();
      if($categoryid){
-         $product=M('product');
-         $product->where('categoryid  ='.$id)->delete();
+     $product=M('product');
+     $product->where('categoryid  ='.$id)->delete();
         }
      }
    }

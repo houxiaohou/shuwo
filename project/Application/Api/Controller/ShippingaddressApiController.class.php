@@ -25,7 +25,7 @@ class ShippingaddressApiController extends RestController {
            	 	$data = [];
         	}
         }
-        $this->response($data[0],"json");
+        $this->response($data['said'],"json");
     }
     //更新用户地址
     public function updateaddress(){
@@ -109,9 +109,9 @@ class ShippingaddressApiController extends RestController {
     }
     //局部更新
     public function updateisdefault(){
-        $address=M('shippingaddress');
         $said=intval( I('get.id',0));
         if($said){
+            $address=M('shippingaddress');
             $userid=I('post.userid');
             $data[ShippingaddressConst::SAID]=$said;
             if($userid){
