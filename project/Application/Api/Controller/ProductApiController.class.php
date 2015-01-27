@@ -29,7 +29,7 @@ class ProductApiController extends RestController{
 		} else {
 			$data = [];
 		}
-		$this->response($data['productid'],'json');
+		$this->response($data[0],'json');
 		
 	}
 	

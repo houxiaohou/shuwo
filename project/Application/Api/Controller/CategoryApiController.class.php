@@ -25,7 +25,7 @@ public function getcategorybyid(){
         if(!count($data)){
             $data = [];
         }
-        $this->response($data['categoryid'], "json");
+        $this->response($data[0], "json");
     }   
  //添加种类
   public function addcategory(){
