@@ -25,7 +25,7 @@ class ShippingaddressApiController extends RestController {
            	 	$data = [];
         	}
         }
-        $this->response($data[0],"json");
+        $this->response($data,"json");
     }
     //更新用户地址
     public function updateaddress(){
