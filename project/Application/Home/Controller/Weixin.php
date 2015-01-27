@@ -1,5 +1,6 @@
 <?php
 namespace Home\Controller;
+
 class Weixin
 {
 	private   $appid = "wx9e9aa8c72fefa959";  
