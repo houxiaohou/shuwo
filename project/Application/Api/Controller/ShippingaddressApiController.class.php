@@ -47,8 +47,7 @@ class ShippingaddressApiController extends RestController {
             $data[ShippingaddressConst::CITY]=I('post.city');
         }
         if(I('post.distint') != null ){
-            $data[ShippingaddressConst::DISTRICT]=I('post.district');
-            
+            $data[ShippingaddressConst::DISTRICT]=I('post.district');          
         }
         if(I('post.address') != null ){
             $data[ShippingaddressConst::ADDRESS]=I('post.address');
@@ -56,9 +55,7 @@ class ShippingaddressApiController extends RestController {
         if(I('post.mobile') != null ){
             $data[ShippingaddressConst::MOBILE]=I('post.mobile');
         }
-        if(I('post.isdefault') != null ){
-            $data[ShippingaddressConst::ISDEFAULT]=I('post.isdefault');
-        }
+             $data[ShippingaddressConst::ISDEFAULT]=1;
         if($address->save($data)){
            $address->where("userid = {$userid}  and said !=".$said)->setField('isdefault',0); 
         }
@@ -90,9 +87,7 @@ class ShippingaddressApiController extends RestController {
         if(I('post.mobile') != null ){
             $data[ShippingaddressConst::MOBILE]=I('post.mobile');
         }
-        if(I('post.isdefault') != null ){
-            $data[ShippingaddressConst::ISDEFAULT]=I('post.isdefault');
-        }
+            $data[ShippingaddressConst::ISDEFAULT]=1;
         $said=$address->add($data);
         if($said){
             $address->where("userid = {$userid}  and said !=".$said)->setField('isdefault',0);
@@ -107,7 +102,9 @@ class ShippingaddressApiController extends RestController {
         $address->where('said  ='.$said)->delete();
         }
     }
-    //局部更新
+    /*
+     * 局部更新
+     */
     public function updateisdefault(){
         $said=intval( I('get.id',0));
         if($said){
@@ -117,9 +114,7 @@ class ShippingaddressApiController extends RestController {
             if($userid){
                 $data[ShippingaddressConst::USERID]=$userid;
             }
-            if(I('post.isdefault') != null ){
-                $data[ShippingaddressConst::ISDEFAULT]=I('post.isdefault');
-            }
+            $data[ShippingaddressConst::ISDEFAULT]=1;
             if($address->save($data)){
                 $address->where("userid = {$userid}  and said !=".$said)->setField('isdefault',0);
             }
