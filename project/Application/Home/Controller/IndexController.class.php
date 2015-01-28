@@ -19,9 +19,17 @@ class IndexController extends Controller {
       		$str = explode("_", $data);
       		if($str&&count($str)==2)
       		{
-      			$userid = $str[0];
-      			$datetime = strtotime($str[1]);
-      			$currentdate = strtotime(date('Ymd'));
+      			$userid = intval($str[0]);
+                if($userid)
+                {
+                   $user = M('user');
+                   $sql = "userid=".$userid;
+                   $userinfo = $user->where($sql)->find();
+                   if(!count($userinfo))
+                   {
+                   	 E('用户授权异常');
+                   }
+                }
       			
       		}
       	}
@@ -113,17 +121,17 @@ $userinfo["unionid"] = "uninonid";
     			}
     			else
     			{
-    				$this->error();
+    				E('获得微信用户信息异常');
     			}
     		}
     		else 
     		{
-    			$this->error();
+    			E('获得access_token异常');
     		}
     	}
     	else 
     	{
-    		$this->error();
+    		E('获得code异常');
     	}
     }
 }

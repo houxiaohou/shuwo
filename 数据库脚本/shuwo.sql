@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-01-28 21:34:50
+Date: 2015-01-28 22:05:05
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -52,7 +52,7 @@ CREATE TABLE `orderproduct` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `orderid` varchar(32) DEFAULT '0',
   `productid` int(11) DEFAULT '0',
-  `quanlity` int(11) DEFAULT '0',
+  `quantity` int(11) DEFAULT '0',
   `realweight` int(10) DEFAULT '0',
   `realprice` decimal(10,2) DEFAULT '0.00',
   PRIMARY KEY (`id`)
@@ -149,7 +149,7 @@ CREATE TABLE `user` (
   `openid` varchar(255) DEFAULT NULL,
   `headimgurl` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`userid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for weixinshop
