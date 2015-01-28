@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-01-26 23:18:57
+Date: 2015-01-28 21:34:50
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -50,7 +50,7 @@ CREATE TABLE `order` (
 DROP TABLE IF EXISTS `orderproduct`;
 CREATE TABLE `orderproduct` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `orderid` int(11) DEFAULT '0',
+  `orderid` varchar(32) DEFAULT '0',
   `productid` int(11) DEFAULT '0',
   `quanlity` int(11) DEFAULT '0',
   `realweight` int(10) DEFAULT '0',
