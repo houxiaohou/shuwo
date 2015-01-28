@@ -34,9 +34,11 @@ return array(
     
         //用户地址URL配置
         array('alladdress','ShippingaddressApi/getalladdress','',array('method'=>'GET')),//查询所有的用户地址
+        array('address/default','ShippingaddressApi/useraddress','',array('method'=>'GET')),//获取用户的默认地址
         array('address/:id/default','ShippingaddressApi/updateisdefault', '', array('method' => 'POST')),//局部更新地址，以（POST）传参
         array('address/:id','ShippingaddressApi/getaddressbyid', '', array('method' => 'GET')),//根据GET传的id查询对应的地址信息
         array('address/:id','ShippingaddressApi/updateaddress', '', array('method' => 'POST')),//更新地址，以（POST）传参
+        array('address','ShippingaddressApi/getalluseraddress', '', array('method' => 'GET')),//获取用户的全部地址
         array('address','ShippingaddressApi/addaddress', '', array('method' => 'POST')),//添加地址，以（POST）传参
         array('address/:id','ShippingaddressApi/deleteaddress', '', array('method' => 'DELETE')),   //删除地址
 
@@ -50,6 +52,7 @@ return array(
       array('order/:id','OrderApi/getorderbyid', '', array('method' => 'GET')),//根据GET传的id查询对应的订单
       array('ordershop/:id','OrderApi/getordershopbyid', '', array('method' => 'GET')),//根据GET传的shopid查询对应店铺的的订单
       array('order/:id','OrderApi/deleteorder', '', array('method' => 'DELETE')),   //删除订单
+    array('test','OrderApi/test', '', array('method' => 'GET')),   //删除订单
 
 )
 );
