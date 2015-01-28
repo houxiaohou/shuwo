@@ -9,15 +9,21 @@ class IndexController extends Controller {
       $weixin  = new Weixin();
       $url = $weixin->getwxurl("http://www.shuwow.com/Home/authorize");
       $key =C("CRYPT_KEY");
-      $xcrpt = new Xcrypt($key, 'cbc', 'auto');
+      $xcrpt = new Xcrypt($key, 'cbc', $key);
       if(cookie('utoken'))
       {
       	$value  = cookie('utoken');
       	$data = $xcrpt->decrypt($value,'base64');
       	if($data)
       	{
-      		
-      		$this->redirect("authorize");
+      		$str = explode("_", $data);
+      		if($str&&count($str)==2)
+      		{
+      			$userid = $str[0];
+      			$datetime = strtotime($str[1]);
+      			$currentdate = strtotime(date('Ymd'));
+      			
+      		}
       	}
       	else
       	{
@@ -42,9 +48,10 @@ class IndexController extends Controller {
     
     public function authorize()
     {
+    	header("Content-Type:text/html;charset=utf-8");
     	$weixin  = new Weixin();
     	$key =C("CRYPT_KEY");
-    	$xcrpt = new Xcrypt($key, 'cbc', 'auto');
+    	$xcrpt = new Xcrypt($key, 'cbc', $key);
     	$weixin->appid ='';
     	$weixin->appsecret='';
 //     	$code  = I('get.code');

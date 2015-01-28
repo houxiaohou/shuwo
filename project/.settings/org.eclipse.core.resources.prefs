@@ -1,5 +1,10 @@
 eclipse.preferences.version=1
+encoding//Application/Home=UTF-8
+encoding//Application/Home/Controller=UTF-8
+encoding//Application/Home/Controller/AppConst.php=UTF-8
+encoding//Application/Home/Controller/IndexController.class.php=UTF-8
+encoding//Application/Home/Controller/UserConst.php=UTF-8
+encoding//Application/Home/Controller/Weixin.php=UTF-8
+encoding//Application/Home/Controller/Xcrypt.php=UTF-8
 encoding//Application/Home/Model=UTF-8
-encoding//Application/Home/Model/Index/authorize.html=UTF-8
-encoding//Application/Home/Model/Index/index.html=UTF-8
 encoding/<project>=UTF-8
