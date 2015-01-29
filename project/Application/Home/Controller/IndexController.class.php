@@ -29,6 +29,7 @@ class IndexController extends Controller {
                    {
                    	 E('用户授权异常');
                    }
+                   $this->display();
                 }
       			
       		}
@@ -56,35 +57,36 @@ class IndexController extends Controller {
     
     public function authorize()
     {
-    	header("Content-Type:text/html;charset=utf-8");
     	$weixin  = new Weixin();
     	$key =C("CRYPT_KEY");
     	$xcrpt = new Xcrypt($key, 'cbc', $key);
     	$weixin->appid ='';
     	$weixin->appsecret='';
-//     	$code  = I('get.code');
+		//$code  = I('get.code');
 
-//测试代码    	
-$code ="testcode";
-$token['openid'] = "openid";
-$token['access_token'] = "access_token";
-$userinfo["openid"] = "openid";
-$userinfo["nickname"] = "test";
-$userinfo["sex"] ="1";
-$userinfo["province"] = "上海";
-$userinfo["city"]="上海";
-$userinfo["country"]="中国";
-$userinfo["headimgurl"] ="http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46";
-$userinfo["unionid"] = "uninonid";
-//
+		//测试代码    	
+		$code ="testcode";
+		$token['openid'] = "openid";
+		$token['access_token'] = "access_token";
+	    $userinfo["openid"] = "openid";
+		$userinfo["nickname"] = "test";
+		$userinfo["sex"] ="1";
+		$userinfo["province"] = "上海";
+		$userinfo["city"]="上海";
+		$userinfo["country"]="中国";
+		$userinfo["headimgurl"] ="http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46";
+		$userinfo["unionid"] = "uninonid";
+		
     	if($code)
     	{
     		//$token = $weixin->getTokenWithCode($code);
+    		
     		if ($token)
     		{
     			$openid = $token['openid'];
     			$accessToken = $token['access_token'];
     			//$userinfo = $weixin->getUser($openid, $accessToken);
+    			
     			if($userinfo)
     			{
     			    $useropenid =$userinfo['openid'];

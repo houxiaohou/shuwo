@@ -7,6 +7,7 @@ class ShopApiController extends RestController {
 
 //返回所有店铺
 public function getallshops() {
+	    
 		$shop =M("shop");
 		$data =$shop->select();
 		if(!count($data))
