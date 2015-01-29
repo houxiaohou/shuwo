@@ -6,7 +6,7 @@ class Authorize
 	public function Filter($type)
 	{
 		$header = [];
-		$utoken= '';
+		$utoken= null;
 		if(function_exists('getallheaders'))
 		{
 			$header = getallheaders();
@@ -23,10 +23,13 @@ class Authorize
 				break;
 			}
 		}
+		if(!$utoken)
+		{
+			return false;
+		}
 		$key =C("CRYPT_KEY");
 		$xcrpt = new Xcrypt($key, 'cbc', $key);
-		// 测试从cookie 获得 utoken;
-		$utoken = cookie('utoken');
+		
 		
 		$data = $xcrpt->decrypt($utoken,'base64');
 		if($data)
