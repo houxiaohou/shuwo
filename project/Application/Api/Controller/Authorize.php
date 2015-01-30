@@ -25,13 +25,14 @@ class Authorize
 		}
 		if(!$utoken)
 		{
-			//return false;
+			return false;
 		}
 		$key =C("CRYPT_KEY");
 		$xcrpt = new Xcrypt($key, 'cbc', $key);
 		
 		//测试数据
-		$data = "2_213123";
+		$data = "2_20140203";
+		
 		//$data = $xcrpt->decrypt($utoken,'base64');
 		if($data)
 		{
@@ -62,7 +63,7 @@ class Authorize
 //                         	$shop = M('admin');
 //                     		$sql = "name=".$id."AND password=".$str[1];
 //                     		$info = $shop->where($sql)->select();
-                         return true;
+                            return  true;
                     	}
                     	$info = $shop->where($sql)->select();
                     	if(count($info))
