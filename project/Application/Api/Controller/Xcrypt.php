@@ -1,4 +1,5 @@
 <?php
+namespace Api\Controller;
 /**
  * 常用对称加密算法类
  * 支持密钥：64/128/256 bit（字节长度8/16/32）
@@ -69,7 +70,7 @@ class Xcrypt{
 				$this->iv = $iv;
 		}
 
-		 
+			
 	}
 
 
@@ -120,9 +121,9 @@ class Xcrypt{
 			default:
 				$ret = $result;
 		}
-		 
+			
 		return $ret;
-		 
+			
 	}
 
 	/**
@@ -133,10 +134,9 @@ class Xcrypt{
 	 */
 	public function decrypt($str, $code = "base64"){
 		$ret = false;
-
 		switch ($code){
 			case 'base64':
-				$str = base64_decode($str);
+				$str = base64_decode(str_replace(' ', '+', $str));
 				break;
 			case 'hex':
 				$str = $this->_hex2bin($str);

@@ -134,10 +134,9 @@ class Xcrypt{
 	 */
 	public function decrypt($str, $code = "base64"){
 		$ret = false;
-
 		switch ($code){
 			case 'base64':
-				$str = base64_decode($str);
+				$str = base64_decode(str_replace(' ', '+', $str));
 				break;
 			case 'hex':
 				$str = $this->_hex2bin($str);

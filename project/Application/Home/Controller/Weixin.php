@@ -3,9 +3,9 @@ namespace Home\Controller;
 
 class Weixin
 {
-	private   $appid = "wx9e9aa8c72fefa959";  
-    private   $appsecret = "a664ce0ebe0bf6c6386e0a548dada882";
-    private   $redirect_rul ='';
+	public    $appid = "";  
+    public    $appsecret = "";
+    public    $redirect_rul ='';
     
     public function getGlobalAccessToken()
     {

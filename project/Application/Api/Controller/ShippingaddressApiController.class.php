@@ -121,4 +121,29 @@ class ShippingaddressApiController extends RestController {
             $this->response($data,'json');
         }
     }
+    /*
+     * 获取用户的全部地址
+     */
+    public function getalluseraddress(){
+        $address=M('shippingaddress');
+        $userid=11;
+        if($userid){
+            $where[ShippingaddressConst::USERID]=$userid;
+            $data=$address->where($where)->select();
+        }
+        $this->response($data,'json');
+    }
+    /*
+     * 获取用户的默认地址
+     */
+    public function useraddress(){
+        $address=M('shippingaddress');
+        $userid=11;
+        if($userid){
+            $where[ShippingaddressConst::USERID]=$userid;
+            $where[ShippingaddressConst::ISDEFAULT]=1;
+            $data=$address->where($where)->find();
+        }
+            $this->response($data,'json');
+    }
 }

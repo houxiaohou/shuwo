@@ -10,10 +10,21 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-01-26 23:18:57
+Date: 2015-01-30 00:43:43
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for admin
+-- ----------------------------
+DROP TABLE IF EXISTS `admin`;
+CREATE TABLE `admin` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT '',
+  `password` varchar(255) DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for category
@@ -23,7 +34,7 @@ CREATE TABLE `category` (
   `categoryid` int(11) NOT NULL AUTO_INCREMENT,
   `categoryname` varchar(255) DEFAULT '',
   PRIMARY KEY (`categoryid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for order
@@ -38,7 +49,7 @@ CREATE TABLE `order` (
   `totalprice` decimal(10,2) DEFAULT '0.00',
   `address` text,
   `phone` varchar(255) DEFAULT '',
-  `createdtime` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `createdtime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `rtotalprice` decimal(10,2) DEFAULT '0.00',
   `dltime` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`orderid`)
@@ -50,9 +61,9 @@ CREATE TABLE `order` (
 DROP TABLE IF EXISTS `orderproduct`;
 CREATE TABLE `orderproduct` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `orderid` int(11) DEFAULT '0',
+  `orderid` varchar(32) DEFAULT '',
   `productid` int(11) DEFAULT '0',
-  `quanlity` int(11) DEFAULT '0',
+  `quantity` int(11) DEFAULT '0',
   `realweight` int(10) DEFAULT '0',
   `realprice` decimal(10,2) DEFAULT '0.00',
   PRIMARY KEY (`id`)
@@ -75,7 +86,7 @@ CREATE TABLE `product` (
   `unit` varchar(255) DEFAULT '',
   `unitweight` int(6) DEFAULT '0',
   PRIMARY KEY (`productid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for shippingaddress
@@ -117,8 +128,9 @@ CREATE TABLE `shop` (
   `notice` text,
   `dlprice` int(3) DEFAULT '0',
   `isopen` tinyint(2) DEFAULT '0',
+  `userid` int(11) DEFAULT '0',
   PRIMARY KEY (`shopid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for shopproduct
@@ -129,7 +141,7 @@ CREATE TABLE `shopproduct` (
   `shopid` int(11) NOT NULL,
   `productid` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for user
@@ -145,11 +157,12 @@ CREATE TABLE `user` (
   `city` varchar(16) DEFAULT '',
   `province` varchar(16) DEFAULT '',
   `country` varchar(16) DEFAULT '',
-  `createdtime` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `createdtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `openid` varchar(255) DEFAULT NULL,
   `headimgurl` varchar(255) DEFAULT NULL,
+  `roles` tinyint(2) DEFAULT '0',
   PRIMARY KEY (`userid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for weixinshop

@@ -5,8 +5,8 @@ class ShopConst
 {
 	const SHOPID= "shopid";
 	const SHOPSN ="shopsn";
-	const SHOPUNIONID  = "spunid";
 	const SHOPADDRESS = "spadr";
+	const USERID = "userid";
 	const SHOPNAME = "spn";
 	const SHOPIMGURL="simgurl";
 	const CITY = "city";

@@ -12,7 +12,7 @@ return array(
 	'DB_PWD'                => '',          // 密码
 	'DB_PORT'               => '3306',        // 端口
 	'DB_PREFIX'             => '',    // 数据库表前缀
-	'CRYPT_KEY'             =>'Shuwo888u8123456',
+	'CRYPT_KEY'             =>'1234567812345678',
 	'SHOW_PAGE_TRACE'       => TRUE,//开启页面TRACE
   //'DEFAULT_THEME'         => '',	// 默认模板主题名称
   //'TMPL_DETECT_THEME'     => true,       // 自动侦测模板主题

@@ -1,19 +1,28 @@
 <?php
+
 namespace Api\Controller;
+
 use Think\Controller\RestController;
+
 require_once 'ShopConst.php';
 require_once 'GeoHash.php';
+require_once 'Authorize.php';
 class ShopApiController extends RestController {
-
-//返回所有店铺
-public function getallshops() {
-		$shop =M("shop");
-		$data =$shop->select();
-		if(!count($data))
-		{
-			$data = [];
-		}	
-		$this->response($data,"json");
+	
+	// 返回所有店铺
+	public function getallshops() {
+		$authorize = new Authorize ();
+		if ($authorize->Filter ( "admin" )) {
+			$shop = M ( "shop" );
+			$data = $shop->select ();
+			if (! count ( $data )) {
+				$data = [ ];
+			}
+			$this->response ( $data, "json" );
+		} else {
+			$message ["msg"] = "Unauthorized";
+			$this->response($message,'json','401');
+	    }
 
 }
 
@@ -81,7 +90,7 @@ public function getshops()
 	$this->response($data,"json");
 }
 
-//通过店铺id得到所有的上架商品
+//通过店铺id得到所有的商品
 public  function getallproducts()
 {
 	$product =M("product");
@@ -236,9 +245,9 @@ public function updateshop()
 	}
 }
 
-	//更新店铺是否营业
-	public function updateshopisopen()
-	{
+//更新店铺是否营业
+public function updateshopisopen()
+{
 		$shop =M("shop");
 		$post ='post.';
 		$id  = intval(I('get.id',0));
