@@ -31,7 +31,7 @@ class Authorize
 		$xcrpt = new Xcrypt($key, 'cbc', $key);
 		
 		//测试数据
-		$data = "2_213123";
+		$data = "3_213123";
 		//$data = $xcrpt->decrypt($utoken,'base64');
 		if($data)
 		{
