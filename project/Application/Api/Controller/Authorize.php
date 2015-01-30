@@ -25,13 +25,15 @@ class Authorize
 		}
 		if(!$utoken)
 		{
-			//return false;
+// 			return false;
 		}
 		$key =C("CRYPT_KEY");
 		$xcrpt = new Xcrypt($key, 'cbc', $key);
 		
 		//测试数据
-		$data = "3_213123";
+
+		$data = "3_20140203";
+		
 		//$data = $xcrpt->decrypt($utoken,'base64');
 		if($data)
 		{
@@ -39,6 +41,7 @@ class Authorize
 			if($str&&count($str)==2)
 			{
 				$id = intval($str[0]);
+				$model = null;
 				$sql ='';
 				$info =[];
 				if($id)
@@ -48,23 +51,23 @@ class Authorize
                     {
                     	if($type == 'user')
                     	{
-                    		$user = M('user');
-                    		$sql = "userid=".$id."AND roles=0";
+                    		$model = M('user');
+                    		$sql = "userid=".$id." AND roles=0";
                     	}
                     	if($type == 'shop')
                     	{
-                    		$shop = M('shop');
-                    		$sql = "userid=".$id."AND shopid=".$shopid."AND roles=1";
+                    		$model = M('shop');
+                    		$sql = "userid=".$id." AND shopid=".$shopid."AND roles=1";
                     		
                         }
                         if($type =='admin')
                         {	
 //                         	$shop = M('admin');
-//                     		$sql = "name=".$id."AND password=".$str[1];
+//                     		$sql = "name=".$id." AND password=".$str[1];
 //                     		$info = $shop->where($sql)->select();
-                         return true;
+                            return  true;
                     	}
-                    	$info = $shop->where($sql)->select();
+                    	$info = $model->where($sql)->select();
                     	if(count($info))
                     	{
                     		break;

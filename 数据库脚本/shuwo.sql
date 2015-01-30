@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-01-30 00:43:43
+Date: 2015-01-30 16:45:41
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -51,7 +51,8 @@ CREATE TABLE `order` (
   `phone` varchar(255) DEFAULT '',
   `createdtime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `rtotalprice` decimal(10,2) DEFAULT '0.00',
-  `dltime` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `dltime` varchar(32) DEFAULT NULL,
+  `notes` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`orderid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
