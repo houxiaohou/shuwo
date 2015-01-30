@@ -151,11 +151,11 @@ class ShopApiController extends RestController {
 		}
 	}
 	
-	// 更新店铺
-	public function updateshop() {
+	// 管理员更新店铺
+	public function adminupdateshop() {
 		$id = intval ( I ( 'get.id', 0 ) );
 		$authorize = new Authorize ();
-		$auid = $authorize->Filter ( 'shop,admin', $id );
+		$auid = $authorize->Filter ( 'admin' );
 		if ($auid) {
 			$post = 'post.';
 			$lat = 0;
@@ -215,11 +215,75 @@ class ShopApiController extends RestController {
 		}
 	}
 	
-	// 更新店铺是否营业
-	public function updateshopisopen() {
+	// 店主更新店铺
+	public function userupdateshop() {
+		$authorize = new Authorize ();
+		$auid = $authorize->Filter ( 'shop' );
+		if ($auid) {
+			$post = 'post.';
+			$lat = 0;
+			$lng = 0;
+			if ($auid) {
+				$shop = M ( "shop" );
+				$data [ShopConst::SHOPID] = $auid;
+				if (I ( $post . ShopConst::SHOPNAME ) != null) {
+					$data [ShopConst::SHOPNAME] = I ( $post . ShopConst::SHOPNAME );
+				}
+				if (I ( $post . ShopConst::SHOPADDRESS ) != null) {
+					$data [ShopConst::SHOPADDRESS] = I ( $post . ShopConst::SHOPADDRESS );
+				}
+				if (I ( $post . ShopConst::SHOPIMGURL ) != null) {
+					$data [ShopConst::SHOPIMGURL] = I ( $post . ShopConst::SHOPIMGURL );
+				}
+				if (I ( $post . ShopConst::CONTACTNAME ) != null) {
+					$data [ShopConst::CONTACTNAME] = I ( $post . ShopConst::CONTACTNAME );
+				}
+				if (I ( $post . ShopConst::CONTACTPHONE ) != null) {
+					$data [ShopConst::CONTACTPHONE] = I ( $post . ShopConst::CONTACTPHONE );
+				}
+				if (I ( $post . ShopConst::CITY ) != null) {
+					$data [ShopConst::CITY] = I ( $post . ShopConst::CITY );
+				}
+				if (I ( $post . ShopConst::PROVINCE ) != null) {
+					$data [ShopConst::PROVINCE] = I ( $post . ShopConst::PROVINCE );
+				}
+				if (I ( $post . ShopConst::DISTRICT ) != null) {
+					$data [ShopConst::DISTRICT] = I ( $post . ShopConst::DISTRICT );
+				}
+				if (doubleval ( I ( $post . ShopConst::LATITUDE ) ) & doubleval ( I ( $post . ShopConst::LONGITUDE ) )) {
+					$lat = $data [ShopConst::LATITUDE] = I ( $post . ShopConst::LATITUDE );
+					$lng = $data [ShopConst::LONGITUDE] = I ( $post . ShopConst::LONGITUDE );
+					$geohash = new Geohash ();
+					$data [ShopConst::GEOHASH] = $geohash->encode ( $lat, $lng );
+				}
+				if (I ( $post . ShopConst::NOTICE ) != null) {
+					$data [ShopConst::NOTICE] = I ( $post . ShopConst::NOTICE );
+				}
+				if (intval ( I ( $post . ShopConst::DELIVERYPRICE ) )) {
+					$data [ShopConst::DELIVERYPRICE] = I ( $post . ShopConst::DELIVERYPRICE );
+				}
+				if (I ( $post . ShopConst::ISOPEN ) != null) {
+					$isopen = intval ( I ( $post . ShopConst::ISOPEN ) );
+					if ($isopen) {
+						$data [ShopConst::ISOPEN] = 1;
+					} else {
+						$data [ShopConst::ISOPEN] = 0;
+					}
+				}
+				$shop->save ( $data );
+			}
+		} else {
+			$message ["msg"] = "Unauthorized";
+			$this->response ( $message, 'json', '401' );
+		}
+	}
+	
+	// 管理员更新店铺是否营业
+	public function adminupdateshopisopen() 
+	{
 		$authorize = new Authorize ();
 		$id = intval ( I ( 'get.id', 0 ) );
-		$auid = $authorize->Filter ( 'shop,admin', $id );
+		$auid = $authorize->Filter ( 'admin');
 		if ($auid) {
 			$shop = M ( "shop" );
 			$post = 'post.';
@@ -239,11 +303,34 @@ class ShopApiController extends RestController {
 		}
 	}
 	
+	public function userupdateshopisopen()
+	{
+		$authorize = new Authorize ();
+		$auid = $authorize->Filter ( 'shop');
+		if ($auid) {
+			$shop = M ( "shop" );
+			$post = 'post.';
+			$isopen = intval ( I ( $post . ShopConst::ISOPEN ) );
+			if ($auid) {
+				$data [ShopConst::SHOPID] = $auid;
+				if ($isopen) {
+					$data [ShopConst::ISOPEN] = 1;
+				} else {
+					$data [ShopConst::ISOPEN] = 0;
+				}
+				$shop->save ( $data );
+			}
+		} else {
+			$message ["msg"] = "Unauthorized";
+			$this->response ( $message, 'json', '401' );
+		}
+	 }
+	
 	// 删除店铺
 	public function deleteshop() {
 		$authorize = new Authorize ();
 		$id = intval ( I ( 'get.id', 0 ) );
-		$auid = $authorize->Filter ( 'admin', $id );
+		$auid = $authorize->Filter ( 'admin');
 		if ($auid) {
 			if ($id) {
 				$shop = M ( "shop" );
