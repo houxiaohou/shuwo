@@ -50,6 +50,9 @@ return array(
       array('order/:id','OrderApi/getorderbyid', '', array('method' => 'GET')),//根据GET传的id查询对应的订单
       array('ordershop/:id','OrderApi/getordershopbyid', '', array('method' => 'GET')),//根据GET传的shopid查询对应店铺的的订单
       array('order/:id','OrderApi/deleteorder', '', array('method' => 'DELETE')),   //删除订单
+      array('order','OrderApi/createorder', '', array('method' => 'POST')),//生成新订单
+      array('weight','OrderApi/getweight', '', array('method' => 'POST')),//称重
+	  
 
 )
 );
