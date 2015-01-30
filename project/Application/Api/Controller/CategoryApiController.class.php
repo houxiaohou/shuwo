@@ -3,7 +3,6 @@
 namespace Api\Controller;
 
 use Think\Controller\RestController;
-use Think\Auth;
 
 require_once 'CategoryConst.php';
 require_once 'Authorize.php';
@@ -18,13 +17,11 @@ class CategoryApiController extends RestController {
 			$data = $category->select ();
 			if (! count ( $data )) {
 				$data = [ ];
-				$this->response ( $data, "json" );
-			} 
-		}
-		else 
-		{
-				$message ["msg"] = "Unauthorized";
-				$this->response ( $message, 'json', '401' );
+			}
+			$this->response ( $data, "json" );
+		} else {
+			$message ["msg"] = "Unauthorized";
+			$this->response ( $message, 'json', '401' );
 		}
 	}
 	// 通过ID查询种类
@@ -43,36 +40,57 @@ class CategoryApiController extends RestController {
 	}
 	// 添加种类
 	public function addcategory() {
-		$category = M ( "category" );
-		if (I ( 'post.categoryname' ) != null) {
-			$data [CategoryConst::CATEGORYNAME] = I ( 'post.categoryname' );
+		$authorize = new Authorize ();
+		$auid = $authorize->Filter ( 'admin' );
+		if ($auid) {
+			$category = M ( "category" );
+			if (I ( 'post.categoryname' ) != null) {
+				$data [CategoryConst::CATEGORYNAME] = I ( 'post.categoryname' );
+			}
+			$category->add ( $data );
+			$this->response ( $data, "json" );
+		} else {
+			$message ["msg"] = "Unauthorized";
+			$this->response ( $message, 'json', '401' );
 		}
-		$category->add ( $data );
-		$this->response ( $data, "json" );
 	}
 	// 更新种类
 	public function updatecategory() {
-		$category = M ( 'category' );
-		$id = intval ( I ( 'get.id', 0 ) );
-		if ($id) {
-			$data [CategoryConst::CATEGORYID] = $id;
+		$authorize = new Authorize ();
+		$auid = $authorize->Filter ( 'admin' );
+		if ($auid) {
+			$category = M ( 'category' );
+			$id = intval ( I ( 'get.id', 0 ) );
+			if ($id) {
+				$data [CategoryConst::CATEGORYID] = $id;
+			}
+			if (I ( 'post.categoryname' ) != null) {
+				$data [CategoryConst::CATEGORYNAME] = I ( 'post.categoryname' );
+			}
+			$data = $category->save ( $data );
+			$this->response ( $data, "json" );
+		} else {
+			$message ["msg"] = "Unauthorized";
+			$this->response ( $message, 'json', '401' );
 		}
-		if (I ( 'post.categoryname' ) != null) {
-			$data [CategoryConst::CATEGORYNAME] = I ( 'post.categoryname' );
-		}
-		$data = $category->save ( $data );
-		$this->response ( $data, "json" );
 	}
 	// 删除种类
 	public function deletecategory() {
-		$id = intval ( I ( 'get.id', 0 ) );
-		if ($id) {
-			$category = M ( 'category' );
-			$categoryid = $category->where ( 'categoryid  =' . $id )->delete ();
-			if ($categoryid) {
-				$product = M ( 'product' );
-				$product->where ( 'categoryid  =' . $id )->delete ();
+		$authorize = new Authorize ();
+		$auid = $authorize->Filter ( 'admin' );
+		if ($auid) {
+			$id = intval ( I ( 'get.id', 0 ) );
+			if ($id) {
+				$category = M ( 'category' );
+				$categoryid = $category->where ( 'categoryid  =' . $id )->delete ();
+				if ($categoryid) {
+					$product = M ( 'product' );
+					$product->where ( 'categoryid  =' . $id )->delete ();
+				}
 			}
+		} else {
+			$message ["msg"] = "Unauthorized";
+			$this->response ( $message, 'json', '401' );
 		}
 	}
 }
