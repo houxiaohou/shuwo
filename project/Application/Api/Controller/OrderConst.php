@@ -14,4 +14,5 @@ class OrderConst
     const CREATEDTIME = "createdtime";
     const RTOTALPRICE = "rtotalprice";
     const DLTIME = "dltime";
+    const NOTES = "notes";
 }
