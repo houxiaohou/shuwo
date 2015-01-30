@@ -77,14 +77,31 @@ class ShopApiController extends RestController {
 		$this->response ( $data, "json" );
 	}
 	
-	// 通过店铺id得到所有的商品 (店铺)
-	public function getallproducts() {
+	// 通过店铺id得到所有的商品 (管理员)
+	public function admingetallproducts() {
 		$product = M ( "product" );
 		$shopid = intval ( I ( 'get.id', 0 ) );
 		$authorize = new Authorize ();
-		$auid = $authorize->Filter ( 'shop', $shopid );
+		$auid = $authorize->Filter ( 'admin');
 		if ($auid) {
 			$data = $product->join ( "shopproduct ON shopproduct.productid=product.productid" )->join ( "category ON category.categoryid = product.categoryid" )->where ( "shopid=".$shopid )->select ();
+			if (! count ( $data )) {
+				$data = [ ];
+			}
+			$this->response ( $data, 'json' );
+		} else {
+			$message ["msg"] = "Unauthorized";
+			$this->response ( $message, 'json', '401' );
+		}
+	}
+	
+	// 通过店铺id得到所有的商品 (店铺)
+	public function usergetallproducts() {
+		$product = M ( "product" );
+		$authorize = new Authorize ();
+		$auid = $authorize->Filter ( 'shop');
+		if ($auid) {
+			$data = $product->join ( "shopproduct ON shopproduct.productid=product.productid" )->join ( "category ON category.categoryid = product.categoryid" )->where ( "shopid=".$auid )->select ();
 			if (! count ( $data )) {
 				$data = [ ];
 			}
