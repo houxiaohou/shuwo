@@ -2,19 +2,14 @@
 namespace Api\Controller;
 use Think\Controller\RestController;
 require_once 'ShippingaddressConst.php';
+require_once 'Authorize.php';
+
 class ShippingaddressApiController extends RestController {
-    //返回所有的用户地址
-    public function getalladdress(){
-        $address=M('shippingaddress');
-        $data=$address->select();
-        if(!count($data))
-        {
-            $data = [];
-        }
-        $this->response($data, "json");
-    }
     //根据id查询对应的用户地址
     public function getaddressbyid(){
+        $authorize = new Authorize ();
+        $userid=$authorize->Filter ( "user" );
+        if($userid){
         $address=M('shippingaddress');
         $said  =intval( I('get.id',0));
         if($said)
@@ -23,20 +18,29 @@ class ShippingaddressApiController extends RestController {
         	$data = $address->where($sql)->find();
         	if(!count($data)){
            	 	$data = [];
-        	}
+        	   }else{
+        	       if($data[ShippingaddressConst::USERID] != $userid){
+        	           $message ["msg"] = "Unauthorized";
+        	           $this->response ( $message, 'json', '401' );
+        	       }
+        	       $this->response($data,"json");
+        	   }
+            }
+        }else{
+            $message ["msg"] = "Unauthorized";
+            $this->response ( $message, 'json', '401' );
         }
-        $this->response($data,"json");
     }
     //更新用户地址
     public function updateaddress(){
+        $authorize = new Authorize ();
+        $userid=$authorize->Filter ( "user" );
+        if($userid){
         $address=M('shippingaddress');
         $said=intval( I('get.id',0));
         if($said){
-        $userid=I('post.userid');
         $data[ShippingaddressConst::SAID]=$said;
-         if($userid){
-             $data[ShippingaddressConst::USERID]=$userid;
-         }
+        $data[ShippingaddressConst::USERID]=$userid;
         if(I('post.username') != null){
             $data[ShippingaddressConst::USERNAME]=I('post.username');
         }
@@ -60,15 +64,19 @@ class ShippingaddressApiController extends RestController {
            $address->where("userid = {$userid}  and said !=".$said)->setField('isdefault',0); 
         }
           $this->response($data,'json');       
-        }
+         }
+       }else{
+           $message ["msg"] = "Unauthorized";
+           $this->response ( $message, 'json', '401' );
+       }
     }
     //添加用户地址
     public function addaddress(){
-        $address=M('shippingaddress');
-        $userid=I('post.userid');
+        $authorize = new Authorize ();
+        $userid=$authorize->Filter ( "user" );
         if($userid){
+        $address=M('shippingaddress');
             $data[ShippingaddressConst::USERID]=$userid;
-        }
         if(I('post.username') != null){
             $data[ShippingaddressConst::USERNAME]=I('post.username');
         }
@@ -93,57 +101,85 @@ class ShippingaddressApiController extends RestController {
             $address->where("userid = {$userid}  and said !=".$said)->setField('isdefault',0);
         }
         $this->response($data,'json');
+        }else{
+            $message ["msg"] = "Unauthorized";
+            $this->response ( $message, 'json', '401' );
+        }
     }
     //删除用户地址
     public function deleteaddress(){
+        $authorize = new Authorize ();
+        $userid=$authorize->Filter ( "user" );
+        if($userid){
         $address=M('shippingaddress');
         $said=intval( I('get.id',0));
         if($said){
         $address->where('said  ='.$said)->delete();
         }
+       }else{
+           $message ["msg"] = "Unauthorized";
+           $this->response ( $message, 'json', '401' );
+       }
     }
     /*
      * 局部更新
      */
     public function updateisdefault(){
+        $authorize = new Authorize ();
+        $userid=$authorize->Filter ( "user" );
+        if($userid){
         $said=intval( I('get.id',0));
         if($said){
             $address=M('shippingaddress');
-            $userid=I('post.userid');
             $data[ShippingaddressConst::SAID]=$said;
-            if($userid){
-                $data[ShippingaddressConst::USERID]=$userid;
-            }
+            $data[ShippingaddressConst::USERID]=$userid;
             $data[ShippingaddressConst::ISDEFAULT]=1;
             if($address->save($data)){
                 $address->where("userid = {$userid}  and said !=".$said)->setField('isdefault',0);
             }
             $this->response($data,'json');
+            }
+        }else{
+            $message ["msg"] = "Unauthorized";
+            $this->response ( $message, 'json', '401' );
         }
     }
     /*
-     * 获取用户的全部地址
+     * 根据userid获取用户的全部地址
      */
     public function getalluseraddress(){
+        $authorize = new Authorize ();
+        $userid=$authorize->Filter ( "user" );
+        if($userid){
         $address=M('shippingaddress');
-        $userid=11;
         if($userid){
             $where[ShippingaddressConst::USERID]=$userid;
             $data=$address->where($where)->select();
         }
         $this->response($data,'json');
+        }else{
+            $message ["msg"] = "Unauthorized";
+            $this->response ( $message, 'json', '401' );
+        }
     }
     /*
      * 获取用户的默认地址
      */
     public function useraddress(){
+        $authorize = new Authorize ();
+        $userid=$authorize->Filter ( "user" );
+        if($userid){
         $address=M('shippingaddress');
-        $userid=11;
         if($userid){
             $where[ShippingaddressConst::USERID]=$userid;
             $where[ShippingaddressConst::ISDEFAULT]=1;
             $data=$address->where($where)->find();
         }
             $this->response($data,'json');
+        }else{
+            $message ["msg"] = "Unauthorized";
+            $this->response ( $message, 'json', '401' );
+        }
     }
+    
 }

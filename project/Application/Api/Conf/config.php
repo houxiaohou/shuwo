@@ -33,14 +33,13 @@ return array(
         array('category/:id','CategoryApi/deletecategory', '', array('method' => 'DELETE')),   //删除水果类型
     
         //用户地址URL配置
-        array('alladdress','ShippingaddressApi/getalladdress','',array('method'=>'GET')),//查询所有的用户地址
         array('address/default','ShippingaddressApi/useraddress','',array('method'=>'GET')),//获取用户的默认地址
         array('address/:id/default','ShippingaddressApi/updateisdefault', '', array('method' => 'POST')),//局部更新地址，以（POST）传参
         array('address/:id','ShippingaddressApi/getaddressbyid', '', array('method' => 'GET')),//根据GET传的id查询对应的地址信息
         array('address/:id','ShippingaddressApi/updateaddress', '', array('method' => 'POST')),//更新地址，以（POST）传参
         array('address','ShippingaddressApi/getalluseraddress', '', array('method' => 'GET')),//获取用户的全部地址
         array('address','ShippingaddressApi/addaddress', '', array('method' => 'POST')),//添加地址，以（POST）传参
-        array('address/:id','ShippingaddressApi/deleteaddress', '', array('method' => 'DELETE')),   //删除地址
+        array('address/:id','ShippingaddressApi/deleteaddress', '', array('method' => 'post')),   //删除地址
 
        //用户账号密码URL配置
        array('alladmin','AdminApi/getalladmin','',array('method'=>'GET')),//查询所有用户
