@@ -3,7 +3,7 @@ namespace Api\Controller;
 require_once 'Xcrypt.php';
 class Authorize
 {
-	public function Filter($type,$shopid=0)
+	public function Filter($type)
 	{
 		$header = [];
 		$utoken= null;
@@ -57,8 +57,8 @@ class Authorize
                     	if($type == 'shop')
                     	{
                     		$model = M('shop');
-                    		$sql = "userid=".$id." AND shopid=".$shopid."AND roles=1";
-                    		
+                    		$sql = "userid=".$id." AND shopid =".$str[1]." AND roles=1" ;
+                    		$id = $str[1];
                         }
                         if($type =='admin')
                         {	

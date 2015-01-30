@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-01-30 16:45:41
+Date: 2015-01-30 21:29:07
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -34,7 +34,7 @@ CREATE TABLE `category` (
   `categoryid` int(11) NOT NULL AUTO_INCREMENT,
   `categoryname` varchar(255) DEFAULT '',
   PRIMARY KEY (`categoryid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for order
@@ -114,7 +114,6 @@ DROP TABLE IF EXISTS `shop`;
 CREATE TABLE `shop` (
   `shopid` int(11) NOT NULL AUTO_INCREMENT,
   `shopsn` varchar(16) NOT NULL DEFAULT '',
-  `spunid` varchar(255) NOT NULL DEFAULT '',
   `spadr` varchar(255) DEFAULT '',
   `simgurl` varchar(255) DEFAULT '',
   `spn` varchar(32) DEFAULT '',
@@ -131,7 +130,7 @@ CREATE TABLE `shop` (
   `isopen` tinyint(2) DEFAULT '0',
   `userid` int(11) DEFAULT '0',
   PRIMARY KEY (`shopid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for shopproduct
@@ -163,7 +162,7 @@ CREATE TABLE `user` (
   `headimgurl` varchar(255) DEFAULT NULL,
   `roles` tinyint(2) DEFAULT '0',
   PRIMARY KEY (`userid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for weixinshop
