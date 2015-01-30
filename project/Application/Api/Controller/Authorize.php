@@ -3,7 +3,7 @@ namespace Api\Controller;
 require_once 'Xcrypt.php';
 class Authorize
 {
-	public function Filter($type)
+	public function Filter($type,$shopid=0)
 	{
 		$header = [];
 		$utoken= null;
@@ -25,13 +25,14 @@ class Authorize
 		}
 		if(!$utoken)
 		{
-			return false;
+			//return false;
 		}
 		$key =C("CRYPT_KEY");
 		$xcrpt = new Xcrypt($key, 'cbc', $key);
 		
-		
-		$data = $xcrpt->decrypt($utoken,'base64');
+		//测试数据
+		$data = "2_213123";
+		//$data = $xcrpt->decrypt($utoken,'base64');
 		if($data)
 		{
 			$str = explode("_", $data);
@@ -42,24 +43,33 @@ class Authorize
 				$info =[];
 				if($id)
 				{
-					if($type == 'user')
-					{
-						$user = M('user');
-						$sql = "userid=".$id;
-						$info = $user->where($sql)->find();
-					}
-					if($type == 'shop')
-					{
-						$shop = M('shop');
-						$sql = "shopid=".$id;
-						$info = $shop->where($sql)->find();
-					}
-					if($type ==	'admin')
-					{
-						$shop = M('admin');
-						$sql = "name=".$id."AND password=".$str[1];
-						$info = $shop->where($sql)->find();
-					}
+                    $types = explode(",", $type);
+                    foreach ($types as $item)
+                    {
+                    	if($type == 'user')
+                    	{
+                    		$user = M('user');
+                    		$sql = "userid=".$id."AND roles=0";
+                    	}
+                    	if($type == 'shop')
+                    	{
+                    		$shop = M('shop');
+                    		$sql = "userid=".$id."AND shopid=".$shopid."AND roles=1";
+                    		
+                        }
+                        if($type =='admin')
+                        {	
+//                         	$shop = M('admin');
+//                     		$sql = "name=".$id."AND password=".$str[1];
+//                     		$info = $shop->where($sql)->select();
+                         return true;
+                    	}
+                    	$info = $shop->where($sql)->select();
+                    	if(count($info))
+                    	{
+                    		break;
+                    	}
+                    }
 					if(!count($info))
 					{ 
 						return  false;

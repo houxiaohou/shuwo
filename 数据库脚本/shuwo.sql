@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-01-29 16:53:36
+Date: 2015-01-30 00:43:43
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -34,7 +34,7 @@ CREATE TABLE `category` (
   `categoryid` int(11) NOT NULL AUTO_INCREMENT,
   `categoryname` varchar(255) DEFAULT '',
   PRIMARY KEY (`categoryid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for order
@@ -86,7 +86,7 @@ CREATE TABLE `product` (
   `unit` varchar(255) DEFAULT '',
   `unitweight` int(6) DEFAULT '0',
   PRIMARY KEY (`productid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for shippingaddress
@@ -128,8 +128,9 @@ CREATE TABLE `shop` (
   `notice` text,
   `dlprice` int(3) DEFAULT '0',
   `isopen` tinyint(2) DEFAULT '0',
+  `userid` int(11) DEFAULT '0',
   PRIMARY KEY (`shopid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for shopproduct
@@ -140,7 +141,7 @@ CREATE TABLE `shopproduct` (
   `shopid` int(11) NOT NULL,
   `productid` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for user
@@ -159,6 +160,7 @@ CREATE TABLE `user` (
   `createdtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `openid` varchar(255) DEFAULT NULL,
   `headimgurl` varchar(255) DEFAULT NULL,
+  `roles` tinyint(2) DEFAULT '0',
   PRIMARY KEY (`userid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 

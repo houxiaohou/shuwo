@@ -113,6 +113,7 @@ class IndexController extends Controller {
     			    	$data[UserConst::HEADIMGURL] = $userinfo[UserConst::HEADIMGURL];
     			    	$data[UserConst::MOBILE] ='';
     			    	$data[UserConst::PASSWORD] = '';
+    			    	$data[UserConst::ROLES]=0;
     			    	$userid = $user->add($data);
     			    	$datetime = date('Ymd',strtotime('+14 day'));
     			    	$str = $userid."_".$datetime;
