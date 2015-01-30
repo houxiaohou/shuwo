@@ -8,8 +8,10 @@ return array(
 		array('shop/:id/allproducts', 'ShopApi/getallproducts', '', array('method' => 'GET')),
 		array('shop/:id/products', 'ShopApi/getsaleproducts', '', array('method' => 'GET')),
         array('shop/:id', 'ShopApi/getshopbyid', '', array('method' => 'GET')),
-		array('shop/:id/isopen','ShopApi/updateshopisopen', '', array('method' => 'POST')),
-		array('shop/:id','ShopApi/updateshop', '', array('method' => 'POST')),
+		array('shop/:id/isopen','ShopApi/adminupdateshopisopen', '', array('method' => 'POST')),
+		array('shop/isopen','ShopApi/userupdateshopisopen', '', array('method' => 'POST')),
+		array('shop/:id','ShopApi/adminupdateshop', '', array('method' => 'POST')),
+		array('usershop ','ShopApi/userupdateshop', '', array('method' => 'POST')),
 		array('shop','ShopApi/addshop', '', array('method' => 'POST')),
         array('shop/:id','ShopApi/deleteshop', '', array('method' => 'DELETE')),
 		
