@@ -77,9 +77,9 @@ class OrderApiController extends RestController {
          	$data[OrderConst::ORDERID] = $orderid;
          	//新生成的订单状态默认为0，为1时下单成功，为2时订单取消
          	$data[OrderConst::ORDERSTATUS] = 0; 
-//          	$authorize = new Authorize();
-         	$data[OrderConst::USERID] = I('post.userid');
-//          	$data[OrderConst::USERID] = $authorize->Filter('user');
+         	$authorize = new Authorize();
+//          	$data[OrderConst::USERID] = I('post.userid');
+         	$data[OrderConst::USERID] = $authorize->Filter('user');
          	
          	$data[OrderConst::SHOPID] = I('post.shopid');
          	//订单的支付状态默认为0待支付，为1时支付成功，为2时支付失败
@@ -93,6 +93,8 @@ class OrderApiController extends RestController {
 //          	$data[OrderConst::PHONE] = I('post.phone');
          	$data[OrderConst::PHONE] = $shippingaddressdata[ShippingaddressConst::MOBILE];
          	$data[OrderConst::CREATEDTIME] = date("Y-m-d H:i:s", time());
+         	$data[OrderConst::DLTIME] = I('post.dltime');
+         	$data[OrderConst::NOTES] = I('post.notes');
          	
         
          	$product = M('product');
