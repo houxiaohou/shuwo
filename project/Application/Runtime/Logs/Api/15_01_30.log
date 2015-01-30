@@ -1,3 +1,69 @@
 [ 2015-01-30T17:33:08+08:00 ] ::1 /shuwo/project/index.php/Api/allcategory
 ERR: 无法加载控制器:Allcategory
 
+[ 2015-01-30T21:51:12+08:00 ] ::1 /shuwo/project/index.php/Api/allproducts
+ERR: 无法加载控制器:Allproducts
+
+[ 2015-01-30T21:52:51+08:00 ] ::1 /shuwo/project/index.php/Api/allproducts
+ERR: 无法加载控制器:Allproducts
+
+[ 2015-01-30T21:53:23+08:00 ] ::1 /shuwo/project/index.php/Api/allproducts
+ERR: 无法加载控制器:Allproducts
+
+[ 2015-01-30T22:21:00+08:00 ] ::1 /shuwo/project/index.php/Api/product/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 Erreur de syntaxe près de 'WHERE `productid` = 3' à la ligne 1
+
+[ 2015-01-30T22:21:01+08:00 ] ::1 /shuwo/project/index.php/Api/product/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 Erreur de syntaxe près de 'WHERE `productid` = 3' à la ligne 1
+
+[ 2015-01-30T22:21:02+08:00 ] ::1 /shuwo/project/index.php/Api/product/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 Erreur de syntaxe près de 'WHERE `productid` = 3' à la ligne 1
+
+[ 2015-01-30T22:21:02+08:00 ] ::1 /shuwo/project/index.php/Api/product/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 Erreur de syntaxe près de 'WHERE `productid` = 3' à la ligne 1
+
+[ 2015-01-30T22:21:02+08:00 ] ::1 /shuwo/project/index.php/Api/product/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 Erreur de syntaxe près de 'WHERE `productid` = 3' à la ligne 1
+
+[ 2015-01-30T22:21:04+08:00 ] ::1 /shuwo/project/index.php/Api/product/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 Erreur de syntaxe près de 'WHERE `productid` = 3' à la ligne 1
+
+[ 2015-01-30T22:21:04+08:00 ] ::1 /shuwo/project/index.php/Api/product/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 Erreur de syntaxe près de 'WHERE `productid` = 3' à la ligne 1
+
+[ 2015-01-30T22:21:04+08:00 ] ::1 /shuwo/project/index.php/Api/product/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 Erreur de syntaxe près de 'WHERE `productid` = 3' à la ligne 1
+
+[ 2015-01-30T22:21:05+08:00 ] ::1 /shuwo/project/index.php/Api/product/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 Erreur de syntaxe près de 'WHERE `productid` = 3' à la ligne 1
+
+[ 2015-01-30T22:21:18+08:00 ] ::1 /shuwo/project/index.php/Api/product/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 Erreur de syntaxe près de 'WHERE `productid` = 3' à la ligne 1
+
+[ 2015-01-30T22:21:18+08:00 ] ::1 /shuwo/project/index.php/Api/product/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 Erreur de syntaxe près de 'WHERE `productid` = 3' à la ligne 1
+
+[ 2015-01-30T22:21:18+08:00 ] ::1 /shuwo/project/index.php/Api/product/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 Erreur de syntaxe près de 'WHERE `productid` = 3' à la ligne 1
+
+[ 2015-01-30T22:21:19+08:00 ] ::1 /shuwo/project/index.php/Api/product/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 Erreur de syntaxe près de 'WHERE `productid` = 3' à la ligne 1
+
+[ 2015-01-30T22:21:19+08:00 ] ::1 /shuwo/project/index.php/Api/product/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 Erreur de syntaxe près de 'WHERE `productid` = 3' à la ligne 1
+
+[ 2015-01-30T22:21:20+08:00 ] ::1 /shuwo/project/index.php/Api/product/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 Erreur de syntaxe près de 'WHERE `productid` = 3' à la ligne 1
+
+[ 2015-01-30T22:21:21+08:00 ] ::1 /shuwo/project/index.php/Api/product/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 Erreur de syntaxe près de 'WHERE `productid` = 3' à la ligne 1
+
+[ 2015-01-30T22:21:21+08:00 ] ::1 /shuwo/project/index.php/Api/product/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 Erreur de syntaxe près de 'WHERE `productid` = 3' à la ligne 1
+
+[ 2015-01-30T22:21:21+08:00 ] ::1 /shuwo/project/index.php/Api/product/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 Erreur de syntaxe près de 'WHERE `productid` = 3' à la ligne 1
+
+[ 2015-01-30T22:21:21+08:00 ] ::1 /shuwo/project/index.php/Api/product/3
+ERR: SQLSTATE[42000]: Syntax error or access violation: 1064 Erreur de syntaxe près de 'WHERE `productid` = 3' à la ligne 1
+

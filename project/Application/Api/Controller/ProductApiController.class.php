@@ -4,20 +4,29 @@ use Think\Controller\RestController;
 require_once 'ProductConst.php';
 require_once 'ShopProductConst.php';
 require_once 'GeoHash.php';
+require_once 'Authorize.php';
 
 class ProductApiController extends RestController{
 	//返回所有产品
 	public function getallproducts() {
+	    $authorize = new Authorize ();
+	    if($authorize->Filter ( "admin" )){
 		$products = M('product');
 		$data = $products->select();
 		if (!count($data)){
 			$data = [];
 		}
 		$this->response($data, 'json');
+	    }else{
+	        $message ["msg"] = "Unauthorized";
+	        $this->response ( $message, 'json', '401' );
+	    }
 	}
 	
 	//通过id查询产品
 	public function getproductbyid() {
+	    $authorize = new Authorize ();
+	    if($authorize->Filter ( "admin" )){
 		$products = M('product');
 		$id = intval(I('get.id',0));
 		if ($id){
@@ -30,11 +39,16 @@ class ProductApiController extends RestController{
 			$data = [];
 		}
 		$this->response($data,'json');
-		
+	    }else{
+	        $message ["msg"] = "Unauthorized";
+	        $this->response ( $message, 'json', '401' );
+	    }
 	}
 	
 	//通过给定id号更新产品上下架
 	public function updateproductissale() {
+	    $authorize = new Authorize ();
+	    if($authorize->Filter ( "shop" )){
 		$product = M('Product');
 		$post = 'post.';
 		$id = intval(I('get.id', 0));
@@ -47,12 +61,17 @@ class ProductApiController extends RestController{
 				$data[ProductConst::ISSALE] = 0;
 			}
 			$product->save($data);
-		}
-		
+		  }
+	    }else{
+	        $message ["msg"] = "Unauthorized";
+	        $this->response ( $message, 'json', '401' );
+	    }
 	}
 	
 	//增加产品 
 	public function addproduct() {
+	    $authorize = new Authorize ();
+	    if($authorize->Filter ( "shop" )){
 		$product = M('product');
 		$data[ProductConst::PRODUCTNAME] = I('post.productname');
 		$data[ProductConst::PIMGURL] = I('post.pimgurl');
@@ -77,21 +96,33 @@ class ProductApiController extends RestController{
 		$data1[ShopProductConst::PRODUCTID] = $productid;
 		
 		$shopproduct->add($data1);
+	    }else{
+	        $message ["msg"] = "Unauthorized";
+	        $this->response ( $message, 'json', '401' );
+	    }
 		
 	}
 	
 	//根据指定id删除产品
 	public function deleteproduct() {
+	    $authorize = new Authorize ();
+	    if($authorize->Filter ( "shop" )){
 		$products = M('product');
 		$id = intval(I('get.id', 0));
 		if ($id){
 			$where['productid'] = $id;
 			$products->where($where)->delete();
 		}
+	    }else{
+	        $message ["msg"] = "Unauthorized";
+	        $this->response ( $message, 'json', '401' );
+	    }
 	}
 	
 	//根据指定id修改产品信息
-	public function updateproduct() {
+	public function updateproduct() {	  
+	    $authorize = new Authorize ();
+	    if($authorize->Filter ( "shop" )){  
 		$products = M('product');
 		$id  = intval(I('get.id', 0));
 		if ($id){
@@ -127,7 +158,10 @@ class ProductApiController extends RestController{
 				$data[ProductConst::UNITWEIGHT] = I('post.unitweight');
 			}
 		}
-		$products->save($data);
-		
+		$products->save($data);		
+	   }else{
+	       $message ["msg"] = "Unauthorized";
+	       $this->response ( $message, 'json', '401' );
+	   }
 	}
 }

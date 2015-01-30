@@ -32,7 +32,7 @@ class Authorize
 		
 		//测试数据
 
-		$data = "3_4";
+		$data = "4_7";
 		
 		//$data = $xcrpt->decrypt($utoken,'base64');
 		if($data)
