@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-01-30 21:29:07
+Date: 2015-01-30 21:41:24
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -128,7 +128,6 @@ CREATE TABLE `shop` (
   `notice` text,
   `dlprice` int(3) DEFAULT '0',
   `isopen` tinyint(2) DEFAULT '0',
-  `userid` int(11) DEFAULT '0',
   PRIMARY KEY (`shopid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
@@ -161,6 +160,7 @@ CREATE TABLE `user` (
   `openid` varchar(255) DEFAULT NULL,
   `headimgurl` varchar(255) DEFAULT NULL,
   `roles` tinyint(2) DEFAULT '0',
+  `shpoid` int(11) DEFAULT '0',
   PRIMARY KEY (`userid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 

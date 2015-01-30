@@ -17,7 +17,7 @@ class Authorize
 		}
 		foreach ($header as $name => $value)
 		{
-			if ($name == "Authorization")
+			if ($name == "Authorization" || $name == "authorization")
 			{
 				$utoken = $value;
 				break;
@@ -32,7 +32,7 @@ class Authorize
 		
 		//测试数据
 
-		$data = "3_20140203";
+		$data = "3_4";
 		
 		//$data = $xcrpt->decrypt($utoken,'base64');
 		if($data)
@@ -56,7 +56,7 @@ class Authorize
                     	}
                     	if($type == 'shop')
                     	{
-                    		$model = M('shop');
+                    		$model = M('user');
                     		$sql = "userid=".$id." AND shopid =".$str[1]." AND roles=1" ;
                     		$id = $str[1];
                         }
