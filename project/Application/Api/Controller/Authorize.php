@@ -32,9 +32,9 @@ class Authorize
 		
 		//测试数据
 
-		$data = "4_7";
+		//$data = "4_7";
 		
-		//$data = $xcrpt->decrypt($utoken,'base64');
+		$data = $xcrpt->decrypt($utoken,'base64');
 		if($data)
 		{
 			$str = explode("_", $data);
@@ -67,7 +67,7 @@ class Authorize
                             // $model = M('admin');
                             // $sql = "name=".$id." AND password=".$str[1];
                         	// $info = $model->where($sql)->select();
-                        	return 'admin';
+                        	//return 'admin';
                     	}
                     	if(count($info))
                     	{
