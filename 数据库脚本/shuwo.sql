@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-01-30 21:57:33
+Date: 2015-01-31 12:39:00
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -86,8 +86,9 @@ CREATE TABLE `product` (
   `categoryid` int(11) DEFAULT '0',
   `unit` varchar(255) DEFAULT '',
   `unitweight` int(6) DEFAULT '0',
+  `shopid` int(11) DEFAULT NULL,
   PRIMARY KEY (`productid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for shippingaddress
@@ -130,17 +131,6 @@ CREATE TABLE `shop` (
   `isopen` tinyint(2) DEFAULT '0',
   PRIMARY KEY (`shopid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Table structure for shopproduct
--- ----------------------------
-DROP TABLE IF EXISTS `shopproduct`;
-CREATE TABLE `shopproduct` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `shopid` int(11) NOT NULL,
-  `productid` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for user
