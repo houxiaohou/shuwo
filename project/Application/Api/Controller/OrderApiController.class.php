@@ -38,7 +38,7 @@ class OrderApiController extends RestController {
      /*
       * 根据GET传的shopid查询对应店铺的的订单
       */
-     public function getordershopbyid(){
+     public function getorderbyshopid(){
          $order = M('order');
          $id = intval(I('get.id',0));
          if ($id){
@@ -51,6 +51,45 @@ class OrderApiController extends RestController {
              $data = [];
          }
          $this->response($data,"json");
+        }
+        
+        /*
+         * 获取当前用户的订单
+         */
+        function getordersbyuser(){
+        	$authorize = new Authorize();
+        	$userid = $authorize->Filter('user');
+        	$start = I('get.start');
+        	$count = I('get.count');
+        	$status = I('get.status');
+        	$order = M('order');
+        	$orderproduct = M('orderproduct');
+        	
+        	$where[OrderConst::USERID] = $userid;
+        	if ( intval($status) == 0) {
+        		$orderdata = $order->where($where)->order('createdtime')->select();
+        	}else {
+        		$where[OrderConst::ORDERSTATUS] = $status;
+        		$orderdata = $order->where($where)->order('createdtime')->select();
+        	}
+        	for ($i=$start;$i<$start+$count;$i++) {
+        		$data[$i][OrderConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
+        		$data[$i][OrderConst::CREATEDTIME] = $orderdata[$i][OrderConst::CREATEDTIME];
+        		$data[$i][OrderConst::ORDERSTATUS] = $orderdata[$i][OrderConst::ORDERSTATUS];
+        		if (intval($data[$i][OrderConst::ORDERSTATUS]) == 1){
+        			$data[$i]['price'] = $data[$i][OrderConst::RTOTALPRICE];
+        		}else {
+        			$data[$i]['price'] = $data[$i][OrderConst::TOTALPRICE];
+        		}
+        		$where2[OrderProductConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
+        		$orderproductdata = $orderproduct->where($where2)->select();
+        		
+                        	
+        	}
+        	
+        	
+        	
+        	
         }
          /*
           * 删除订单
@@ -146,8 +185,8 @@ class OrderApiController extends RestController {
          	}
          	$data[OrderConst::TOTALPRICE] = $totalprice;
          	$order->add($data);
-         	
-         	$this->response($totalprice,'json');
+         	$data2['orderid'] = $orderid;
+         	$this->response($data2,'json');
 
     	
          }
