@@ -52,6 +52,28 @@ class ShopApiController extends RestController {
 		}
 	}
 	
+	//店主获得店铺信息
+	public function usergetshops()
+	{
+		$authorize = new Authorize();
+		$shopid = $authorize->Filter("shop");
+		if($shopid)
+		{
+			$shop = M('shop');
+			$data = $shop->where("shopid =".$shopid)->find();
+			if(!count($data))
+			{
+				$data=[];
+			}
+			$this->response($data,'json');
+		}
+		else
+		{
+			$message ["msg"] = "Unauthorized";
+			$this->response ( $message, 'json', '401' );
+		}
+	}
+	
 	// 通过经纬度得到周围的营业店铺 （可以匿名）
 	public function getshops() {
 		$get = 'get.';
@@ -320,6 +342,7 @@ class ShopApiController extends RestController {
 		}
 	}
 	
+	//店主更新店铺是否营业
 	public function userupdateshopisopen()
 	{
 		$authorize = new Authorize ();
