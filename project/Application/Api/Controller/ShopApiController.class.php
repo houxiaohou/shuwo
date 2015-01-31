@@ -84,7 +84,7 @@ class ShopApiController extends RestController {
 		$authorize = new Authorize ();
 		$auid = $authorize->Filter ( 'admin');
 		if ($auid) {
-			$data = $product->join ( "shopproduct ON shopproduct.productid=product.productid" )->join ( "category ON category.categoryid = product.categoryid" )->where ( "shopid=".$shopid )->select ();
+			$data = $product->where ( "shopid= ".$shopid )->select ();
 			if (! count ( $data )) {
 				$data = [ ];
 			}
@@ -101,7 +101,7 @@ class ShopApiController extends RestController {
 		$authorize = new Authorize ();
 		$auid = $authorize->Filter ( 'shop');
 		if ($auid) {
-			$data = $product->join ( "shopproduct ON shopproduct.productid=product.productid" )->join ( "category ON category.categoryid = product.categoryid" )->where ( "shopid=".$auid )->select ();
+			$data = $product->where ( "shopid=".$auid )->select ();
 			if (! count ( $data )) {
 				$data = [ ];
 			}
@@ -117,7 +117,7 @@ class ShopApiController extends RestController {
 		$product = M ( "product" );
 		$shopid = intval ( I ( 'get.id', 0 ) );
 		if ($shopid) {
-			$data = $product->join ( "shopproduct ON shopproduct.productid=product.productid" )->join ( "category ON category.categoryid = product.categoryid" )->where ( "shopid=".$shopid." AND issale=1" )->order ( 'num desc' )->select ();
+			$data = $product->where ( "shopid=".$shopid." AND issale=1" )->order ( 'num desc' )->select ();
 			if (! count ( $data )) {
 				$data = [ ];
 			}
@@ -351,7 +351,10 @@ class ShopApiController extends RestController {
 		if ($auid) {
 			if ($id) {
 				$shop = M ( "shop" );
-				$shop->where ( 'shopid=' . $id )->delete ();
+				if($shop->where ( 'shopid=' . $id )->delete ()){
+				    $product=M('product');
+				    $product->where('shopid')->delete();
+				}
 			}
 		} else {
 			$message ["msg"] = "Unauthorized";
