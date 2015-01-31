@@ -14,4 +14,5 @@ class ProductConst
 	const CATEGORYID = 'categoryid';
 	const UNIT = 'unit';
 	const UNITWEIGHT = 'unitweight';
+	const SHOPID ="shopid";
 }
