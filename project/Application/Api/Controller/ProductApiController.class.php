@@ -26,7 +26,6 @@ class ProductApiController extends RestController{
 	//通过id查询产品
 	public function getproductbyid() {
 	    $authorize = new Authorize ();
-	    if($authorize->Filter ( "admin" )){
 		$products = M('product');
 		$id = intval(I('get.id',0));
 		if ($id){
@@ -38,11 +37,7 @@ class ProductApiController extends RestController{
 		} else {
 			$data = [];
 		}
-		$this->response($data,'json');
-	    }else{
-	        $message ["msg"] = "Unauthorized";
-	        $this->response ( $message, 'json', '401' );
-	    }
+		$this->response($data,'json');	    
 	}
 	
 	//通过给定id号更新产品上下架
@@ -71,7 +66,8 @@ class ProductApiController extends RestController{
 	//增加产品 
 	public function addproduct() {
 	    $authorize = new Authorize ();
-	    if($authorize->Filter ( "shop" )){
+	    $shopid=$authorize->Filter ( "shop" );
+	    if($shopid){
 		$product = M('product');
 		$data[ProductConst::PRODUCTNAME] = I('post.productname');
 		$data[ProductConst::PIMGURL] = I('post.pimgurl');
@@ -90,7 +86,6 @@ class ProductApiController extends RestController{
 		
 		//插入shopproduct表值
 		$shopproduct = M('shopproduct');
-		$shopid = I('post.shopid');
 
 		$data1[ShopProductConst::SHOPID] = $shopid;
 		$data1[ShopProductConst::PRODUCTID] = $productid;
