@@ -56,7 +56,7 @@ class OrderApiController extends RestController {
         /*
          * 获取当前用户的订单
          */
-        function getordersbyuser(){
+     public   function getordersbyuser(){
         	$authorize = new Authorize();
         	$userid = $authorize->Filter('user');
         	$start = I('get.start');
@@ -121,14 +121,12 @@ class OrderApiController extends RestController {
          */
         public function getordersbyshop() {
 //         	$authorize = new Authorize();
-        	$id =1;
 //         	$auid = $authorize->Filter('admin,shop');
 //         	if (intval($auid)){
 //         		$shopid = $auid;
 //         	}else{
 //         		$shopid = I('get.shopid');
 //         	}
-        	$this->response($id,'json');
 //         	$status = I('get.status');
 //         	$start = I('get.start');
 //         	$count = I('get.count');
