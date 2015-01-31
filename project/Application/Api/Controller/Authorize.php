@@ -53,21 +53,22 @@ class Authorize
                     	{
                     		$model = M('user');
                     		$sql = "userid=".$id." AND roles=0";
+                    		$info = $model->where($sql)->select();
                     	}
                     	if($item == 'shop')
                     	{
                     		$model = M('user');
                     		$sql = "userid=".$id." AND shopid =".$str[1]." AND roles=1" ;
                     		$id = $str[1];
+                    		$info = $model->where($sql)->select();
                         }
                         if($item =='admin')
                         {	
-//                         	$shop = M('admin');
-//                     		$sql = "name=".$id." AND password=".$str[1];
-//                     		$info = $shop->where($sql)->select();
-                            return  "admin";
+                            // $model = M('admin');
+                            // $sql = "name=".$id." AND password=".$str[1];
+                        	// $info = $model->where($sql)->select();
+                        	return 'admin';
                     	}
-                    	$info = $model->where($sql)->select();
                     	if(count($info))
                     	{
                     		break;
