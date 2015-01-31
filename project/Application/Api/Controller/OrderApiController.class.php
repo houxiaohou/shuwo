@@ -347,7 +347,30 @@ class OrderApiController extends RestController {
          	$order->where($where4)->setField('rtotalprice',$rtotalprice);
          }
          
-         
+         public function cancelorder()
+         {
+         	$authorize = new Authorize();
+         	$auid = $authorize->Filter('admin,shop');
+         	if($auid){
+         		$order = M('order');
+         		$id = I('get.id','');
+         		if (intval($auid))
+         		{
+         			if($auid!=$order->where("orderid=".$id)->getField("shopid"))
+         			{
+         				$message ["msg"] = "Unauthorized";
+         				$this->response ( $message, 'json', '401' );
+         			}
+         			$order->where("orderid=".$id)->setField("orderstatus",2);
+         		}
+         		
+         	}
+         	else
+         	{
+         		$message ["msg"] = "Unauthorized";
+         		$this->response ( $message, 'json', '401' );
+         	}
+         }
          
      
          
