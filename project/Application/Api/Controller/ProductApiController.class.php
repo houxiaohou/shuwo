@@ -5,7 +5,6 @@ namespace Api\Controller;
 use Think\Controller\RestController;
 
 require_once 'ProductConst.php';
-require_once 'ShopProductConst.php';
 require_once 'GeoHash.php';
 require_once 'Authorize.php';
 class ProductApiController extends RestController {
