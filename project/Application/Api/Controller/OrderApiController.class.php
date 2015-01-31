@@ -126,6 +126,7 @@ class OrderApiController extends RestController {
         public function getordersbyshop() {
         	$authorize = new Authorize();
         	$auid = $authorize->Filter('admin,shop');
+        	if($auid){
         	if (intval($auid)){
         		$shopid = $auid;
         	}else{
@@ -186,7 +187,10 @@ class OrderApiController extends RestController {
         		$data[$i]['productdetail'] = $data_order_product;
         	}
         	$this->response($data,'json');
-        		
+        	}else{
+        	    $message ["msg"] = "Unauthorized";
+        	    $this->response ( $message, 'json', '401' );
+        	}
         }
          /*
           * 删除订单
@@ -342,8 +346,32 @@ class OrderApiController extends RestController {
          	$where4[OrderConst::ORDERID] = $orderid;
          	$order->where($where4)->setField('rtotalprice',$rtotalprice);
          }
-         
-         
+         /*
+          * 撤销订单
+          */
+         public function cancelorder()
+         {
+         	$authorize = new Authorize();
+         	$auid = $authorize->Filter('admin,shop');
+         	if($auid){
+         		$order = M('order');
+         		$id = I('get.id','');
+         		if (intval($auid))
+         		{
+         			if($auid!=$order->where("orderid=".$id)->getField("shopid"))
+         			{
+         				$message ["msg"] = "Unauthorized";
+         				$this->response ( $message, 'json', '401' );
+         			}
+         		}
+         		$order->where("orderid=".$id)->setField("orderstatus",2);
+         	}
+         	else
+         	{
+         		$message ["msg"] = "Unauthorized";
+         		$this->response ( $message, 'json', '401' );
+         	}
+         }
          
      
          
