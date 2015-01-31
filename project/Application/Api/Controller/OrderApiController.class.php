@@ -22,14 +22,30 @@ class OrderApiController extends RestController {
      * 根据GET传的id查询对应的订单
      */
     public function getorderbyid(){
-        $order = M('order');
-        $product = M('product');
-        $orderproduct = M('orderproduct');
-		$id = I('get.id',0);
+    	$order = M('order');
+    	$product = M('product');
+    	$orderproduct = M('orderproduct');
+    	
+    	$id = I('get.id',0);
+    	$where[OrderConst::ORDERID] = $id;
+    	$orderdata = $order->where($where)->find();
+    	
+    	$authorize = new Authorize();
+    	$isAdmin = $authorize->Filter("admin");
+    	if (!$isAdmin) {
+    		$shopId = $authorize->Filter("shop");
+    		if ($shopId != $orderdata[OrderConst::SHOPID]) {
+    			$userId = $authorize->Filter("user");
+    			if ($userId != $orderdata[OrderConst::USERID]) {
+    				$message ["msg"] = "Unauthorized";
+    				$this->response ( $message, 'json', '401' );
+    	
+    			}
+    		}
+    	}
+    	 
 		
 		if ($id){
-			$where[OrderConst::ORDERID] = $id;
-			$orderdata = $order->where($where)->find();
 					if ($orderdata != null){
 						$data[OrderConst::ORDERID] = $orderdata[OrderConst::ORDERID];
 						$data[OrderConst::CREATEDTIME] = $orderdata[OrderConst::CREATEDTIME];
@@ -381,6 +397,8 @@ class OrderApiController extends RestController {
          	$order = M('order');
          	$where4[OrderConst::ORDERID] = $orderid;
          	$order->where($where4)->setField('rtotalprice',$rtotalprice);
+         	//将订单状态由0变成1(订单确认)
+         	$order->where($where4)->setField('orderstatus',1);
          }
          /*
           * 撤销订单
