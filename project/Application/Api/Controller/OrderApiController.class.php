@@ -77,25 +77,40 @@ class OrderApiController extends RestController {
         		default:
         			break;	
         	}
+        	$order_sum = $order->where($where)->select();
+        	$ordercount = count($order_sum);
+   			if ($ordercount < $count){
+   				$count = $ordercount;
+   			}
         	$orderdata = $order->where($where)->order('createdtime')->limit($start,$count)->select();
+        	
         	for ($i=$start;$i<$start+$count;$i++) {
         		$data[$i][OrderConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
         		$data[$i][OrderConst::CREATEDTIME] = $orderdata[$i][OrderConst::CREATEDTIME];
         		$data[$i][OrderConst::ORDERSTATUS] = $orderdata[$i][OrderConst::ORDERSTATUS];
-        		if (intval($data[$i][OrderConst::ORDERSTATUS]) == 1){
-        			$data[$i]['price'] = $data[$i][OrderConst::RTOTALPRICE];
+        		$data[$i][OrderConst::ADDRESS] = $orderdata[$i][OrderConst::ADDRESS];
+        		$data[$i][OrderConst::PHONE] = $orderdata[$i][OrderConst::PHONE];
+        		$data[$i][OrderConst::NOTES] = $orderdata[$i][OrderConst::NOTES];
+        		
+        		if ($orderdata[$i][OrderConst::RTOTALPRICE] > 0){
+        			$data[$i]['price'] = $orderdata[$i][OrderConst::RTOTALPRICE];
         		}else {
-        			$data[$i]['price'] = $data[$i][OrderConst::TOTALPRICE];
+        			$data[$i]['price'] = $orderdata[$i][OrderConst::TOTALPRICE];
         		}
         		$where2[OrderProductConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
-        		$orderproductdata = $orderproduct->where($where2)->field('productid,quantity,realprice')->select();
+        		$orderproductdata = $orderproduct->where($where2)->field('productid,quantity,realweight,realprice')->select();
         		$count2 = count($orderproductdata);
         		for ($j=0;$j<$count2;$j++) {
         			$data2[$j]['quantity'] = $orderproductdata[$j][OrderProductConst::QUANTITY];
         			$data2[$j]['realprice'] = $orderproductdata[$j][OrderProductConst::REALPRICE];
+        			$data2[$j]['realweight'] = $orderproductdata[$j][OrderProductConst::REALWEIGHT];
         			$where3[ProductConst::PRODUCTID] = $orderproductdata[$j][OrderProductConst::PRODUCTID];
-        			$productdata =  $product->where($where3)->field('productname')->find();
+        			$productdata =  $product->where($where3)->field('productname,unit,attribute,unitweight')->find();
         			$data2[$j]['productname'] = $productdata['productname'];
+        			$data2[$j]['unit'] = $productdata['unit'];
+        			$data2[$j]['attribute'] = $productdata['attribute'];
+        			$data2[$j]['unitweight'] = $productdata['unitweight'];
+        			
         		}
         		$data[$i]['productdetail'] = $data2;  	
         	}
