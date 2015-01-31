@@ -9,6 +9,7 @@ class OrderConst
     const SHOPID = "shopid";
     const PAYSTATUS ="paystatus";
     const TOTALPRICE = "totalprice";
+    const USERNAME = "username";
     const ADDRESS = "address";
     const PHONE = "phone";
     const CREATEDTIME = "createdtime";
