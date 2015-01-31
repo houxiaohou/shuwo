@@ -5,6 +5,7 @@ require_once 'OrderConst.php';
 require_once 'ProductConst.php';
 require_once 'OrderProductConst.php';
 require_once 'ShippingaddressConst.php';
+require_once 'ShopProductConst.php';
 require_once 'Authorize.php';
 class OrderApiController extends RestController {
     /*
@@ -67,12 +68,16 @@ class OrderApiController extends RestController {
         	$product = M('product');
         	
         	$where[OrderConst::USERID] = $userid;
-        	if ( intval($status) == 0) {
-        		$orderdata = $order->where($where)->order('createdtime')->select();
-        	}else {
-        		$where[OrderConst::ORDERSTATUS] = $status;
-        		$orderdata = $order->where($where)->order('createdtime')->select();
+        	switch (intval($status)) {
+        		case 0:
+        		case 1:
+        		case 2:
+        			$where[OrderConst::ORDERSTATUS] = $status;
+        			break;
+        		default:
+        			break;	
         	}
+        	$orderdata = $order->where($where)->order('createdtime')->limit($start,$count)->select();
         	for ($i=$start;$i<$start+$count;$i++) {
         		$data[$i][OrderConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
         		$data[$i][OrderConst::CREATEDTIME] = $orderdata[$i][OrderConst::CREATEDTIME];
@@ -95,6 +100,24 @@ class OrderApiController extends RestController {
         		$data[$i]['productdetail'] = $data2;  	
         	}
         	$this->response($data,'json');
+        }
+        /*
+         * 获取当前店铺的订单
+         */
+        public function getordersbyshop() {
+        	$authorize = new Authorize();
+        	$isadmin = $authorize->Filter('admin');
+        	if ($isadmin){
+        		$shopid = I('get.shopid');
+        	}else{
+        		$shopid = $authorize->Filter('shop');
+        	}
+        	
+        	
+        	
+        	
+        	
+        	
         }
          /*
           * 删除订单
