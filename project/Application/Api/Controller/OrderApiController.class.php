@@ -64,6 +64,7 @@ class OrderApiController extends RestController {
         	$status = I('get.status');
         	$order = M('order');
         	$orderproduct = M('orderproduct');
+        	$product = M('product');
         	
         	$where[OrderConst::USERID] = $userid;
         	if ( intval($status) == 0) {
@@ -82,14 +83,18 @@ class OrderApiController extends RestController {
         			$data[$i]['price'] = $data[$i][OrderConst::TOTALPRICE];
         		}
         		$where2[OrderProductConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
-        		$orderproductdata = $orderproduct->where($where2)->select();
-        		
-                        	
+        		$orderproductdata = $orderproduct->where($where2)->field('productid,quantity,realprice')->select();
+        		$count2 = count($orderproductdata);
+        		for ($j=0;$j<$count2;$j++) {
+        			$data2[$j]['quantity'] = $orderproductdata[$j][OrderProductConst::QUANTITY];
+        			$data2[$j]['realprice'] = $orderproductdata[$j][OrderProductConst::REALPRICE];
+        			$where3[ProductConst::PRODUCTID] = $orderproductdata[$j][OrderProductConst::PRODUCTID];
+        			$productdata =  $product->where($where3)->field('productname')->find();
+        			$data2[$j]['productname'] = $productdata['productname'];
+        		}
+        		$data[$i]['productdetail'] = $data2;  	
         	}
-        	
-        	
-        	
-        	
+        	$this->response($data,'json');
         }
          /*
           * 删除订单
