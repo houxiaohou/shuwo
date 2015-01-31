@@ -126,6 +126,7 @@ class OrderApiController extends RestController {
         public function getordersbyshop() {
         	$authorize = new Authorize();
         	$auid = $authorize->Filter('admin,shop');
+        	if($auid){
         	if (intval($auid)){
         		$shopid = $auid;
         	}else{
@@ -186,7 +187,10 @@ class OrderApiController extends RestController {
         		$data[$i]['productdetail'] = $data_order_product;
         	}
         	$this->response($data,'json');
-        		
+        	}else{
+        	    $message ["msg"] = "Unauthorized";
+        	    $this->response ( $message, 'json', '401' );
+        	}
         }
          /*
           * 删除订单
