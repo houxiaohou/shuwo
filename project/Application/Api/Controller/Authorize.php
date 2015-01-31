@@ -40,7 +40,7 @@ class Authorize
 			$str = explode("_", $data);
 			if($str&&count($str)==2)
 			{
-				$id = intval($str[0]);
+				$id = $str[0];
 				$model = null;
 				$sql ='';
 				$info =[];
