@@ -59,25 +59,97 @@ class OrderApiController extends RestController {
      public   function getordersbyuser(){
         	$authorize = new Authorize();
         	$userid = $authorize->Filter('user');
+        	if ($userid){
+        		$start = I('get.start');
+        		$count = I('get.count');
+        		$status = I('get.status');
+        		$order = M('order');
+        		$orderproduct = M('orderproduct');
+        		$product = M('product');
+        		 
+        		$where[OrderConst::USERID] = $userid;
+        		switch (intval($status)) {
+        			case 0:
+        			case 1:
+        			case 2:
+        				$where[OrderConst::ORDERSTATUS] = $status;
+        				break;
+        			default:
+        				break;
+        		}
+        		
+        		$orderdata = $order->where($where)->order('createdtime')->limit($start,$count)->select();
+        		for ($i=0;$i<$count;$i++) {
+        			if ($orderdata[$i][OrderConst::ORDERID] == null){
+        				break;
+        			}
+        			else {
+        				$data[$i][OrderConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
+        				$data[$i][OrderConst::CREATEDTIME] = $orderdata[$i][OrderConst::CREATEDTIME];
+        				$data[$i][OrderConst::ORDERSTATUS] = $orderdata[$i][OrderConst::ORDERSTATUS];
+        				$data[$i][OrderConst::ADDRESS] = $orderdata[$i][OrderConst::ADDRESS];
+        				$data[$i][OrderConst::PHONE] = $orderdata[$i][OrderConst::PHONE];
+        				$data[$i][OrderConst::NOTES] = $orderdata[$i][OrderConst::NOTES];
+        		
+        				if ($orderdata[$i][OrderConst::RTOTALPRICE] > 0){
+        					$data[$i]['price'] = $orderdata[$i][OrderConst::RTOTALPRICE];
+        				}else {
+        					$data[$i]['price'] = $orderdata[$i][OrderConst::TOTALPRICE];
+        				}
+        				$where_order_product[OrderProductConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
+        				$orderproductdata = $orderproduct->where($where_order_product)->field('productid,quantity,realweight,realprice')->select();
+        				$count2 = count($orderproductdata);
+        				for ($j=0;$j<$count2;$j++) {
+        					$data_order_product[$j]['quantity'] = $orderproductdata[$j][OrderProductConst::QUANTITY];
+        					$data_order_product[$j]['realprice'] = $orderproductdata[$j][OrderProductConst::REALPRICE];
+        					$data_order_product[$j]['realweight'] = $orderproductdata[$j][OrderProductConst::REALWEIGHT];
+        					$where_product[ProductConst::PRODUCTID] = $orderproductdata[$j][OrderProductConst::PRODUCTID];
+        					$productdata =  $product->where($where_product)->field('productname,unit,attribute,unitweight')->find();
+        					$data_order_product[$j]['productname'] = $productdata['productname'];
+        					$data_order_product[$j]['unit'] = $productdata['unit'];
+        					$data_order_product[$j]['attribute'] = $productdata['attribute'];
+        					$data_order_product[$j]['unitweight'] = $productdata['unitweight'];
+        					 
+        				}
+        			}
+        			$data[$i]['productdetail'] = $data_order_product;
+        			$this->response($data,'json');
+        		}
+        	}else{
+        		$message ["msg"] = "Unauthorized";
+        		$this->response ( $message, 'json', '401' );
+        	}
+        }
+        /*
+         * 获取当前店铺的订单
+         */
+        public function getordersbyshop() {
+        	$authorize = new Authorize();
+        	$auid = $authorize->Filter('admin,shop');
+        	if (intval($auid)){
+        		$shopid = $auid;
+        	}else{
+        		$shopid = I('get.shopid');
+        	}
+        	$status = I('get.status');
         	$start = I('get.start');
         	$count = I('get.count');
-        	$status = I('get.status');
         	$order = M('order');
         	$orderproduct = M('orderproduct');
         	$product = M('product');
         	
-        	$where[OrderConst::USERID] = $userid;
+        	$where_order[OrderConst::SHOPID] = $shopid;
         	switch (intval($status)) {
         		case 0:
         		case 1:
         		case 2:
-        			$where[OrderConst::ORDERSTATUS] = $status;
+        			$where_order[OrderConst::ORDERSTATUS] = $status;
         			break;
         		default:
-        			break;	
+        			break;
         	}
-        
-        	$orderdata = $order->where($where)->order('createdtime')->limit($start,$count)->select();
+        	$orderdata = $order->where($where_order)->order('createdtime')->limit($start,$count)->select();
+        	
         	for ($i=0;$i<$count;$i++) {
         		if ($orderdata[$i][OrderConst::ORDERID] == null){
         			break;
@@ -114,75 +186,6 @@ class OrderApiController extends RestController {
         		$data[$i]['productdetail'] = $data_order_product;
         	}
         	$this->response($data,'json');
-        	
-        }
-        /*
-         * 获取当前店铺的订单
-         */
-        public function getordersbyshop() {
-//         	$authorize = new Authorize();
-//         	$auid = $authorize->Filter('admin,shop');
-//         	if (intval($auid)){
-//         		$shopid = $auid;
-//         	}else{
-//         		$shopid = I('get.shopid');
-//         	}
-//         	$status = I('get.status');
-//         	$start = I('get.start');
-//         	$count = I('get.count');
-//         	$order = M('order');
-//         	var_dump($order);
-//         	$orderproduct = M('orderproduct');
-//         	$product = M('product');
-        	
-//         	$where_order[OrderConst::SHOPID] = $shopid;
-//         	switch (intval($status)) {
-//         		case 0:
-//         		case 1:
-//         		case 2:
-//         			$where_order[OrderConst::ORDERSTATUS] = $status;
-//         			break;
-//         		default:
-//         			break;
-//         	}
-//         	$orderdata = $order->where($where_order)->order('createdtime')->limit($start,$count)->select();
-        	
-//         	for ($i=0;$i<$count;$i++) {
-//         		if ($orderdata[$i][OrderConst::ORDERID] == null){
-//         			break;
-//         		}
-//         		else {
-//         			$data[$i][OrderConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
-//         			$data[$i][OrderConst::CREATEDTIME] = $orderdata[$i][OrderConst::CREATEDTIME];
-//         			$data[$i][OrderConst::ORDERSTATUS] = $orderdata[$i][OrderConst::ORDERSTATUS];
-//         			$data[$i][OrderConst::ADDRESS] = $orderdata[$i][OrderConst::ADDRESS];
-//         			$data[$i][OrderConst::PHONE] = $orderdata[$i][OrderConst::PHONE];
-//         			$data[$i][OrderConst::NOTES] = $orderdata[$i][OrderConst::NOTES];
-        			 
-//         			if ($orderdata[$i][OrderConst::RTOTALPRICE] > 0){
-//         				$data[$i]['price'] = $orderdata[$i][OrderConst::RTOTALPRICE];
-//         			}else {
-//         				$data[$i]['price'] = $orderdata[$i][OrderConst::TOTALPRICE];
-//         			}
-//         			$where_order_product[OrderProductConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
-//         			$orderproductdata = $orderproduct->where($where_order_product)->field('productid,quantity,realweight,realprice')->select();
-//         			$count2 = count($orderproductdata);
-//         			for ($j=0;$j<$count2;$j++) {
-//         				$data_order_product[$j]['quantity'] = $orderproductdata[$j][OrderProductConst::QUANTITY];
-//         				$data_order_product[$j]['realprice'] = $orderproductdata[$j][OrderProductConst::REALPRICE];
-//         				$data_order_product[$j]['realweight'] = $orderproductdata[$j][OrderProductConst::REALWEIGHT];
-//         				$where_product[ProductConst::PRODUCTID] = $orderproductdata[$j][OrderProductConst::PRODUCTID];
-//         				$productdata =  $product->where($where_product)->field('productname,unit,attribute,unitweight')->find();
-//         				$data_order_product[$j]['productname'] = $productdata['productname'];
-//         				$data_order_product[$j]['unit'] = $productdata['unit'];
-//         				$data_order_product[$j]['attribute'] = $productdata['attribute'];
-//         				$data_order_product[$j]['unitweight'] = $productdata['unitweight'];
-        				 
-//         			}
-//         		}
-//         		$data[$i]['productdetail'] = $data_order_product;
-//         	}
-//         	$this->response($data,'json');
         		
         }
          /*
