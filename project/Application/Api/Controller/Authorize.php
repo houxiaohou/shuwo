@@ -49,18 +49,18 @@ class Authorize
                     $types = explode(",", $type);
                     foreach ($types as $item)
                     {
-                    	if($type == 'user')
+                    	if($item == 'user')
                     	{
                     		$model = M('user');
                     		$sql = "userid=".$id." AND roles=0";
                     	}
-                    	if($type == 'shop')
+                    	if($item == 'shop')
                     	{
                     		$model = M('user');
                     		$sql = "userid=".$id." AND shopid =".$str[1]." AND roles=1" ;
                     		$id = $str[1];
                         }
-                        if($type =='admin')
+                        if($item =='admin')
                         {	
 //                         	$shop = M('admin');
 //                     		$sql = "name=".$id." AND password=".$str[1];
