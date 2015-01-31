@@ -50,7 +50,7 @@ class ProductApiController extends RestController {
 			$id = intval ( I ( 'get.id', 0 ) );
 			$auid = intval ( $auid );
 			if ($auid) {
-				if ($auid != $product->where ( "productid=" . $auid )->getField ( "shopid" )) {
+				if ($auid != $product->where ( "productid=" . $id )->getField ( "shopid" )) {
 					$message ["msg"] = "Unauthorized";
 					$this->response ( $message, 'json', '401' );
 				}
@@ -117,7 +117,7 @@ class ProductApiController extends RestController {
 			$id = intval ( I ( 'get.id', 0 ) );
 			if(intval($auid))
 			{
-				if ($auid != $products->where ( "productid=" . $auid )->getField ( "shopid" )) {
+				if ($auid != $products->where ( "productid=" . $id )->getField ( "shopid" )) {
 					$message ["msg"] = "Unauthorized";
 					$this->response ( $message, 'json', '401' );
 				}
@@ -142,7 +142,7 @@ class ProductApiController extends RestController {
 			$id = intval ( I ( 'get.id', 0 ) );
 			if(intval($auid))
 			{
-				if ($auid != $products->where ( "productid=" . $auid )->getField ( "shopid" )) {
+				if ($auid != $products->where ( "productid=" . $id )->getField ( "shopid" )) {
 					$message ["msg"] = "Unauthorized";
 					$this->response ( $message, 'json', '401' );
 				}

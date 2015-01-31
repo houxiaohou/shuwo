@@ -65,7 +65,7 @@ class Authorize
 //                         	$shop = M('admin');
 //                     		$sql = "name=".$id." AND password=".$str[1];
 //                     		$info = $shop->where($sql)->select();
-                            return  true;
+                            return  "admin";
                     	}
                     	$info = $model->where($sql)->select();
                     	if(count($info))
