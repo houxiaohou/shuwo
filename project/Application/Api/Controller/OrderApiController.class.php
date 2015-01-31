@@ -346,7 +346,9 @@ class OrderApiController extends RestController {
          	$where4[OrderConst::ORDERID] = $orderid;
          	$order->where($where4)->setField('rtotalprice',$rtotalprice);
          }
-         
+         /*
+          * 撤销订单
+          */
          public function cancelorder()
          {
          	$authorize = new Authorize();
@@ -361,9 +363,8 @@ class OrderApiController extends RestController {
          				$message ["msg"] = "Unauthorized";
          				$this->response ( $message, 'json', '401' );
          			}
-         			$order->where("orderid=".$id)->setField("orderstatus",2);
          		}
-         		
+         		$order->where("orderid=".$id)->setField("orderstatus",2);
          	}
          	else
          	{
