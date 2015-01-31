@@ -23,35 +23,68 @@ class OrderApiController extends RestController {
      */
     public function getorderbyid(){
         $order = M('order');
-		$id = intval(I('get.id',0));
+        $product = M('product');
+        $orderproduct = M('orderproduct');
+		$id = I('get.id',0);
+		
 		if ($id){
-			$where[OrderConst::ORDERID] =$id;
-			$data = $order->where($where)->find();
-			if (!count($data)){
-				$data = [];
-			}
-		} else {
+			$where[OrderConst::ORDERID] = $id;
+			$orderdata = $order->where($where)->find();
+					if ($orderdata != null){
+						$data[OrderConst::ORDERID] = $orderdata[OrderConst::ORDERID];
+						$data[OrderConst::CREATEDTIME] = $orderdata[OrderConst::CREATEDTIME];
+						$data[OrderConst::ORDERSTATUS] = $orderdata[OrderConst::ORDERSTATUS];
+						$data[OrderConst::USERNAME] = $orderdata[OrderConst::USERNAME];
+						$data[OrderConst::ADDRESS] = $orderdata[OrderConst::ADDRESS];
+						$data[OrderConst::PHONE] = $orderdata[OrderConst::PHONE];
+						$data[OrderConst::NOTES] = $orderdata[OrderConst::NOTES];
+							
+						if ($orderdata[OrderConst::RTOTALPRICE] > 0){
+							$data['price'] = $orderdata[OrderConst::RTOTALPRICE];
+						}else {
+							$data['price'] = $orderdata[OrderConst::TOTALPRICE];
+						}
+						$where_order_product[OrderProductConst::ORDERID] = $orderdata[OrderConst::ORDERID];
+						$orderproductdata = $orderproduct->where($where_order_product)->field('productid,quantity,realweight,realprice')->select();
+						$count_order_product = count($orderproductdata);
+						for ($j=0;$j<$count_order_product;$j++) {
+							$data_order_product[$j]['quantity'] = $orderproductdata[$j][OrderProductConst::QUANTITY];
+							$data_order_product[$j]['realprice'] = $orderproductdata[$j][OrderProductConst::REALPRICE];
+							$data_order_product[$j]['realweight'] = $orderproductdata[$j][OrderProductConst::REALWEIGHT];
+							$where_product[ProductConst::PRODUCTID] = $orderproductdata[$j][OrderProductConst::PRODUCTID];
+							$productdata =  $product->where($where_product)->field('productname,unit,attribute,unitweight')->find();
+							$data_order_product[$j]['productname'] = $productdata['productname'];
+							$data_order_product[$j]['unit'] = $productdata['unit'];
+							$data_order_product[$j]['attribute'] = $productdata['attribute'];
+							$data_order_product[$j]['unitweight'] = $productdata['unitweight'];	
+						}
+						$data['productdetail'] = $data_order_product;
+					}else{
+						$data = [];
+					}
+		}else{
 			$data = [];
- 		}
- 		$this->response($data[OrderConst::ORDERID],"json");
-     }
+		}
+		$this->response($data,'json');
+    }
+			
      /*
       * 根据GET传的shopid查询对应店铺的的订单
       */
-     public function getorderbyshopid(){
-         $order = M('order');
-         $id = intval(I('get.id',0));
-         if ($id){
-             $where[OrderConst::SHOPID] =$id;
-             $data = $order->where($where)->select();
-             if (!count($data)){
-                 $data = [];
-             }
-         } else {
-             $data = [];
-         }
-         $this->response($data,"json");
-        }
+//      public function getorderbyshopid(){
+//          $order = M('order');
+//          $id = intval(I('get.id',0));
+//          if ($id){
+//              $where[OrderConst::SHOPID] =$id;
+//              $data = $order->where($where)->select();
+//              if (!count($data)){
+//                  $data = [];
+//              }
+//          } else {
+//              $data = [];
+//          }
+//          $this->response($data,"json");
+//         }
         
         /*
          * 获取当前用户的订单
@@ -87,6 +120,7 @@ class OrderApiController extends RestController {
         				$data[$i][OrderConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
         				$data[$i][OrderConst::CREATEDTIME] = $orderdata[$i][OrderConst::CREATEDTIME];
         				$data[$i][OrderConst::ORDERSTATUS] = $orderdata[$i][OrderConst::ORDERSTATUS];
+        				$data[$i][OrderConst::USERNAME] = $orderdata[$i][OrderConst::USERNAME];
         				$data[$i][OrderConst::ADDRESS] = $orderdata[$i][OrderConst::ADDRESS];
         				$data[$i][OrderConst::PHONE] = $orderdata[$i][OrderConst::PHONE];
         				$data[$i][OrderConst::NOTES] = $orderdata[$i][OrderConst::NOTES];
@@ -98,8 +132,8 @@ class OrderApiController extends RestController {
         				}
         				$where_order_product[OrderProductConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
         				$orderproductdata = $orderproduct->where($where_order_product)->field('productid,quantity,realweight,realprice')->select();
-        				$count2 = count($orderproductdata);
-        				for ($j=0;$j<$count2;$j++) {
+        				$count_order_product = count($orderproductdata);
+        				for ($j=0;$j<$count_order_product;$j++) {
         					$data_order_product[$j]['quantity'] = $orderproductdata[$j][OrderProductConst::QUANTITY];
         					$data_order_product[$j]['realprice'] = $orderproductdata[$j][OrderProductConst::REALPRICE];
         					$data_order_product[$j]['realweight'] = $orderproductdata[$j][OrderProductConst::REALWEIGHT];
@@ -113,8 +147,8 @@ class OrderApiController extends RestController {
         				}
         			}
         			$data[$i]['productdetail'] = $data_order_product;
-        			$this->response($data,'json');
         		}
+        		$this->response($data,'json');
         	}else{
         		$message ["msg"] = "Unauthorized";
         		$this->response ( $message, 'json', '401' );
@@ -132,6 +166,7 @@ class OrderApiController extends RestController {
         	}else{
         		$shopid = I('get.shopid');
         	}
+        	var_dump($shopid);
         	$status = I('get.status');
         	$start = I('get.start');
         	$count = I('get.count');
@@ -159,6 +194,7 @@ class OrderApiController extends RestController {
         			$data[$i][OrderConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
         			$data[$i][OrderConst::CREATEDTIME] = $orderdata[$i][OrderConst::CREATEDTIME];
         			$data[$i][OrderConst::ORDERSTATUS] = $orderdata[$i][OrderConst::ORDERSTATUS];
+        			$data[$i][OrderConst::USERNAME] = $orderdata[$i][OrderConst::USERNAME];
         			$data[$i][OrderConst::ADDRESS] = $orderdata[$i][OrderConst::ADDRESS];
         			$data[$i][OrderConst::PHONE] = $orderdata[$i][OrderConst::PHONE];
         			$data[$i][OrderConst::NOTES] = $orderdata[$i][OrderConst::NOTES];
