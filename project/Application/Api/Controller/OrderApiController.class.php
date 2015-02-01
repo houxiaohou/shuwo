@@ -61,9 +61,10 @@ class OrderApiController extends RestController {
 							$data['price'] = $orderdata[OrderConst::TOTALPRICE];
 						}
 						$where_order_product[OrderProductConst::ORDERID] = $orderdata[OrderConst::ORDERID];
-						$orderproductdata = $orderproduct->where($where_order_product)->field('productid,quantity,realweight,realprice')->select();
+						$orderproductdata = $orderproduct->where($where_order_product)->field('id,productid,quantity,realweight,realprice')->select();
 						$count_order_product = count($orderproductdata);
 						for ($j=0;$j<$count_order_product;$j++) {
+							$data_order_product[$j]['orderproductid'] = $orderproductdata[$j][OrderProductConst::ID];
 							$data_order_product[$j]['quantity'] = $orderproductdata[$j][OrderProductConst::QUANTITY];
 							$data_order_product[$j]['realprice'] = $orderproductdata[$j][OrderProductConst::REALPRICE];
 							$data_order_product[$j]['realweight'] = $orderproductdata[$j][OrderProductConst::REALWEIGHT];
@@ -147,9 +148,10 @@ class OrderApiController extends RestController {
         					$data[$i]['price'] = $orderdata[$i][OrderConst::TOTALPRICE];
         				}
         				$where_order_product[OrderProductConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
-        				$orderproductdata = $orderproduct->where($where_order_product)->field('productid,quantity,realweight,realprice')->select();
+        				$orderproductdata = $orderproduct->where($where_order_product)->field('id,productid,quantity,realweight,realprice')->select();
         				$count_order_product = count($orderproductdata);
         				for ($j=0;$j<$count_order_product;$j++) {
+							$data_order_product[$j]['orderproductid'] = $orderproductdata[$j][OrderProductConst::ID];
         					$data_order_product[$j]['quantity'] = $orderproductdata[$j][OrderProductConst::QUANTITY];
         					$data_order_product[$j]['realprice'] = $orderproductdata[$j][OrderProductConst::REALPRICE];
         					$data_order_product[$j]['realweight'] = $orderproductdata[$j][OrderProductConst::REALWEIGHT];
@@ -220,9 +222,10 @@ class OrderApiController extends RestController {
         				$data[$i]['price'] = $orderdata[$i][OrderConst::TOTALPRICE];
         			}
         			$where_order_product[OrderProductConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
-        			$orderproductdata = $orderproduct->where($where_order_product)->field('productid,quantity,realweight,realprice')->select();
+        			$orderproductdata = $orderproduct->where($where_order_product)->field('id,productid,quantity,realweight,realprice')->select();
         			$count2 = count($orderproductdata);
         			for ($j=0;$j<$count2;$j++) {
+        				$data_order_product[$j]['orderproductid'] = $orderproductdata[$j][OrderProductConst::ID];
         				$data_order_product[$j]['quantity'] = $orderproductdata[$j][OrderProductConst::QUANTITY];
         				$data_order_product[$j]['realprice'] = $orderproductdata[$j][OrderProductConst::REALPRICE];
         				$data_order_product[$j]['realweight'] = $orderproductdata[$j][OrderProductConst::REALWEIGHT];
@@ -382,14 +385,17 @@ class OrderApiController extends RestController {
          			if ($discount) {
          				$price = $discount;
          			}
-         			$realprice = $weight*$price/500;
+					if ($productdata[ProductConst::ATTRIBUTE] == 1 || $productdata[ProductConst::ATTRIBUTE] == 2) {
+						$realprice = $weight*$price/500;
+					} else {
+						$realprice = $weight*$price;
+					}
          			$data[OrderProductConst::REALPRICE] = $realprice;
          			
          			$orderproduct->where($where)->save($data);
          			
          			//计算真实总价
          			$rtotalprice += $realprice;
-         
          		}
          	}
          	//将真实总价写入对应的order表中的rtotalprice字段中
