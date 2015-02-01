@@ -182,7 +182,6 @@ class OrderApiController extends RestController {
         	}else{
         		$shopid = I('get.shopid');
         	}
-        	var_dump($shopid);
         	$status = I('get.status');
         	$start = I('get.start');
         	$count = I('get.count');
