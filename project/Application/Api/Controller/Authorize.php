@@ -72,7 +72,7 @@ class Authorize
 //                         		return "admin";
 //                         	}
                         	
-                        	return "admin";
+//                         	return "admin";
                     	}
                     	if(count($info))
                     	{

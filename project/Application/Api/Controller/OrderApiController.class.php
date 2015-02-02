@@ -410,28 +410,30 @@ class OrderApiController extends RestController {
           */
          public function cancelorder()
          {
+         	$order = M('order');
+         	$id = I('post.id',0);
+         	$ordernotes = I('post.ordernotes');
+         	$where[OrderConst::ORDERID] = $id;
+         	$orderdata = $order->where($where)->find();
+         	
          	$authorize = new Authorize();
-         	$auid = $authorize->Filter('admin,shop');
-         	if($auid){
-         		$order = M('order');
-         		$id = I('get.id','');
-         		$ordernotes = I('get.ordernotes');
-         		if (intval($auid))
-         		{
-         			if($auid!=$order->where("orderid=".$id)->getField("shopid"))
-         			{
+         	$isAdmin = $authorize->Filter("admin");
+         	if (!$isAdmin) {
+         		$shopId = $authorize->Filter("shop");
+         		if ($shopId != $orderdata[OrderConst::SHOPID]) {
          				$message ["msg"] = "Unauthorized";
          				$this->response ( $message, 'json', '401' );
-         			}
          		}
-         		$order->where("orderid=".$id)->setField("orderstatus",2);
-         		$order->where("orderid=".$id)->setField("ordernotes",$ordernotes);
          	}
-         	else
-         	{
-         		$message ["msg"] = "Unauthorized";
-         		$this->response ( $message, 'json', '401' );
-         	}
+         	
+         		if ($id){
+         			$order->where("orderid=".$id)->setField("orderstatus",2);
+         			$order->where("orderid=".$id)->setField("ordernotes",$ordernotes);
+         		}else {
+         			$data = [];
+         			$this->response($data,'json');
+         		}
+         	
          }
         
 }
