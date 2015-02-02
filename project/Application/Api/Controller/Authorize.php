@@ -64,10 +64,15 @@ class Authorize
                         }
                         if($item =='admin')
                         {	
-                            // $model = M('admin');
-                            // $sql = "name=".$id." AND password=".$str[1];
-                        	// $info = $model->where($sql)->select();
-                        	//return 'admin';
+//                             $model = M('admin');
+//                             $sql = "name='".$id."' AND password='".$str[1]."'";
+//                         	$info = $model->where($sql)->select();
+//                         	if($info)
+//                         	{
+//                         		return "admin";
+//                         	}
+                        	
+                        	return "admin";
                     	}
                     	if(count($info))
                     	{

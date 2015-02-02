@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-01-31 16:48:03
+Date: 2015-02-02 12:50:48
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -54,6 +54,7 @@ CREATE TABLE `order` (
   `dltime` varchar(32) DEFAULT NULL,
   `notes` varchar(255) DEFAULT NULL,
   `username` varchar(255) DEFAULT '',
+  `ordernotes` varchar(255) DEFAULT '',
   PRIMARY KEY (`orderid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -132,6 +133,17 @@ CREATE TABLE `shop` (
   `isopen` tinyint(2) DEFAULT '0',
   PRIMARY KEY (`shopid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for shopproduct
+-- ----------------------------
+DROP TABLE IF EXISTS `shopproduct`;
+CREATE TABLE `shopproduct` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `shopid` int(11) NOT NULL,
+  `productid` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for user
