@@ -11,8 +11,61 @@ class OrderApiController extends RestController {
      * 查询所有的订单
      */
       public function getallorder(){
+      	$authorize = new Authorize();
+      	$isAdmin = $authorize->Filter("admin");
+      	if (!$isAdmin) {
+      				$message ["msg"] = "Unauthorized";
+      				$this->response ( $message, 'json', '401' );
+      	}
+      	
         $order =M("order");
-        $data =$order->select();
+        $product = M("product");
+        $orderproduct = M("orderproduct");
+        $start = I('get.start');
+        $count = I('get.count');
+        
+        $orderdata = $order->order('-createdtime')->limit($start,$count)->select();
+        for ($i=0;$i<$count;$i++) {
+        	if ($orderdata[$i][OrderConst::ORDERID] == null){
+        		break;
+        	}
+        	else {
+        		$data[$i][OrderConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
+        		$data[$i][OrderConst::CREATEDTIME] = $orderdata[$i][OrderConst::CREATEDTIME];
+        		$data[$i][OrderConst::ORDERSTATUS] = $orderdata[$i][OrderConst::ORDERSTATUS];
+        		$data[$i][OrderConst::USERNAME] = $orderdata[$i][OrderConst::USERNAME];
+        		$data[$i][OrderConst::ADDRESS] = $orderdata[$i][OrderConst::ADDRESS];
+        		$data[$i][OrderConst::PHONE] = $orderdata[$i][OrderConst::PHONE];
+        		$data[$i][OrderConst::NOTES] = $orderdata[$i][OrderConst::NOTES];
+        		$data[$i][OrderConst::SHOPID] = $orderdata[$i][OrderConst::SHOPID];
+        
+        		if ($orderdata[$i][OrderConst::RTOTALPRICE] > 0){
+        			$data[$i]['price'] = $orderdata[$i][OrderConst::RTOTALPRICE];
+        		}else {
+        			$data[$i]['price'] = $orderdata[$i][OrderConst::TOTALPRICE];
+        		}
+        		if ($orderdata[$i][OrderConst::ORDERNOTES] != null){
+        			$data[$i][OrderConst::ORDERNOTES] = $orderdata[$i][OrderConst::ORDERNOTES];
+        		}
+        		$where_order_product[OrderProductConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
+        		$orderproductdata = $orderproduct->where($where_order_product)->field('id,productid,quantity,realweight,realprice')->select();
+        		$count_order_product = count($orderproductdata);
+        		for ($j=0;$j<$count_order_product;$j++) {
+        			$data_order_product[$j]['orderproductid'] = $orderproductdata[$j][OrderProductConst::ID];
+        			$data_order_product[$j]['quantity'] = $orderproductdata[$j][OrderProductConst::QUANTITY];
+        			$data_order_product[$j]['realprice'] = $orderproductdata[$j][OrderProductConst::REALPRICE];
+        			$data_order_product[$j]['realweight'] = $orderproductdata[$j][OrderProductConst::REALWEIGHT];
+        			$where_product[ProductConst::PRODUCTID] = $orderproductdata[$j][OrderProductConst::PRODUCTID];
+        			$productdata =  $product->where($where_product)->field('productname,unit,attribute,unitweight')->find();
+        			$data_order_product[$j]['productname'] = $productdata['productname'];
+        			$data_order_product[$j]['unit'] = $productdata['unit'];
+        			$data_order_product[$j]['attribute'] = $productdata['attribute'];
+        			$data_order_product[$j]['unitweight'] = $productdata['unitweight'];
+        
+        		}
+        	}
+        	$data[$i]['productdetail'] = $data_order_product;
+        }
         if(!count($data)){
             $data = [];
         }
@@ -54,11 +107,15 @@ class OrderApiController extends RestController {
 						$data[OrderConst::ADDRESS] = $orderdata[OrderConst::ADDRESS];
 						$data[OrderConst::PHONE] = $orderdata[OrderConst::PHONE];
 						$data[OrderConst::NOTES] = $orderdata[OrderConst::NOTES];
+						$data[OrderConst::SHOPID] = $orderdata[OrderConst::SHOPID];
 							
 						if ($orderdata[OrderConst::RTOTALPRICE] > 0){
 							$data['price'] = $orderdata[OrderConst::RTOTALPRICE];
 						}else {
 							$data['price'] = $orderdata[OrderConst::TOTALPRICE];
+						}
+						if ($orderdata[OrderConst::ORDERNOTES] != null){
+							$data[OrderConst::ORDERNOTES] = $orderdata[OrderConst::ORDERNOTES];
 						}
 						$where_order_product[OrderProductConst::ORDERID] = $orderdata[OrderConst::ORDERID];
 						$orderproductdata = $orderproduct->where($where_order_product)->field('id,productid,quantity,realweight,realprice')->select();
@@ -128,7 +185,7 @@ class OrderApiController extends RestController {
         				break;
         		}
         		
-        		$orderdata = $order->where($where)->order('createdtime')->limit($start,$count)->select();
+        		$orderdata = $order->where($where)->order('-createdtime')->limit($start,$count)->select();
         		for ($i=0;$i<$count;$i++) {
         			if ($orderdata[$i][OrderConst::ORDERID] == null){
         				break;
@@ -141,11 +198,15 @@ class OrderApiController extends RestController {
         				$data[$i][OrderConst::ADDRESS] = $orderdata[$i][OrderConst::ADDRESS];
         				$data[$i][OrderConst::PHONE] = $orderdata[$i][OrderConst::PHONE];
         				$data[$i][OrderConst::NOTES] = $orderdata[$i][OrderConst::NOTES];
+        				$data[$i][OrderConst::SHOPID] = $orderdata[$i][OrderConst::SHOPID];
         		
         				if ($orderdata[$i][OrderConst::RTOTALPRICE] > 0){
         					$data[$i]['price'] = $orderdata[$i][OrderConst::RTOTALPRICE];
         				}else {
         					$data[$i]['price'] = $orderdata[$i][OrderConst::TOTALPRICE];
+        				}
+        				if ($orderdata[$i][OrderConst::ORDERNOTES] != null){
+        					$data[$i][OrderConst::ORDERNOTES] = $orderdata[$i][OrderConst::ORDERNOTES];
         				}
         				$where_order_product[OrderProductConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
         				$orderproductdata = $orderproduct->where($where_order_product)->field('id,productid,quantity,realweight,realprice')->select();
@@ -201,7 +262,7 @@ class OrderApiController extends RestController {
         		default:
         			break;
         	}
-        	$orderdata = $order->where($where_order)->order('createdtime')->limit($start,$count)->select();
+        	$orderdata = $order->where($where_order)->order('-createdtime')->limit($start,$count)->select();
         	
         	for ($i=0;$i<$count;$i++) {
         		if ($orderdata[$i][OrderConst::ORDERID] == null){
@@ -215,11 +276,15 @@ class OrderApiController extends RestController {
         			$data[$i][OrderConst::ADDRESS] = $orderdata[$i][OrderConst::ADDRESS];
         			$data[$i][OrderConst::PHONE] = $orderdata[$i][OrderConst::PHONE];
         			$data[$i][OrderConst::NOTES] = $orderdata[$i][OrderConst::NOTES];
+        			$data[$i][OrderConst::SHOPID] = $orderdata[$i][OrderConst::SHOPID];
         			 
         			if ($orderdata[$i][OrderConst::RTOTALPRICE] > 0){
         				$data[$i]['price'] = $orderdata[$i][OrderConst::RTOTALPRICE];
         			}else {
         				$data[$i]['price'] = $orderdata[$i][OrderConst::TOTALPRICE];
+        			}
+        			if ($orderdata[$i][OrderConst::ORDERNOTES] != null){
+        				$data[$i][OrderConst::ORDERNOTES] = $orderdata[$i][OrderConst::ORDERNOTES];
         			}
         			$where_order_product[OrderProductConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
         			$orderproductdata = $orderproduct->where($where_order_product)->field('id,productid,quantity,realweight,realprice')->select();
@@ -415,7 +480,6 @@ class OrderApiController extends RestController {
          	$ordernotes = I('post.ordernotes');
          	$where[OrderConst::ORDERID] = $id;
          	$orderdata = $order->where($where)->find();
-         	
          	$authorize = new Authorize();
          	$isAdmin = $authorize->Filter("admin");
          	if (!$isAdmin) {

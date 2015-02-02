@@ -34,7 +34,7 @@ class Authorize
 
 		$data = "4_7";
 		
-		$data = $xcrpt->decrypt($utoken,'base64');
+// 		$data = $xcrpt->decrypt($utoken,'base64');
 		if($data)
 		{
 			$str = explode("_", $data);
@@ -72,7 +72,7 @@ class Authorize
 //                         		return "admin";
 //                         	}
                         	
-//                         	return "admin";
+                        	return "admin";
                     	}
                     	if(count($info))
                     	{
