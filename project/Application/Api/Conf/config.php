@@ -46,9 +46,10 @@ return array(
         array('address/:id\d','ShippingaddressApi/deleteaddress', '', array('method' => 'post')),   //删除地址
 
        //用户账号密码URL配置
-       array('alladmin','AdminApi/getalladmin','',array('method'=>'GET')),//查询所有用户
-       array('admin/:id','AdminApi/updateadmin', '', array('method' => 'POST')),//更新地址，以（POST）传参
-       array('admin','AdminApi/addadmin', '', array('method' => 'POST')),//添加地址，以（POST）传参
+       array('login','AdminApi/userlogin','',array('method'=>'POST')),//管理员登录认证
+       array('alladmin','AdminApi/getalladmin','',array('method'=>'GET')),//查询所有管理员
+//        array('admin/:id','AdminApi/updateadmin', '', array('method' => 'POST')),//更新管理员信息
+       array('admin','AdminApi/addadmin', '', array('method' => 'POST')),//添加管理员
 
        //订单URL配置
       	array('allorder','OrderApi/getallorder','',array('method'=>'GET')),//查询所有的订单

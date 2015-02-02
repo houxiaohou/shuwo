@@ -2,9 +2,11 @@
 namespace Api\Controller;
 use Think\Controller\RestController;
 require_once 'AdminConst.php';
+require_once 'Xcrypt.php';
+
 class AdminApiController extends RestController {
     /*
-     * 返回所有用户
+     * 返回所有管理员
      */
     public function getalladmin() {
         $category =M("admin");
@@ -15,7 +17,7 @@ class AdminApiController extends RestController {
         $this->response($data,"json");
     }
     /*
-     * 添加用户
+     * 添加管理员
      */
     public function addadmin(){
         $admin =M("admin");
@@ -25,30 +27,51 @@ class AdminApiController extends RestController {
         }
         if(I('post.password') != null )
         {
-            $data[AdminConst::PASSWORD]=I('post.password');
+            $data[AdminConst::PASSWORD]=md5(I('post.password'));
         }
         $admin->add($data);
         $this->response($data,"json");
     }
     /*
-     * 更新用户
+     * 更新管理员信息
      */
-    public function updateadmin(){
-        $admin =M("admin");
-        $id=intval(I('get.id',0));
-        if($id)
-        {
-            $data[AdminConst::ID]=$id;
+//     public function updateadmin(){
+//         $admin =M("admin");
+//         $id=intval(I('get.id',0));
+//         if($id)
+//         {
+//             $data[AdminConst::ID]=$id;
+//         }
+//         if(I('post.name') != null )
+//         {
+//             $data[AdminConst::NAME]=I('post.name');
+//         }
+//         if(I('post.password') != null )
+//         {
+//             $data[AdminConst::PASSWORD]=I('post.password');
+//         }
+//         $data=$admin->save($data);
+//         $this->response($data,"json");
+//     }
+    /*
+     * 管理员登录认证
+     */
+public function userlogin(){
+    $key =C("CRYPT_KEY");
+    $xcrpt = new Xcrypt($key, 'cbc', $key);
+    $admin=M('admin');
+    if(I('post.name') !=  NULL || I('post.password') != NULL){
+         $where[AdminConst::NAME]=I('post.name');
+         $where[AdminConst::PASSWORD]=md5(I('post.password'));
+        $data=$admin->where($where)->find();
+        if (! count ( $data )) {
+            $data = [ ];
         }
-        if(I('post.name') != null )
-        {
-            $data[AdminConst::NAME]=I('post.name');
-        }
-        if(I('post.password') != null )
-        {
-            $data[AdminConst::PASSWORD]=I('post.password');
-        }
-        $data=$admin->save($data);
-        $this->response($data,"json");
+        $name=$data[AdminConst::NAME];
+        $password=$data[AdminConst::PASSWORD];
+        $str=$name."_".$password;
+        $token['token'] = $xcrpt->encrypt($str,'base64');
+        $this->response($token,'json');       
+        }   
     }
 }
