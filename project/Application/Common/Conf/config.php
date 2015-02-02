@@ -14,6 +14,8 @@ return array(
 	'DB_PREFIX'             => '',    // 数据库表前缀
 	'CRYPT_KEY'             =>'1234567812345678',
 	'SHOW_PAGE_TRACE'       => TRUE,//开启页面TRACE
+	'SHUWO_APPID'           =>'wx17a029b44c383634',
+	'SHUWO_APPSECRET'       =>'',
   //'DEFAULT_THEME'         => '',	// 默认模板主题名称
   //'TMPL_DETECT_THEME'     => true,       // 自动侦测模板主题
   //'TMPL_TEMPLATE_SUFFIX'  => '.html',     // 默认模板文件后缀
