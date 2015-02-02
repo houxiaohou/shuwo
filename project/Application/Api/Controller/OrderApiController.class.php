@@ -415,6 +415,7 @@ class OrderApiController extends RestController {
          	if($auid){
          		$order = M('order');
          		$id = I('get.id','');
+         		$ordernotes = I('get.ordernotes');
          		if (intval($auid))
          		{
          			if($auid!=$order->where("orderid=".$id)->getField("shopid"))
@@ -424,6 +425,7 @@ class OrderApiController extends RestController {
          			}
          		}
          		$order->where("orderid=".$id)->setField("orderstatus",2);
+         		$order->where("orderid=".$id)->setField("ordernotes",$ordernotes);
          	}
          	else
          	{
@@ -431,9 +433,5 @@ class OrderApiController extends RestController {
          		$this->response ( $message, 'json', '401' );
          	}
          }
-         
-     
-         
-         
-	
+        
 }
