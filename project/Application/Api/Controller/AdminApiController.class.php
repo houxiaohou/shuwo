@@ -6,32 +6,32 @@ require_once 'Xcrypt.php';
 
 class AdminApiController extends RestController {
     /*
-     * 返回所有管理员
-     */
-    public function getalladmin() {
-        $category =M("admin");
-        $data =$category->select();
-        if(!count($data)){
-            $data = [];
-        }
-        $this->response($data,"json");
-    }
-    /*
-     * 添加管理员
-     */
-    public function addadmin(){
-        $admin =M("admin");
-        if(I('post.name') != null )
-        {
-            $data[AdminConst::NAME]=I('post.name');
-        }
-        if(I('post.password') != null )
-        {
-            $data[AdminConst::PASSWORD]=md5(I('post.password'));
-        }
-        $admin->add($data);
-        $this->response($data,"json");
-    }
+//      * 返回所有管理员
+//      */
+//     public function getalladmin() {
+//         $category =M("admin");
+//         $data =$category->select();
+//         if(!count($data)){
+//             $data = [];
+//         }
+//         $this->response($data,"json");
+//     }
+//     /*
+//      * 添加管理员
+//      */
+//     public function addadmin(){
+//         $admin =M("admin");
+//         if(I('post.name') != null )
+//         {
+//             $data[AdminConst::NAME]=I('post.name');
+//         }
+//         if(I('post.password') != null )
+//         {
+//             $data[AdminConst::PASSWORD]=md5(I('post.password'));
+//         }
+//         $admin->add($data);
+//         $this->response($data,"json");
+//     }
     /*
      * 更新管理员信息
      */
@@ -56,11 +56,12 @@ class AdminApiController extends RestController {
     /*
      * 管理员登录认证
      */
-public function userlogin(){
+public function adminlogin(){
     $key =C("CRYPT_KEY");
     $xcrpt = new Xcrypt($key, 'cbc', $key);
     $admin=M('admin');
-    if(I('post.name') !=  NULL || I('post.password') != NULL){
+    if(I('post.name') !=  NULL && I('post.password') != NULL)
+    {
          $where[AdminConst::NAME]=I('post.name');
          $where[AdminConst::PASSWORD]=md5(I('post.password'));
         $data=$admin->where($where)->find();
@@ -70,8 +71,13 @@ public function userlogin(){
         $name=$data[AdminConst::NAME];
         $password=$data[AdminConst::PASSWORD];
         $str=$name."_".$password;
-        $token['token'] = $xcrpt->encrypt($str,'base64');
-        $this->response($token,'json');       
-        }   
+        $token['utoken'] = $xcrpt->encrypt($str,'base64');
+        $this->response($token,'json');         
     }
+    else
+    {
+    	$message ["msg"] = "Unauthorized";
+    	$this->response ( $message, 'json', '401' );
+    }
+}
 }
