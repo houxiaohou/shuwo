@@ -64,20 +64,19 @@ public function adminlogin(){
     {
          $where[AdminConst::NAME]=I('post.name');
          $where[AdminConst::PASSWORD]=md5(I('post.password'));
-        $data=$admin->where($where)->find();
+         $data=$admin->where($where)->find();
+         
         if (! count ( $data )) {
-            $data = [ ];
+            $message ["msg"] = "Unauthorized";
+            $this->response ( $message, 'json', '401' );
         }
+        
         $name=$data[AdminConst::NAME];
         $password=$data[AdminConst::PASSWORD];
+        
         $str=$name."_".$password;
         $token['utoken'] = $xcrpt->encrypt($str,'base64');
-        $this->response($token,'json');         
+        $this->response($token,'json');
+        }      
     }
-    else
-    {
-    	$message ["msg"] = "Unauthorized";
-    	$this->response ( $message, 'json', '401' );
-    }
-}
 }
