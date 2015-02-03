@@ -3,19 +3,19 @@ return array(
 'URL_ROUTER_ON' => true, // 是否开启URL路由
 'URL_ROUTE_RULES' => array(
 		//店铺URL配置
-// 		array('allshops', 'ShopApi/getallshops', '', array('method' => 'GET')),
-// 		array('shops', 'ShopApi/getshops', '', array('method' => 'GET')),
-// 		array('usershop','ShopApi/usergetshops', '', array('method' => 'GET')),
-// 		array('shop/:id\d/allproducts', 'ShopApi/admingetallproducts', '', array('method' => 'GET')),
-// 		array('shop/allproducts', 'ShopApi/usergetallproducts', '', array('method' => 'GET')),
-// 		array('shop/:id\d/products', 'ShopApi/getsaleproducts', '', array('method' => 'GET')),
-//         array('shop/:id\d', 'ShopApi/getshopbyid', '', array('method' => 'GET')),
-// 		array('shop/:id\d/isopen','ShopApi/adminupdateshopisopen', '', array('method' => 'POST')),
-// 		array('shop/isopen','ShopApi/userupdateshopisopen', '', array('method' => 'POST')),
-// 		array('shop/:id\d','ShopApi/adminupdateshop', '', array('method' => 'POST')),
-// 		array('usershop','ShopApi/userupdateshop', '', array('method' => 'POST')),
-// 		array('shop','ShopApi/addshop', '', array('method' => 'POST')),
-        array('shop/:id\d','ShopApi/deleteshop', '', array('method' => 'get')),
+		array('allshops', 'ShopApi/getallshops', '', array('method' => 'GET')),
+		array('shops', 'ShopApi/getshops', '', array('method' => 'GET')),
+		array('usershop','ShopApi/usergetshops', '', array('method' => 'GET')),
+		array('shop/:id\d/allproducts', 'ShopApi/admingetallproducts', '', array('method' => 'GET')),
+		array('shop/allproducts', 'ShopApi/usergetallproducts', '', array('method' => 'GET')),
+		array('shop/:id\d/products', 'ShopApi/getsaleproducts', '', array('method' => 'GET')),
+        array('shop/:id\d', 'ShopApi/getshopbyid', '', array('method' => 'GET')),
+		array('shop/:id\d/isopen','ShopApi/adminupdateshopisopen', '', array('method' => 'POST')),
+		array('shop/isopen','ShopApi/userupdateshopisopen', '', array('method' => 'POST')),
+		array('shop/:id\d','ShopApi/adminupdateshop', '', array('method' => 'POST')),
+		array('usershop','ShopApi/userupdateshop', '', array('method' => 'POST')),
+		array('shop','ShopApi/addshop', '', array('method' => 'POST')),
+        array('shop/:id\d','ShopApi/deleteshop', '', array('method' => 'DELETE')),
 		
 		//请求上传图片七牛token
 		array('uptoken', 'ImgApi/getuptoken', '', array('method' => 'GET')),
