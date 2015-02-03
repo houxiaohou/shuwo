@@ -16,8 +16,10 @@ return array(
 	'SHOW_PAGE_TRACE'       => false,//开启页面TRACE
 	'SHUWO_APPID'           =>'wx17a029b44c383634',
 	'SHUWO_APPSECRET'       =>'0f0d1caf3e84edbf61fc28fecf0c74b9',
+	'SHUWO_CALLBACK'        =>'http://www.shuwow.com/Home/Index/authorize',
 	'SHOP_APPID'            =>'wx17a8c83f5b2f6540',
 	'SHOP_APPSECRET'        =>'432fb4827de4de9c2038ebcd2c5f064a',
+     'SHOP_CALLBACK'        =>'http://www.shuwow.com/Home/Index/shopauthorize',
   //'DEFAULT_THEME'         => '',	// 默认模板主题名称
   //'TMPL_DETECT_THEME'     => true,       // 自动侦测模板主题
   //'TMPL_TEMPLATE_SUFFIX'  => '.html',     // 默认模板文件后缀
@@ -28,11 +30,4 @@ return array(
         '__JS__'              =>__ROOT__.'/public/js',
         '__IMAGES__'          =>__ROOT__.'/public/images',
     		),	
-		/***微信***/
-		"wx_appID" => "",
-		"wx_appsecret" => "",
-		"weixin_token" => "",
-		/**OAuth2.0授权后跳转到的默认页面**/
-		"wx_webauth_callback_url" => urlencode(""),
-		"wx_webauth_expire" => 6500,
 );

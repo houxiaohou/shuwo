@@ -14,7 +14,7 @@ class IndexController extends Controller {
 		$weixin = new Weixin ();
 		$weixin->appid = $appid;
 		$weixin->appsecret = $appsecret;
-		$url = $weixin->getwxurl ( "http://www.shuwow.com/Home/authorize" );
+		$url = $weixin->getwxurl ( C('SHUWO_CALLBACK')  );
 		$key = C ( "CRYPT_KEY" );
 		$xcrpt = new Xcrypt ( $key, 'cbc', $key );
 		if (cookie ( 'utoken' )) {
@@ -123,16 +123,16 @@ class IndexController extends Controller {
 		}
 	}
 	public function shop() {
-	    $appid = C ( 'SHUWO_APPID' );
-	    $appsecret = C ( 'SHUWO_APPSECRET' );
+	    $appid = C ( 'SHOP_APPID' );
+	    $appsecret = C ( 'SHOP_APPSECRET' );
 	    $weixin = new Weixin ();
 	    $weixin->appid = $appid;
 	    $weixin->appsecret = $appsecret;
-	    $url = $weixin->getwxurl ( "http://www.shuwow.com/Home/shopauthorize" );
+	    $url = $weixin->getwxurl ( C('SHOP_CALLBACK') );
 	    $key = C ( "CRYPT_KEY" );
 	    $xcrpt = new Xcrypt ( $key, 'cbc', $key );
-	    if (cookie ( 'utoken' )) {
-	        $value = cookie ( 'utoken' );
+	    if (cookie ( 'stoken' )) {
+	        $value = cookie ( 'stoken' );
 	        $data = $xcrpt->decrypt ( $value, 'base64' );
 	        if ($data) {
 	            $str = explode ( "_", $data );
@@ -141,7 +141,6 @@ class IndexController extends Controller {
 	                if ($userid) {
 	 					    $model = M('user');
                     		$sql = "userid=".$userid." AND shopid =".$str[1]." AND roles=1" ;
-                    		$id = $str[1];
                     		$info = $model->where($sql)->select();
 	                    if (! count ( $info )) {
 	                        E ( '店铺授权异常' );
@@ -155,7 +154,7 @@ class IndexController extends Controller {
 	            // exit;
 	
 	            // 测试模拟代码
-	            $this->redirect ( "authorize" );
+	            $this->redirect ( "shopauthorize" );
 	        }
 	    } else {
 	        // $redircturl = "Location:".$url;
@@ -163,7 +162,7 @@ class IndexController extends Controller {
 	        // exit;
 	        	
 	        // 测试模拟代码
-	        $this->redirect ( "authorize" );
+	        $this->redirect ( "shopauthorize" );
 	    }
 	}
 	public function shopauthorize() {
@@ -218,7 +217,7 @@ class IndexController extends Controller {
 	                    $shopid = $data [UserConst::SHOPID];
 	                    $str = $userid . "_" . $shopid;
 	                    $xcrptstr = $xcrpt->encrypt ( $str, 'base64' );
-	                    cookie ( 'utoken', $xcrptstr, 1209600 );
+	                    cookie ( 'stoken', $xcrptstr, 1209600 );
 	                    $this->redirect ( "shop" );
 	                } else {
 	                	E("未能授权商户信息");

@@ -1,22 +1,22 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost_3306
+Source Server         : localhost
 Source Server Version : 50617
 Source Host           : localhost:3306
-Source Database       : shuwo
+Source Database       : shuwo1
 
 Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-02-03 14:35:10
+Date: 2015-02-03 15:40:37
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for `admin`
+-- Table structure for admin
 -- ----------------------------
 DROP TABLE IF EXISTS `admin`;
 CREATE TABLE `admin` (
@@ -31,7 +31,7 @@ CREATE TABLE `admin` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `category`
+-- Table structure for category
 -- ----------------------------
 DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
@@ -50,7 +50,7 @@ INSERT INTO `category` VALUES ('4', '柑橘橙类');
 INSERT INTO `category` VALUES ('5', '桃李类');
 
 -- ----------------------------
--- Table structure for `order`
+-- Table structure for order
 -- ----------------------------
 DROP TABLE IF EXISTS `order`;
 CREATE TABLE `order` (
@@ -76,7 +76,7 @@ CREATE TABLE `order` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `orderproduct`
+-- Table structure for orderproduct
 -- ----------------------------
 DROP TABLE IF EXISTS `orderproduct`;
 CREATE TABLE `orderproduct` (
@@ -94,7 +94,7 @@ CREATE TABLE `orderproduct` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `product`
+-- Table structure for product
 -- ----------------------------
 DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
@@ -116,8 +116,8 @@ CREATE TABLE `product` (
 -- ----------------------------
 -- Records of product
 -- ----------------------------
-INSERT INTO `product` VALUES ('1', '水晶富士\r\n\r\n水晶富士\r\n\r\n水晶富士苹果', '', '1', '100', '2.00', '0.00', '1', '1', '个', '250', '1');
-INSERT INTO `product` VALUES ('2', '秦冠苹果\r\n\r\n 秦冠苹果', '', '1', '256', '2.00', '0.00', '1', '1', '个', '256', '1');
+INSERT INTO `product` VALUES ('1', '', '', '1', '100', '2.00', '0.00', '1', '1', '个', '250', '1');
+INSERT INTO `product` VALUES ('2', '秦冠苹果\r\n\r\n', '', '1', '256', '2.00', '0.00', '1', '1', '个', '256', '1');
 INSERT INTO `product` VALUES ('3', '青苹果', '', '1', '198', '1.50', '0.00', '1', '1', '个', '300', '2');
 INSERT INTO `product` VALUES ('4', '嘎啦果', '', '1', '519', '2.50', '0.00', '1', '1', '个', '250', '2');
 INSERT INTO `product` VALUES ('5', '黄金帅苹果 ', '', '1', '520', '2.00', '0.00', '1', '1', '个', '270', '3');
@@ -126,7 +126,7 @@ INSERT INTO `product` VALUES ('7', '蜜梨（皇冠梨）', '', '1', '629', '2.0
 INSERT INTO `product` VALUES ('8', '水晶梨1', '', '1', '263', '2.00', '0.00', '1', '1', '个', '290', '4');
 
 -- ----------------------------
--- Table structure for `shippingaddress`
+-- Table structure for shippingaddress
 -- ----------------------------
 DROP TABLE IF EXISTS `shippingaddress`;
 CREATE TABLE `shippingaddress` (
@@ -148,7 +148,7 @@ CREATE TABLE `shippingaddress` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `shop`
+-- Table structure for shop
 -- ----------------------------
 DROP TABLE IF EXISTS `shop`;
 CREATE TABLE `shop` (
@@ -184,22 +184,7 @@ INSERT INTO `shop` VALUES ('7', '', '上海市虹口区曲阳路街道上农一�
 INSERT INTO `shop` VALUES ('8', '', '上海市普陀区桃浦镇李子园六村东方向靠近真南路215', '', '绿缘水果店', '媛媛', '13761902139', '31.27437', '121.402472', 'wtw3ft6d6th7b467m', '上海', '普陀区', '桃浦镇李子园六村', '缘来是你', '12', '1');
 
 -- ----------------------------
--- Table structure for `shopproduct`
--- ----------------------------
-DROP TABLE IF EXISTS `shopproduct`;
-CREATE TABLE `shopproduct` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `shopid` int(11) NOT NULL,
-  `productid` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of shopproduct
--- ----------------------------
-
--- ----------------------------
--- Table structure for `user`
+-- Table structure for user
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
@@ -225,7 +210,7 @@ CREATE TABLE `user` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `weixinshop`
+-- Table structure for weixinshop
 -- ----------------------------
 DROP TABLE IF EXISTS `weixinshop`;
 CREATE TABLE `weixinshop` (
@@ -243,7 +228,7 @@ CREATE TABLE `weixinshop` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `weixinuser`
+-- Table structure for weixinuser
 -- ----------------------------
 DROP TABLE IF EXISTS `weixinuser`;
 CREATE TABLE `weixinuser` (
@@ -261,7 +246,7 @@ CREATE TABLE `weixinuser` (
 -- ----------------------------
 
 -- ----------------------------
--- Function structure for `GETDISTANCE`
+-- Function structure for GETDISTANCE
 -- ----------------------------
 DROP FUNCTION IF EXISTS `GETDISTANCE`;
 DELIMITER ;;
@@ -301,7 +286,7 @@ END
 DELIMITER ;
 
 -- ----------------------------
--- Function structure for `NewProc`
+-- Function structure for NewProc
 -- ----------------------------
 DROP FUNCTION IF EXISTS `NewProc`;
 DELIMITER ;;
