@@ -1,7 +1,7 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost
+Source Server         : localhost_3306
 Source Server Version : 50617
 Source Host           : localhost:3306
 Source Database       : shuwo
@@ -10,13 +10,13 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-02-02 12:50:48
+Date: 2015-02-03 14:35:10
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for admin
+-- Table structure for `admin`
 -- ----------------------------
 DROP TABLE IF EXISTS `admin`;
 CREATE TABLE `admin` (
@@ -24,20 +24,33 @@ CREATE TABLE `admin` (
   `name` varchar(255) DEFAULT '',
   `password` varchar(255) DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for category
+-- Records of admin
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `category`
 -- ----------------------------
 DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
   `categoryid` int(11) NOT NULL AUTO_INCREMENT,
   `categoryname` varchar(255) DEFAULT '',
   PRIMARY KEY (`categoryid`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for order
+-- Records of category
+-- ----------------------------
+INSERT INTO `category` VALUES ('1', '苹果类');
+INSERT INTO `category` VALUES ('2', '梨类');
+INSERT INTO `category` VALUES ('3', '瓜类');
+INSERT INTO `category` VALUES ('4', '柑橘橙类');
+INSERT INTO `category` VALUES ('5', '桃李类');
+
+-- ----------------------------
+-- Table structure for `order`
 -- ----------------------------
 DROP TABLE IF EXISTS `order`;
 CREATE TABLE `order` (
@@ -59,7 +72,11 @@ CREATE TABLE `order` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for orderproduct
+-- Records of order
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `orderproduct`
 -- ----------------------------
 DROP TABLE IF EXISTS `orderproduct`;
 CREATE TABLE `orderproduct` (
@@ -73,7 +90,11 @@ CREATE TABLE `orderproduct` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for product
+-- Records of orderproduct
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `product`
 -- ----------------------------
 DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
@@ -90,10 +111,22 @@ CREATE TABLE `product` (
   `unitweight` int(6) DEFAULT '0',
   `shopid` int(11) DEFAULT NULL,
   PRIMARY KEY (`productid`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for shippingaddress
+-- Records of product
+-- ----------------------------
+INSERT INTO `product` VALUES ('1', '水晶富士\r\n\r\n水晶富士\r\n\r\n水晶富士苹果', '', '1', '100', '2.00', '0.00', '1', '1', '个', '250', '1');
+INSERT INTO `product` VALUES ('2', '秦冠苹果\r\n\r\n 秦冠苹果', '', '1', '256', '2.00', '0.00', '1', '1', '个', '256', '1');
+INSERT INTO `product` VALUES ('3', '青苹果', '', '1', '198', '1.50', '0.00', '1', '1', '个', '300', '2');
+INSERT INTO `product` VALUES ('4', '嘎啦果', '', '1', '519', '2.50', '0.00', '1', '1', '个', '250', '2');
+INSERT INTO `product` VALUES ('5', '黄金帅苹果 ', '', '1', '520', '2.00', '0.00', '1', '1', '个', '270', '3');
+INSERT INTO `product` VALUES ('6', '雪梨', '', '1', '624', '2.00', '0.00', '1', '1', '个', '260', '4');
+INSERT INTO `product` VALUES ('7', '蜜梨（皇冠梨）', '', '1', '629', '2.00', '0.00', '1', '1', '个', '300', '4');
+INSERT INTO `product` VALUES ('8', '水晶梨1', '', '1', '263', '2.00', '0.00', '1', '1', '个', '290', '4');
+
+-- ----------------------------
+-- Table structure for `shippingaddress`
 -- ----------------------------
 DROP TABLE IF EXISTS `shippingaddress`;
 CREATE TABLE `shippingaddress` (
@@ -111,7 +144,11 @@ CREATE TABLE `shippingaddress` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for shop
+-- Records of shippingaddress
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `shop`
 -- ----------------------------
 DROP TABLE IF EXISTS `shop`;
 CREATE TABLE `shop` (
@@ -132,10 +169,22 @@ CREATE TABLE `shop` (
   `dlprice` int(3) DEFAULT '0',
   `isopen` tinyint(2) DEFAULT '0',
   PRIMARY KEY (`shopid`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for shopproduct
+-- Records of shop
+-- ----------------------------
+INSERT INTO `shop` VALUES ('1', '', '南翔镇古猗园东北方向民主东街78-80', '', '佳远水果店', '李大牛', '15821691728', '31.300663', '121.323178', 'wtw60f0gdfqret9nn', '上海', '嘉定区', '南翔镇', '本店绝对值得关注', '12', '1');
+INSERT INTO `shop` VALUES ('2', '', '德华社区德华路332号', '', '德华水果店', '李二牛', '13838137911', '31.301179', '121.319461', 'wtw60dnns6dv8rwgd', '上海', '嘉定区', '南翔镇', '相信我们绝对是首选', '10', '1');
+INSERT INTO `shop` VALUES ('3', '', '德园社区德华路456', '', '乡巴佬水果店(德华路店)', '媚娘', '18239260081', '31.300153', '121.317207', 'wtw60dh2xg6j3vjeq', '上海', '嘉定区', '南翔镇', '我们值得信赖', '16', '0');
+INSERT INTO `shop` VALUES ('4', '', '德园社区德园路337号', '', '小郭水果超市', '小郭', '15537618477', '31.300408', '121.315492', 'wtw60d54pfgq83mus', '上海', '嘉定区', '南翔镇', '凸比难保完', '6', '0');
+INSERT INTO `shop` VALUES ('5', '', '翔华社区靠近南翔镇火车站路108号', '', '翔华水果店', '啊翔', '13838137911', '31.291413', '121.313805', 'wtw6086j8w1m70cmr', '上海', '嘉定区', '南翔镇', '维瑞古德', '9', '0');
+INSERT INTO `shop` VALUES ('6', '', '上海市普陀区宜川路街道中远两湾城第一西方向靠近中潭路65号', '', '中潭水果店', '倪三妮', '15000933310', '31.25852', '121.449285', 'wtw3gdkwj6qwcu82n', '上海', '普陀区', '宜川路', '吼吼吼', '8', '1');
+INSERT INTO `shop` VALUES ('7', '', '上海市虹口区曲阳路街道上农一西南方向靠近中山北一路652-3临', '', '胖子精品水果店 ', '胖纸', '13162344458', '31.289122', '121.489802', 'wtw6h840me44zjc3d', '上海', '虹口区', '曲阳路', '胖纸都是潜力股', '8', '1');
+INSERT INTO `shop` VALUES ('8', '', '上海市普陀区桃浦镇李子园六村东方向靠近真南路215', '', '绿缘水果店', '媛媛', '13761902139', '31.27437', '121.402472', 'wtw3ft6d6th7b467m', '上海', '普陀区', '桃浦镇李子园六村', '缘来是你', '12', '1');
+
+-- ----------------------------
+-- Table structure for `shopproduct`
 -- ----------------------------
 DROP TABLE IF EXISTS `shopproduct`;
 CREATE TABLE `shopproduct` (
@@ -146,7 +195,11 @@ CREATE TABLE `shopproduct` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for user
+-- Records of shopproduct
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `user`
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
@@ -165,10 +218,14 @@ CREATE TABLE `user` (
   `roles` tinyint(2) DEFAULT '0',
   `shopid` int(11) DEFAULT '0',
   PRIMARY KEY (`userid`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for weixinshop
+-- Records of user
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `weixinshop`
 -- ----------------------------
 DROP TABLE IF EXISTS `weixinshop`;
 CREATE TABLE `weixinshop` (
@@ -182,7 +239,11 @@ CREATE TABLE `weixinshop` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for weixinuser
+-- Records of weixinshop
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `weixinuser`
 -- ----------------------------
 DROP TABLE IF EXISTS `weixinuser`;
 CREATE TABLE `weixinuser` (
@@ -196,7 +257,11 @@ CREATE TABLE `weixinuser` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Function structure for GETDISTANCE
+-- Records of weixinuser
+-- ----------------------------
+
+-- ----------------------------
+-- Function structure for `GETDISTANCE`
 -- ----------------------------
 DROP FUNCTION IF EXISTS `GETDISTANCE`;
 DELIMITER ;;
@@ -236,7 +301,7 @@ END
 DELIMITER ;
 
 -- ----------------------------
--- Function structure for NewProc
+-- Function structure for `NewProc`
 -- ----------------------------
 DROP FUNCTION IF EXISTS `NewProc`;
 DELIMITER ;;
