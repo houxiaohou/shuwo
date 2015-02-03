@@ -376,7 +376,8 @@ class ShopApiController extends RestController {
 				$shop = M ( "shop" );
 				if($shop->where ( 'shopid=' . $id )->delete ()){
 				    $product=M('product');
-				    $product->where('shopid')->delete();
+				    $where[ShopConst::SHOPID]=$id;
+				    $product->where($where)->delete();
 				}
 			}
 		} else {
