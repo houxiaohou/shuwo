@@ -194,7 +194,7 @@ class IndexController extends Controller {
 	        if ($token) {
 	            $openid = $token ['openid'];
 	            $accessToken = $token ['access_token'];
-	            //$userinfo = $weixin->getUser ( $openid, $accessToken );
+	            $userinfo = $weixin->getUser ( $openid, $accessToken );
 	
 	            if ($userinfo) {
 	                $useropenid = $userinfo ['openid'];
