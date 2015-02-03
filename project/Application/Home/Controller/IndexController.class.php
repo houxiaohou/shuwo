@@ -128,7 +128,7 @@ class IndexController extends Controller {
 	    $weixin = new Weixin ();
 	    $weixin->appid = $appid;
 	    $weixin->appsecret = $appsecret;
-	    $url = $weixin->getwxurl ( "http://www.shuwow.com/Home/authorize" );
+	    $url = $weixin->getwxurl ( "http://www.shuwow.com/Home/shopauthorize" );
 	    $key = C ( "CRYPT_KEY" );
 	    $xcrpt = new Xcrypt ( $key, 'cbc', $key );
 	    if (cookie ( 'utoken' )) {
@@ -139,11 +139,12 @@ class IndexController extends Controller {
 	            if ($str && count ( $str ) == 2) {
 	                $userid = intval ( $str [0] );
 	                if ($userid) {
-	                    $user = M ( 'user' );
-	                    $sql = "userid=" . $userid;
-	                    $userinfo = $user->where ( $sql )->find ();
-	                    if (! count ( $userinfo )) {
-	                        E ( '用户授权异常' );
+	 					    $model = M('user');
+                    		$sql = "userid=".$userid." AND shopid =".$str[1]." AND roles=1" ;
+                    		$id = $str[1];
+                    		$info = $model->where($sql)->select();
+	                    if (! count ( $info )) {
+	                        E ( '店铺授权异常' );
 	                    }
 	                    $this->display ();
 	                }
@@ -167,8 +168,8 @@ class IndexController extends Controller {
 	}
 	public function shopauthorize() {
 	    $weixin = new Weixin ();
-	    $appid = C ( 'SHUWO_APPID' );
-	    $appsecret = C ( 'SHUWO_APPSECRET' );
+	    $appid = C ( 'SHOP_APPID' );
+	    $appsecret = C ( 'SHOP_APPSECRET' );
 	    $weixin->appid = $appid;
 	    $weixin->appsecret = $appsecret;
 	    $key = C ( "CRYPT_KEY" );
@@ -179,14 +180,14 @@ class IndexController extends Controller {
 	    $code = "testcode";
 	    $token ['openid'] = "openid";
 	    $token ['access_token'] = "access_token";
-	    $userinfo ["openid"] = "openid";
-	    $userinfo ["nickname"] = "test";
+	    $userinfo ["openid"] = "shopopenid";
+	    $userinfo ["nickname"] = "testshop";
 	    $userinfo ["sex"] = "1";
 	    $userinfo ["province"] = "上海";
 	    $userinfo ["city"] = "上海";
 	    $userinfo ["country"] = "中国";
 	    $userinfo ["headimgurl"] = "http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46";
-	    $userinfo ["unionid"] = "uninonid";
+	    $userinfo ["unionid"] = "shopuninonid";
 	
 	    if ($code) {
 	        //$token = $weixin->getTokenWithCode ( $code );
@@ -202,30 +203,26 @@ class IndexController extends Controller {
 	                $sql = "openid='" . $useropenid . "'";
 	                $data = $user->where ( $sql )->find ();
 	                if (count ( $data )) {
-	                    $userid = $data [UserConst::USERID];
-	                    $datetime = date ( 'Ymd', strtotime ( '+14 day' ) );
-	                    $str = $userid . "_" . $datetime;
+	                	$item[UserConst::OPENID] = $userinfo [UserConst::OPENID];
+	                	$item [UserConst::UNIOID] = $userinfo [UserConst::UNIOID] ? $userinfo [UserConst::UNIOID] : "";
+	                	$item [UserConst::NICKNAME] = $userinfo [UserConst::NICKNAME];
+	                	$item [UserConst::SEX] = $userinfo [UserConst::SEX];
+	                	$item [UserConst::PROVINCE] = $userinfo [UserConst::PROVINCE];
+	                	$item [UserConst::CITY] = $userinfo [UserConst::CITY];
+	                	$item [UserConst::COUNTRY] = $userinfo [UserConst::COUNTRY];
+	                	$item [UserConst::HEADIMGURL] = $userinfo [UserConst::HEADIMGURL];
+	                	$item [UserConst::MOBILE] = '';
+	                	$item [UserConst::PASSWORD] = '';
+	                	$item [UserConst::ROLES] = 1;
+	                    $item[UserConst::USERID]= $userid = $data [UserConst::USERID];
+	                    $shopid = $data [UserConst::SHOPID];
+	                    $str = $userid . "_" . $shopid;
 	                    $xcrptstr = $xcrpt->encrypt ( $str, 'base64' );
 	                    cookie ( 'utoken', $xcrptstr, 1209600 );
+	                    $this->redirect ( "shop" );
 	                } else {
-	                    $data [UserConst::OPENID] = $userinfo [UserConst::OPENID];
-	                    $data [UserConst::UNIOID] = $userinfo [UserConst::UNIOID] ? $userinfo [UserConst::UNIOID] : "";
-	                    $data [UserConst::NICKNAME] = $userinfo [UserConst::NICKNAME];
-	                    $data [UserConst::SEX] = $userinfo [UserConst::SEX];
-	                    $data [UserConst::PROVINCE] = $userinfo [UserConst::PROVINCE];
-	                    $data [UserConst::CITY] = $userinfo [UserConst::CITY];
-	                    $data [UserConst::COUNTRY] = $userinfo [UserConst::COUNTRY];
-	                    $data [UserConst::HEADIMGURL] = $userinfo [UserConst::HEADIMGURL];
-	                    $data [UserConst::MOBILE] = '';
-	                    $data [UserConst::PASSWORD] = '';
-	                    $data [UserConst::ROLES] = 0;
-	                    $userid = $user->add ( $data );
-	                    $datetime = date ( 'Ymd', strtotime ( '+14 day' ) );
-	                    $str = $userid . "_" . $datetime;
-	                    $xcrptstr = $xcrpt->encrypt ( $str, 'base64' );
-	                    cookie ( 'utoken', $xcrptstr, 1209600 );
+	                	E("未能授权商户信息");
 	                }
-	                $this->redirect ( "index" );
 	            } else {
 	                E ( '获得微信用户信息异常' );
 	            }

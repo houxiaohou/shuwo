@@ -16,4 +16,5 @@ Class UserConst
 	const CREATEDTIME = "createdtime";
 	const HEADIMGURL ="headimgurl";
 	const ROLES ="roles";
+	const SHOPID = "shopid";
 }
