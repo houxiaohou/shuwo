@@ -35,20 +35,20 @@ class IndexController extends Controller {
 					}
 				}
 			} else {
-				// $redircturl = "Location:".$url;
-				// header($redircturl);
-				// exit;
+				$redircturl = "Location:".$url;
+				header($redircturl);
+				exit;
 				
 				// 测试模拟代码
-				$this->redirect ( "authorize" );
+				//$this->redirect ( "authorize" );
 			}
 		} else {
-			// $redircturl = "Location:".$url;
-			// header($redircturl);
-			// exit;
+			$redircturl = "Location:".$url;
+			header($redircturl);
+			exit;
 			
 			// 测试模拟代码
-			$this->redirect ( "authorize" );
+			//$this->redirect ( "authorize" );
 		}
 	}
 	public function authorize() {
@@ -59,28 +59,28 @@ class IndexController extends Controller {
 		$weixin->appsecret = $appsecret;
 		$key = C ( "CRYPT_KEY" );
 		$xcrpt = new Xcrypt ( $key, 'cbc', $key );
-		// $code = I('get.code');
+		$code = I('get.code');
 		
 		// 测试代码
-		$code = "testcode";
-		$token ['openid'] = "openid";
-		$token ['access_token'] = "access_token";
-		$userinfo ["openid"] = "openid";
-		$userinfo ["nickname"] = "test";
-		$userinfo ["sex"] = "1";
-		$userinfo ["province"] = "上海";
-		$userinfo ["city"] = "上海";
-		$userinfo ["country"] = "中国";
-		$userinfo ["headimgurl"] = "http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46";
-		$userinfo ["unionid"] = "uninonid";
+// 		$code = "testcode";
+// 		$token ['openid'] = "openid";
+// 		$token ['access_token'] = "access_token";
+// 		$userinfo ["openid"] = "openid";
+// 		$userinfo ["nickname"] = "test";
+// 		$userinfo ["sex"] = "1";
+// 		$userinfo ["province"] = "上海";
+// 		$userinfo ["city"] = "上海";
+// 		$userinfo ["country"] = "中国";
+// 		$userinfo ["headimgurl"] = "http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46";
+// 		$userinfo ["unionid"] = "uninonid";
 		
 		if ($code) {
-			//$token = $weixin->getTokenWithCode ( $code );
+			$token = $weixin->getTokenWithCode ( $code );
 			
 			if ($token) {
 				$openid = $token ['openid'];
 				$accessToken = $token ['access_token'];
-				//$userinfo = $weixin->getUser ( $openid, $accessToken );
+				$userinfo = $weixin->getUser ( $openid, $accessToken );
 				
 				if ($userinfo) {
 					$useropenid = $userinfo ['openid'];
@@ -149,20 +149,20 @@ class IndexController extends Controller {
 	                }
 	            }
 	        } else {
-	            // $redircturl = "Location:".$url;
-	            // header($redircturl);
-	            // exit;
+	            $redircturl = "Location:".$url;
+	            header($redircturl);
+	            exit;
 	
 	            // 测试模拟代码
-	            $this->redirect ( "shopauthorize" );
+               //$this->redirect ( "shopauthorize" );
 	        }
 	    } else {
-	        // $redircturl = "Location:".$url;
-	        // header($redircturl);
-	        // exit;
+	        $redircturl = "Location:".$url;
+	        header($redircturl);
+	        exit;
 	        	
 	        // 测试模拟代码
-	        $this->redirect ( "shopauthorize" );
+	        //$this->redirect ( "shopauthorize" );
 	    }
 	}
 	public function shopauthorize() {
@@ -173,23 +173,23 @@ class IndexController extends Controller {
 	    $weixin->appsecret = $appsecret;
 	    $key = C ( "CRYPT_KEY" );
 	    $xcrpt = new Xcrypt ( $key, 'cbc', $key );
-	    // $code = I('get.code');
+	    $code = I('get.code');
 	
 	    // 测试代码
-	    $code = "testcode";
-	    $token ['openid'] = "openid";
-	    $token ['access_token'] = "access_token";
-	    $userinfo ["openid"] = "shopopenid";
-	    $userinfo ["nickname"] = "testshop";
-	    $userinfo ["sex"] = "1";
-	    $userinfo ["province"] = "上海";
-	    $userinfo ["city"] = "上海";
-	    $userinfo ["country"] = "中国";
-	    $userinfo ["headimgurl"] = "http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46";
-	    $userinfo ["unionid"] = "shopuninonid";
+// 	    $code = "testcode";
+// 	    $token ['openid'] = "openid";
+// 	    $token ['access_token'] = "access_token";
+// 	    $userinfo ["openid"] = "shopopenid";
+// 	    $userinfo ["nickname"] = "testshop";
+// 	    $userinfo ["sex"] = "1";
+// 	    $userinfo ["province"] = "上海";
+// 	    $userinfo ["city"] = "上海";
+// 	    $userinfo ["country"] = "中国";
+// 	    $userinfo ["headimgurl"] = "http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46";
+// 	    $userinfo ["unionid"] = "shopuninonid";
 	
 	    if ($code) {
-	        //$token = $weixin->getTokenWithCode ( $code );
+	        $token = $weixin->getTokenWithCode ( $code );
 	        	
 	        if ($token) {
 	            $openid = $token ['openid'];
