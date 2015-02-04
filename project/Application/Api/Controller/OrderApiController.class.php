@@ -21,7 +21,7 @@ class OrderApiController extends RestController {
       				$this->response ( $message, 'json', '401' );
       	}
       	
-        $order =M("order");
+        $order =M("orders");
         $product = M("product");
         $orderproduct = M("orderproduct");
         $start = I('get.start');
@@ -79,7 +79,7 @@ class OrderApiController extends RestController {
 	 * 根据GET传的id查询对应的订单
 	 */
 	public function getorderbyid() {
-		$order = M ( 'order' );
+		$order = M ( 'orders' );
 		$product = M ( 'product' );
 		$orderproduct = M ( 'orderproduct' );
 		
@@ -169,7 +169,7 @@ class OrderApiController extends RestController {
         		$start = I('get.start');
         		$count = I('get.count');
         		$status = I('get.status');
-        		$order = M('order');
+        		$order = M('orders');
         		$orderproduct = M('orderproduct');
         		$product = M('product');
         		 
@@ -247,7 +247,7 @@ class OrderApiController extends RestController {
         	$status = I('get.status');
         	$start = I('get.start');
         	$count = I('get.count');
-        	$order = M('order');
+        	$order = M('orders');
         	$orderproduct = M('orderproduct');
         	$product = M('product');
         	
@@ -318,7 +318,7 @@ class OrderApiController extends RestController {
 	public function deleteorder() {
 		$id = intval ( I ( 'get.id', 0 ) );
 		if ($id) {
-			$order = M ( "order" );
+			$order = M ( "orders" );
 			$where [OrderConst::ORDERID] = $id;
 			$order->where ( $where )->delete ();
 		}
@@ -328,7 +328,7 @@ class OrderApiController extends RestController {
 	 * 创建新订单
 	 */
 	public function createorder() {
-		$order = M ( 'order' );
+		$order = M ( 'orders' );
 		// 生成16位唯一订单号
 		$orderid = date ( 'Ymd' ) . substr ( implode ( NULL, array_map ( 'ord', str_split ( substr ( uniqid (), 7, 13 ), 1 ) ) ), 0, 8 );
 		$data [OrderConst::ORDERID] = $orderid;
@@ -457,7 +457,7 @@ class OrderApiController extends RestController {
 			}
 		}
 		// 将真实总价写入对应的order表中的rtotalprice字段中
-		$order = M ( 'order' );
+		$order = M ( 'orders' );
 		$where4 [OrderConst::ORDERID] = $orderid;
 		$order->where ( $where4 )->setField ( 'rtotalprice', $rtotalprice );
 		// 将订单状态由0变成1(订单确认)
@@ -467,7 +467,7 @@ class OrderApiController extends RestController {
 	 * 撤销订单
 	 */
 	public function cancelorder() {
-		$order = M ( 'order' );
+		$order = M ( 'orders' );
 		$id = I ( 'post.id', 0 );
 		$ordernotes = I ( 'post.ordernotes','');
 		$authorize = new Authorize ();

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-02-03 20:44:56
+Date: 2015-02-04 18:29:38
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -52,32 +52,6 @@ INSERT INTO `category` VALUES ('5', '桃李类');
 INSERT INTO `category` VALUES ('6', '其他');
 
 -- ----------------------------
--- Table structure for order
--- ----------------------------
-DROP TABLE IF EXISTS `order`;
-CREATE TABLE `order` (
-  `orderid` varchar(32) NOT NULL,
-  `orderstatus` int(3) NOT NULL DEFAULT '0',
-  `userid` int(11) NOT NULL,
-  `shopid` int(11) NOT NULL DEFAULT '0',
-  `paystatus` int(11) DEFAULT '0',
-  `totalprice` decimal(10,2) DEFAULT '0.00',
-  `address` text,
-  `phone` varchar(255) DEFAULT '',
-  `createdtime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `rtotalprice` decimal(10,2) DEFAULT '0.00',
-  `dltime` varchar(32) DEFAULT NULL,
-  `notes` varchar(255) DEFAULT NULL,
-  `username` varchar(255) DEFAULT '',
-  `ordernotes` varchar(255) DEFAULT '',
-  PRIMARY KEY (`orderid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of order
--- ----------------------------
-
--- ----------------------------
 -- Table structure for orderproduct
 -- ----------------------------
 DROP TABLE IF EXISTS `orderproduct`;
@@ -93,6 +67,32 @@ CREATE TABLE `orderproduct` (
 
 -- ----------------------------
 -- Records of orderproduct
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for orders
+-- ----------------------------
+DROP TABLE IF EXISTS `orders`;
+CREATE TABLE `orders` (
+  `orderid` varchar(32) NOT NULL,
+  `orderstatus` int(3) NOT NULL DEFAULT '0',
+  `userid` int(11) NOT NULL,
+  `shopid` int(11) NOT NULL DEFAULT '0',
+  `paystatus` int(11) DEFAULT '0',
+  `totalprice` decimal(10,2) DEFAULT '0.00',
+  `address` text,
+  `phone` varchar(255) DEFAULT '',
+  `createdtime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `rtotalprice` decimal(10,2) DEFAULT '0.00',
+  `dltime` varchar(32) DEFAULT NULL,
+  `notes` varchar(255) DEFAULT NULL,
+  `username` varchar(255) DEFAULT '',
+  `ordernotes` varchar(255) DEFAULT '',
+  PRIMARY KEY (`orderid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of orders
 -- ----------------------------
 
 -- ----------------------------

@@ -1,7 +1,7 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost_3306
+Source Server         : localhost
 Source Server Version : 50617
 Source Host           : localhost:3306
 Source Database       : shuwo
@@ -10,13 +10,13 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-02-03 18:08:50
+Date: 2015-02-04 18:29:47
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for `admin`
+-- Table structure for admin
 -- ----------------------------
 DROP TABLE IF EXISTS `admin`;
 CREATE TABLE `admin` (
@@ -24,14 +24,10 @@ CREATE TABLE `admin` (
   `name` varchar(255) DEFAULT '',
   `password` varchar(255) DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of admin
--- ----------------------------
-
--- ----------------------------
--- Table structure for `category`
+-- Table structure for category
 -- ----------------------------
 DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
@@ -41,37 +37,7 @@ CREATE TABLE `category` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of category
--- ----------------------------
-
--- ----------------------------
--- Table structure for `order`
--- ----------------------------
-DROP TABLE IF EXISTS `order`;
-CREATE TABLE `order` (
-  `orderid` varchar(32) NOT NULL,
-  `orderstatus` int(3) NOT NULL DEFAULT '0',
-  `userid` int(11) NOT NULL,
-  `shopid` int(11) NOT NULL DEFAULT '0',
-  `paystatus` int(11) DEFAULT '0',
-  `totalprice` decimal(10,2) DEFAULT '0.00',
-  `address` text,
-  `phone` varchar(255) DEFAULT '',
-  `createdtime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `rtotalprice` decimal(10,2) DEFAULT '0.00',
-  `dltime` varchar(32) DEFAULT NULL,
-  `notes` varchar(255) DEFAULT NULL,
-  `username` varchar(255) DEFAULT '',
-  `ordernotes` varchar(255) DEFAULT '',
-  PRIMARY KEY (`orderid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of order
--- ----------------------------
-
--- ----------------------------
--- Table structure for `orderproduct`
+-- Table structure for orderproduct
 -- ----------------------------
 DROP TABLE IF EXISTS `orderproduct`;
 CREATE TABLE `orderproduct` (
@@ -85,11 +51,29 @@ CREATE TABLE `orderproduct` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of orderproduct
+-- Table structure for orders
 -- ----------------------------
+DROP TABLE IF EXISTS `orders`;
+CREATE TABLE `orders` (
+  `orderid` varchar(32) NOT NULL,
+  `orderstatus` int(3) NOT NULL DEFAULT '0',
+  `userid` int(11) NOT NULL,
+  `shopid` int(11) NOT NULL DEFAULT '0',
+  `paystatus` int(11) DEFAULT '0',
+  `totalprice` decimal(10,2) DEFAULT '0.00',
+  `address` text,
+  `phone` varchar(255) DEFAULT '',
+  `createdtime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `rtotalprice` decimal(10,2) DEFAULT '0.00',
+  `dltime` varchar(32) DEFAULT NULL,
+  `notes` varchar(255) DEFAULT NULL,
+  `username` varchar(255) DEFAULT '',
+  `ordernotes` varchar(255) DEFAULT '',
+  PRIMARY KEY (`orderid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Table structure for `product`
+-- Table structure for product
 -- ----------------------------
 DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
@@ -109,11 +93,7 @@ CREATE TABLE `product` (
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of product
--- ----------------------------
-
--- ----------------------------
--- Table structure for `shippingaddress`
+-- Table structure for shippingaddress
 -- ----------------------------
 DROP TABLE IF EXISTS `shippingaddress`;
 CREATE TABLE `shippingaddress` (
@@ -131,11 +111,7 @@ CREATE TABLE `shippingaddress` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of shippingaddress
--- ----------------------------
-
--- ----------------------------
--- Table structure for `shop`
+-- Table structure for shop
 -- ----------------------------
 DROP TABLE IF EXISTS `shop`;
 CREATE TABLE `shop` (
@@ -159,11 +135,7 @@ CREATE TABLE `shop` (
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of shop
--- ----------------------------
-
--- ----------------------------
--- Table structure for `user`
+-- Table structure for user
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
@@ -185,11 +157,7 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of user
--- ----------------------------
-
--- ----------------------------
--- Table structure for `weixinshop`
+-- Table structure for weixinshop
 -- ----------------------------
 DROP TABLE IF EXISTS `weixinshop`;
 CREATE TABLE `weixinshop` (
@@ -203,11 +171,7 @@ CREATE TABLE `weixinshop` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of weixinshop
--- ----------------------------
-
--- ----------------------------
--- Table structure for `weixinuser`
+-- Table structure for weixinuser
 -- ----------------------------
 DROP TABLE IF EXISTS `weixinuser`;
 CREATE TABLE `weixinuser` (
@@ -221,11 +185,7 @@ CREATE TABLE `weixinuser` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of weixinuser
--- ----------------------------
-
--- ----------------------------
--- Function structure for `GETDISTANCE`
+-- Function structure for GETDISTANCE
 -- ----------------------------
 DROP FUNCTION IF EXISTS `GETDISTANCE`;
 DELIMITER ;;
@@ -265,7 +225,7 @@ END
 DELIMITER ;
 
 -- ----------------------------
--- Function structure for `NewProc`
+-- Function structure for NewProc
 -- ----------------------------
 DROP FUNCTION IF EXISTS `NewProc`;
 DELIMITER ;;
