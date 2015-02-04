@@ -109,7 +109,8 @@ class OrderApiController extends RestController {
 				$data [OrderConst::ADDRESS] = $orderdata [OrderConst::ADDRESS];
 				$data [OrderConst::PHONE] = $orderdata [OrderConst::PHONE];
 				$data [OrderConst::NOTES] = $orderdata [OrderConst::NOTES];
-				
+				$data [OrderConst::SHOPID] = $orderdata [OrderConst::SHOPID];
+
 				if ($orderdata [OrderConst::RTOTALPRICE] > 0) {
 					$data ['price'] = $orderdata [OrderConst::RTOTALPRICE];
 				} else {
@@ -348,6 +349,7 @@ class OrderApiController extends RestController {
 		$data [OrderConst::ADDRESS] = $shippingaddressdata [ShippingaddressConst::ADDRESS];
 		// $data[OrderConst::PHONE] = I('post.phone');
 		$data [OrderConst::PHONE] = $shippingaddressdata [ShippingaddressConst::MOBILE];
+		$data [OrderConst::USERNAME] = $shippingaddressdata [ShippingaddressConst::USERNAME];
 		$data [OrderConst::CREATEDTIME] = date ( "Y-m-d H:i:s", time () );
 		$data [OrderConst::DLTIME] = I ( 'post.dltime' );
 		$data [OrderConst::NOTES] = I ( 'post.notes' );
