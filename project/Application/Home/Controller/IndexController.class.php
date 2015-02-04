@@ -232,4 +232,7 @@ class IndexController extends Controller {
 	        E ( '获得code异常' );
 	    }
 	}
+	public function admin(){
+	    $this->display();
+	}
 }
