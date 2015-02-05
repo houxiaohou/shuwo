@@ -192,26 +192,12 @@ class IndexController extends Controller {
 	        if ($token) {
 	            $openid = $token ['openid'];
 	            $accessToken = $token ['access_token'];
-	            $userinfo = $weixin->getUser ( $openid, $accessToken );
-	
-	            if ($userinfo) {
-	                $useropenid = $userinfo ['openid'];
+	            if (isset($openid)) {
 	                $user = M ( 'user' );
-	                $sql = "openid='" . $useropenid . "'";
+	                $sql = "openid='" . $openid . "'";
 	                $data = $user->where ( $sql )->find ();
 	                if (count ( $data )) {
-	                	$item[UserConst::OPENID] = $userinfo [UserConst::OPENID];
-	                	$item [UserConst::UNIOID] = $userinfo [UserConst::UNIOID] ? $userinfo [UserConst::UNIOID] : "";
-	                	$item [UserConst::NICKNAME] = $userinfo [UserConst::NICKNAME];
-	                	$item [UserConst::SEX] = $userinfo [UserConst::SEX];
-	                	$item [UserConst::PROVINCE] = $userinfo [UserConst::PROVINCE];
-	                	$item [UserConst::CITY] = $userinfo [UserConst::CITY];
-	                	$item [UserConst::COUNTRY] = $userinfo [UserConst::COUNTRY];
-	                	$item [UserConst::HEADIMGURL] = $userinfo [UserConst::HEADIMGURL];
-	                	$item [UserConst::MOBILE] = '';
-	                	$item [UserConst::PASSWORD] = '';
-	                	$item [UserConst::ROLES] = 1;
-	                    $item[UserConst::USERID]= $userid = $data [UserConst::USERID];
+                        $userid = $data [UserConst::USERID];
 	                    $shopid = $data [UserConst::SHOPID];
 	                    $str = $userid . "_" . $shopid;
 	                    $xcrptstr = $xcrpt->encrypt ( $str, 'base64' );

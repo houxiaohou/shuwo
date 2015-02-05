@@ -71,7 +71,6 @@ class wechatcallback
 		{
 			case "subscribe":
 				$content = "欢迎关注树窝小店 ";
-// 				$content .= (!empty($object->EventKey))?("\n来自二维码场景 ".str_replace("qrscene_","",$object->EventKey)):"";
 				break;
 			case "unsubscribe":
 				$content = "取消关注";
@@ -154,9 +153,38 @@ class wechatcallback
 // 		}
 
 		//写逻辑 当从小店树窝小店  add+shop+“授权码”；
-		$content = '';
-		
-		
+// 		$content = '';
+// 		$keyword = add+shop+12323
+// 		$shop = M("shop");
+// 		$shopid =   $shop->where()->getField("shopid");
+// 		if(count($data))
+// 		{
+// 			$user =M('user');
+// 			$objecct->FromUserName;
+			
+// 			$weixin = new Weixn();
+// 			$weixin->appid = C('SHOP_APPID');
+// 			$weixin->appsecret = C('SHOP_APPSECRET');
+// 			$userInfo =   $weixin->getUserbyglobaltoken($objecct->FromUserName);
+// 			$data [UserConst::OPENID] = $userinfo [UserConst::OPENID];
+// 			$data [UserConst::UNIOID] = $userinfo [UserConst::UNIOID] ? $userinfo [UserConst::UNIOID] : "";
+// 			$data [UserConst::NICKNAME] = $userinfo [UserConst::NICKNAME];
+// 			$data [UserConst::SEX] = $userinfo [UserConst::SEX];
+// 			$data [UserConst::PROVINCE] = $userinfo [UserConst::PROVINCE];
+// 			$data [UserConst::CITY] = $userinfo [UserConst::CITY];
+// 			$data [UserConst::COUNTRY] = $userinfo [UserConst::COUNTRY];
+// 			$data [UserConst::HEADIMGURL] = $userinfo [UserConst::HEADIMGURL];
+// 			$data [UserConst::MOBILE] = '';
+// 			$data [UserConst::PASSWORD] = '';
+// 			$data [UserConst::ROLES] = 1;
+// 			$data[UserConst::SHOPID] =$shopid;
+// 			$userid = $user->add($data);
+// 			if($userid)
+// 			{
+// 				$content = ""
+// 			} 
+// 		}
+		$content = "这是一条文本信息";
 		$result = $this->transmitText($object, $content);
 
 		return $result;
