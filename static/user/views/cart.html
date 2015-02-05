@@ -1,6 +1,6 @@
 <div class="container-fluid cart">
   <div class="global-header cart-nav text-center">
-    <a ui-sref="shuwo.default" class="link back">
+    <a class="link back" ng-click="back()">
       <i class="fa fa-chevron-left"></i>
     </a>
     <span class="title">购物车</span>
@@ -11,7 +11,7 @@
   <p class="text-center loading" ng-show="productLoading||shopLoading">
     <i class="fa fa-spinner fa-spin"></i>
   </p>
-  <div ng-show="!productLoading&&!shopLoading">
+  <div ng-show="!productLoading&&!shopLoading&&items.length>0">
     <div class="shop-info">
       <img ng-src="{{shop.simgurl}}?imageView2/1/w/80/h/80" alt=""/>
       <p class="name">{{shop.spn}} <span>（满{{shop.dlprice}}元免费送货）</span> </p>
@@ -44,7 +44,7 @@
               </div>
             </div>
           </div>
-          <div class="remove text-center" ng-click="removeFromCart(i.product);">
+          <div class="remove text-center" ng-click="removeFromCart(i.product, $index);">
             <i class="fa fa-close"></i>
           </div>
         </li>
@@ -54,16 +54,21 @@
       <div class="row">
         <div class="col-xs-8">
           <p class="total">价格约：
-            <span class="color-red">{{totalPrice() | price}}元</span>
+            <span class="color-red">{{totalPrice() | number:2}}元</span>
           </p>
         </div>
         <div class="col-xs-4 text-right">
           <button class="btn btn-block btn-lg btn-success" ng-click="submit();" ng-disabled="totalPrice()<shop.dlprice">
-            <span ng-if="totalPrice()<shop.dlprice">差{{(shop.dlprice-totalPrice()) | price}}元</span>
+            <span ng-if="totalPrice()<shop.dlprice">差{{(shop.dlprice-totalPrice()) | number:2}}元</span>
             <span ng-if="totalPrice()>=shop.dlprice">提交订单</span>
           </button>
         </div>
       </div>
     </div>
+  </div>
+  <div ng-show="!productLoading&&!shopLoading&&items.length==0" class="text-center">
+    <img ng-src="{{noneImage}}" alt="" style="margin-top: 50px;width: 150px;"/>
+    <p style="padding-top: 10px;">空空的，快去选水果吧~</p>
+    <button class="btn btn-success" ui-sref="shuwo.default" style="margin-top: 10px;">去选水果</button>
   </div>
 </div>

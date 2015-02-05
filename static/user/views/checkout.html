@@ -40,8 +40,8 @@
             <p class="color-red" ng-if="i.attribute=='3'">{{i.num}}{{i.unit}}</p>
           </div>
           <div class="col-xs-4 text-center">
-            <p class="color-red" ng-if="i.attribute=='1'">约{{i.price}}元</p>
-            <p class="color-red" ng-if="i.attribute=='2' || i.attribute=='3'">{{i.price}}元</p>
+            <p class="color-red" ng-if="i.attribute=='1'">约{{i.price | number:2}}元</p>
+            <p class="color-red" ng-if="i.attribute=='2' || i.attribute=='3'">{{i.price | number:2}}元</p>
           </div>
         </li>
       </ul>

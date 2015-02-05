@@ -20,8 +20,8 @@
         <li ng-class="{active: $state.includes('shuwo.shop')}">
           <a ui-sref="shuwo.shop.list"><em class="fa fa-building"></em> <span class="item-text">店铺管理</span></a>
         </li>
-        <li ui-sref-active="active">
-          <a ui-sref="shuwo.order"><em class="fa fa-file-text"></em> <span class="item-text">订单管理</span></a>
+        <li ng-class="{active: $state.includes('shuwo.order')}">
+          <a ui-sref="shuwo.order.list"><em class="fa fa-file-text"></em> <span class="item-text">订单管理</span></a>
         </li>
         <li ui-sref-active="active">
           <a ui-sref="shuwo.user"><em class="fa fa-users"></em> <span class="item-text">用户管理</span></a>

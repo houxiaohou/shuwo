@@ -6,7 +6,7 @@
     </a>
   </div>
   <div class="order-none text-center" ng-show="!loading&&orders.length==0">
-    <img src="./images/wan.c475ffdc.png" alt=""/>
+    <img ng-src="{{noneImage}}" alt=""/>
     <p>还没有订单，快去选水果吧~</p>
     <button class="btn btn-success" ui-sref="shuwo.default">去选水果</button>
   </div>
@@ -56,7 +56,7 @@
           </div>
         </div>
       </li>
-      <p class="loading text-center" ng-show="loading"><i class="fa fa-spinner fa-spin"></i></p>
     </ul>
+    <p class="loading text-center" ng-show="loading"><i class="fa fa-spinner fa-spin"></i></p>
   </div>
 </div>
