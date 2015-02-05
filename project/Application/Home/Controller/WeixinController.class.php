@@ -5,13 +5,15 @@ namespace Home\Controller;
 
 use Think\Controller;
 
-require_once 'wechatCallback.php';
+define("TOKEN", "weixin");
+
+require_once 'wechatcallback.php';
 
 class WeixinController extends Controller
 {
-	public  function  Index()
+	public  function  index()
 	{
-		$wechatObj = new wechatCallback();
+		$wechatObj = new wechatcallback();
 		if (!isset($_GET['echostr'])) {
 			$wechatObj->responseMsg();
 		}else{

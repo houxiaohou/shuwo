@@ -14,7 +14,7 @@ class IndexController extends Controller {
 		$weixin = new Weixin ();
 		$weixin->appid = $appid;
 		$weixin->appsecret = $appsecret;
-		$url = $weixin->getwxurl ( C('SHUWO_CALLBACK')  );
+		$url = $weixin->getwxurl(C('SHUWO_CALLBACK'));
 		$key = C ( "CRYPT_KEY" );
 		$xcrpt = new Xcrypt ( $key, 'cbc', $key );
 		if (cookie ( 'utoken' )) {
@@ -43,9 +43,9 @@ class IndexController extends Controller {
 				//$this->redirect ( "authorize" );
 			}
 		} else {
-			$redircturl = "Location:".$url;
-			header($redircturl);
-			exit;
+    		$redircturl = "Location:".$url;
+            header($redircturl);
+            exit;
 			
 			// 测试模拟代码
 			//$this->redirect ( "authorize" );
@@ -58,9 +58,8 @@ class IndexController extends Controller {
 		$weixin->appid = $appid;
 		$weixin->appsecret = $appsecret;
 		$key = C ( "CRYPT_KEY" );
-		$xcrpt = new Xcrypt ( $key, 'cbc', $key );
+		$xcrpt = new Xcrypt ( $key, 'cbc', $key );		
 		$code = I('get.code');
-		
 		// 测试代码
 // 		$code = "testcode";
 // 		$token ['openid'] = "openid";
@@ -76,12 +75,10 @@ class IndexController extends Controller {
 		
 		if ($code) {
 			$token = $weixin->getTokenWithCode ( $code );
-			
 			if ($token) {
 				$openid = $token ['openid'];
 				$accessToken = $token ['access_token'];
-				$userinfo = $weixin->getUser ( $openid, $accessToken );
-				
+				$userinfo = $weixin->getUser($openid, $accessToken);
 				if ($userinfo) {
 					$useropenid = $userinfo ['openid'];
 					$user = M ( 'user' );
@@ -122,6 +119,7 @@ class IndexController extends Controller {
 			E ( '获得code异常' );
 		}
 	}
+	
 	public function shop() {
 	    $appid = C ( 'SHOP_APPID' );
 	    $appsecret = C ( 'SHOP_APPSECRET' );

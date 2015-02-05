@@ -1,6 +1,7 @@
 <?php
 namespace Home\Controller;
-class wechatCallback
+define("TOKEN", "weixin");
+class wechatcallback
 {
 	public function valid()
 	{
@@ -8,7 +9,7 @@ class wechatCallback
 		$signature = $_GET["signature"];
 		$timestamp = $_GET["timestamp"];
 		$nonce = $_GET["nonce"];
-		$token = 'weixin';
+		$token = TOKEN;
 		$tmpArr = array($token, $timestamp, $nonce);
 		sort($tmpArr);
 		$tmpStr = implode($tmpArr);
@@ -36,21 +37,21 @@ class wechatCallback
 				case "text":
 					$result = $this->receiveText($postObj);
 					break;
-				case "image":
-					$result = $this->receiveImage($postObj);
-					break;
-				case "location":
-					$result = $this->receiveLocation($postObj);
-					break;
-				case "voice":
-					$result = $this->receiveVoice($postObj);
-					break;
-				case "video":
-					$result = $this->receiveVideo($postObj);
-					break;
-				case "link":
-					$result = $this->receiveLink($postObj);
-					break;
+// 				case "image":
+// 					$result = $this->receiveImage($postObj);
+// 					break;
+// 				case "location":
+// 					$result = $this->receiveLocation($postObj);
+// 					break;
+// 				case "voice":
+// 					$result = $this->receiveVoice($postObj);
+// 					break;
+// 				case "video":
+// 					$result = $this->receiveVideo($postObj);
+// 					break;
+// 				case "link":
+// 					$result = $this->receiveLink($postObj);
+// 					break;
 				default:
 					$result = "unknown msg type: ".$RX_TYPE;
 					break;
@@ -70,49 +71,47 @@ class wechatCallback
 		{
 			case "subscribe":
 				$content = "欢迎关注树窝小店 ";
-				$content .= (!empty($object->EventKey))?("\n来自二维码场景 ".str_replace("qrscene_","",$object->EventKey)):"";
+// 				$content .= (!empty($object->EventKey))?("\n来自二维码场景 ".str_replace("qrscene_","",$object->EventKey)):"";
 				break;
 			case "unsubscribe":
 				$content = "取消关注";
 				break;
-			case "SCAN":
-				$content = "扫描场景 ".$object->EventKey;
-				break;
+// 			case "SCAN":
+// 				$content = "扫描场景 ".$object->EventKey;
+// 				break;
 			case "CLICK":
 				switch ($object->EventKey)
 				{
-					case "COMPANY":
-						$content = array();
-						$content[] = array("Title"=>"多图文1标题", "Description"=>"", "PicUrl"=>"http://discuz.comli.com/weixin/weather/icon/cartoon.jpg", "Url" =>"http://m.cnblogs.com/?u=txw1958");
+					case "income":
+						$content = "店铺收益".$object->FromUserName;
 						break;
 					default:
 						$content = "点击菜单：".$object->EventKey;
 						break;
 				}
 				break;
-			case "LOCATION":
-				$content = "上传位置：纬度 ".$object->Latitude.";经度 ".$object->Longitude;
-				break;
+// 			case "LOCATION":
+// 				$content = "上传位置：纬度 ".$object->Latitude.";经度 ".$object->Longitude;
+// 				break;
 			case "VIEW":
 				$content = "跳转链接 ".$object->EventKey;
 				break;
-			case "MASSSENDJOBFINISH":
-				$content = "消息ID：".$object->MsgID."，结果：".$object->Status."，粉丝数：".$object->TotalCount."，过滤：".$object->FilterCount."，发送成功：".$object->SentCount."，发送失败：".$object->ErrorCount;
-				break;
+// 			case "MASSSENDJOBFINISH":
+// 				$content = "消息ID：".$object->MsgID."，结果：".$object->Status."，粉丝数：".$object->TotalCount."，过滤：".$object->FilterCount."，发送成功：".$object->SentCount."，发送失败：".$object->ErrorCount;
+// 				break;
 			default:
 				$content = "receive a new event: ".$object->Event;
 				break;
 		}
-		if(is_array($content)){
-			if (isset($content[0])){
-				$result = $this->transmitNews($object, $content);
-			}else if (isset($content['MusicUrl'])){
-				$result = $this->transmitMusic($object, $content);
-			}
-		}else{
-			$result = $this->transmitText($object, $content);
-		}
+// 		if(is_array($content)){
+// 			if (isset($content[0])){
+// 				$result = $this->transmitNews($object, $content);
+// 			}
+// 		}else{
+// 			$result = $this->transmitText($object, $content);
+// 		}
 
+		$result = $this->transmitText($object, $content);
 		return $result;
 	}
 
@@ -120,88 +119,94 @@ class wechatCallback
 	private function receiveText($object)
 	{
 		$keyword = trim($object->Content);
-		//多客服人工回复模式
-		if (strstr($keyword, "您好") || strstr($keyword, "你好") || strstr($keyword, "在吗")){
-			$result = $this->transmitService($object);
-		}
-		//自动回复模式
-		else{
-			if (strstr($keyword, "文本")){
-				$content = "这是个文本消息";
-			}else if (strstr($keyword, "单图文")){
-				$content = array();
-				$content[] = array("Title"=>"单图文标题",  "Description"=>"单图文内容", "PicUrl"=>"http://discuz.comli.com/weixin/weather/icon/cartoon.jpg", "Url" =>"http://m.cnblogs.com/?u=txw1958");
-			}else if (strstr($keyword, "图文") || strstr($keyword, "多图文")){
-				$content = array();
-				$content[] = array("Title"=>"多图文1标题", "Description"=>"", "PicUrl"=>"http://discuz.comli.com/weixin/weather/icon/cartoon.jpg", "Url" =>"http://m.cnblogs.com/?u=txw1958");
-				$content[] = array("Title"=>"多图文2标题", "Description"=>"", "PicUrl"=>"http://d.hiphotos.bdimg.com/wisegame/pic/item/f3529822720e0cf3ac9f1ada0846f21fbe09aaa3.jpg", "Url" =>"http://m.cnblogs.com/?u=txw1958");
-				$content[] = array("Title"=>"多图文3标题", "Description"=>"", "PicUrl"=>"http://g.hiphotos.bdimg.com/wisegame/pic/item/18cb0a46f21fbe090d338acc6a600c338644adfd.jpg", "Url" =>"http://m.cnblogs.com/?u=txw1958");
-			}else if (strstr($keyword, "音乐")){
-				$content = array();
-				$content = array("Title"=>"最炫民族风", "Description"=>"歌手：凤凰传奇", "MusicUrl"=>"http://121.199.4.61/music/zxmzf.mp3", "HQMusicUrl"=>"http://121.199.4.61/music/zxmzf.mp3");
-			}else{
-				$content = date("Y-m-d H:i:s",time())."\n".$object->FromUserName."\n技术支持 方倍工作室";
-			}
+// 		//多客服人工回复模式
+// 		if (strstr($keyword, "您好") || strstr($keyword, "你好") || strstr($keyword, "在吗")){
+// 			$result = $this->transmitService($object);
+// 		}
+// 		//自动回复模式
+// 		else{
+// 			if (strstr($keyword, "文本")){
+// 				$content = "这是个文本消息";
+// 			}else if (strstr($keyword, "单图文")){
+// 				$content = array();
+// 				$content[] = array("Title"=>"单图文标题",  "Description"=>"单图文内容", "PicUrl"=>"http://discuz.comli.com/weixin/weather/icon/cartoon.jpg", "Url" =>"http://m.cnblogs.com/?u=txw1958");
+// 			}else if (strstr($keyword, "图文") || strstr($keyword, "多图文")){
+// 				$content = array();
+// 				$content[] = array("Title"=>"多图文1标题", "Description"=>"", "PicUrl"=>"http://discuz.comli.com/weixin/weather/icon/cartoon.jpg", "Url" =>"http://m.cnblogs.com/?u=txw1958");
+// 				$content[] = array("Title"=>"多图文2标题", "Description"=>"", "PicUrl"=>"http://d.hiphotos.bdimg.com/wisegame/pic/item/f3529822720e0cf3ac9f1ada0846f21fbe09aaa3.jpg", "Url" =>"http://m.cnblogs.com/?u=txw1958");
+// 				$content[] = array("Title"=>"多图文3标题", "Description"=>"", "PicUrl"=>"http://g.hiphotos.bdimg.com/wisegame/pic/item/18cb0a46f21fbe090d338acc6a600c338644adfd.jpg", "Url" =>"http://m.cnblogs.com/?u=txw1958");
+// 			}else if (strstr($keyword, "音乐")){
+// 				$content = array();
+// 				$content = array("Title"=>"最炫民族风", "Description"=>"歌手：凤凰传奇", "MusicUrl"=>"http://121.199.4.61/music/zxmzf.mp3", "HQMusicUrl"=>"http://121.199.4.61/music/zxmzf.mp3");
+// 			}else{
+// 				$content = date("Y-m-d H:i:s",time())."\n".$object->FromUserName."\n技术支持 方倍工作室";
+// 			}
 
-			if(is_array($content)){
-				if (isset($content[0]['PicUrl'])){
-					$result = $this->transmitNews($object, $content);
-				}else if (isset($content['MusicUrl'])){
-					$result = $this->transmitMusic($object, $content);
-				}
-			}else{
-				$result = $this->transmitText($object, $content);
-			}
-		}
+// 			if(is_array($content)){
+// 				if (isset($content[0]['PicUrl'])){
+// 					$result = $this->transmitNews($object, $content);
+// 				}else if (isset($content['MusicUrl'])){
+// 					$result = $this->transmitMusic($object, $content);
+// 				}
+// 			}else{
+// 				$result = $this->transmitText($object, $content);
+// 			}
+// 		}
+
+		//写逻辑 当从小店树窝小店  add+shop+“授权码”；
+		$content = '';
+		
+		
+		$result = $this->transmitText($object, $content);
 
 		return $result;
 	}
 
 	//接收图片消息
-	private function receiveImage($object)
-	{
-		$content = array("MediaId"=>$object->MediaId);
-		$result = $this->transmitImage($object, $content);
-		return $result;
-	}
+// 	private function receiveImage($object)
+// 	{
+// 		$content = array("MediaId"=>$object->MediaId);
+// 		$result = $this->transmitImage($object, $content);
+// 		return $result;
+// 	}
 
-	//接收位置消息
-	private function receiveLocation($object)
-	{
-		$content = "你发送的是位置，纬度为：".$object->Location_X."；经度为：".$object->Location_Y."；缩放级别为：".$object->Scale."；位置为：".$object->Label;
-		$result = $this->transmitText($object, $content);
-		return $result;
-	}
+// 	//接收位置消息
+// 	private function receiveLocation($object)
+// 	{
+// 		$content = "你发送的是位置，纬度为：".$object->Location_X."；经度为：".$object->Location_Y."；缩放级别为：".$object->Scale."；位置为：".$object->Label;
+// 		$result = $this->transmitText($object, $content);
+// 		return $result;
+// 	}
 
-	//接收语音消息
-	private function receiveVoice($object)
-	{
-		if (isset($object->Recognition) && !empty($object->Recognition)){
-			$content = "你刚才说的是：".$object->Recognition;
-			$result = $this->transmitText($object, $content);
-		}else{
-			$content = array("MediaId"=>$object->MediaId);
-			$result = $this->transmitVoice($object, $content);
-		}
+// 	//接收语音消息
+// 	private function receiveVoice($object)
+// 	{
+// 		if (isset($object->Recognition) && !empty($object->Recognition)){
+// 			$content = "你刚才说的是：".$object->Recognition;
+// 			$result = $this->transmitText($object, $content);
+// 		}else{
+// 			$content = array("MediaId"=>$object->MediaId);
+// 			$result = $this->transmitVoice($object, $content);
+// 		}
 
-		return $result;
-	}
+// 		return $result;
+// 	}
 
-	//接收视频消息
-	private function receiveVideo($object)
-	{
-		$content = array("MediaId"=>$object->MediaId, "ThumbMediaId"=>$object->ThumbMediaId, "Title"=>"", "Description"=>"");
-		$result = $this->transmitVideo($object, $content);
-		return $result;
-	}
+// 	//接收视频消息
+// 	private function receiveVideo($object)
+// 	{
+// 		$content = array("MediaId"=>$object->MediaId, "ThumbMediaId"=>$object->ThumbMediaId, "Title"=>"", "Description"=>"");
+// 		$result = $this->transmitVideo($object, $content);
+// 		return $result;
+// 	}
 
-	//接收链接消息
-	private function receiveLink($object)
-	{
-		$content = "你发送的是链接，标题为：".$object->Title."；内容为：".$object->Description."；链接地址为：".$object->Url;
-		$result = $this->transmitText($object, $content);
-		return $result;
-	}
+// 	//接收链接消息
+// 	private function receiveLink($object)
+// 	{
+// 		$content = "你发送的是链接，标题为：".$object->Title."；内容为：".$object->Description."；链接地址为：".$object->Url;
+// 		$result = $this->transmitText($object, $content);
+// 		return $result;
+// 	}
 
 	//回复文本消息
 	private function transmitText($object, $content)

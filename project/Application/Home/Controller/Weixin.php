@@ -22,6 +22,21 @@ class Weixin
     	return $strjson;
     }
     
+    public function verify($token,$openid)
+    {
+    	
+    	if(!isset($openid)||!isset($token))
+    	{
+    		return false;
+    	}
+    	$url = "https://api.weixin.qq.com/sns/auth?access_token=".$token."&openid=".$openid;
+    	$Token = $this->https_request($url);
+    	$data = json_decode($Token, true);
+    	
+   	   echo $data['errcode'];
+    	
+    }
+    
     //通过全局access token 获得用户信息
     public  function getUserbyglobaltoken($openId)
     {
@@ -31,7 +46,10 @@ class Weixin
 		//得到全局token
 		$accessToken = $this->getGlobalAccessToken();
 		//构造Get请求URL
-		$url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token={$accessToken}&openid={$openId}";
+		
+		$url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$accessToken['access_token']."&openid=".$openId;
+
+		echo $url;
 		//通过CURL提交GET请求
 		$result = $this->https_request($url);
 		//解码JSON数据
@@ -62,9 +80,11 @@ class Weixin
 		{
 			return false;
 		}
+		
 		$url = "https://api.weixin.qq.com/sns/userinfo?access_token=".$token."&openid=".$openid."&lang=zh_CN";
 		$Token = $this->https_request($url);
 		$data = json_decode($Token, true);
+		
 		if ($data['errcode']||!$data) {
 			return false;
 		}
@@ -103,7 +123,7 @@ class Weixin
 				return $result;
 		}
 	
-		public function getwxurl($redirct_url = "",$scope = "snsapi_base")
+		public function getwxurl($redirct_url = "",$scope = "snsapi_userinfo")
 		{
 			$redirct_url = $redirct_url === ""?$this->redirect_rul:urlencode($redirct_url);
 			$wxurl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=".$this->appid."&redirect_uri=".$redirct_url."&response_type=code&scope=".$scope."&state=STATE#wechat_redirect";
