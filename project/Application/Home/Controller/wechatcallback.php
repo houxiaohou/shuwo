@@ -131,7 +131,7 @@ class wechatcallback
 					            }
 					        }		    
 					    }
-						$content = "今日收益".$num.'<br/>'.'当月收益'.$count.'<br/>'.$count.'<br/>';
+						$content = "今日收益".$num.'<br/>'.'当月收益'.$count.'<br/>'.'总收益'.$earnings.'<br/>';
 						break;
 					default:
 						$content = "点击菜单：".$object->EventKey;
