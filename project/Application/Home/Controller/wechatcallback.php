@@ -3,6 +3,7 @@ namespace Home\Controller;
 define("TOKEN", "weixin");
 require_once 'weixinController.clsss.php';
 require_once 'weixin.php';
+require_once 'UserConst.php';
 
 class wechatcallback
 {
@@ -203,8 +204,42 @@ class wechatcallback
 		//写逻辑 当从小店树窝小店  add+shop+“授权码”；
 // 		$content = '';
 // 		$keyword = add+shop+12323
+        //获取店铺的授权码
+        $shopsn = substr($keyword, 7);
+        $shop = M("shop");
+        $where['shopsn'] = $shopsn;
+        $data = $shop->where($where)->getField("shopid");
 // 		$shop = M("shop");
 // 		$shopid =   $shop->where()->getField("shopid");
+        if (count($data))
+        {
+        	$user = M('user');
+        
+        	$weixin = new Weixin();
+        	$weixin->appid = C('SHOP_APPID');
+        	$weixin->appsecret = C('SHOP_SECRET');
+        	$userInfo = $weixin->getUserbyglobaltoken($object->FromUserName);
+        	
+        	$data_user[UserConst::OPENID] = $userInfo[UserConst::OPENID];
+        	$data_user[UserConst::UNIOID] = $userInfo [UserConst::UNIOID] ? $userInfo [UserConst::UNIOID] : "";
+       		$data_user[UserConst::NICKNAME] = $userInfo [UserConst::NICKNAME];
+        	$data_user[UserConst::SEX] = $userInfo [UserConst::SEX];
+        	$data_user[UserConst::PROVINCE] = $userInfo [UserConst::PROVINCE];
+        	$data_user[UserConst::CITY] = $userInfo [UserConst::CITY];
+        	$data_user [UserConst::COUNTRY] = $userInfo [UserConst::COUNTRY];
+        	$data_user[UserConst::HEADIMGURL] = $userInfo [UserConst::HEADIMGURL];
+        	$data_user[UserConst::MOBILE] = '';
+        	$data_user[UserConst::PASSWORD] = '';
+        	$data_user[UserConst::ROLES] = 1;
+        	$data_user[UserConst::SHOPID] =$data;
+     		$userid = $user->add($data_user);
+        		if($userid)
+        			{
+    					$content = "授权成功";
+   					}
+        }else {
+        	$content = "授权未成功";
+        }
 // 		if(count($data))
 // 		{
 // 			$user =M('user');
@@ -232,7 +267,7 @@ class wechatcallback
 // 				$content = ""
 // 			} 
 // 		}
-		$content = "这是一条文本信息";
+		
 		$result = $this->transmitText($object, $content);
 
 		return $result;
