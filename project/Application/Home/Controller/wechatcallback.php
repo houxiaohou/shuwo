@@ -221,13 +221,13 @@ class wechatcallback
         	$userInfo = $weixin->getUserbyglobaltoken($object->FromUserName);
         	
         	$data_user[UserConst::OPENID] = $userInfo[UserConst::OPENID];
-        	$data_user[UserConst::UNIOID] = $userInfo [UserConst::UNIOID] ? $userInfo [UserConst::UNIOID] : "";
-       		$data_user[UserConst::NICKNAME] = $userInfo [UserConst::NICKNAME];
-        	$data_user[UserConst::SEX] = $userInfo [UserConst::SEX];
-        	$data_user[UserConst::PROVINCE] = $userInfo [UserConst::PROVINCE];
-        	$data_user[UserConst::CITY] = $userInfo [UserConst::CITY];
-        	$data_user [UserConst::COUNTRY] = $userInfo [UserConst::COUNTRY];
-        	$data_user[UserConst::HEADIMGURL] = $userInfo [UserConst::HEADIMGURL];
+        	$data_user[UserConst::UNIOID] = $userInfo[UserConst::UNIOID] ? $userInfo[UserConst::UNIOID] : "";
+       		$data_user[UserConst::NICKNAME] = $userInfo[UserConst::NICKNAME];
+        	$data_user[UserConst::SEX] = $userInfo[UserConst::SEX];
+        	$data_user[UserConst::PROVINCE] = $userInfo[UserConst::PROVINCE];
+        	$data_user[UserConst::CITY] = $userInfo[UserConst::CITY];
+        	$data_user [UserConst::COUNTRY] = $userInfo[UserConst::COUNTRY];
+        	$data_user[UserConst::HEADIMGURL] = $userInfo[UserConst::HEADIMGURL];
         	$data_user[UserConst::MOBILE] = '';
         	$data_user[UserConst::PASSWORD] = '';
         	$data_user[UserConst::ROLES] = 1;
