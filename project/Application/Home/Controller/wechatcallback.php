@@ -1,8 +1,8 @@
 <?php
 namespace Home\Controller;
 define("TOKEN", "weixin");
-require_once 'weixinController.clsss.php';
-require_once 'weixin.php';
+require_once 'WeixinController.class.php';
+require_once 'Weixin.php';
 require_once 'UserConst.php';
 
 class wechatcallback
