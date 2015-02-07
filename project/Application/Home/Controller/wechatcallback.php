@@ -83,46 +83,68 @@ class wechatcallback {
 			// break;
 			case "CLICK" :
 				switch ($object->EventKey) {
-					case "income" : 						
-					    $openid='oR-0TuBMFVWqAjTrRjKFmyCbMxyA';
-					    if($openid){
-					        $user=M('user');
-					        $where['openid']=$openid;
- 					        $data=$user->where($where)->find();
- 					        if(count($data)){
- 					            $userid=$data['userid'];
- 					            $shopid=$data['shopid'];
- 					            if(!empty($userid) || !empty($shopid)){
- 					                $orders=M('orders');
- 					                $data=$orders->where('orderstatus != 2 and userid =' . $userid . ' and shopid='.$shopid )->select();
- 					                if(count($data)){
- 					                    $i=0;
- 					                    for($i=0;$i<count($data);$i++){
- 					                        $content = $data[$i]['username'];
- 					                        //总收益
- 					                        $earnings+=$data[$i]['totalprice'];
- 					                        //当天时间
- 					                        $createtime.=substr($data[$i]['createdtime'],0,-9);
- 					                        $daytime=date('Y-m-d');
- 					                      
- 					                    }
- 					                }else{
- 					                    $content = '您权限不够';
- 					                }
- 					            }else{
- 					                $content = '您权限不够';
- 					              }
- 					            }
-					       }else{
-					           $content = '您权限不够';
-					       }
-						}						
+					case "income" :
+						$openid = $object->FromUserName;
+						if ($openid) {
+							$user = M ( 'user' );
+							$data = $user->where ( "openid='" . $openid . "'" )->find ();
+							if (count ( $data )) {
+								$orders = M ( 'orders' );
+								$shopid = $data ["shopid"];
+								
+								// 当日收益
+								$today = date ( "Y-m-d" );
+								$sql = "select SUM(totalprice) as cincome from orders where DATE_FORMAT(createdtime,'%Y-%m-%d')='" . $today . "' AND shopid = {$shopid} AND orderstatus != 2";
+								$item = $orders->query ( $sql );
+								$todayincome = doubleval ( $item [0] ['cincome'] );
+								
+								// 当月收益
+								$Month = date ( "Y-m" );
+								$sql = "select SUM(totalprice) as mincome from orders where DATE_FORMAT(createdtime,'%Y-%m')='" . $Month . "' AND shopid = {$shopid} AND orderstatus != 2";
+								$item = $orders->query ( $sql );
+								$monthincome = doubleval ( $item [0] ['mincome'] );
+								
+								// 当前总收益
+								$sql = "select SUM(totalprice) as tincome from orders where shopid = {$shopid} AND orderstatus != 2";
+								$item = $orders->query ( $sql );
+								$totalincome = doubleval ( $item [0] ['tincome'] );
+								$content = "当日收益: " . $todayincome . "元 \n\n" . "当月收益: " . $monthincome . "元 \n\n" . "目前总收益: " . $totalincome . "元 \n\n";
+							} else 
+							{
+								$content="请确定该账号是否授权\n店铺授权码格式 （add+shop+授权码)";
+							}
+							// $shopid=$data['shopid'];
+							// if(!empty($userid) || !empty($shopid)){
+							
+							// if(count($data)){
+							// $i=0;
+							// for($i=0;$i<count($data);$i++){
+							// $content = $data[$i]['username'];
+							// //总收益
+							// $earnings+=$data[$i]['totalprice'];
+							// //当天时间
+							// $createtime.=substr($data[$i]['createdtime'],0,-9);
+							// $daytime=date('Y-m-d');
+							
+							// }
+							// }else{
+							// $content = '您权限不够';
+							// }
+							// }else{
+							// $content = '您权限不够';
+							// }
+							// }
+							// }else{
+							// $content = '您权限不够';
+						}
 						break;
 					default :
 						$content = "点击菜单：" . $object->EventKey;
 						break;
-// 				}
+				}
 				break;
+			// }
+			
 			// case "LOCATION":
 			// $content = "上传位置：纬度 ".$object->Latitude.";经度 ".$object->Longitude;
 			// break;
@@ -192,17 +214,17 @@ class wechatcallback {
 		$strarray = explode ( "+", $keyword );
 		$shopsn = '';
 		if (count ( $strarray ) == 3 & $strarray [0] == 'add' && $strarray [1] == 'shop') {
-			$shopsn = $strarray [2];
 			$shop = M ( "shop" );
-			$where ['shopsn'] = $shopsn;
+			$where ['shopsn'] = $strarray[2];
 			$data = $shop->where ( $where )->getField ( "shopid" );
 			if (count ( $data )) {
-				$user = M ( 'user' );
 				$weixin = new Weixin ();
 				$weixin->appid = C ( 'SHOP_APPID' );
 				$weixin->appsecret = C ( 'SHOP_APPSECRET' );
 				$userInfo = $weixin->getUserbyglobaltoken ( $object->FromUserName );
 				if (count ( $userInfo )) {
+					$user = M ( 'user' );
+					$userid = $user->where ( "shopid=" . $data )->getField ( "userid" );
 					$data_user [UserConst::OPENID] = $userInfo [UserConst::OPENID];
 					$data_user [UserConst::UNIOID] = $userInfo [UserConst::UNIOID] ? $userInfo [UserConst::UNIOID] : "";
 					$data_user [UserConst::NICKNAME] = $userInfo [UserConst::NICKNAME];
@@ -215,9 +237,19 @@ class wechatcallback {
 					$data_user [UserConst::PASSWORD] = '';
 					$data_user [UserConst::ROLES] = 1;
 					$data_user [UserConst::SHOPID] = $data;
-					$userid = $user->add ( $data_user );
 					if ($userid) {
-						  $content = "授权成功";
+						$data_user [UserConst::USERID] = $userid;
+						if ($user->save ( $data_user )) {
+							$content = "授权成功";
+						} else {
+							$content = "授权未成功";
+						}
+					} else {
+						if ($user->add ( $data_user )) {
+							$content = "授权成功";
+						} else {
+							$content = "授权未成功";
+						}
 					}
 				} else {
 					$content = "授权未成功";
