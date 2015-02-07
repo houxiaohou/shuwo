@@ -239,7 +239,7 @@ class wechatcallback {
 					$data_user [UserConst::SHOPID] = $data;
 					if ($userid) {
 						$data_user [UserConst::USERID] = $userid;
-						if ($user->save ( $data_user )) {
+						if ($user->save ( $data_user )!==false) {
 							$content = "授权成功";
 						} else {
 							$content = "授权未成功";

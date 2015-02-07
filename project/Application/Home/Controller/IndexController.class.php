@@ -172,7 +172,6 @@ class IndexController extends Controller {
 	    $key = C ( "CRYPT_KEY" );
 	    $xcrpt = new Xcrypt ( $key, 'cbc', $key );
 	    $code = I('get.code');
-	
 	    // 测试代码
 // 	    $code = "testcode";
 // 	    $token ['openid'] = "openid";
