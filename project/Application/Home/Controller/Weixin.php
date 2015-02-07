@@ -47,9 +47,8 @@ class Weixin
 		$accessToken = $this->getGlobalAccessToken();
 		//构造Get请求URL
 		
-		$url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$accessToken['access_token']."&openid=".$openId;
+		$url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$accessToken['access_token']."&openid=".$openId."&lang=zh_CN";
 
-		echo $url;
 		//通过CURL提交GET请求
 		$result = $this->https_request($url);
 		//解码JSON数据
