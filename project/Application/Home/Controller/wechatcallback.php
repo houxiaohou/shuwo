@@ -83,58 +83,45 @@ class wechatcallback {
 			// break;
 			case "CLICK" :
 				switch ($object->EventKey) {
-					case "income" :
-						// $user = M('user');
-						// $where['openid']=$object->FromUserName;
-						// $data=$user->where($where)->find();
-						
-						// if(is_array($data)){
-						
-						// $userid=$data['userid'];
-						// $shopid=$data['shopid'];
-						
-						// if(!empty($userid) || !empty($shopid)){
-						
-						// $orders=M('orders');
-						// $data=$orders->where('orderstatus != 2 and userid =' . $userid . ' and shopid='.$shopid )->select();
-						// if(is_array($data)){
-						// $i=0;
-						// for($i=0;$i<count($data);$i++){
-						// //总收益
-						// $earnings+=$data[$i]['totalprice'];
-						// //数据库中的当天时间
-						// $createtime=substr($data[$i]['createdtime'],0,-9);
-						// //当前时间
-						// $daytime=date('Y-m-d');
-						
-						// if($createtime == $daytime){
-						
-						// $arr=$orders->where('orderstatus != 2 and userid =' . $userid . ' and shopid='.$shopid )->select();
-						
-						// $num+=$arr[$i]['totalprice'];
-						// }
-						// //数据库中的当月时间
-						// $orderstime=substr($data[$i]['createdtime'],0,-12);
-						// //当月时间
-						// $monthtime=date('Y-m');
-						
-						// if($orderstime == $monthtime){
-						
-						// $array=$orders->where('orderstatus != 2 and userid =' . $userid . ' and shopid='.$shopid )->select();
-						
-						// $count+=$array[$i]['totalprice'];
-						
-						// }
-						// }
-						// }
-						// }
-						// }
-						$content = "今日收益" . $object->FromUserName;
+					case "income" : 						
+					    $openid='oR-0TuBMFVWqAjTrRjKFmyCbMxyA';
+					    if($openid){
+					        $user=M('user');
+					        $where['openid']=$openid;
+ 					        $data=$user->where($where)->find();
+ 					        if(count($data)){
+ 					            $userid=$data['userid'];
+ 					            $shopid=$data['shopid'];
+ 					            if(!empty($userid) || !empty($shopid)){
+ 					                $orders=M('orders');
+ 					                $data=$orders->where('orderstatus != 2 and userid =' . $userid . ' and shopid='.$shopid )->select();
+ 					                if(count($data)){
+ 					                    $i=0;
+ 					                    for($i=0;$i<count($data);$i++){
+ 					                        $content = $data[$i]['username'];
+ 					                        //总收益
+ 					                        $earnings+=$data[$i]['totalprice'];
+ 					                        //当天时间
+ 					                        $createtime.=substr($data[$i]['createdtime'],0,-9);
+ 					                        $daytime=date('Y-m-d');
+ 					                      
+ 					                    }
+ 					                }else{
+ 					                    $content = '您权限不够';
+ 					                }
+ 					            }else{
+ 					                $content = '您权限不够';
+ 					              }
+ 					            }
+					       }else{
+					           $content = '您权限不够';
+					       }
+						}						
 						break;
 					default :
 						$content = "点击菜单：" . $object->EventKey;
 						break;
-				}
+// 				}
 				break;
 			// case "LOCATION":
 			// $content = "上传位置：纬度 ".$object->Latitude.";经度 ".$object->Longitude;
