@@ -29,9 +29,16 @@ class IndexController extends Controller {
 						$sql = "userid=" . $userid;
 						$userinfo = $user->where ( $sql )->find ();
 						if (! count ( $userinfo )) {
-							E ( '用户授权异常' );
+							cookie ( 'utoken',null );
+							$redircturl = "Location:".$url;
+							header($redircturl);
+							exit;
 						}
-						$this->display ();
+						else 
+						{
+							$this->display ();
+						}
+
 					}
 				}
 			} else {
@@ -141,9 +148,15 @@ class IndexController extends Controller {
                     		$sql = "userid=".$userid." AND shopid =".$str[1]." AND roles=1" ;
                     		$info = $model->where($sql)->select();
 	                    if (! count ( $info )) {
-	                        E ( '店铺授权异常' );
+	                       	cookie ( 'stoken',null );
+							$redircturl = "Location:".$url;
+							header($redircturl);
+							exit;
 	                    }
-	                    $this->display ();
+	                    else 
+	                    {
+	                      $this->display ();
+	                    }
 	                }
 	            }
 	        } else {

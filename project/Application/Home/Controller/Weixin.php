@@ -22,6 +22,24 @@ class Weixin
     	return $strjson;
     }
     
+    public  function getshopGlobalAccessToken()
+    {
+    	$weixinshop  = M('weixinshop');
+    	if(time()>intval($weixinshop->where("id ='wxshop'")->getField("expires")))
+    	{
+    		$this->appid = C ( 'SHOP_APPID' );
+	        $this->appsecret = C ( 'SHOP_APPSECRET' );
+	        $token = $this->getGlobalAccessToken();
+	        $weixinshop->where("id ='wxshop'")->setField("accesstoken",$token['access_token']);
+	        $weixinshop->where("id ='wxshop'")->setField("expires",time()+7200);
+	        return $token['access_token'];
+    	}
+    	else 
+    	{
+    	  return $weixinshop->where("id ='wxshop'")->getField("accesstoken");
+    	}
+    }
+    
     public function verify($token,$openid)
     {
     	
@@ -37,27 +55,45 @@ class Weixin
     	
     }
     
-    //通过全局access token 获得用户信息
-    public  function getUserbyglobaltoken($openId)
+      //  通过全局access token 获得用户信息
+    public  function getshopbyglobaltoken($openId,$accesstoken)
     {
     	if(!isset($openId)){
     		return false;
     	}
-		//得到全局token
-		$accessToken = $this->getGlobalAccessToken();
-		//构造Get请求URL
+    	$url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$accesstoken."&openid=".$openId."&lang=zh_CN";
+    
+    	//通过CURL提交GET请求
+    	$result = $this->https_request($url);
+    	//解码JSON数据
+    	$strjson=json_decode($result,true);
+    	if ($strjson['errcode']||!$strjson) {
+    		return false;
+    	}
+    	return  $strjson;
+    }
+    
+//     //通过全局access token 获得用户信息
+//     public  function getUserbyglobaltoken($openId)
+//     {
+//     	if(!isset($openId)){
+//     		return false;
+//     	}
+// 		//得到全局token
+// 		$accessToken = $this->getGlobalAccessToken();
+// 		//构造Get请求URL
 		
-		$url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$accessToken['access_token']."&openid=".$openId."&lang=zh_CN";
+// 		$url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=".$accessToken['access_token']."&openid=".$openId."&lang=zh_CN";
 
-		//通过CURL提交GET请求
-		$result = $this->https_request($url);
-		//解码JSON数据
-		$strjson=json_decode($result,true);
-		if ($strjson['errcode']||!$strjson) {
-				return false;
-		}
-		return  $strjson;
-	}
+// 		//通过CURL提交GET请求
+// 		$result = $this->https_request($url);
+// 		//解码JSON数据
+// 		$strjson=json_decode($result,true);
+// 		if ($strjson['errcode']||!$strjson) {
+// 				return false;
+// 		}
+// 		return  $strjson;
+// 	}
 	
 	//通过code换取网页授权access_token和用户openid(微信auth2.0 受权)
 	public function getTokenWithCode($code){

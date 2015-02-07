@@ -219,9 +219,8 @@ class wechatcallback {
 			$data = $shop->where ( $where )->getField ( "shopid" );
 			if (count ( $data )) {
 				$weixin = new Weixin ();
-				$weixin->appid = C ( 'SHOP_APPID' );
-				$weixin->appsecret = C ( 'SHOP_APPSECRET' );
-				$userInfo = $weixin->getUserbyglobaltoken ( $object->FromUserName );
+                $token = $weixin->getshopGlobalAccessToken();
+				$userInfo = $weixin->getshopbyglobaltoken($object->FromUserName, $token);
 				if (count ( $userInfo )) {
 					$user = M ( 'user' );
 					$userid = $user->where ( "shopid=" . $data )->getField ( "userid" );
@@ -258,7 +257,7 @@ class wechatcallback {
 				$content = "授权未成功";
 			}
 		} else {
-			$content = "请输入正确的店铺授权码格式 （add+shop+授权码)";
+			$content = "请输入正确的店铺授权码格式 (add+shop+授权码)";
 		}
 		
 		// if(count($data))
