@@ -1,8 +1,8 @@
 <?php
 namespace Home\Controller;
 define("TOKEN", "weixin");
+
 require_once 'Weixin.php';
-require_once 'WeixinController.class.php';
 require_once 'UserConst.php';
 
 class wechatcallback
@@ -203,7 +203,7 @@ class wechatcallback
 
 		//写逻辑 当从小店树窝小店  add+shop+“授权码”；
 // 		$content = '';
-// 		$keyword = add+shop+12323
+// 		$keyword = aad+shop+12323
         //获取店铺的授权码
         $shopsn = substr($keyword, 7);
         $shop = M("shop");
@@ -221,13 +221,13 @@ class wechatcallback
         	$userInfo = $weixin->getUserbyglobaltoken($object->FromUserName);
         	
         	$data_user[UserConst::OPENID] = $userInfo[UserConst::OPENID];
-        	$data_user[UserConst::UNIOID] = $userInfo [UserConst::UNIOID] ? $userInfo [UserConst::UNIOID] : "";
-       		$data_user[UserConst::NICKNAME] = $userInfo [UserConst::NICKNAME];
-        	$data_user[UserConst::SEX] = $userInfo [UserConst::SEX];
-        	$data_user[UserConst::PROVINCE] = $userInfo [UserConst::PROVINCE];
-        	$data_user[UserConst::CITY] = $userInfo [UserConst::CITY];
-        	$data_user [UserConst::COUNTRY] = $userInfo [UserConst::COUNTRY];
-        	$data_user[UserConst::HEADIMGURL] = $userInfo [UserConst::HEADIMGURL];
+        	$data_user[UserConst::UNIOID] = $userInfo[UserConst::UNIOID] ? $userInfo[UserConst::UNIOID] : "";
+       		$data_user[UserConst::NICKNAME] = $userInfo[UserConst::NICKNAME];
+        	$data_user[UserConst::SEX] = $userInfo[UserConst::SEX];
+        	$data_user[UserConst::PROVINCE] = $userInfo[UserConst::PROVINCE];
+        	$data_user[UserConst::CITY] = $userInfo[UserConst::CITY];
+        	$data_user [UserConst::COUNTRY] = $userInfo[UserConst::COUNTRY];
+        	$data_user[UserConst::HEADIMGURL] = $userInfo[UserConst::HEADIMGURL];
         	$data_user[UserConst::MOBILE] = '';
         	$data_user[UserConst::PASSWORD] = '';
         	$data_user[UserConst::ROLES] = 1;
