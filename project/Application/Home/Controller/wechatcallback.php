@@ -111,7 +111,7 @@ class wechatcallback {
 								$content = "当日收益: " . $todayincome . "元 \n\n" . "当月收益: " . $monthincome . "元 \n\n" . "目前总收益: " . $totalincome . "元 \n\n";
 							} else 
 							{
-								$content="请确定该账号是否授权\n店铺授权码格式 （add+shop+授权码)";
+								$content="请确定该账号是否授权。\n店铺授权码格式 \n(add+shop+授权码)";
 							}
 							// $shopid=$data['shopid'];
 							// if(!empty($userid) || !empty($shopid)){
