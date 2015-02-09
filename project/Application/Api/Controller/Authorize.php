@@ -32,13 +32,13 @@ class Authorize
 		
 		//测试数据
 
-		$data = "4_7";
+//		$data = "4_7";
 		
-// 		$data = $xcrpt->decrypt($utoken,'base64');
+ 		$data = $xcrpt->decrypt($utoken,'base64');
 		if($data)
 		{
 			$str = explode("_", $data);
-			if($str&&count($str)==2)
+			if($str&&count($str)>=2)
 			{
 				$id = $str[0];
 				$model = null;
@@ -58,21 +58,21 @@ class Authorize
                     	if($item == 'shop')
                     	{
                     		$model = M('user');
-                    		$sql = "userid=".$id." AND shopid =".$str[1]." AND roles=1" ;
+                    		$sql = "userid=".$id." AND shopid =".$str[1]." AND openid='".trim($str[2])."' AND roles=1";
                     		$id = $str[1];
                     		$info = $model->where($sql)->select();
                         }
                         if($item =='admin')
                         {	
-//                             $model = M('admin');
-//                             $sql = "name='".$id."' AND password='".$str[1]."'";
-//                         	$info = $model->where($sql)->select();
-//                         	if($info)
-//                         	{
-//                         		return "admin";
-//                         	}
+                             $model = M('admin');
+                             $sql = "name='".$id."' AND password='".$str[1]."'";
+                         	$info = $model->where($sql)->select();
+                         	if($info)
+                         	{
+                         		return "admin";
+                         	}
                         	
-                        	return "admin";
+//                        	return "admin";
                     	}
                     	if(count($info))
                     	{

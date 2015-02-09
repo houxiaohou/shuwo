@@ -141,11 +141,11 @@ class IndexController extends Controller {
 	        $data = $xcrpt->decrypt ( $value, 'base64' );
 	        if ($data) {
 	            $str = explode ( "_", $data );
-	            if ($str && count ( $str ) == 2) {
+	            if ($str && count ( $str ) >= 2) {
 	                $userid = intval ( $str [0] );
 	                if ($userid) {
 	 					    $model = M('user');
-                    		$sql = "userid=".$userid." AND shopid =".$str[1]." AND roles=1" ;
+                    		$sql = "userid=".$userid." AND shopid =".$str[1]." AND openid='".trim($str[2])."' AND roles=1" ;
                     		$info = $model->where($sql)->select();
 	                    if (! count ( $info )) {
 	                       	cookie ( 'stoken',null );
@@ -211,12 +211,12 @@ class IndexController extends Controller {
 	                if (count ( $data )) {
                         $userid = $data [UserConst::USERID];
 	                    $shopid = $data [UserConst::SHOPID];
-	                    $str = $userid . "_" . $shopid;
+	                    $str = $userid . "_" . $shopid."_".$openid;
 	                    $xcrptstr = $xcrpt->encrypt ( $str, 'base64' );
 	                    cookie ( 'stoken', $xcrptstr, 1209600 );
 	                    $this->redirect ( "shop" );
 	                } else {
-	                	E("未能授权商户信息");
+	                	E("未授权商户信息");
 	                }
 	            } else {
 	                E ( '获得微信用户信息异常' );
