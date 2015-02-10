@@ -40,6 +40,12 @@ class Weixin
     	}
     }
     
+    public function sendtemplatemsg($data,$token)
+    {
+    	$url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=".$token;
+    	$this->https_request($url,$data,'POST');
+    }
+    
     public function verify($token,$openid)
     {
     	

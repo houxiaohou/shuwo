@@ -19,7 +19,8 @@ return array(
 	'SHUWO_CALLBACK'        =>'http://www.shuwow.com/Home/Index/authorize',
 	'SHOP_APPID'            =>'wx17a8c83f5b2f6540',
 	'SHOP_APPSECRET'        =>'432fb4827de4de9c2038ebcd2c5f064a',
-     'SHOP_CALLBACK'        =>'http://www.shuwow.com/Home/Index/shopauthorize',
+    'SHOP_CALLBACK'        =>'http://www.shuwow.com/Home/Index/shopauthorize',
+	'NEWORDER_TEMPID'      => 'XrQbgdZeQEiXhwg48Scghcv0iKERogNroEgZTsnNj2c',
   //'DEFAULT_THEME'         => '',	// 默认模板主题名称
   //'TMPL_DETECT_THEME'     => true,       // 自动侦测模板主题
   //'TMPL_TEMPLATE_SUFFIX'  => '.html',     // 默认模板文件后缀

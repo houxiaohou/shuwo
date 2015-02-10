@@ -9,72 +9,71 @@ require_once 'ProductConst.php';
 require_once 'OrderProductConst.php';
 require_once 'ShippingaddressConst.php';
 require_once 'Authorize.php';
+require_once 'Weixin.php';
 class OrderApiController extends RestController {
-    /*
-     * 查询所有的订单
-     */
-      public function getallorder(){
-      	$authorize = new Authorize();
-      	$isAdmin = $authorize->Filter("admin");
-      	if (!$isAdmin) {
-      				$message ["msg"] = "Unauthorized";
-      				$this->response ( $message, 'json', '401' );
-      	}
-      	
-        $order =M("orders");
-        $product = M("product");
-        $orderproduct = M("orderproduct");
-        $start = I('get.start');
-        $count = I('get.count');
-        
-        $orderdata = $order->order('-createdtime')->limit($start,$count)->select();
-        for ($i=0;$i<$count;$i++) {
-        	if ($orderdata[$i][OrderConst::ORDERID] == null){
-        		break;
-        	}
-        	else {
-        		$data[$i][OrderConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
-        		$data[$i][OrderConst::CREATEDTIME] = $orderdata[$i][OrderConst::CREATEDTIME];
-        		$data[$i][OrderConst::ORDERSTATUS] = $orderdata[$i][OrderConst::ORDERSTATUS];
-        		$data[$i][OrderConst::USERNAME] = $orderdata[$i][OrderConst::USERNAME];
-        		$data[$i][OrderConst::ADDRESS] = $orderdata[$i][OrderConst::ADDRESS];
-        		$data[$i][OrderConst::PHONE] = $orderdata[$i][OrderConst::PHONE];
-        		$data[$i][OrderConst::NOTES] = $orderdata[$i][OrderConst::NOTES];
-        		$data[$i][OrderConst::SHOPID] = $orderdata[$i][OrderConst::SHOPID];
-        
-        		if ($orderdata[$i][OrderConst::RTOTALPRICE] > 0){
-        			$data[$i]['price'] = $orderdata[$i][OrderConst::RTOTALPRICE];
-        		}else {
-        			$data[$i]['price'] = $orderdata[$i][OrderConst::TOTALPRICE];
-        		}
-        		if ($orderdata[$i][OrderConst::ORDERNOTES] != null){
-        			$data[$i][OrderConst::ORDERNOTES] = $orderdata[$i][OrderConst::ORDERNOTES];
-        		}
-        		$where_order_product[OrderProductConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
-        		$orderproductdata = $orderproduct->where($where_order_product)->field('id,productid,quantity,realweight,realprice')->select();
-        		$count_order_product = count($orderproductdata);
-        		for ($j=0;$j<$count_order_product;$j++) {
-        			$data_order_product[$j]['orderproductid'] = $orderproductdata[$j][OrderProductConst::ID];
-        			$data_order_product[$j]['quantity'] = $orderproductdata[$j][OrderProductConst::QUANTITY];
-        			$data_order_product[$j]['realprice'] = $orderproductdata[$j][OrderProductConst::REALPRICE];
-        			$data_order_product[$j]['realweight'] = $orderproductdata[$j][OrderProductConst::REALWEIGHT];
-        			$where_product[ProductConst::PRODUCTID] = $orderproductdata[$j][OrderProductConst::PRODUCTID];
-        			$productdata =  $product->where($where_product)->field('productname,unit,attribute,unitweight')->find();
-        			$data_order_product[$j]['productname'] = $productdata['productname'];
-        			$data_order_product[$j]['unit'] = $productdata['unit'];
-        			$data_order_product[$j]['attribute'] = $productdata['attribute'];
-        			$data_order_product[$j]['unitweight'] = $productdata['unitweight'];
-        
-        		}
-        	}
-        	$data[$i]['productdetail'] = $data_order_product;
-        }
-        if(!count($data)){
-            $data = [];
-        }
-        $this->response($data,"json");
-    }
-    
+	/*
+	 * 查询所有的订单
+	 */
+	public function getallorder() {
+		$authorize = new Authorize ();
+		$isAdmin = $authorize->Filter ( "admin" );
+		if (! $isAdmin) {
+			$message ["msg"] = "Unauthorized";
+			$this->response ( $message, 'json', '401' );
+		}
+		
+		$order = M ( "orders" );
+		$product = M ( "product" );
+		$orderproduct = M ( "orderproduct" );
+		$start = I ( 'get.start' );
+		$count = I ( 'get.count' );
+		
+		$orderdata = $order->order ( '-createdtime' )->limit ( $start, $count )->select ();
+		for($i = 0; $i < $count; $i ++) {
+			if ($orderdata [$i] [OrderConst::ORDERID] == null) {
+				break;
+			} else {
+				$data [$i] [OrderConst::ORDERID] = $orderdata [$i] [OrderConst::ORDERID];
+				$data [$i] [OrderConst::CREATEDTIME] = $orderdata [$i] [OrderConst::CREATEDTIME];
+				$data [$i] [OrderConst::ORDERSTATUS] = $orderdata [$i] [OrderConst::ORDERSTATUS];
+				$data [$i] [OrderConst::USERNAME] = $orderdata [$i] [OrderConst::USERNAME];
+				$data [$i] [OrderConst::ADDRESS] = $orderdata [$i] [OrderConst::ADDRESS];
+				$data [$i] [OrderConst::PHONE] = $orderdata [$i] [OrderConst::PHONE];
+				$data [$i] [OrderConst::NOTES] = $orderdata [$i] [OrderConst::NOTES];
+				$data [$i] [OrderConst::SHOPID] = $orderdata [$i] [OrderConst::SHOPID];
+				
+				if ($orderdata [$i] [OrderConst::RTOTALPRICE] > 0) {
+					$data [$i] ['price'] = $orderdata [$i] [OrderConst::RTOTALPRICE];
+				} else {
+					$data [$i] ['price'] = $orderdata [$i] [OrderConst::TOTALPRICE];
+				}
+				if ($orderdata [$i] [OrderConst::ORDERNOTES] != null) {
+					$data [$i] [OrderConst::ORDERNOTES] = $orderdata [$i] [OrderConst::ORDERNOTES];
+				}
+				$where_order_product [OrderProductConst::ORDERID] = $orderdata [$i] [OrderConst::ORDERID];
+				$orderproductdata = $orderproduct->where ( $where_order_product )->field ( 'id,productid,quantity,realweight,realprice' )->select ();
+				$count_order_product = count ( $orderproductdata );
+				for($j = 0; $j < $count_order_product; $j ++) {
+					$data_order_product [$j] ['orderproductid'] = $orderproductdata [$j] [OrderProductConst::ID];
+					$data_order_product [$j] ['quantity'] = $orderproductdata [$j] [OrderProductConst::QUANTITY];
+					$data_order_product [$j] ['realprice'] = $orderproductdata [$j] [OrderProductConst::REALPRICE];
+					$data_order_product [$j] ['realweight'] = $orderproductdata [$j] [OrderProductConst::REALWEIGHT];
+					$where_product [ProductConst::PRODUCTID] = $orderproductdata [$j] [OrderProductConst::PRODUCTID];
+					$productdata = $product->where ( $where_product )->field ( 'productname,unit,attribute,unitweight' )->find ();
+					$data_order_product [$j] ['productname'] = $productdata ['productname'];
+					$data_order_product [$j] ['unit'] = $productdata ['unit'];
+					$data_order_product [$j] ['attribute'] = $productdata ['attribute'];
+					$data_order_product [$j] ['unitweight'] = $productdata ['unitweight'];
+				}
+			}
+			$data [$i] ['productdetail'] = $data_order_product;
+		}
+		if (! count ( $data )) {
+			$data = [ ];
+		}
+		$this->response ( $data, "json" );
+	}
+	
 	/*
 	 * 根据GET传的id查询对应的订单
 	 */
@@ -110,7 +109,7 @@ class OrderApiController extends RestController {
 				$data [OrderConst::PHONE] = $orderdata [OrderConst::PHONE];
 				$data [OrderConst::NOTES] = $orderdata [OrderConst::NOTES];
 				$data [OrderConst::SHOPID] = $orderdata [OrderConst::SHOPID];
-
+				
 				if ($orderdata [OrderConst::RTOTALPRICE] > 0) {
 					$data ['price'] = $orderdata [OrderConst::RTOTALPRICE];
 				} else {
@@ -159,159 +158,154 @@ class OrderApiController extends RestController {
 	// $this->response($data,"json");
 	// }
 	
-        /*
-         * 获取当前用户的订单
-         */
-     public   function getordersbyuser(){
-        	$authorize = new Authorize();
-        	$userid = $authorize->Filter('user');
-        	if ($userid){
-        		$start = I('get.start');
-        		$count = I('get.count');
-        		$status = I('get.status');
-        		$order = M('orders');
-        		$orderproduct = M('orderproduct');
-        		$product = M('product');
-        		 
-        		$where[OrderConst::USERID] = $userid;
-        		switch (intval($status)) {
-        			case 0:
-        			case 1:
-        			case 2:
-        				$where[OrderConst::ORDERSTATUS] = $status;
-        				break;
-        			default:
-        				break;
-        		}
-        		
-        		$orderdata = $order->where($where)->order('-createdtime')->limit($start,$count)->select();
-        		for ($i=0;$i<$count;$i++) {
-        			if ($orderdata[$i][OrderConst::ORDERID] == null){
-        				break;
-        			}
-        			else {
-        				$data[$i][OrderConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
-        				$data[$i][OrderConst::CREATEDTIME] = $orderdata[$i][OrderConst::CREATEDTIME];
-        				$data[$i][OrderConst::ORDERSTATUS] = $orderdata[$i][OrderConst::ORDERSTATUS];
-        				$data[$i][OrderConst::USERNAME] = $orderdata[$i][OrderConst::USERNAME];
-        				$data[$i][OrderConst::ADDRESS] = $orderdata[$i][OrderConst::ADDRESS];
-        				$data[$i][OrderConst::PHONE] = $orderdata[$i][OrderConst::PHONE];
-        				$data[$i][OrderConst::NOTES] = $orderdata[$i][OrderConst::NOTES];
-        				$data[$i][OrderConst::SHOPID] = $orderdata[$i][OrderConst::SHOPID];
-        		
-        				if ($orderdata[$i][OrderConst::RTOTALPRICE] > 0){
-        					$data[$i]['price'] = $orderdata[$i][OrderConst::RTOTALPRICE];
-        				}else {
-        					$data[$i]['price'] = $orderdata[$i][OrderConst::TOTALPRICE];
-        				}
-        				if ($orderdata[$i][OrderConst::ORDERNOTES] != null){
-        					$data[$i][OrderConst::ORDERNOTES] = $orderdata[$i][OrderConst::ORDERNOTES];
-        				}
-        				$where_order_product[OrderProductConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
-        				$orderproductdata = $orderproduct->where($where_order_product)->field('id,productid,quantity,realweight,realprice')->select();
-        				$count_order_product = count($orderproductdata);
-        				for ($j=0;$j<$count_order_product;$j++) {
-							$data_order_product[$j]['orderproductid'] = $orderproductdata[$j][OrderProductConst::ID];
-        					$data_order_product[$j]['quantity'] = $orderproductdata[$j][OrderProductConst::QUANTITY];
-        					$data_order_product[$j]['realprice'] = $orderproductdata[$j][OrderProductConst::REALPRICE];
-        					$data_order_product[$j]['realweight'] = $orderproductdata[$j][OrderProductConst::REALWEIGHT];
-        					$where_product[ProductConst::PRODUCTID] = $orderproductdata[$j][OrderProductConst::PRODUCTID];
-        					$productdata =  $product->where($where_product)->field('productname,unit,attribute,unitweight')->find();
-        					$data_order_product[$j]['productname'] = $productdata['productname'];
-        					$data_order_product[$j]['unit'] = $productdata['unit'];
-        					$data_order_product[$j]['attribute'] = $productdata['attribute'];
-        					$data_order_product[$j]['unitweight'] = $productdata['unitweight'];
-        					 
-        				}
-        			}
-        			$data[$i]['productdetail'] = $data_order_product;
-        		}
-        		$this->response($data,'json');
-        	}else{
-        		$message ["msg"] = "Unauthorized";
-        		$this->response ( $message, 'json', '401' );
-        	}
-        }
-        /*
-         * 获取当前店铺的订单
-         */
-        public function getordersbyshop() {
-        	$authorize = new Authorize();
-        	$auid = $authorize->Filter('admin,shop');
-        	if($auid){
-        	if (intval($auid)){
-        		$shopid = $auid;
-        	}else{
-        		$shopid = I('get.shopid');
-        	}
-        	$status = I('get.status');
-        	$start = I('get.start');
-        	$count = I('get.count');
-        	$order = M('orders');
-        	$orderproduct = M('orderproduct');
-        	$product = M('product');
-        	
-        	$where_order[OrderConst::SHOPID] = $shopid;
-        	switch (intval($status)) {
-        		case 0:
-        		case 1:
-        		case 2:
-        			$where_order[OrderConst::ORDERSTATUS] = $status;
-        			break;
-        		default:
-        			break;
-        	}
-        	$orderdata = $order->where($where_order)->order('-createdtime')->limit($start,$count)->select();
-        	
-        	for ($i=0;$i<$count;$i++) {
-        		if ($orderdata[$i][OrderConst::ORDERID] == null){
-        			break;
-        		}
-        		else {
-        			$data[$i][OrderConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
-        			$data[$i][OrderConst::CREATEDTIME] = $orderdata[$i][OrderConst::CREATEDTIME];
-        			$data[$i][OrderConst::ORDERSTATUS] = $orderdata[$i][OrderConst::ORDERSTATUS];
-        			$data[$i][OrderConst::USERNAME] = $orderdata[$i][OrderConst::USERNAME];
-        			$data[$i][OrderConst::ADDRESS] = $orderdata[$i][OrderConst::ADDRESS];
-        			$data[$i][OrderConst::PHONE] = $orderdata[$i][OrderConst::PHONE];
-        			$data[$i][OrderConst::NOTES] = $orderdata[$i][OrderConst::NOTES];
-        			$data[$i][OrderConst::SHOPID] = $orderdata[$i][OrderConst::SHOPID];
-        			 
-        			if ($orderdata[$i][OrderConst::RTOTALPRICE] > 0){
-        				$data[$i]['price'] = $orderdata[$i][OrderConst::RTOTALPRICE];
-        			}else {
-        				$data[$i]['price'] = $orderdata[$i][OrderConst::TOTALPRICE];
-        			}
-        			if ($orderdata[$i][OrderConst::ORDERNOTES] != null){
-        				$data[$i][OrderConst::ORDERNOTES] = $orderdata[$i][OrderConst::ORDERNOTES];
-        			}
-        			$where_order_product[OrderProductConst::ORDERID] = $orderdata[$i][OrderConst::ORDERID];
-        			$orderproductdata = $orderproduct->where($where_order_product)->field('id,productid,quantity,realweight,realprice')->select();
-        			$count2 = count($orderproductdata);
-        			for ($j=0;$j<$count2;$j++) {
-        				$data_order_product[$j]['orderproductid'] = $orderproductdata[$j][OrderProductConst::ID];
-        				$data_order_product[$j]['quantity'] = $orderproductdata[$j][OrderProductConst::QUANTITY];
-        				$data_order_product[$j]['realprice'] = $orderproductdata[$j][OrderProductConst::REALPRICE];
-        				$data_order_product[$j]['realweight'] = $orderproductdata[$j][OrderProductConst::REALWEIGHT];
-        				$where_product[ProductConst::PRODUCTID] = $orderproductdata[$j][OrderProductConst::PRODUCTID];
-        				$productdata =  $product->where($where_product)->field('productname,unit,attribute,unitweight')->find();
-        				$data_order_product[$j]['productname'] = $productdata['productname'];
-        				$data_order_product[$j]['unit'] = $productdata['unit'];
-        				$data_order_product[$j]['attribute'] = $productdata['attribute'];
-        				$data_order_product[$j]['unitweight'] = $productdata['unitweight'];
-        				 
-        			}
-        		}
-        		$data[$i]['productdetail'] = $data_order_product;
-        	}
-        	$this->response($data,'json');
-        	}else{
-        	    $message ["msg"] = "Unauthorized";
-        	    $this->response ( $message, 'json', '401' );
-        	}
-        }
-     
-
+	/*
+	 * 获取当前用户的订单
+	 */
+	public function getordersbyuser() {
+		$authorize = new Authorize ();
+		$userid = $authorize->Filter ( 'user' );
+		if ($userid) {
+			$start = I ( 'get.start' );
+			$count = I ( 'get.count' );
+			$status = I ( 'get.status' );
+			$order = M ( 'orders' );
+			$orderproduct = M ( 'orderproduct' );
+			$product = M ( 'product' );
+			
+			$where [OrderConst::USERID] = $userid;
+			switch (intval ( $status )) {
+				case 0 :
+				case 1 :
+				case 2 :
+					$where [OrderConst::ORDERSTATUS] = $status;
+					break;
+				default :
+					break;
+			}
+			
+			$orderdata = $order->where ( $where )->order ( '-createdtime' )->limit ( $start, $count )->select ();
+			for($i = 0; $i < $count; $i ++) {
+				if ($orderdata [$i] [OrderConst::ORDERID] == null) {
+					break;
+				} else {
+					$data [$i] [OrderConst::ORDERID] = $orderdata [$i] [OrderConst::ORDERID];
+					$data [$i] [OrderConst::CREATEDTIME] = $orderdata [$i] [OrderConst::CREATEDTIME];
+					$data [$i] [OrderConst::ORDERSTATUS] = $orderdata [$i] [OrderConst::ORDERSTATUS];
+					$data [$i] [OrderConst::USERNAME] = $orderdata [$i] [OrderConst::USERNAME];
+					$data [$i] [OrderConst::ADDRESS] = $orderdata [$i] [OrderConst::ADDRESS];
+					$data [$i] [OrderConst::PHONE] = $orderdata [$i] [OrderConst::PHONE];
+					$data [$i] [OrderConst::NOTES] = $orderdata [$i] [OrderConst::NOTES];
+					$data [$i] [OrderConst::SHOPID] = $orderdata [$i] [OrderConst::SHOPID];
+					
+					if ($orderdata [$i] [OrderConst::RTOTALPRICE] > 0) {
+						$data [$i] ['price'] = $orderdata [$i] [OrderConst::RTOTALPRICE];
+					} else {
+						$data [$i] ['price'] = $orderdata [$i] [OrderConst::TOTALPRICE];
+					}
+					if ($orderdata [$i] [OrderConst::ORDERNOTES] != null) {
+						$data [$i] [OrderConst::ORDERNOTES] = $orderdata [$i] [OrderConst::ORDERNOTES];
+					}
+					$where_order_product [OrderProductConst::ORDERID] = $orderdata [$i] [OrderConst::ORDERID];
+					$orderproductdata = $orderproduct->where ( $where_order_product )->field ( 'id,productid,quantity,realweight,realprice' )->select ();
+					$count_order_product = count ( $orderproductdata );
+					for($j = 0; $j < $count_order_product; $j ++) {
+						$data_order_product [$j] ['orderproductid'] = $orderproductdata [$j] [OrderProductConst::ID];
+						$data_order_product [$j] ['quantity'] = $orderproductdata [$j] [OrderProductConst::QUANTITY];
+						$data_order_product [$j] ['realprice'] = $orderproductdata [$j] [OrderProductConst::REALPRICE];
+						$data_order_product [$j] ['realweight'] = $orderproductdata [$j] [OrderProductConst::REALWEIGHT];
+						$where_product [ProductConst::PRODUCTID] = $orderproductdata [$j] [OrderProductConst::PRODUCTID];
+						$productdata = $product->where ( $where_product )->field ( 'productname,unit,attribute,unitweight' )->find ();
+						$data_order_product [$j] ['productname'] = $productdata ['productname'];
+						$data_order_product [$j] ['unit'] = $productdata ['unit'];
+						$data_order_product [$j] ['attribute'] = $productdata ['attribute'];
+						$data_order_product [$j] ['unitweight'] = $productdata ['unitweight'];
+					}
+				}
+				$data [$i] ['productdetail'] = $data_order_product;
+			}
+			$this->response ( $data, 'json' );
+		} else {
+			$message ["msg"] = "Unauthorized";
+			$this->response ( $message, 'json', '401' );
+		}
+	}
+	/*
+	 * 获取当前店铺的订单
+	 */
+	public function getordersbyshop() {
+		$authorize = new Authorize ();
+		$auid = $authorize->Filter ( 'admin,shop' );
+		if ($auid) {
+			if (intval ( $auid )) {
+				$shopid = $auid;
+			} else {
+				$shopid = I ( 'get.shopid' );
+			}
+			$status = I ( 'get.status' );
+			$start = I ( 'get.start' );
+			$count = I ( 'get.count' );
+			$order = M ( 'orders' );
+			$orderproduct = M ( 'orderproduct' );
+			$product = M ( 'product' );
+			
+			$where_order [OrderConst::SHOPID] = $shopid;
+			switch (intval ( $status )) {
+				case 0 :
+				case 1 :
+				case 2 :
+					$where_order [OrderConst::ORDERSTATUS] = $status;
+					break;
+				default :
+					break;
+			}
+			$orderdata = $order->where ( $where_order )->order ( '-createdtime' )->limit ( $start, $count )->select ();
+			
+			for($i = 0; $i < $count; $i ++) {
+				if ($orderdata [$i] [OrderConst::ORDERID] == null) {
+					break;
+				} else {
+					$data [$i] [OrderConst::ORDERID] = $orderdata [$i] [OrderConst::ORDERID];
+					$data [$i] [OrderConst::CREATEDTIME] = $orderdata [$i] [OrderConst::CREATEDTIME];
+					$data [$i] [OrderConst::ORDERSTATUS] = $orderdata [$i] [OrderConst::ORDERSTATUS];
+					$data [$i] [OrderConst::USERNAME] = $orderdata [$i] [OrderConst::USERNAME];
+					$data [$i] [OrderConst::ADDRESS] = $orderdata [$i] [OrderConst::ADDRESS];
+					$data [$i] [OrderConst::PHONE] = $orderdata [$i] [OrderConst::PHONE];
+					$data [$i] [OrderConst::NOTES] = $orderdata [$i] [OrderConst::NOTES];
+					$data [$i] [OrderConst::SHOPID] = $orderdata [$i] [OrderConst::SHOPID];
+					
+					if ($orderdata [$i] [OrderConst::RTOTALPRICE] > 0) {
+						$data [$i] ['price'] = $orderdata [$i] [OrderConst::RTOTALPRICE];
+					} else {
+						$data [$i] ['price'] = $orderdata [$i] [OrderConst::TOTALPRICE];
+					}
+					if ($orderdata [$i] [OrderConst::ORDERNOTES] != null) {
+						$data [$i] [OrderConst::ORDERNOTES] = $orderdata [$i] [OrderConst::ORDERNOTES];
+					}
+					$where_order_product [OrderProductConst::ORDERID] = $orderdata [$i] [OrderConst::ORDERID];
+					$orderproductdata = $orderproduct->where ( $where_order_product )->field ( 'id,productid,quantity,realweight,realprice' )->select ();
+					$count2 = count ( $orderproductdata );
+					for($j = 0; $j < $count2; $j ++) {
+						$data_order_product [$j] ['orderproductid'] = $orderproductdata [$j] [OrderProductConst::ID];
+						$data_order_product [$j] ['quantity'] = $orderproductdata [$j] [OrderProductConst::QUANTITY];
+						$data_order_product [$j] ['realprice'] = $orderproductdata [$j] [OrderProductConst::REALPRICE];
+						$data_order_product [$j] ['realweight'] = $orderproductdata [$j] [OrderProductConst::REALWEIGHT];
+						$where_product [ProductConst::PRODUCTID] = $orderproductdata [$j] [OrderProductConst::PRODUCTID];
+						$productdata = $product->where ( $where_product )->field ( 'productname,unit,attribute,unitweight' )->find ();
+						$data_order_product [$j] ['productname'] = $productdata ['productname'];
+						$data_order_product [$j] ['unit'] = $productdata ['unit'];
+						$data_order_product [$j] ['attribute'] = $productdata ['attribute'];
+						$data_order_product [$j] ['unitweight'] = $productdata ['unitweight'];
+					}
+				}
+				$data [$i] ['productdetail'] = $data_order_product;
+			}
+			$this->response ( $data, 'json' );
+		} else {
+			$message ["msg"] = "Unauthorized";
+			$this->response ( $message, 'json', '401' );
+		}
+	}
+	
 	/*
 	 * 删除订单
 	 */
@@ -402,6 +396,60 @@ class OrderApiController extends RestController {
 		$data [OrderConst::TOTALPRICE] = $totalprice;
 		$order->add ( $data );
 		$data2 ['orderid'] = $orderid;
+		
+		// 构造模板消息
+
+		$shopid =intval($data [OrderConst::SHOPID]);
+		if ($shopid) {
+			$user = M ( "user" );
+			$userinfo = $user->where ( 'shopid=' . $shopid )->find();
+			$current = date('y年m月d日 H时:i分');
+			$contact = $data [OrderConst::USERNAME]." 电话".$data [OrderConst::PHONE];
+			$address = "发货地址: ".$data [OrderConst::ADDRESS]."   配送时间: ".$data [OrderConst::DLTIME];
+			$orderNum ="订单编号：".$orderid;
+			if (count($userinfo)&&! empty ( $userinfo["openid"])) {
+				$template = array (
+						'touser' => $userinfo["openid"],
+						'template_id' => C('NEWORDER_TEMPID'),
+						'url' => "http://www.shuwow.com/Home/Index/shop",
+						'topcolor' => "#009900",
+						'data' => array (
+								'first' => array (
+										'value' => urlencode ( $orderNum ),
+										'color' => "#FF0000"
+								),
+								'tradeDateTime' => array (
+										'value' => urlencode ($current ),
+										'color' => "#009900"
+								),
+								'orderType' => array (
+										'value' => urlencode ( "新的订单" ),
+										'color' => "#009900"
+								),
+								'customerInfo' => array (
+										'value' => urlencode ($contact),
+										'color' => "#009900"
+								),
+								'orderItemName' => array (
+										'value' => urlencode ( "发货地址&配送时间" ),
+								),
+								'orderItemData' => array (
+										'value' => urlencode ( $address ),
+										'color' => "#009900"
+								),
+								'remark' => array (
+										'value' => urlencode ( "\\n信息来自树窝小店" ),
+										'color' => "#cccccc"
+								)
+						)
+				);
+				$weixin = new Weixin ();
+				$token = $weixin->getshopGlobalAccessToken ();
+				$weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
+			}
+		}
+		
+
 		$this->response ( $data2, 'json' );
 	}
 	
@@ -469,27 +517,21 @@ class OrderApiController extends RestController {
 	public function cancelorder() {
 		$order = M ( 'orders' );
 		$id = I ( 'post.id', 0 );
-		$ordernotes = I ( 'post.ordernotes','');
+		$ordernotes = I ( 'post.ordernotes', '' );
 		$authorize = new Authorize ();
-		$auid= $authorize->Filter ( "admin,shop" );
-        if (!$auid)
-        {
-        	$message ["msg"] = "Unauthorized";
-        	$this->response ( $message, 'json', '401' );
-        }
-        else
-        {
-        	if(intval($auid))
-        	{
-        		if($auid!=$order->where("orderid=".$id)->getField("shopid"))
-        		{
-        			$message ["msg"] = "Unauthorized";
-        			$this->response ( $message, 'json', '401' );
-        		}
-        	}
-        }
-
-        
+		$auid = $authorize->Filter ( "admin,shop" );
+		if (! $auid) {
+			$message ["msg"] = "Unauthorized";
+			$this->response ( $message, 'json', '401' );
+		} else {
+			if (intval ( $auid )) {
+				if ($auid != $order->where ( "orderid=" . $id )->getField ( "shopid" )) {
+					$message ["msg"] = "Unauthorized";
+					$this->response ( $message, 'json', '401' );
+				}
+			}
+		}
+		
 		if ($id) {
 			$order->where ( "orderid=" . $id )->setField ( "orderstatus", 2 );
 			$order->where ( "orderid=" . $id )->setField ( "ordernotes", $ordernotes );

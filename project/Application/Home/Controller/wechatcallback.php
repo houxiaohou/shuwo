@@ -244,10 +244,17 @@ class wechatcallback {
 							$content = "授权未成功";
 						}
 					} else {
-						if ($user->add ( $data_user )) {
-							$content = "授权成功";
-						} else {
-							$content = "授权未成功";
+						if (!$user->where("openid='".trim($data_user [UserConst::OPENID])."'")->find())
+						{
+							if ($user->add ( $data_user )) {
+								$content = "授权成功";
+							} else {
+								$content = "授权未成功";
+							}
+						}				
+						else
+						{
+							$content = "该账号已被授权。若要取消授权或获得新的授权，请联系商务经理。";
 						}
 					}
 				} else {

@@ -9,6 +9,7 @@ require_once 'Xcrypt.php';
 require_once 'UserConst.php';
 class IndexController extends Controller {
 	public function index() {
+
 		$appid = C ( 'SHUWO_APPID' );
 		$appsecret = C ( 'SHUWO_APPSECRET' );
 		$weixin = new Weixin ();
