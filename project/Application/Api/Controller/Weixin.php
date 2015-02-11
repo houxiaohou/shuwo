@@ -40,6 +40,24 @@ class Weixin
 		}
 	}
 	
+	public  function getusersGlobalAccessToken()
+	{
+		$weixinshop  = M('weixinuser');
+		if(time()>intval($weixinshop->where("id ='wxuser'")->getField("expires")))
+		{
+			$this->appid = C ( 'SHUWO_APPID' );
+			$this->appsecret = C ( 'SHUWO_APPSECRET' );
+			$token = $this->getGlobalAccessToken();
+			$weixinshop->where("id ='wxuser'")->setField("accesstoken",$token['access_token']);
+			$weixinshop->where("id ='wxuser'")->setField("expires",time()+7200);
+			return $token['access_token'];
+		}
+		else
+		{
+			return $weixinshop->where("id ='wxuser'")->getField("accesstoken");
+		}
+	}
+	
     public function sendtemplatemsg($data,$token)
     {
     	$url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=".$token;

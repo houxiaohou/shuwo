@@ -30,6 +30,7 @@ class OrderApiController extends RestController {
 		
 		$orderdata = $order->order ( '-createdtime' )->limit ( $start, $count )->select ();
 		for($i = 0; $i < $count; $i ++) {
+			$data_order_product = [];
 			if ($orderdata [$i] [OrderConst::ORDERID] == null) {
 				break;
 			} else {
@@ -165,7 +166,7 @@ class OrderApiController extends RestController {
 		$authorize = new Authorize ();
 		$userid = $authorize->Filter ( 'user' );
 		if ($userid) {
-			$start = I ( 'get.start' );
+			$start = I ( 'get.start',-1);
 			$count = I ( 'get.count' );
 			$status = I ( 'get.status' );
 			$order = M ( 'orders' );
@@ -173,6 +174,8 @@ class OrderApiController extends RestController {
 			$product = M ( 'product' );
 			
 			$where [OrderConst::USERID] = $userid;
+			if(intval($start)>-1)
+			{
 			switch (intval ( $status )) {
 				case 0 :
 				case 1 :
@@ -182,9 +185,11 @@ class OrderApiController extends RestController {
 				default :
 					break;
 			}
+			}
 			
 			$orderdata = $order->where ( $where )->order ( '-createdtime' )->limit ( $start, $count )->select ();
 			for($i = 0; $i < $count; $i ++) {
+				$data_order_product = [];
 				if ($orderdata [$i] [OrderConst::ORDERID] == null) {
 					break;
 				} else {
@@ -241,15 +246,17 @@ class OrderApiController extends RestController {
 			} else {
 				$shopid = I ( 'get.shopid' );
 			}
-			$status = I ( 'get.status' );
-			$start = I ( 'get.start' );
-			$count = I ( 'get.count' );
+			$status = I ( 'get.status',-1);
+			$start = I ( 'get.start');
+			$count = I ( 'get.count');
 			$order = M ( 'orders' );
 			$orderproduct = M ( 'orderproduct' );
 			$product = M ( 'product' );
 			
 			$where_order [OrderConst::SHOPID] = $shopid;
-			switch (intval ( $status )) {
+			if(intval($status)>-1)
+			{
+		       switch (intval ( $status )) {
 				case 0 :
 				case 1 :
 				case 2 :
@@ -258,9 +265,11 @@ class OrderApiController extends RestController {
 				default :
 					break;
 			}
+			}
 			$orderdata = $order->where ( $where_order )->order ( '-createdtime' )->limit ( $start, $count )->select ();
 			
-			for($i = 0; $i < $count; $i ++) {
+			for($i = 0; $i < $count; $i++) {
+				$data_order_product =[];
 				if ($orderdata [$i] [OrderConst::ORDERID] == null) {
 					break;
 				} else {
@@ -298,6 +307,7 @@ class OrderApiController extends RestController {
 					}
 				}
 				$data [$i] ['productdetail'] = $data_order_product;
+				
 			}
 			$this->response ( $data, 'json' );
 		} else {
@@ -509,7 +519,10 @@ class OrderApiController extends RestController {
 		$where4 [OrderConst::ORDERID] = $orderid;
 		$order->where ( $where4 )->setField ( 'rtotalprice', $rtotalprice );
 		// 将订单状态由0变成1(订单确认)
-		$order->where ( $where4 )->setField ( 'orderstatus', 1 );
+		if($order->where ( $where4 )->setField ( 'orderstatus', 1 ))
+		{
+			
+		}
 	}
 	/*
 	 * 撤销订单

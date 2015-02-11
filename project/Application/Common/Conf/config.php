@@ -14,13 +14,15 @@ return array(
 	'DB_PREFIX'             => '',    // 数据库表前缀
 	'CRYPT_KEY'             =>'1234567812345678',
 	'SHOW_PAGE_TRACE'       => false,//开启页面TRACE
+	'SHOW_ERROR_MSG'        => false,
 	'SHUWO_APPID'           =>'wx17a029b44c383634',
 	'SHUWO_APPSECRET'       =>'0f0d1caf3e84edbf61fc28fecf0c74b9',
 	'SHUWO_CALLBACK'        =>'http://www.shuwow.com/Home/Index/authorize',
 	'SHOP_APPID'            =>'wx17a8c83f5b2f6540',
 	'SHOP_APPSECRET'        =>'432fb4827de4de9c2038ebcd2c5f064a',
-    'SHOP_CALLBACK'        =>'http://www.shuwow.com/Home/Index/shopauthorize',
-	'NEWORDER_TEMPID'      => 'XrQbgdZeQEiXhwg48Scghcv0iKERogNroEgZTsnNj2c',
+     'SHOP_CALLBACK'        =>'http://www.shuwow.com/Home/Index/shopauthorize',
+     'NEWORDER_TEMPID'      => 'XrQbgdZeQEiXhwg48Scghcv0iKERogNroEgZTsnNj2c',
+	'ORDERSTATUS_TEMPID'   =>  'HH96xFdaloMYuz0nM7dBfPWHgPfXeEWP4LdiQAeQEpM',
   //'DEFAULT_THEME'         => '',	// 默认模板主题名称
   //'TMPL_DETECT_THEME'     => true,       // 自动侦测模板主题
   //'TMPL_TEMPLATE_SUFFIX'  => '.html',     // 默认模板文件后缀
