@@ -410,7 +410,7 @@ class OrderApiController extends RestController {
 		if ($shopid) {
 			$user = M ( "user" );
 			$userinfo = $user->where ( 'shopid=' . $shopid )->find ();
-			$current = date ( 'y年m月d日 H时:i分' );
+			$current = date ( 'y年m月d日 H:i' );
 			$contact = $data [OrderConst::USERNAME] . " 电话" . $data [OrderConst::PHONE];
 			$address = "发货地址: " . $data [OrderConst::ADDRESS] . "   配送时间: " . $data [OrderConst::DLTIME];
 			$orderNum = "订单编号：" . $orderid;
@@ -521,7 +521,7 @@ class OrderApiController extends RestController {
 				$user = M ( "user" );
 				$userinfo = $user->where ( 'userid=' . $userid )->find ();
 				if (count ( $userinfo ) &&!empty($userinfo ['openid'])) {
-					$current = date ( 'y年m月d日H时:i分' );
+					$current = date ( 'y年m月d日H:i' );
 					$msg  = "您所购买的水果,商家已于".$current."称重";
 					$totalprice = "实际价格:".$rtotalprice."元";
 					if (count ( $userinfo ) && ! empty ( $userinfo ["openid"] )) {
@@ -579,8 +579,60 @@ class OrderApiController extends RestController {
 		}
 		
 		if ($id) {
-			$order->where ( "orderid=" . $id )->setField ( "orderstatus", 2 );
-			$order->where ( "orderid=" . $id )->setField ( "ordernotes", $ordernotes );
+			if($order->where ( "orderid=" . $id )->setField ( "orderstatus", 2 ) &&$order->where ( "orderid=" . $id )->setField ( "ordernotes", $ordernotes ))
+			{
+				$userid = $order->where ( "orderid=" . $id )->getField ( "userid" );
+				if (intval ( $userid )) {
+					$user = M ( "user" );
+					$phone = '暂无';
+					$shopname='';
+					if(intval($auid))
+					{
+					   $shop = M('shop');
+					   $shopid = $auid;
+					   $shop = $shop->where("shopid=".$shopid)->find();
+					   $shopname = $shop['spn'];
+					   $phone = $shop['phone'];
+					}
+					$userinfo = $user->where ( 'userid=' . $userid )->find ();
+                    
+					if (count ( $userinfo ) &&!empty($userinfo ['openid'])) {
+						$current = date ( 'y年m月d日H:i' );
+						$msg  = $shopname."已于".$current."取消订单";
+           				$errormsg = "订单取消原因:".$ordernotes." 商家电话:".$phone;
+						if (count ( $userinfo ) && ! empty ( $userinfo ["openid"] )) {
+							$template = array (
+									'touser' => trim($userinfo ["openid"]),
+									'template_id' => C ( 'ORDERSTATUS_TEMPID' ),
+									'url' => "http://www.shuwow.com/Home/Index/index/#/order",
+									'topcolor' => "#009900",
+									'data' => array (
+											'first' => array (
+													'value' => urlencode ( $msg ),
+													'color' => "#FF0000"
+											),
+											'OrderSn' => array (
+													'value' => urlencode ( $id ),
+													'color' => "#009900"
+											),
+											'OrderStatus' => array (
+													'value' => urlencode ($errormsg),
+													'color' => "#009900"
+											),
+											'remark' => array (
+													'value' => urlencode ( "\\n信息来自树窝小店" ),
+													'color' => "#cccccc"
+											)
+									)
+							);
+							$weixin = new Weixin ();
+							$token = $weixin->getusersGlobalAccessToken();
+							$weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
+						}
+					}
+				}
+			}
+			
 		} else {
 			$data = [ ];
 			$this->response ( $data, 'json' );
