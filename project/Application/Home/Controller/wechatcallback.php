@@ -109,9 +109,8 @@ class wechatcallback {
 								$item = $orders->query ( $sql );
 								$totalincome = doubleval ( $item [0] ['tincome'] );
 								$content = "当日收益: " . $todayincome . "元 \n\n" . "当月收益: " . $monthincome . "元 \n\n" . "目前总收益: " . $totalincome . "元 \n\n";
-							} else 
-							{
-								$content="请确定该账号是否授权。\n店铺授权码格式 \n(add+shop+授权码)";
+							} else {
+								$content = "请确定该账号是否授权。\n店铺授权码格式 \n(add+shop+授权码)";
 							}
 							// $shopid=$data['shopid'];
 							// if(!empty($userid) || !empty($shopid)){
@@ -215,12 +214,12 @@ class wechatcallback {
 		$shopsn = '';
 		if (count ( $strarray ) == 3 & $strarray [0] == 'add' && $strarray [1] == 'shop') {
 			$shop = M ( "shop" );
-			$where ['shopsn'] = $strarray[2];
+			$where ['shopsn'] = $strarray [2];
 			$data = $shop->where ( $where )->getField ( "shopid" );
-			if (count ( $data )) {
+			if (intval($data)) {
 				$weixin = new Weixin ();
-                $token = $weixin->getshopGlobalAccessToken();
-				$userInfo = $weixin->getshopbyglobaltoken($object->FromUserName, $token);
+				$token = $weixin->getshopGlobalAccessToken ();
+				$userInfo = $weixin->getshopbyglobaltoken ( $object->FromUserName, $token );
 				if (count ( $userInfo )) {
 					$user = M ( 'user' );
 					$userid = $user->where ( "shopid=" . $data )->getField ( "userid" );
@@ -238,22 +237,33 @@ class wechatcallback {
 					$data_user [UserConst::SHOPID] = $data;
 					if ($userid) {
 						$data_user [UserConst::USERID] = $userid;
-						if ($user->save ( $data_user )!==false) {
-							$content = "授权成功";
-						} else {
-							$content = "授权未成功";
+						$shopid = $user->where ( "openid='" . trim ( $data_user [UserConst::OPENID] ) . "'" )->getField ( "shopid" );
+						if (!intval($shopid) ) {
+							if ($user->save ( $data_user ) !== false) {
+								$content = "授权成功";
+							} else {
+								$content = "授权未成功";
+							}
+						} else if (intval($shopid) == intval($data) )
+						{
+							if ($user->save ( $data_user ) !== false) {
+								$content = "授权成功";
+							} else {
+								$content = "授权未成功";
+							}
+						}
+						else
+						{
+							$content = "该账号已被授权。若要取消授权或获得新的授权，请联系商务经理。";
 						}
 					} else {
-						if (!$user->where("openid='".trim($data_user [UserConst::OPENID])."'")->find())
-						{
+						if (! $user->where ( "openid='" . trim ( $data_user [UserConst::OPENID] ) . "'" )->find ()) {
 							if ($user->add ( $data_user )) {
 								$content = "授权成功";
 							} else {
 								$content = "授权未成功";
 							}
-						}				
-						else
-						{
+						} else {
 							$content = "该账号已被授权。若要取消授权或获得新的授权，请联系商务经理。";
 						}
 					}
