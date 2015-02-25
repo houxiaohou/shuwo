@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50541
 File Encoding         : 65001
 
-Date: 2015-02-11 14:35:48
+Date: 2015-02-25 19:28:31
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -46,9 +46,9 @@ CREATE TABLE `orderproduct` (
   `productid` int(11) DEFAULT '0',
   `quantity` int(11) DEFAULT '0',
   `realweight` int(10) DEFAULT '0',
-  `realprice` decimal(10,2) DEFAULT '0.00',
+  `realprice` decimal(10,1) DEFAULT '0.0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=337 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=465 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for orders
@@ -60,11 +60,11 @@ CREATE TABLE `orders` (
   `userid` int(11) NOT NULL,
   `shopid` int(11) NOT NULL DEFAULT '0',
   `paystatus` int(11) DEFAULT '0',
-  `totalprice` decimal(10,2) DEFAULT '0.00',
+  `totalprice` decimal(10,1) DEFAULT '0.0',
   `address` text,
   `phone` varchar(255) DEFAULT '',
   `createdtime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `rtotalprice` decimal(10,2) DEFAULT '0.00',
+  `rtotalprice` decimal(10,1) DEFAULT '0.0',
   `dltime` varchar(32) DEFAULT NULL,
   `notes` varchar(255) DEFAULT NULL,
   `username` varchar(255) DEFAULT '',
@@ -90,7 +90,7 @@ CREATE TABLE `product` (
   `unitweight` int(6) DEFAULT '0',
   `shopid` int(11) DEFAULT NULL,
   PRIMARY KEY (`productid`)
-) ENGINE=InnoDB AUTO_INCREMENT=166 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=257 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for shippingaddress
@@ -108,7 +108,7 @@ CREATE TABLE `shippingaddress` (
   `isdefault` tinyint(3) unsigned DEFAULT '1',
   PRIMARY KEY (`said`),
   KEY `shippingaddress_ibfk_userid` (`userid`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for shop
@@ -132,7 +132,7 @@ CREATE TABLE `shop` (
   `dlprice` int(3) DEFAULT '0',
   `isopen` tinyint(2) DEFAULT '0',
   PRIMARY KEY (`shopid`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for user
@@ -154,7 +154,7 @@ CREATE TABLE `user` (
   `roles` tinyint(2) DEFAULT '0',
   `shopid` int(11) DEFAULT '0',
   PRIMARY KEY (`userid`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for weixinshop

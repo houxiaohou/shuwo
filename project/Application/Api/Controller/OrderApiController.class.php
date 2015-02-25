@@ -523,7 +523,8 @@ class OrderApiController extends RestController {
 				if (count ( $userinfo ) &&!empty($userinfo ['openid'])) {
 					$current = date ( 'y年m月d日H:i' );
 					$msg  = "您所购买的水果,商家已于".$current."称重";
-					$totalprice = "实际价格:".$rtotalprice."元";
+					$realtotal = $order->where ( $where4 )->getField('rtotalprice');
+					$totalprice = "实际价格:".$realtotal."元";
 					if (count ( $userinfo ) && ! empty ( $userinfo ["openid"] )) {
 						$template = array (
 								'touser' => trim($userinfo ["openid"]),
