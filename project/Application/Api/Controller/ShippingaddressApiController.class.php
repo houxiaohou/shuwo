@@ -42,30 +42,27 @@ class ShippingaddressApiController extends RestController {
 			if ($said) {
 				$data [ShippingaddressConst::SAID] = $said;
 				$data [ShippingaddressConst::USERID] = $userid;
-				if (I ( 'post.username' ) != null) {
-					$data [ShippingaddressConst::USERNAME] = I ( 'post.username' );
-				}
-				if (I ( 'post.province' ) != null) {
-					$data [ShippingaddressConst::PROVINCE] = I ( 'post.province' );
-				}
-				if (I ( 'post.city' ) != null) {
-					$data [ShippingaddressConst::CITY] = I ( 'post.city' );
-				}
-				if (I ( 'post.distint' ) != null) {
-					$data [ShippingaddressConst::DISTRICT] = I ( 'post.district' );
-				}
-				if (I ( 'post.address' ) != null) {
-					$data [ShippingaddressConst::ADDRESS] = I ( 'post.address' );
-				}
-				if (I ( 'post.mobile' ) != null) {
-					$data [ShippingaddressConst::MOBILE] = I ( 'post.mobile' );
-				}
-				$data [ShippingaddressConst::ISDEFAULT] = 1;
-				if ($address->save ( $data )) {
-					$address->where ( "userid = {$userid}  and said !=" . $said )->setField ( 'isdefault', 0 );
-				}
-				$this->response ( $data, 'json' );
-			}
+				$username = I ( 'post.username','');
+				$province = I ( 'post.province','');
+				$city    =  I ( 'post.city','');
+				$district = I ( 'post.district','');
+				$addres = I ( 'post.address','');
+				$mobile = I ( 'post.mobile','');				
+				if (!empty($username) && !empty($province) && !empty($city)  && !empty($district) && !empty($addres) && !empty($mobile))
+			     {
+					$data [ShippingaddressConst::USERNAME] = $username;			
+				    $data [ShippingaddressConst::PROVINCE] = $province;			
+				    $data [ShippingaddressConst::CITY] = $city;			
+				    $data [ShippingaddressConst::DISTRICT] = $district;		
+				    $data [ShippingaddressConst::ADDRESS] = $addres;			
+				    $data [ShippingaddressConst::MOBILE] = $mobile;
+					$data [ShippingaddressConst::ISDEFAULT] = 1;
+					if ($address->save ( $data )) {
+					    $address->where ( "userid = {$userid}  and said !=" . $said )->setField ( 'isdefault', 0 );
+					}
+					$this->response ( $data, 'json' );
+					}
+				}				
 		} else {
 			$message ["msg"] = "Unauthorized";
 			$this->response ( $message, 'json', '401' );
@@ -78,30 +75,27 @@ class ShippingaddressApiController extends RestController {
 		if ($userid) {
 			$address = M ( 'shippingaddress' );
 			$data [ShippingaddressConst::USERID] = $userid;
-			if (I ( 'post.username' ) != null) {
-				$data [ShippingaddressConst::USERNAME] = I ( 'post.username' );
+			$username = I ( 'post.username','');
+			$province = I ( 'post.province','');
+			$city    =  I ( 'post.city','');
+			$district = I ( 'post.district','');
+			$addres = I ( 'post.address','');
+			$mobile = I ( 'post.mobile','');
+			if (!empty($username) && !empty($province) && !empty($city)  && !empty($district) && !empty($addres) && !empty($mobile))
+			{
+				$data [ShippingaddressConst::USERNAME] = $username;			
+				$data [ShippingaddressConst::PROVINCE] = $province;			
+				$data [ShippingaddressConst::CITY] = $city;			
+				$data [ShippingaddressConst::DISTRICT] = $district;		
+				$data [ShippingaddressConst::ADDRESS] = $addres;			
+				$data [ShippingaddressConst::MOBILE] = $mobile;			
+			    $data [ShippingaddressConst::ISDEFAULT] = 1;			    
+			    $said = $address->add ( $data );
+			    if ($said) {
+			        $address->where ( "userid = {$userid}  and said !=" . $said )->setField ( 'isdefault', 0 );
+			    }
+			    $this->response ( $data, 'json' );
 			}
-			if (I ( 'post.province' ) != null) {
-				$data [ShippingaddressConst::PROVINCE] = I ( 'post.province' );
-			}
-			if (I ( 'post.city' ) != null) {
-				$data [ShippingaddressConst::CITY] = I ( 'post.city' );
-			}
-			if (I ( 'post.distint' ) != null) {
-				$data [ShippingaddressConst::DISTRICT] = I ( 'post.district' );
-			}
-			if (I ( 'post.address' ) != null) {
-				$data [ShippingaddressConst::ADDRESS] = I ( 'post.address' );
-			}
-			if (I ( 'post.mobile' ) != null) {
-				$data [ShippingaddressConst::MOBILE] = I ( 'post.mobile' );
-			}
-			$data [ShippingaddressConst::ISDEFAULT] = 1;
-			$said = $address->add ( $data );
-			if ($said) {
-				$address->where ( "userid = {$userid}  and said !=" . $said )->setField ( 'isdefault', 0 );
-			}
-			$this->response ( $data, 'json' );
 		} else {
 			$message ["msg"] = "Unauthorized";
 			$this->response ( $message, 'json', '401' );
