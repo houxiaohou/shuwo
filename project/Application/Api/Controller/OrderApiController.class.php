@@ -42,6 +42,7 @@ class OrderApiController extends RestController {
 				$data [$i] [OrderConst::PHONE] = $orderdata [$i] [OrderConst::PHONE];
 				$data [$i] [OrderConst::NOTES] = $orderdata [$i] [OrderConst::NOTES];
 				$data [$i] [OrderConst::SHOPID] = $orderdata [$i] [OrderConst::SHOPID];
+				$data [$i] [OrderConst::DLTIME] = $orderdata [$i] [OrderConst::DLTIME];
 				
 				if ($orderdata [$i] [OrderConst::RTOTALPRICE] > 0) {
 					$data [$i] ['price'] = $orderdata [$i] [OrderConst::RTOTALPRICE];
@@ -110,6 +111,7 @@ class OrderApiController extends RestController {
 				$data [OrderConst::PHONE] = $orderdata [OrderConst::PHONE];
 				$data [OrderConst::NOTES] = $orderdata [OrderConst::NOTES];
 				$data [OrderConst::SHOPID] = $orderdata [OrderConst::SHOPID];
+				$data [OrderConst::DLTIME] = $orderdata [OrderConst::DLTIME];
 				
 				if ($orderdata [OrderConst::RTOTALPRICE] > 0) {
 					$data ['price'] = $orderdata [OrderConst::RTOTALPRICE];
@@ -279,6 +281,7 @@ class OrderApiController extends RestController {
 					$data [$i] [OrderConst::PHONE] = $orderdata [$i] [OrderConst::PHONE];
 					$data [$i] [OrderConst::NOTES] = $orderdata [$i] [OrderConst::NOTES];
 					$data [$i] [OrderConst::SHOPID] = $orderdata [$i] [OrderConst::SHOPID];
+					$data [$i] [OrderConst::DLTIME] = $orderdata [$i] [OrderConst::DLTIME];
 					
 					if ($orderdata [$i] [OrderConst::RTOTALPRICE] > 0) {
 						$data [$i] ['price'] = $orderdata [$i] [OrderConst::RTOTALPRICE];
