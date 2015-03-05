@@ -43,6 +43,7 @@ class OrderApiController extends RestController {
 				$data [$i] [OrderConst::NOTES] = $orderdata [$i] [OrderConst::NOTES];
 				$data [$i] [OrderConst::SHOPID] = $orderdata [$i] [OrderConst::SHOPID];
 				$data [$i] [OrderConst::DLTIME] = $orderdata [$i] [OrderConst::DLTIME];
+				$data [$i] [OrderConst::ISFIRST] = $orderdata [$i] [OrderConst::ISFIRST];
 				
 				if ($orderdata [$i] [OrderConst::RTOTALPRICE] > 0) {
 					$data [$i] ['price'] = $orderdata [$i] [OrderConst::RTOTALPRICE];
@@ -112,6 +113,7 @@ class OrderApiController extends RestController {
 				$data [OrderConst::NOTES] = $orderdata [OrderConst::NOTES];
 				$data [OrderConst::SHOPID] = $orderdata [OrderConst::SHOPID];
 				$data [OrderConst::DLTIME] = $orderdata [OrderConst::DLTIME];
+				$data [OrderConst::ISFIRST] = $orderdata [OrderConst::ISFIRST];
 				
 				if ($orderdata [OrderConst::RTOTALPRICE] > 0) {
 					$data ['price'] = $orderdata [OrderConst::RTOTALPRICE];
@@ -205,6 +207,7 @@ class OrderApiController extends RestController {
 					$data [$i] [OrderConst::PHONE] = $orderdata [$i] [OrderConst::PHONE];
 					$data [$i] [OrderConst::NOTES] = $orderdata [$i] [OrderConst::NOTES];
 					$data [$i] [OrderConst::SHOPID] = $orderdata [$i] [OrderConst::SHOPID];
+					$data [$i] [OrderConst::ISFIRST] = $orderdata [$i] [OrderConst::ISFIRST];
 					
 					if ($orderdata [$i] [OrderConst::RTOTALPRICE] > 0) {
 						$data [$i] ['price'] = $orderdata [$i] [OrderConst::RTOTALPRICE];
@@ -286,6 +289,7 @@ class OrderApiController extends RestController {
 					$data [$i] [OrderConst::NOTES] = $orderdata [$i] [OrderConst::NOTES];
 					$data [$i] [OrderConst::SHOPID] = $orderdata [$i] [OrderConst::SHOPID];
 					$data [$i] [OrderConst::DLTIME] = $orderdata [$i] [OrderConst::DLTIME];
+					$data [$i] [OrderConst::ISFIRST] = $orderdata [$i] [OrderConst::ISFIRST];
 					
 					if ($orderdata [$i] [OrderConst::RTOTALPRICE] > 0) {
 						$data [$i] ['price'] = $orderdata [$i] [OrderConst::RTOTALPRICE];
@@ -344,8 +348,16 @@ class OrderApiController extends RestController {
 		$data [OrderConst::ORDERSTATUS] = 0;
 		$authorize = new Authorize ();
 		// $data[OrderConst::USERID] = I('post.userid');
-		$data [OrderConst::USERID] = $authorize->Filter ( 'user' );
-		
+		$userid=3;
+		$data [OrderConst::USERID] = $userid;
+		if($userid){
+		    $orders = M ( 'orders' );
+		    if($orders->where("userid = {$userid}")->find()){
+		        $data[OrderConst::ISFIRST]=0;
+		    }else{
+		        $data[OrderConst::ISFIRST]=1;
+		    }
+		}
 		$data [OrderConst::SHOPID] = I ( 'post.shopid' );
 		// 订单的支付状态默认为0待支付，为1时支付成功，为2时支付失败
 		$data [OrderConst::PAYSTATUS] = 0;
@@ -361,6 +373,7 @@ class OrderApiController extends RestController {
 		$data [OrderConst::CREATEDTIME] = date ( "Y-m-d H:i:s", time () );
 		$data [OrderConst::DLTIME] = I ( 'post.dltime' );
 		$data [OrderConst::NOTES] = I ( 'post.notes' );
+		
 		
 		$product = M ( 'product' );
 		$orderproduct = M ( 'orderproduct' );

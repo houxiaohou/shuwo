@@ -17,4 +17,5 @@ class OrderConst
     const DLTIME = "dltime";
     const NOTES = "notes";
     const ORDERNOTES = "ordernotes";
+    const ISFIRST = "isfirst";
 }
