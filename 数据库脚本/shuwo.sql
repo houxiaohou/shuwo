@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-03-05 10:54:01
+Date: 2015-03-05 14:21:19
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -134,6 +134,9 @@ CREATE TABLE `orders` (
 -- ----------------------------
 -- Records of orders
 -- ----------------------------
+INSERT INTO `orders` VALUES ('2015030510149102', '0', '1', '1', '0', '0.00', '南翔', '15821691728\r\n', '2015-03-05 12:04:46', '0.00', '规定的时间', '留言', 'wang', '', '1');
+INSERT INTO `orders` VALUES ('2015030557101495', '0', '2', '1', '0', '0.00', '南翔', '15821691728\r\n', '2015-03-05 12:04:25', '0.00', '规定的时间', '留言', 'wang', '', '0');
+INSERT INTO `orders` VALUES ('2015030598575597', '0', '1', '1', '0', '0.00', '南翔', '15821691728\r\n', '2015-03-05 12:04:59', '0.00', '规定的时间', '留言', 'wang', '', '0');
 INSERT INTO `orders` VALUES ('51awd1a5w1d', '1', '2', '1', '0', '888.00', '地址', '15821691728', '2015-02-06 14:03:42', '0.00', '规定的时间', '留言', '用户名称', '原因', '0');
 INSERT INTO `orders` VALUES ('58da6w5d4a65wd', '0', '2', '1', '0', '100.00', '地址', '1821742225', '2015-02-06 16:03:48', '0.00', 'awd', 'awd', 'awd', 'sasada', '0');
 INSERT INTO `orders` VALUES ('a58wd46a5dadwa', '0', '2', '1', '0', '98.00', '地址', '1521742225', '2015-03-01 15:11:23', '0.00', '规定的时间', '留言', '客户名称', '理由', '0');
@@ -264,7 +267,7 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'uninonid', 'test', '', '', '0', '上海', '上海', '中国', '2015-02-03 17:09:37', 'openid', 'http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46', '0', '0');
+INSERT INTO `user` VALUES ('1', 'uninonid', '王先森', '', '', '0', '上海', '上海', '中国', '2015-03-05 11:46:32', 'openid', 'http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46', '0', '0');
 INSERT INTO `user` VALUES ('2', 'shopuninonid', 'testshop', '', '', '1', '上海', '上海', '中国', '2015-02-03 17:09:49', 'shopopenid', 'http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46', '1', '1');
 
 -- ----------------------------
