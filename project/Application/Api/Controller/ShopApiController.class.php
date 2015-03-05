@@ -12,7 +12,18 @@ class ShopApiController extends RestController {
 	// 返回所有店铺
 	// 管理员
 	public function getallshops() {
-		echo 'hello...';
+	        $authorize = new Authorize ();
+        if ($authorize->Filter("admin")) {
+            $shop = M("shop");
+            $data = $shop->select();
+            if (!count($data)) {
+                $data = [];
+            }
+            $this->response($data, "json");
+        } else {
+            $message ["msg"] = "Unauthorized";
+            $this->response($message, 'json', '401');
+        }
 	}
 	
 	// 通过id查询店铺 （可以匿名）

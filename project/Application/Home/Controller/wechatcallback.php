@@ -6,6 +6,7 @@ define ( "TOKEN", "weixin" );
 
 require_once 'Weixin.php';
 require_once 'UserConst.php';
+require_once 'BDConst.php';
 class wechatcallback {
 	public function valid() {
 		$echoStr = $_GET ["echostr"];
@@ -212,11 +213,11 @@ class wechatcallback {
 		// 获取店铺的授权码
 		$strarray = explode ( "+", $keyword );
 		$shopsn = '';
-		if (count ( $strarray ) == 3 & $strarray [0] == 'add' && $strarray [1] == 'shop') {
+		if (count ( $strarray ) == 3 && $strarray [0] == 'add' && $strarray [1] == 'shop') {
 			$shop = M ( "shop" );
 			$where ['shopsn'] = $strarray [2];
 			$data = $shop->where ( $where )->getField ( "shopid" );
-			if (intval($data)) {
+			if (intval ( $data )) {
 				$weixin = new Weixin ();
 				$token = $weixin->getshopGlobalAccessToken ();
 				$userInfo = $weixin->getshopbyglobaltoken ( $object->FromUserName, $token );
@@ -238,22 +239,19 @@ class wechatcallback {
 					if ($userid) {
 						$data_user [UserConst::USERID] = $userid;
 						$shopid = $user->where ( "openid='" . trim ( $data_user [UserConst::OPENID] ) . "'" )->getField ( "shopid" );
-						if (!intval($shopid) ) {
+						if (! intval ( $shopid )) {
 							if ($user->save ( $data_user ) !== false) {
 								$content = "授权成功";
 							} else {
 								$content = "授权未成功";
 							}
-						} else if (intval($shopid) == intval($data) )
-						{
+						} else if (intval ( $shopid ) == intval ( $data )) {
 							if ($user->save ( $data_user ) !== false) {
 								$content = "授权成功";
 							} else {
 								$content = "授权未成功";
 							}
-						}
-						else
-						{
+						} else {
 							$content = "该账号已被授权。若要取消授权或获得新的授权，请联系商务经理。";
 						}
 					} else {
@@ -272,6 +270,41 @@ class wechatcallback {
 				}
 			} else {
 				$content = "授权未成功";
+			}
+		} else if (count ( $strarray ) == 2 && $strarray [0] == 'add' && $strarray [1] == 'bd') {
+			$weixin = new Weixin ();
+			$token = $weixin->getshopGlobalAccessToken ();
+			$userInfo = $weixin->getshopbyglobaltoken ( $object->FromUserName, $token );
+			if (count ( $userInfo )) {
+				$openid = trim ( $userInfo [BDConst::OPENID] );
+				$bd = M ( "bd" );
+				$data_bd [BDConst::OPENID] = $openid;
+				$data_bd [BDConst::UNIOID] = $userInfo [BDConst::UNIOID] ? $userInfo [BDConst::UNIOID] : "";
+				$data_bd [BDConst::NICKNAME] = $userInfo [BDConst::NICKNAME];
+				$data_bd [BDConst::SEX] = $userInfo [BDConst::SEX];
+				$data_bd [BDConst::PROVINCE] = $userInfo [BDConst::PROVINCE];
+				$data_bd [BDConst::CITY] = $userInfo [BDConst::CITY];
+				$data_bd [BDConst::COUNTRY] = $userInfo [BDConst::COUNTRY];
+				$data_bd [BDConst::HEADIMGURL] = $userInfo [BDConst::HEADIMGURL];
+				$data_bd [BDConst::MOBILE] = '';
+				$data_bd [BDConst::PASSWORD] = '';
+				$bdinfo = $bd->where ( "openid ='" . $openid . "'" )->find ();
+				if (count ( $bdinfo )) {
+					$data_bd [BDConst::BDID] = $bdinfo [BDConst::BDID];
+					if ($bd->save ( $data_bd ) !== false) {
+						$content = "BD授权成功";
+					} else {
+						$content = "BD授权未成功";
+					}
+				} else {
+					if ($bd->add ( $data_bd )) {
+						$content = "BD授权成功";
+					} else {
+						$content = "BD授权未成功";
+					}
+				}
+			} else {
+				$content = "BD授权未成功";
 			}
 		} else {
 			$content = "请输入正确的店铺授权码格式 (add+shop+授权码)";
@@ -495,5 +528,7 @@ class wechatcallback {
 </xml>";
 		$result = sprintf ( $xmlTpl, $object->FromUserName, $object->ToUserName, time () );
 		return $result;
+	}
+	private function SetBD() {
 	}
 }
