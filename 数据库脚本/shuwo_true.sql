@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-03-05 14:34:29
+Date: 2015-03-05 14:41:50
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -32,7 +32,7 @@ CREATE TABLE `admin` (
 DROP TABLE IF EXISTS `bd`;
 CREATE TABLE `bd` (
   `bdid` int(11) NOT NULL AUTO_INCREMENT,
-  `unionid` varchar(255) NOT NULL,
+  `unionid` varchar(255) NOT NULL DEFAULT '',
   `nickname` varchar(32) DEFAULT '',
   `password` varchar(255) DEFAULT '',
   `mobile` varchar(16) DEFAULT '',
@@ -40,7 +40,7 @@ CREATE TABLE `bd` (
   `city` varchar(16) DEFAULT '',
   `province` varchar(16) DEFAULT '',
   `country` varchar(16) DEFAULT '',
-  `createdtime` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `createdtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `openid` varchar(255) DEFAULT '',
   `headimgurl` varchar(255) DEFAULT '',
   PRIMARY KEY (`bdid`)
