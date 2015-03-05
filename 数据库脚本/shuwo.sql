@@ -1,7 +1,7 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost_3306
+Source Server         : localhost
 Source Server Version : 50617
 Source Host           : localhost:3306
 Source Database       : shuwo
@@ -10,13 +10,13 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-03-05 10:54:01
+Date: 2015-03-05 14:24:11
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for `admin`
+-- Table structure for admin
 -- ----------------------------
 DROP TABLE IF EXISTS `admin`;
 CREATE TABLE `admin` (
@@ -32,22 +32,22 @@ CREATE TABLE `admin` (
 INSERT INTO `admin` VALUES ('1', 'admin', 'f38292831df4b230cb982bd44d3e7bef');
 
 -- ----------------------------
--- Table structure for `bd`
+-- Table structure for bd
 -- ----------------------------
 DROP TABLE IF EXISTS `bd`;
 CREATE TABLE `bd` (
   `bdid` int(11) NOT NULL AUTO_INCREMENT,
   `unionid` varchar(255) NOT NULL,
-  `nickname` varchar(32) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `mobile` varchar(16) DEFAULT NULL,
-  `sex` tinyint(1) DEFAULT NULL,
-  `city` varchar(16) DEFAULT NULL,
-  `province` varchar(16) DEFAULT NULL,
-  `country` varchar(16) DEFAULT NULL,
+  `nickname` varchar(32) DEFAULT '',
+  `password` varchar(255) DEFAULT '',
+  `mobile` varchar(16) DEFAULT '',
+  `sex` tinyint(1) DEFAULT '0',
+  `city` varchar(16) DEFAULT '',
+  `province` varchar(16) DEFAULT '',
+  `country` varchar(16) DEFAULT '',
   `createdtime` timestamp NOT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `openid` varchar(255) DEFAULT NULL,
-  `headimgurl` varchar(255) DEFAULT NULL,
+  `openid` varchar(255) DEFAULT '',
+  `headimgurl` varchar(255) DEFAULT '',
   PRIMARY KEY (`bdid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -56,13 +56,13 @@ CREATE TABLE `bd` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `bdshop`
+-- Table structure for bdshop
 -- ----------------------------
 DROP TABLE IF EXISTS `bdshop`;
 CREATE TABLE `bdshop` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `bdid` int(11) NOT NULL,
-  `shopid` int(11) NOT NULL,
+  `bdid` int(11) NOT NULL DEFAULT '0',
+  `shopid` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -71,7 +71,7 @@ CREATE TABLE `bdshop` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `category`
+-- Table structure for category
 -- ----------------------------
 DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
@@ -91,7 +91,7 @@ INSERT INTO `category` VALUES ('5', '桃李类');
 INSERT INTO `category` VALUES ('6', '其他');
 
 -- ----------------------------
--- Table structure for `orderproduct`
+-- Table structure for orderproduct
 -- ----------------------------
 DROP TABLE IF EXISTS `orderproduct`;
 CREATE TABLE `orderproduct` (
@@ -109,7 +109,7 @@ CREATE TABLE `orderproduct` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `orders`
+-- Table structure for orders
 -- ----------------------------
 DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (
@@ -139,7 +139,7 @@ INSERT INTO `orders` VALUES ('58da6w5d4a65wd', '0', '2', '1', '0', '100.00', '�
 INSERT INTO `orders` VALUES ('a58wd46a5dadwa', '0', '2', '1', '0', '98.00', '地址', '1521742225', '2015-03-01 15:11:23', '0.00', '规定的时间', '留言', '客户名称', '理由', '0');
 
 -- ----------------------------
--- Table structure for `product`
+-- Table structure for product
 -- ----------------------------
 DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
@@ -175,7 +175,7 @@ INSERT INTO `product` VALUES ('11', '台湾橄榄', '', '1', '8555', '15.00', '0
 INSERT INTO `product` VALUES ('12', '砂糖桔', '', '1', '7415', '6.80', '6.20', '2', '6', '克', '50', '5');
 
 -- ----------------------------
--- Table structure for `shippingaddress`
+-- Table structure for shippingaddress
 -- ----------------------------
 DROP TABLE IF EXISTS `shippingaddress`;
 CREATE TABLE `shippingaddress` (
@@ -204,7 +204,7 @@ INSERT INTO `shippingaddress` VALUES ('11', '1', 'wang', '南翔', '上海', '�
 INSERT INTO `shippingaddress` VALUES ('12', '1', 'wang', '南翔', '上海', '上海', '南翔', '15821691728\r\n', '0');
 
 -- ----------------------------
--- Table structure for `shop`
+-- Table structure for shop
 -- ----------------------------
 DROP TABLE IF EXISTS `shop`;
 CREATE TABLE `shop` (
@@ -240,7 +240,7 @@ INSERT INTO `shop` VALUES ('7', '', '上海市虹口区曲阳路街道上农一�
 INSERT INTO `shop` VALUES ('8', '', '上海市普陀区桃浦镇李子园六村东方向靠近真南路215', '', '绿缘水果店', '媛媛', '13761902139', '31.27437', '121.402472', 'wtw3ft6d6th7b467m', '上海', '普陀区', '桃浦镇李子园六村', '缘来是你', '12', '1');
 
 -- ----------------------------
--- Table structure for `user`
+-- Table structure for user
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
@@ -268,7 +268,7 @@ INSERT INTO `user` VALUES ('1', 'uninonid', 'test', '', '', '0', '上海', '上�
 INSERT INTO `user` VALUES ('2', 'shopuninonid', 'testshop', '', '', '1', '上海', '上海', '中国', '2015-02-03 17:09:49', 'shopopenid', 'http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46', '1', '1');
 
 -- ----------------------------
--- Table structure for `weixinshop`
+-- Table structure for weixinshop
 -- ----------------------------
 DROP TABLE IF EXISTS `weixinshop`;
 CREATE TABLE `weixinshop` (
@@ -286,7 +286,7 @@ CREATE TABLE `weixinshop` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `weixinuser`
+-- Table structure for weixinuser
 -- ----------------------------
 DROP TABLE IF EXISTS `weixinuser`;
 CREATE TABLE `weixinuser` (
@@ -304,7 +304,7 @@ CREATE TABLE `weixinuser` (
 -- ----------------------------
 
 -- ----------------------------
--- Function structure for `GETDISTANCE`
+-- Function structure for GETDISTANCE
 -- ----------------------------
 DROP FUNCTION IF EXISTS `GETDISTANCE`;
 DELIMITER ;;
@@ -344,7 +344,7 @@ END
 DELIMITER ;
 
 -- ----------------------------
--- Function structure for `NewProc`
+-- Function structure for NewProc
 -- ----------------------------
 DROP FUNCTION IF EXISTS `NewProc`;
 DELIMITER ;;
