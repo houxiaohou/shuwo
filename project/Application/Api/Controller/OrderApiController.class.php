@@ -189,6 +189,9 @@ class OrderApiController extends RestController {
 			}
 			
 			$orderdata = $order->where ( $where )->order ( '-createdtime' )->limit ( $start, $count )->select ();
+			$data = [];
+			if($orderdata&&count($orderdata)>0)
+			{
 			for($i = 0; $i < $count; $i ++) {
 				$data_order_product = [ ];
 				if ($orderdata [$i] [OrderConst::ORDERID] == null) {
@@ -228,6 +231,7 @@ class OrderApiController extends RestController {
 					}
 				}
 				$data [$i] ['productdetail'] = $data_order_product;
+			}
 			}
 			$this->response ( $data, 'json' );
 		} else {
