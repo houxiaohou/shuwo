@@ -348,7 +348,7 @@ class OrderApiController extends RestController {
 		$data [OrderConst::ORDERSTATUS] = 0;
 		$authorize = new Authorize ();
 		// $data[OrderConst::USERID] = I('post.userid');
-		$userid=3;
+		$userid=$authorize->Filter ( "user" );
 		$data [OrderConst::USERID] = $userid;
 		if($userid){
 		    $orders = M ( 'orders' );
