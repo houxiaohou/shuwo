@@ -63,7 +63,8 @@ return array(
       	array('weight','OrderApi/getweight', '', array('method' => 'POST')),//称重
       	
 		//BD URL配置
-		array('allbds','BDApi/getallbds','',array('method'=>'GET')),//查询所有的订单
-
+		array('allbds','BDApi/getallbds','',array('method'=>'GET')),//得到所有的BD和店铺
+		array('bd/:id\d','BDApi/deletebd','',array('method'=>'DELETE')),//删除bd	
+		array('bdid/:bdid\d/shopid/:shopid\d','BDApi/deletebdshop','',array('method'=>'DELETE')),//删除bdshop
 )
 );
