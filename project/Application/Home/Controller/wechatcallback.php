@@ -271,7 +271,7 @@ class wechatcallback {
 			} else {
 				$content = "授权未成功";
 			}
-		} else if (count ( $strarray ) == 2 && $strarray [0] == 'add' && $strarray [1] == 'bd') {
+		} else if (count ( $strarray ) == 3 && $strarray [0] == 'add' && $strarray [1] == 'bd') {
 			$weixin = new Weixin ();
 			$token = $weixin->getshopGlobalAccessToken ();
 			$userInfo = $weixin->getshopbyglobaltoken ( $object->FromUserName, $token );
@@ -288,6 +288,7 @@ class wechatcallback {
 				$data_bd [BDConst::HEADIMGURL] = $userInfo [BDConst::HEADIMGURL];
 				$data_bd [BDConst::MOBILE] = '';
 				$data_bd [BDConst::PASSWORD] = '';
+				$data_bd [BDConst::BDNAME] = $strarray [2];
 				$bdinfo = $bd->where ( "openid ='" . $openid . "'" )->find ();
 				if (count ( $bdinfo )) {
 					$data_bd [BDConst::BDID] = $bdinfo [BDConst::BDID];

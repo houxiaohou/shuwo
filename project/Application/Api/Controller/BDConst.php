@@ -15,4 +15,5 @@ Class BDConst
 	const COUNTRY ="country";
 	const CREATEDTIME = "createdtime";
 	const HEADIMGURL ="headimgurl";
+	const BDNAME ="bdname";
 }
