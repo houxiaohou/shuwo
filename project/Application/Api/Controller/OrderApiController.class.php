@@ -192,50 +192,49 @@ class OrderApiController extends RestController {
 			}
 			
 			$orderdata = $order->where ( $where )->order ( '-createdtime' )->limit ( $start, $count )->select ();
-			$data = [];
-			if($orderdata&&count($orderdata)>0)
-			{
-			for($i = 0; $i < $count; $i ++) {
-				$data_order_product = [ ];
-				if ($orderdata [$i] [OrderConst::ORDERID] == null) {
-					break;
-				} else {
-					$data [$i] [OrderConst::ORDERID] = $orderdata [$i] [OrderConst::ORDERID];
-					$data [$i] [OrderConst::CREATEDTIME] = $orderdata [$i] [OrderConst::CREATEDTIME];
-					$data [$i] [OrderConst::ORDERSTATUS] = $orderdata [$i] [OrderConst::ORDERSTATUS];
-					$data [$i] [OrderConst::USERNAME] = $orderdata [$i] [OrderConst::USERNAME];
-					$data [$i] [OrderConst::ADDRESS] = $orderdata [$i] [OrderConst::ADDRESS];
-					$data [$i] [OrderConst::PHONE] = $orderdata [$i] [OrderConst::PHONE];
-					$data [$i] [OrderConst::NOTES] = $orderdata [$i] [OrderConst::NOTES];
-					$data [$i] [OrderConst::SHOPID] = $orderdata [$i] [OrderConst::SHOPID];
-					$data [$i] [OrderConst::ISFIRST] = $orderdata [$i] [OrderConst::ISFIRST];
-					
-					if ($orderdata [$i] [OrderConst::RTOTALPRICE] > 0) {
-						$data [$i] ['price'] = $orderdata [$i] [OrderConst::RTOTALPRICE];
+			$data = [ ];
+			if ($orderdata && count ( $orderdata ) > 0) {
+				for($i = 0; $i < $count; $i ++) {
+					$data_order_product = [ ];
+					if ($orderdata [$i] [OrderConst::ORDERID] == null) {
+						break;
 					} else {
-						$data [$i] ['price'] = $orderdata [$i] [OrderConst::TOTALPRICE];
+						$data [$i] [OrderConst::ORDERID] = $orderdata [$i] [OrderConst::ORDERID];
+						$data [$i] [OrderConst::CREATEDTIME] = $orderdata [$i] [OrderConst::CREATEDTIME];
+						$data [$i] [OrderConst::ORDERSTATUS] = $orderdata [$i] [OrderConst::ORDERSTATUS];
+						$data [$i] [OrderConst::USERNAME] = $orderdata [$i] [OrderConst::USERNAME];
+						$data [$i] [OrderConst::ADDRESS] = $orderdata [$i] [OrderConst::ADDRESS];
+						$data [$i] [OrderConst::PHONE] = $orderdata [$i] [OrderConst::PHONE];
+						$data [$i] [OrderConst::NOTES] = $orderdata [$i] [OrderConst::NOTES];
+						$data [$i] [OrderConst::SHOPID] = $orderdata [$i] [OrderConst::SHOPID];
+						$data [$i] [OrderConst::ISFIRST] = $orderdata [$i] [OrderConst::ISFIRST];
+						
+						if ($orderdata [$i] [OrderConst::RTOTALPRICE] > 0) {
+							$data [$i] ['price'] = $orderdata [$i] [OrderConst::RTOTALPRICE];
+						} else {
+							$data [$i] ['price'] = $orderdata [$i] [OrderConst::TOTALPRICE];
+						}
+						if ($orderdata [$i] [OrderConst::ORDERNOTES] != null) {
+							$data [$i] [OrderConst::ORDERNOTES] = $orderdata [$i] [OrderConst::ORDERNOTES];
+						}
+						$where_order_product [OrderProductConst::ORDERID] = $orderdata [$i] [OrderConst::ORDERID];
+						$orderproductdata = $orderproduct->where ( $where_order_product )->field ( 'id,productid,quantity,realweight,realprice' )->select ();
+						$count_order_product = count ( $orderproductdata );
+						for($j = 0; $j < $count_order_product; $j ++) {
+							$data_order_product [$j] ['orderproductid'] = $orderproductdata [$j] [OrderProductConst::ID];
+							$data_order_product [$j] ['quantity'] = $orderproductdata [$j] [OrderProductConst::QUANTITY];
+							$data_order_product [$j] ['realprice'] = $orderproductdata [$j] [OrderProductConst::REALPRICE];
+							$data_order_product [$j] ['realweight'] = $orderproductdata [$j] [OrderProductConst::REALWEIGHT];
+							$where_product [ProductConst::PRODUCTID] = $orderproductdata [$j] [OrderProductConst::PRODUCTID];
+							$productdata = $product->where ( $where_product )->field ( 'productname,unit,attribute,unitweight' )->find ();
+							$data_order_product [$j] ['productname'] = $productdata ['productname'];
+							$data_order_product [$j] ['unit'] = $productdata ['unit'];
+							$data_order_product [$j] ['attribute'] = $productdata ['attribute'];
+							$data_order_product [$j] ['unitweight'] = $productdata ['unitweight'];
+						}
 					}
-					if ($orderdata [$i] [OrderConst::ORDERNOTES] != null) {
-						$data [$i] [OrderConst::ORDERNOTES] = $orderdata [$i] [OrderConst::ORDERNOTES];
-					}
-					$where_order_product [OrderProductConst::ORDERID] = $orderdata [$i] [OrderConst::ORDERID];
-					$orderproductdata = $orderproduct->where ( $where_order_product )->field ( 'id,productid,quantity,realweight,realprice' )->select ();
-					$count_order_product = count ( $orderproductdata );
-					for($j = 0; $j < $count_order_product; $j ++) {
-						$data_order_product [$j] ['orderproductid'] = $orderproductdata [$j] [OrderProductConst::ID];
-						$data_order_product [$j] ['quantity'] = $orderproductdata [$j] [OrderProductConst::QUANTITY];
-						$data_order_product [$j] ['realprice'] = $orderproductdata [$j] [OrderProductConst::REALPRICE];
-						$data_order_product [$j] ['realweight'] = $orderproductdata [$j] [OrderProductConst::REALWEIGHT];
-						$where_product [ProductConst::PRODUCTID] = $orderproductdata [$j] [OrderProductConst::PRODUCTID];
-						$productdata = $product->where ( $where_product )->field ( 'productname,unit,attribute,unitweight' )->find ();
-						$data_order_product [$j] ['productname'] = $productdata ['productname'];
-						$data_order_product [$j] ['unit'] = $productdata ['unit'];
-						$data_order_product [$j] ['attribute'] = $productdata ['attribute'];
-						$data_order_product [$j] ['unitweight'] = $productdata ['unitweight'];
-					}
+					$data [$i] ['productdetail'] = $data_order_product;
 				}
-				$data [$i] ['productdetail'] = $data_order_product;
-			}
 			}
 			$this->response ( $data, 'json' );
 		} else {
@@ -349,15 +348,15 @@ class OrderApiController extends RestController {
 		$data [OrderConst::ORDERSTATUS] = 0;
 		$authorize = new Authorize ();
 		// $data[OrderConst::USERID] = I('post.userid');
-		$userid=$authorize->Filter ( "user" );
+		$userid = $authorize->Filter ( "user" );
 		$data [OrderConst::USERID] = $userid;
-		if($userid){
-		    $orders = M ( 'orders' );
-		    if($orders->where("userid = {$userid}")->find()){
-		        $data[OrderConst::ISFIRST]=0;
-		    }else{
-		        $data[OrderConst::ISFIRST]=1;
-		    }
+		if ($userid) {
+			$orders = M ( 'orders' );
+			if ($orders->where ( "userid = {$userid}" )->find ()) {
+				$data [OrderConst::ISFIRST] = 0;
+			} else {
+				$data [OrderConst::ISFIRST] = 1;
+			}
 		}
 		$data [OrderConst::SHOPID] = I ( 'post.shopid' );
 		// 订单的支付状态默认为0待支付，为1时支付成功，为2时支付失败
@@ -374,7 +373,6 @@ class OrderApiController extends RestController {
 		$data [OrderConst::CREATEDTIME] = date ( "Y-m-d H:i:s", time () );
 		$data [OrderConst::DLTIME] = I ( 'post.dltime' );
 		$data [OrderConst::NOTES] = I ( 'post.notes' );
-		
 		
 		$product = M ( 'product' );
 		$orderproduct = M ( 'orderproduct' );
@@ -474,55 +472,58 @@ class OrderApiController extends RestController {
 				$weixin = new Weixin ();
 				$token = $weixin->getshopGlobalAccessToken ();
 				$weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
-				$bdshop =M('bdshop');
-				$bdshops = $bdshop->where("shopid=".$shopid)->select();
-                if(count($bdshops))
-                {
-                	$bd =M('bd');
-                	for($i=0;$i<count($bdshops);$i++)
-                    {
-                        $bddata =  $bd->where("bdid=".$bdshops[$i][BDConst::BDID])->find();
-						if(count($bddata)&&!empty($bddata[BDConst::OPENID]))
-						{
+				
+				
+				//通知BD
+				$shop = M('shop');
+				$shopname = $shop->where("shopid=".$shopid)->getField("spn");
+				$bdshop = M ( 'bdshop' );
+				$bdshops = $bdshop->where ( "shopid=" . $shopid )->select ();
+				if (count ( $bdshops )) {
+					$bd = M ( 'bd' );
+					for($i = 0; $i < count ( $bdshops ); $i ++) {
+						$bddata = $bd->where ( "bdid=" . $bdshops [$i] [BDConst::BDID] )->find ();
+						if (count ( $bddata ) && ! empty ( $bddata [BDConst::OPENID] )) {
+							$msgstr = $shopname."收到新的订单";
 							$bdtemplate = array (
-									'touser' => $bddata[BDConst::OPENID],
+									'touser' => $bddata [BDConst::OPENID],
 									'template_id' => C ( 'NEWORDER_TEMPID' ),
 									'topcolor' => "#009900",
 									'data' => array (
 											'first' => array (
 													'value' => urlencode ( $orderNum ),
-													'color' => "#FF0000"
+													'color' => "#FF0000" 
 											),
 											'tradeDateTime' => array (
 													'value' => urlencode ( $current ),
-													'color' => "#009900"
+													'color' => "#009900" 
 											),
 											'orderType' => array (
-													'value' => urlencode ( "新的订单" ),
-													'color' => "#009900"
+													'value' => urlencode ( $msgstr ),
+													'color' => "#FF0000" 
 											),
 											'customerInfo' => array (
 													'value' => urlencode ( $contact ),
-													'color' => "#009900"
+													'color' => "#009900" 
 											),
 											'orderItemName' => array (
-													'value' => urlencode ( "发货地址&配送时间" )
+													'value' => urlencode ( "发货地址&配送时间" ) 
 											),
 											'orderItemData' => array (
 													'value' => urlencode ( $address ),
-													'color' => "#009900"
+													'color' => "#009900" 
 											),
 											'remark' => array (
 													'value' => urlencode ( "\\n信息来自树窝小店" ),
-													'color' => "#cccccc"
-											)
-									)
+													'color' => "#cccccc" 
+											) 
+									) 
 							);
 							$token = $weixin->getshopGlobalAccessToken ();
 							$weixin->sendtemplatemsg ( urldecode ( json_encode ( $bdtemplate ) ), $token );
 						}
-                    }
-                 }
+					}
+				}
 			}
 		}
 		
@@ -533,6 +534,7 @@ class OrderApiController extends RestController {
 	 * 水果称重
 	 */
 	public function getWeight() {
+		$weixin = new Weixin ();
 		$orderproduct = M ( 'orderproduct' );
 		$product = M ( 'product' );
 		$rtotalprice = 0; // 真实总价
@@ -590,14 +592,14 @@ class OrderApiController extends RestController {
 			if (intval ( $userid )) {
 				$user = M ( "user" );
 				$userinfo = $user->where ( 'userid=' . $userid )->find ();
-				if (count ( $userinfo ) &&!empty($userinfo ['openid'])) {
+				if (count ( $userinfo ) && ! empty ( $userinfo ['openid'] )) {
 					$current = date ( 'y年m月d日H:i' );
-					$msg  = "您所购买的水果,商家已于".$current."称重";
-					$realtotal = $order->where ( $where4 )->getField('rtotalprice');
-					$totalprice = "实际价格:".$realtotal."元";
+					$msg = "您所购买的水果,商家已于" . $current . "称重";
+					$realtotal = $order->where ( $where4 )->getField ( 'rtotalprice' );
+					$totalprice = "实际价格:" . $realtotal . "元";
 					if (count ( $userinfo ) && ! empty ( $userinfo ["openid"] )) {
 						$template = array (
-								'touser' => trim($userinfo ["openid"]),
+								'touser' => trim ( $userinfo ["openid"] ),
 								'template_id' => C ( 'ORDERSTATUS_TEMPID' ),
 								'url' => "http://www.shuwow.com/Home/Index/index/#/order",
 								'topcolor' => "#009900",
@@ -611,7 +613,7 @@ class OrderApiController extends RestController {
 												'color' => "#009900" 
 										),
 										'OrderStatus' => array (
-												'value' => urlencode ($totalprice),
+												'value' => urlencode ( $totalprice ),
 												'color' => "#009900" 
 										),
 										'remark' => array (
@@ -620,9 +622,54 @@ class OrderApiController extends RestController {
 										) 
 								) 
 						);
-						$weixin = new Weixin ();
-						$token = $weixin->getusersGlobalAccessToken();
+						$token = $weixin->getusersGlobalAccessToken ();
 						$weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
+					}
+				}
+			}
+			
+			// 通知BD
+			$shopid = $order->where ( $where4 )->getField ( "shopid" );
+			if ($shopid) {
+				$shop = M ( "shop" );
+				$shopname = $shop->where ( "shopid=" . $shopid )->getField ( "spn" );
+				$bdshop = M ( "bdshop" );
+				$bdshops = $bdshop->where ( "shopid=" . $shopid )->select ();
+				if (count ( $bdshops )) {
+					$bd = M ( 'bd' );
+					for($i = 0; $i < count ( $bdshops ); $i ++) {
+						$bddata = $bd->where ( "bdid=" . $bdshops [$i] [BDConst::BDID] )->find ();
+						if (count ( $bddata ) && ! empty ( $bddata [BDConst::OPENID] )) {
+							$current = date ( 'y年m月d日H:i' );
+							$msg = $shopname."已于" . $current . "确认订单";
+							$realtotal = $order->where ( $where4 )->getField ( 'rtotalprice' );
+							$totalprice = "实际价格:" . $realtotal . "元";
+							$bdtemplate = array (
+									'touser' => trim ( $bddata [BDConst::OPENID]),
+									'template_id' => C ( 'BDORDERSTATUS_TEMPID' ),
+									'topcolor' => "#FF0000",
+									'data' => array (
+											'first' => array (
+													'value' => urlencode ( $msg ),
+													'color' => "#FF0000" 
+											),
+											'OrderSn' => array (
+													'value' => urlencode ( $orderid ),
+													'color' => "#009900" 
+											),
+											'OrderStatus' => array (
+													'value' => urlencode ( $totalprice ),
+													'color' => "#009900" 
+											),
+											'remark' => array (
+													'value' => urlencode ( "\\n信息来自树窝小店" ),
+													'color' => "#cccccc" 
+											) 
+									) 
+							);
+							$token = $weixin->getshopGlobalAccessToken ();
+							$weixin->sendtemplatemsg ( urldecode ( json_encode ( $bdtemplate ) ), $token );
+						}
 					}
 				}
 			}
@@ -650,33 +697,77 @@ class OrderApiController extends RestController {
 		}
 		
 		if ($id) {
-			if($order->where ( "orderid=" . $id )->setField ( "orderstatus", 2 ) &&$order->where ( "orderid=" . $id )->setField ( "ordernotes", $ordernotes ))
-			{
+			if ($order->where ( "orderid=" . $id )->setField ( "orderstatus", 2 ) && $order->where ( "orderid=" . $id )->setField ( "ordernotes", $ordernotes )) {
 				$userid = $order->where ( "orderid=" . $id )->getField ( "userid" );
 				if (intval ( $userid )) {
 					$user = M ( "user" );
 					$phone = '暂无';
-					$shopname='';
-					if(intval($auid))
-					{
-					   $shop = M('shop');
-					   $shopid = $auid;
-					   $shop = $shop->where("shopid=".$shopid)->find();
-					   $shopname = $shop['spn'];
-					   $phone = $shop['phone'];
+					$shopname = '';
+					if (intval ( $auid )) {
+						$shop = M ( 'shop' );
+						$shopid = $auid;
+						$shop = $shop->where ( "shopid=" . $shopid )->find ();
+						$shopname = $shop ['spn'];
+						$phone = $shop ['phone'];
 					}
 					$userinfo = $user->where ( 'userid=' . $userid )->find ();
-                    
-					if (count ( $userinfo ) &&!empty($userinfo ['openid'])) {
+					
+					if (count ( $userinfo ) && ! empty ( $userinfo ['openid'] )) {
 						$current = date ( 'y年m月d日H:i' );
-						$msg  = $shopname."已于".$current."取消订单";
-           				$errormsg = "订单取消原因:".$ordernotes." 商家电话:".$phone;
+						$msg = $shopname . "已于" . $current . "取消订单";
+						$errormsg = "订单取消原因:" . $ordernotes . " 商家电话:" . $phone;
 						if (count ( $userinfo ) && ! empty ( $userinfo ["openid"] )) {
 							$template = array (
-									'touser' => trim($userinfo ["openid"]),
+									'touser' => trim ( $userinfo ["openid"] ),
 									'template_id' => C ( 'ORDERSTATUS_TEMPID' ),
 									'url' => "http://www.shuwow.com/Home/Index/index/#/order",
 									'topcolor' => "#009900",
+									'data' => array (
+											'first' => array (
+													'value' => urlencode ( $msg ),
+													'color' => "#FF0000" 
+											),
+											'OrderSn' => array (
+													'value' => urlencode ( $id ),
+													'color' => "#009900" 
+											),
+											'OrderStatus' => array (
+													'value' => urlencode ( $errormsg ),
+													'color' => "#009900" 
+											),
+											'remark' => array (
+													'value' => urlencode ( "\\n信息来自树窝小店" ),
+													'color' => "#cccccc" 
+											) 
+									) 
+							);
+							$weixin = new Weixin ();
+							$token = $weixin->getusersGlobalAccessToken ();
+							$weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
+						}
+					}
+				}
+			}
+			
+			// 通知BD
+			$shopid = $order->where ( "orderid=" . $id )->getField ( "shopid" );
+			if ($shopid) {
+				$shop = M ( "shop" );
+				$shopname = $shop->where ( "shopid=" . $shopid )->getField ( "spn" );
+				$bdshop = M ( "bdshop" );
+				$bdshops = $bdshop->where ( "shopid=" . $shopid )->select ();
+				if (count ( $bdshops )) {
+					$bd = M ( 'bd' );
+					for($i = 0; $i < count ( $bdshops ); $i ++) {
+						$bddata = $bd->where ( "bdid=" . $bdshops [$i] [BDConst::BDID] )->find ();
+						if (count ( $bddata ) && ! empty ( $bddata [BDConst::OPENID] )) {
+							$current = date ( 'y年m月d日H:i' );
+							$msg = $shopname."已于" . $current . "取消订单";
+							$errormsg = "订单取消原因:" . $ordernotes . " 商家电话:" . $phone;
+							$bdtemplate = array (
+									'touser' => trim ( $bddata [BDConst::OPENID]),
+									'template_id' => C ( 'BDORDERSTATUS_TEMPID' ),
+									'topcolor' => "#FF0000",
 									'data' => array (
 											'first' => array (
 													'value' => urlencode ( $msg ),
@@ -687,7 +778,7 @@ class OrderApiController extends RestController {
 													'color' => "#009900"
 											),
 											'OrderStatus' => array (
-													'value' => urlencode ($errormsg),
+													'value' => urlencode ( $errormsg ),
 													'color' => "#009900"
 											),
 											'remark' => array (
@@ -696,9 +787,8 @@ class OrderApiController extends RestController {
 											)
 									)
 							);
-							$weixin = new Weixin ();
-							$token = $weixin->getusersGlobalAccessToken();
-							$weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
+							$token = $weixin->getshopGlobalAccessToken ();
+							$weixin->sendtemplatemsg ( urldecode ( json_encode ( $bdtemplate ) ), $token );
 						}
 					}
 				}
