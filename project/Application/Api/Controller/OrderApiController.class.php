@@ -5,6 +5,7 @@ namespace Api\Controller;
 use Think\Controller\RestController;
 
 require_once 'OrderConst.php';
+require_once 'BDConst.php';
 require_once 'ProductConst.php';
 require_once 'OrderProductConst.php';
 require_once 'ShippingaddressConst.php';
@@ -473,6 +474,55 @@ class OrderApiController extends RestController {
 				$weixin = new Weixin ();
 				$token = $weixin->getshopGlobalAccessToken ();
 				$weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
+				$bdshop =M('bdshop');
+				$bdshops = $bdshop->where("shopid=".$shopid)->select();
+                if(count($bdshops))
+                {
+                	$bd =M('bd');
+                	for($i=0;$i<count($bdshops);$i++)
+                    {
+                        $bddata =  $bd->where("bdid=".$bdshops[$i][BDConst::BDID])->find();
+						if(count($bddata)&&!empty($bddata[BDConst::OPENID]))
+						{
+							$bdtemplate = array (
+									'touser' => $bddata[BDConst::OPENID],
+									'template_id' => C ( 'NEWORDER_TEMPID' ),
+									'topcolor' => "#009900",
+									'data' => array (
+											'first' => array (
+													'value' => urlencode ( $orderNum ),
+													'color' => "#FF0000"
+											),
+											'tradeDateTime' => array (
+													'value' => urlencode ( $current ),
+													'color' => "#009900"
+											),
+											'orderType' => array (
+													'value' => urlencode ( "新的订单" ),
+													'color' => "#009900"
+											),
+											'customerInfo' => array (
+													'value' => urlencode ( $contact ),
+													'color' => "#009900"
+											),
+											'orderItemName' => array (
+													'value' => urlencode ( "发货地址&配送时间" )
+											),
+											'orderItemData' => array (
+													'value' => urlencode ( $address ),
+													'color' => "#009900"
+											),
+											'remark' => array (
+													'value' => urlencode ( "\\n信息来自树窝小店" ),
+													'color' => "#cccccc"
+											)
+									)
+							);
+							$token = $weixin->getshopGlobalAccessToken ();
+							$weixin->sendtemplatemsg ( urldecode ( json_encode ( $bdtemplate ) ), $token );
+						}
+                    }
+                 }
 			}
 		}
 		
