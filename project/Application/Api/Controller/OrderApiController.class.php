@@ -647,7 +647,7 @@ class OrderApiController extends RestController {
 							$bdtemplate = array (
 									'touser' => trim ( $bddata [BDConst::OPENID]),
 									'template_id' => C ( 'BDORDERSTATUS_TEMPID' ),
-									'topcolor' => "#FF0000",
+									'topcolor' => "#0000CD",
 									'data' => array (
 											'first' => array (
 													'value' => urlencode ( $msg ),
