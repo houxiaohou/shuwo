@@ -308,11 +308,20 @@ class OrderApiController extends RestController {
 						$data_order_product [$j] ['realprice'] = $orderproductdata [$j] [OrderProductConst::REALPRICE];
 						$data_order_product [$j] ['realweight'] = $orderproductdata [$j] [OrderProductConst::REALWEIGHT];
 						$where_product [ProductConst::PRODUCTID] = $orderproductdata [$j] [OrderProductConst::PRODUCTID];
-						$productdata = $product->where ( $where_product )->field ( 'productname,unit,attribute,unitweight' )->find ();
+						$productdata = $product->where ( $where_product )->field ( 'productname,unit,attribute,unitweight,price,discount' )->find ();
 						$data_order_product [$j] ['productname'] = $productdata ['productname'];
+						$data_order_product [$j] ['price'] = $productdata ['price'];
 						$data_order_product [$j] ['unit'] = $productdata ['unit'];
 						$data_order_product [$j] ['attribute'] = $productdata ['attribute'];
 						$data_order_product [$j] ['unitweight'] = $productdata ['unitweight'];
+						if(intval($data_order_product [$j] ['discount']))
+						{
+							$data_order_product [$j] ['discount'] = $productdata ['discount'];
+						}
+						else
+						{
+							$data_order_product [$j] ['discount'] = $productdata ['price'];
+						}
 					}
 				}
 				$data [$i] ['productdetail'] = $data_order_product;
