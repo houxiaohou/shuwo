@@ -45,6 +45,9 @@ class CategorypicApiController extends RestController {
 	}
 	//根据CATEGORIID 查询对应的信息
 	public function getcategorypicbycategoryid() {
+	    $authorize = new Authorize ();
+	    $auid = $authorize->Filter ( 'admin,shop' );
+	    if ($auid) {
 	    $category = M ( "categorypic" );
 	    $categoryid = intval ( I ( 'get.id', 0 ) );
 	    if (! $categoryid) {
@@ -56,5 +59,9 @@ class CategorypicApiController extends RestController {
 	        $data = [ ];
 	    }
 	    $this->response ( $data, "json" );
+	    }else{
+	        $message ["msg"] = "Unauthorized";
+	        $this->response ( $message, 'json', '401' );
+	    }
 	}
 }
