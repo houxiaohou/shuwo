@@ -64,4 +64,25 @@ class CategorypicApiController extends RestController {
 	        $this->response ( $message, 'json', '401' );
 	    }
 	}
+	//更新
+	public function updatecategorypic(){
+	    $authorize = new Authorize ();
+	    $auid = $authorize->Filter ( 'admin,shop' );
+	    if ($auid) {
+	        $category = M ( 'categorypic' );
+	        $id = intval ( I ( 'get.id', 0 ) );
+	        $imgurl = I('post.imgurl');
+	        $des = I('post.des');
+	        if(!empty($id) && !empty($imgurl) && !empty($des)){
+	            $data[CategorypicConst::ID] = $id;
+	            $data[CategorypicConst::IMGURL] = $imgurl;
+	            $data[CategorypicConst::DES] = $des;
+	            $data = $category->save ( $data );
+	            $this->response ( $data, "json" );
+	        }
+	    } else {
+	        $message ["msg"] = "Unauthorized";
+	        $this->response ( $message, 'json', '401' );
+	    }
+	}
 }

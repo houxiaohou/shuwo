@@ -68,10 +68,9 @@ return array(
 		array('bdid/:bdid\d/shopid/:shopid\d','BDApi/deletebdshop','',array('method'=>'DELETE')),//删除bdshop
 		
         //CATEGORYPIC URL配置
-        array('categorypic','CategorypicApi/addcategorypic','',array('method'=>'POST')),//添加
+        array('categorypic/:id\d','CategorypicApi/updatecategorypic', '', array('method' => 'POST')),//更新
         array('categorypic/:id\d','CategorypicApi/getcategorypicbycategoryid', '', array('method' => 'GET')),//根据GET传的categoryid查询对应的信息
-        array('categorypic/:id\d','CategorypicApi/deletecategorypic','',array('method'=>'DELETE')),//删除
-        
-        
+        array('categorypic/:id\d','CategorypicApi/deletecategorypic','',array('method'=>'DELETE')),//删除        
+        array('categorypic','CategorypicApi/addcategorypic','',array('method'=>'POST')),//添加
 )
 );
