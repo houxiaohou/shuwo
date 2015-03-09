@@ -66,5 +66,8 @@ return array(
 		array('allbds','BDApi/getallbds','',array('method'=>'GET')),//得到所有的BD和店铺
 		array('bd/:id\d','BDApi/deletebd','',array('method'=>'DELETE')),//删除bd	
 		array('bdid/:bdid\d/shopid/:shopid\d','BDApi/deletebdshop','',array('method'=>'DELETE')),//删除bdshop
+		
+       //CATEGORYPIC URL配置
+       array(),
 )
 );

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-03-09 11:07:38
+Date: 2015-03-09 11:20:43
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -97,8 +97,8 @@ DROP TABLE IF EXISTS `categorypic`;
 CREATE TABLE `categorypic` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `categoryid` int(11) NOT NULL DEFAULT '0',
-  `imgurl` varchar(255) NOT NULL,
-  `des` varchar(255) NOT NULL,
+  `imgurl` varchar(255) NOT NULL DEFAULT '',
+  `des` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
