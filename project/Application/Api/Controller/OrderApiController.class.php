@@ -18,11 +18,7 @@ class OrderApiController extends RestController {
 	public function getallorder() {
 		$authorize = new Authorize ();
 		$isAdmin = $authorize->Filter ( "admin" );
-		if (! $isAdmin) {
-			$message ["msg"] = "Unauthorized";
-			$this->response ( $message, 'json', '401' );
-		}
-		
+		if ($isAdmin) {
 		$order = M ( "orders" );
 		$product = M ( "product" );
 		$orderproduct = M ( "orderproduct" );
@@ -30,52 +26,11 @@ class OrderApiController extends RestController {
 		$count = I ( 'get.count' );
 		
 		$orderdata = $order->order ( '-createdtime' )->limit ( $start, $count )->select ();
-		for($i = 0; $i < $count; $i ++) {
-			$data_order_product = [ ];
-			if ($orderdata [$i] [OrderConst::ORDERID] == null) {
-				break;
-			} else {
-				$data [$i] [OrderConst::ORDERID] = $orderdata [$i] [OrderConst::ORDERID];
-				$data [$i] [OrderConst::CREATEDTIME] = $orderdata [$i] [OrderConst::CREATEDTIME];
-				$data [$i] [OrderConst::ORDERSTATUS] = $orderdata [$i] [OrderConst::ORDERSTATUS];
-				$data [$i] [OrderConst::USERNAME] = $orderdata [$i] [OrderConst::USERNAME];
-				$data [$i] [OrderConst::ADDRESS] = $orderdata [$i] [OrderConst::ADDRESS];
-				$data [$i] [OrderConst::PHONE] = $orderdata [$i] [OrderConst::PHONE];
-				$data [$i] [OrderConst::NOTES] = $orderdata [$i] [OrderConst::NOTES];
-				$data [$i] [OrderConst::SHOPID] = $orderdata [$i] [OrderConst::SHOPID];
-				$data [$i] [OrderConst::DLTIME] = $orderdata [$i] [OrderConst::DLTIME];
-				$data [$i] [OrderConst::ISFIRST] = $orderdata [$i] [OrderConst::ISFIRST];
-				
-				if ($orderdata [$i] [OrderConst::RTOTALPRICE] > 0) {
-					$data [$i] ['price'] = $orderdata [$i] [OrderConst::RTOTALPRICE];
-				} else {
-					$data [$i] ['price'] = $orderdata [$i] [OrderConst::TOTALPRICE];
-				}
-				if ($orderdata [$i] [OrderConst::ORDERNOTES] != null) {
-					$data [$i] [OrderConst::ORDERNOTES] = $orderdata [$i] [OrderConst::ORDERNOTES];
-				}
-				$where_order_product [OrderProductConst::ORDERID] = $orderdata [$i] [OrderConst::ORDERID];
-				$orderproductdata = $orderproduct->where ( $where_order_product )->field ( 'id,productid,quantity,realweight,realprice' )->select ();
-				$count_order_product = count ( $orderproductdata );
-				for($j = 0; $j < $count_order_product; $j ++) {
-					$data_order_product [$j] ['orderproductid'] = $orderproductdata [$j] [OrderProductConst::ID];
-					$data_order_product [$j] ['quantity'] = $orderproductdata [$j] [OrderProductConst::QUANTITY];
-					$data_order_product [$j] ['realprice'] = $orderproductdata [$j] [OrderProductConst::REALPRICE];
-					$data_order_product [$j] ['realweight'] = $orderproductdata [$j] [OrderProductConst::REALWEIGHT];
-					$where_product [ProductConst::PRODUCTID] = $orderproductdata [$j] [OrderProductConst::PRODUCTID];
-					$productdata = $product->where ( $where_product )->field ( 'productname,unit,attribute,unitweight' )->find ();
-					$data_order_product [$j] ['productname'] = $productdata ['productname'];
-					$data_order_product [$j] ['unit'] = $productdata ['unit'];
-					$data_order_product [$j] ['attribute'] = $productdata ['attribute'];
-					$data_order_product [$j] ['unitweight'] = $productdata ['unitweight'];
-				}
-			}
-			$data [$i] ['productdetail'] = $data_order_product;
+		$this->orderdetail($orderdata, $orderproduct, $count, $product);
+		}else{
+		    $message ["msg"] = "Unauthorized";
+		    $this->response ( $message, 'json', '401' );
 		}
-		if (! count ( $data )) {
-			$data = [ ];
-		}
-		$this->response ( $data, "json" );
 	}
 	
 	/*
@@ -169,11 +124,11 @@ class OrderApiController extends RestController {
 	 */
 	public function getordersbyuser() {
 		$authorize = new Authorize ();
-		$userid = $authorize->Filter ( 'user' );
+		$userid = 2;
 		if ($userid) {
-			$start = I ( 'get.start', - 1 );
+			$status = I ( 'get.status', - 1 );
+			$start = I ( 'get.start' );
 			$count = I ( 'get.count' );
-			$status = I ( 'get.status' );
 			$order = M ( 'orders' );
 			$orderproduct = M ( 'orderproduct' );
 			$product = M ( 'product' );
@@ -194,52 +149,11 @@ class OrderApiController extends RestController {
 			$orderdata = $order->where ( $where )->order ( '-createdtime' )->limit ( $start, $count )->select ();
 			$data = [ ];
 			if ($orderdata && count ( $orderdata ) > 0) {
-				for($i = 0; $i < $count; $i ++) {
-					$data_order_product = [ ];
-					if ($orderdata [$i] [OrderConst::ORDERID] == null) {
-						break;
-					} else {
-						$data [$i] [OrderConst::ORDERID] = $orderdata [$i] [OrderConst::ORDERID];
-						$data [$i] [OrderConst::CREATEDTIME] = $orderdata [$i] [OrderConst::CREATEDTIME];
-						$data [$i] [OrderConst::ORDERSTATUS] = $orderdata [$i] [OrderConst::ORDERSTATUS];
-						$data [$i] [OrderConst::USERNAME] = $orderdata [$i] [OrderConst::USERNAME];
-						$data [$i] [OrderConst::ADDRESS] = $orderdata [$i] [OrderConst::ADDRESS];
-						$data [$i] [OrderConst::PHONE] = $orderdata [$i] [OrderConst::PHONE];
-						$data [$i] [OrderConst::NOTES] = $orderdata [$i] [OrderConst::NOTES];
-						$data [$i] [OrderConst::SHOPID] = $orderdata [$i] [OrderConst::SHOPID];
-						$data [$i] [OrderConst::ISFIRST] = $orderdata [$i] [OrderConst::ISFIRST];
-						
-						if ($orderdata [$i] [OrderConst::RTOTALPRICE] > 0) {
-							$data [$i] ['price'] = $orderdata [$i] [OrderConst::RTOTALPRICE];
-						} else {
-							$data [$i] ['price'] = $orderdata [$i] [OrderConst::TOTALPRICE];
-						}
-						if ($orderdata [$i] [OrderConst::ORDERNOTES] != null) {
-							$data [$i] [OrderConst::ORDERNOTES] = $orderdata [$i] [OrderConst::ORDERNOTES];
-						}
-						$where_order_product [OrderProductConst::ORDERID] = $orderdata [$i] [OrderConst::ORDERID];
-						$orderproductdata = $orderproduct->where ( $where_order_product )->field ( 'id,productid,quantity,realweight,realprice' )->select ();
-						$count_order_product = count ( $orderproductdata );
-						for($j = 0; $j < $count_order_product; $j ++) {
-							$data_order_product [$j] ['orderproductid'] = $orderproductdata [$j] [OrderProductConst::ID];
-							$data_order_product [$j] ['quantity'] = $orderproductdata [$j] [OrderProductConst::QUANTITY];
-							$data_order_product [$j] ['realprice'] = $orderproductdata [$j] [OrderProductConst::REALPRICE];
-							$data_order_product [$j] ['realweight'] = $orderproductdata [$j] [OrderProductConst::REALWEIGHT];
-							$where_product [ProductConst::PRODUCTID] = $orderproductdata [$j] [OrderProductConst::PRODUCTID];
-							$productdata = $product->where ( $where_product )->field ( 'productname,unit,attribute,unitweight' )->find ();
-							$data_order_product [$j] ['productname'] = $productdata ['productname'];
-							$data_order_product [$j] ['unit'] = $productdata ['unit'];
-							$data_order_product [$j] ['attribute'] = $productdata ['attribute'];
-							$data_order_product [$j] ['unitweight'] = $productdata ['unitweight'];
-						}
-					}
-					$data [$i] ['productdetail'] = $data_order_product;
-				}
-			}
-			$this->response ( $data, 'json' );
+               $this->orderdetail($orderdata, $orderproduct, $count, $product);
 		} else {
 			$message ["msg"] = "Unauthorized";
 			$this->response ( $message, 'json', '401' );
+		  }
 		}
 	}
 	/*
@@ -274,59 +188,7 @@ class OrderApiController extends RestController {
 				}
 			}
 			$orderdata = $order->where ( $where_order )->order ( '-createdtime' )->limit ( $start, $count )->select ();
-			
-			for($i = 0; $i < $count; $i ++) {
-				$data_order_product = [ ];
-				if ($orderdata [$i] [OrderConst::ORDERID] == null) {
-					break;
-				} else {
-					$data [$i] [OrderConst::ORDERID] = $orderdata [$i] [OrderConst::ORDERID];
-					$data [$i] [OrderConst::CREATEDTIME] = $orderdata [$i] [OrderConst::CREATEDTIME];
-					$data [$i] [OrderConst::ORDERSTATUS] = $orderdata [$i] [OrderConst::ORDERSTATUS];
-					$data [$i] [OrderConst::USERNAME] = $orderdata [$i] [OrderConst::USERNAME];
-					$data [$i] [OrderConst::ADDRESS] = $orderdata [$i] [OrderConst::ADDRESS];
-					$data [$i] [OrderConst::PHONE] = $orderdata [$i] [OrderConst::PHONE];
-					$data [$i] [OrderConst::NOTES] = $orderdata [$i] [OrderConst::NOTES];
-					$data [$i] [OrderConst::SHOPID] = $orderdata [$i] [OrderConst::SHOPID];
-					$data [$i] [OrderConst::DLTIME] = $orderdata [$i] [OrderConst::DLTIME];
-					$data [$i] [OrderConst::ISFIRST] = $orderdata [$i] [OrderConst::ISFIRST];
-					
-					if ($orderdata [$i] [OrderConst::RTOTALPRICE] > 0) {
-						$data [$i] ['price'] = $orderdata [$i] [OrderConst::RTOTALPRICE];
-					} else {
-						$data [$i] ['price'] = $orderdata [$i] [OrderConst::TOTALPRICE];
-					}
-					if ($orderdata [$i] [OrderConst::ORDERNOTES] != null) {
-						$data [$i] [OrderConst::ORDERNOTES] = $orderdata [$i] [OrderConst::ORDERNOTES];
-					}
-					$where_order_product [OrderProductConst::ORDERID] = $orderdata [$i] [OrderConst::ORDERID];
-					$orderproductdata = $orderproduct->where ( $where_order_product )->field ( 'id,productid,quantity,realweight,realprice' )->select ();
-					$count2 = count ( $orderproductdata );
-					for($j = 0; $j < $count2; $j ++) {
-						$data_order_product [$j] ['orderproductid'] = $orderproductdata [$j] [OrderProductConst::ID];
-						$data_order_product [$j] ['quantity'] = $orderproductdata [$j] [OrderProductConst::QUANTITY];
-						$data_order_product [$j] ['realprice'] = $orderproductdata [$j] [OrderProductConst::REALPRICE];
-						$data_order_product [$j] ['realweight'] = $orderproductdata [$j] [OrderProductConst::REALWEIGHT];
-						$where_product [ProductConst::PRODUCTID] = $orderproductdata [$j] [OrderProductConst::PRODUCTID];
-						$productdata = $product->where ( $where_product )->field ( 'productname,unit,attribute,unitweight,price,discount' )->find ();
-						$data_order_product [$j] ['productname'] = $productdata ['productname'];
-						$data_order_product [$j] ['price'] = $productdata ['price'];
-						$data_order_product [$j] ['unit'] = $productdata ['unit'];
-						$data_order_product [$j] ['attribute'] = $productdata ['attribute'];
-						$data_order_product [$j] ['unitweight'] = $productdata ['unitweight'];
-						if(intval($data_order_product [$j] ['discount']))
-						{
-							$data_order_product [$j] ['discount'] = $productdata ['discount'];
-						}
-						else
-						{
-							$data_order_product [$j] ['discount'] = $productdata ['price'];
-						}
-					}
-				}
-				$data [$i] ['productdetail'] = $data_order_product;
-			}
-			$this->response ( $data, 'json' );
+			$this->orderdetail($orderdata, $orderproduct, $count, $product);
 		} else {
 			$message ["msg"] = "Unauthorized";
 			$this->response ( $message, 'json', '401' );
@@ -807,5 +669,59 @@ class OrderApiController extends RestController {
 			$data = [ ];
 			$this->response ( $data, 'json' );
 		}
+	}
+	private function orderdetail( $orderdata, $orderproduct,$count,$product){
+	    for($i = 0; $i < $count; $i ++) {
+	        $data_order_product = [ ];
+	        if ($orderdata [$i] [OrderConst::ORDERID] == null) {
+	            break;
+	        } else {
+	            $data [$i] [OrderConst::ORDERID] = $orderdata [$i] [OrderConst::ORDERID];
+	            $data [$i] [OrderConst::CREATEDTIME] = $orderdata [$i] [OrderConst::CREATEDTIME];
+	            $data [$i] [OrderConst::ORDERSTATUS] = $orderdata [$i] [OrderConst::ORDERSTATUS];
+	            $data [$i] [OrderConst::USERNAME] = $orderdata [$i] [OrderConst::USERNAME];
+	            $data [$i] [OrderConst::ADDRESS] = $orderdata [$i] [OrderConst::ADDRESS];
+	            $data [$i] [OrderConst::PHONE] = $orderdata [$i] [OrderConst::PHONE];
+	            $data [$i] [OrderConst::NOTES] = $orderdata [$i] [OrderConst::NOTES];
+	            $data [$i] [OrderConst::SHOPID] = $orderdata [$i] [OrderConst::SHOPID];
+	            $data [$i] [OrderConst::DLTIME] = $orderdata [$i] [OrderConst::DLTIME];
+	            $data [$i] [OrderConst::ISFIRST] = $orderdata [$i] [OrderConst::ISFIRST];
+	
+	            if ($orderdata [$i] [OrderConst::RTOTALPRICE] > 0) {
+	                $data [$i] ['price'] = $orderdata [$i] [OrderConst::RTOTALPRICE];
+	            } else {
+	                $data [$i] ['price'] = $orderdata [$i] [OrderConst::TOTALPRICE];
+	            }
+	            if ($orderdata [$i] [OrderConst::ORDERNOTES] != null) {
+	                $data [$i] [OrderConst::ORDERNOTES] = $orderdata [$i] [OrderConst::ORDERNOTES];
+	            }
+	            $where_order_product [OrderProductConst::ORDERID] = $orderdata [$i] [OrderConst::ORDERID];
+	            $orderproductdata = $orderproduct->where ( $where_order_product )->field ( 'id,productid,quantity,realweight,realprice' )->select ();
+	            $count2 = count ( $orderproductdata );
+	            for($j = 0; $j < $count2; $j ++) {
+	                $data_order_product [$j] ['orderproductid'] = $orderproductdata [$j] [OrderProductConst::ID];
+	                $data_order_product [$j] ['quantity'] = $orderproductdata [$j] [OrderProductConst::QUANTITY];
+	                $data_order_product [$j] ['realprice'] = $orderproductdata [$j] [OrderProductConst::REALPRICE];
+	                $data_order_product [$j] ['realweight'] = $orderproductdata [$j] [OrderProductConst::REALWEIGHT];
+	                $where_product [ProductConst::PRODUCTID] = $orderproductdata [$j] [OrderProductConst::PRODUCTID];
+	                $productdata = $product->where ( $where_product )->field ( 'productname,unit,attribute,unitweight,price,discount' )->find ();
+	                $data_order_product [$j] ['productname'] = $productdata ['productname'];
+	                $data_order_product [$j] ['price'] = $productdata ['price'];
+	                $data_order_product [$j] ['unit'] = $productdata ['unit'];
+	                $data_order_product [$j] ['attribute'] = $productdata ['attribute'];
+	                $data_order_product [$j] ['unitweight'] = $productdata ['unitweight'];
+	                if(intval($data_order_product [$j] ['discount']))
+	                {
+	                    $data_order_product [$j] ['discount'] = $productdata ['discount'];
+	                }
+	                else
+	                {
+	                    $data_order_product [$j] ['discount'] = $productdata ['price'];
+	                }
+	            }
+	        }
+	        $data [$i] ['productdetail'] = $data_order_product;
+	    }
+	    $this->response ( $data, 'json' );
 	}
 }
