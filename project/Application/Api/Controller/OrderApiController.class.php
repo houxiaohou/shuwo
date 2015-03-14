@@ -41,8 +41,8 @@ class OrderApiController extends RestController {
 		$product = M ( 'product' );
 		$orderproduct = M ( 'orderproduct' );
 		
-		$orderid = I ( 'get.id', 0 );
-		$where [OrderConst::ORDERID] = $orderid;
+		$id = I ( 'get.id', 0 );
+		$where [OrderConst::ORDERID] = $id;
 		$orderdata = $order->where ( $where )->find ();
 		
 		$authorize = new Authorize ();
@@ -58,7 +58,7 @@ class OrderApiController extends RestController {
 			}
 		}
 		
-		if ($orderid) {
+		if ($id) {
 			if ($orderdata != null) {
 				$data [OrderConst::ORDERID] = $orderdata [OrderConst::ORDERID];
 				$data [OrderConst::CREATEDTIME] = $orderdata [OrderConst::CREATEDTIME];
@@ -106,9 +106,9 @@ class OrderApiController extends RestController {
 	 */
 	// public function getorderbyshopid(){
 	// $order = M('order');
-	// $orderid = intval(I('get.id',0));
-	// if ($orderid){
-	// $where[OrderConst::SHOPID] =$orderid;
+	// $id = intval(I('get.id',0));
+	// if ($id){
+	// $where[OrderConst::SHOPID] =$id;
 	// $data = $order->where($where)->select();
 	// if (!count($data)){
 	// $data = [];
@@ -199,10 +199,10 @@ class OrderApiController extends RestController {
 	 * 删除订单
 	 */
 	public function deleteorder() {
-		$orderid = intval ( I ( 'get.id', 0 ) );
-		if ($orderid) {
+		$id = intval ( I ( 'get.id', 0 ) );
+		if ($id) {
 			$order = M ( "orders" );
-			$where [OrderConst::ORDERID] = $orderid;
+			$where [OrderConst::ORDERID] = $id;
 			$order->where ( $where )->delete ();
 		}
 	}
@@ -211,7 +211,6 @@ class OrderApiController extends RestController {
 	 * 创建新订单
 	 */
 	public function createorder() {
-	    $weixin = new Weixin ();
 		$order = M ( 'orders' );
 		// 生成16位唯一订单号
 		$orderid = date ( 'Ymd' ) . substr ( implode ( NULL, array_map ( 'ord', str_split ( substr ( uniqid (), 7, 13 ), 1 ) ) ), 0, 8 );
@@ -300,16 +299,50 @@ class OrderApiController extends RestController {
 		$shopid = intval ( $data [OrderConst::SHOPID] );
 		if ($shopid) {
 			$user = M ( "user" );
-			$bddata = $user->where ( 'shopid=' . $shopid )->find ();
+			$userinfo = $user->where ( 'shopid=' . $shopid )->find ();
 			$current = date ( 'y年m月d日 H:i' );
 			$contact = $data [OrderConst::USERNAME] . " 电话" . $data [OrderConst::PHONE];
 			$address = "发货地址: " . $data [OrderConst::ADDRESS] . "   配送时间: " . $data [OrderConst::DLTIME];
 			$orderNum = "订单编号：" . $orderid;
-			$url = "http://www.shuwow.com/Home/Index/shop";
-			$msgstr = '新的订单';
-			if (count ( $bddata ) && ! empty ( $bddata ["openid"] )) {
-			    $this->weixinmain($weixin, $bddata, $url, $orderNum, $current, $msgstr, $contact, $address);
-
+			if (count ( $userinfo ) && ! empty ( $userinfo ["openid"] )) {
+				$template = array (
+						'touser' => $userinfo ["openid"],
+						'template_id' => C ( 'NEWORDER_TEMPID' ),
+						'url' => "http://www.shuwow.com/Home/Index/shop",
+						'topcolor' => "#009900",
+						'data' => array (
+								'first' => array (
+										'value' => urlencode ( $orderNum ),
+										'color' => "#FF0000" 
+								),
+								'tradeDateTime' => array (
+										'value' => urlencode ( $current ),
+										'color' => "#009900" 
+								),
+								'orderType' => array (
+										'value' => urlencode ( "新的订单" ),
+										'color' => "#009900" 
+								),
+								'customerInfo' => array (
+										'value' => urlencode ( $contact ),
+										'color' => "#009900" 
+								),
+								'orderItemName' => array (
+										'value' => urlencode ( "发货地址&配送时间" ) 
+								),
+								'orderItemData' => array (
+										'value' => urlencode ( $address ),
+										'color' => "#009900" 
+								),
+								'remark' => array (
+										'value' => urlencode ( "\\n信息来自树窝小店" ),
+										'color' => "#cccccc" 
+								) 
+						) 
+				);
+				$weixin = new Weixin ();
+				$token = $weixin->getshopGlobalAccessToken ();
+				$weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
 				
 				
 				//通知BD
@@ -323,8 +356,42 @@ class OrderApiController extends RestController {
 						$bddata = $bd->where ( "bdid=" . $bdshops [$i] [BDConst::BDID] )->find ();
 						if (count ( $bddata ) && ! empty ( $bddata [BDConst::OPENID] )) {
 							$msgstr = $shopname."收到新的订单";
-							$url = '';
-							$this->weixinmain($weixin, $bddata, $url, $orderNum, $current, $msgstr, $contact, $address);
+							$bdtemplate = array (
+									'touser' => $bddata [BDConst::OPENID],
+									'template_id' => C ( 'NEWORDER_TEMPID' ),
+									'topcolor' => "#009900",
+									'data' => array (
+											'first' => array (
+													'value' => urlencode ( $orderNum ),
+													'color' => "#FF0000" 
+											),
+											'tradeDateTime' => array (
+													'value' => urlencode ( $current ),
+													'color' => "#009900" 
+											),
+											'orderType' => array (
+													'value' => urlencode ( $msgstr ),
+													'color' => "#FF0000" 
+											),
+											'customerInfo' => array (
+													'value' => urlencode ( $contact ),
+													'color' => "#009900" 
+											),
+											'orderItemName' => array (
+													'value' => urlencode ( "发货地址&配送时间" ) 
+											),
+											'orderItemData' => array (
+													'value' => urlencode ( $address ),
+													'color' => "#009900" 
+											),
+											'remark' => array (
+													'value' => urlencode ( "\\n信息来自树窝小店" ),
+													'color' => "#cccccc" 
+											) 
+									) 
+							);
+							$token = $weixin->getshopGlobalAccessToken ();
+							$weixin->sendtemplatemsg ( urldecode ( json_encode ( $bdtemplate ) ), $token );
 						}
 					}
 				}
@@ -395,14 +462,39 @@ class OrderApiController extends RestController {
 			$userid = $order->where ( $where4 )->getField ( "userid" );
 			if (intval ( $userid )) {
 				$user = M ( "user" );
-				$bddata = $user->where ( 'userid=' . $userid )->find ();
-				if (count ( $bddata ) && ! empty ( $bddata ['openid'] )) {
+				$userinfo = $user->where ( 'userid=' . $userid )->find ();
+				if (count ( $userinfo ) && ! empty ( $userinfo ['openid'] )) {
 					$current = date ( 'y年m月d日H:i' );
 					$msg = "您所购买的水果,商家已于" . $current . "称重";
 					$realtotal = $order->where ( $where4 )->getField ( 'rtotalprice' );
 					$totalprice = "实际价格:" . $realtotal . "元";
-					if (count ( $bddata ) && ! empty ( $bddata ["openid"] )) {
-					    $this->weixintop($weixin,$bddata, $msg, $orderid, $totalprice, $totalprice);
+					if (count ( $userinfo ) && ! empty ( $userinfo ["openid"] )) {
+						$template = array (
+								'touser' => trim ( $userinfo ["openid"] ),
+								'template_id' => C ( 'ORDERSTATUS_TEMPID' ),
+								'url' => "http://www.shuwow.com/Home/Index/index/#/order",
+								'topcolor' => "#009900",
+								'data' => array (
+										'first' => array (
+												'value' => urlencode ( $msg ),
+												'color' => "#FF0000" 
+										),
+										'OrderSn' => array (
+												'value' => urlencode ( $orderid ),
+												'color' => "#009900" 
+										),
+										'OrderStatus' => array (
+												'value' => urlencode ( $totalprice ),
+												'color' => "#009900" 
+										),
+										'remark' => array (
+												'value' => urlencode ( "\\n信息来自树窝小店" ),
+												'color' => "#cccccc" 
+										) 
+								) 
+						);
+						$token = $weixin->getusersGlobalAccessToken ();
+						$weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
 					}
 				}
 			}
@@ -423,8 +515,31 @@ class OrderApiController extends RestController {
 							$msg = $shopname."已于" . $current . "确认订单";
 							$realtotal = $order->where ( $where4 )->getField ( 'rtotalprice' );
 							$totalprice = "实际价格:" . $realtotal . "元";
-							$topcolor = "#0000CD";
-							$this->weixindetail($weixin,$topcolor,$bddata, $msg, $orderid, $totalprice);
+							$bdtemplate = array (
+									'touser' => trim ( $bddata [BDConst::OPENID]),
+									'template_id' => C ( 'BDORDERSTATUS_TEMPID' ),
+									'topcolor' => "#0000CD",
+									'data' => array (
+											'first' => array (
+													'value' => urlencode ( $msg ),
+													'color' => "#FF0000" 
+											),
+											'OrderSn' => array (
+													'value' => urlencode ( $orderid ),
+													'color' => "#009900" 
+											),
+											'OrderStatus' => array (
+													'value' => urlencode ( $totalprice ),
+													'color' => "#009900" 
+											),
+											'remark' => array (
+													'value' => urlencode ( "\\n信息来自树窝小店" ),
+													'color' => "#cccccc" 
+											) 
+									) 
+							);
+							$token = $weixin->getshopGlobalAccessToken ();
+							$weixin->sendtemplatemsg ( urldecode ( json_encode ( $bdtemplate ) ), $token );
 						}
 					}
 				}
@@ -435,9 +550,8 @@ class OrderApiController extends RestController {
 	 * 撤销订单
 	 */
 	public function cancelorder() {
-	    $weixin = new Weixin ();
 		$order = M ( 'orders' );
-		$orderid = I ( 'post.id', 0 );
+		$id = I ( 'post.id', 0 );
 		$ordernotes = I ( 'post.ordernotes', '' );
 		$authorize = new Authorize ();
 		$auid = $authorize->Filter ( "admin,shop" );
@@ -446,16 +560,16 @@ class OrderApiController extends RestController {
 			$this->response ( $message, 'json', '401' );
 		} else {
 			if (intval ( $auid )) {
-				if ($auid != $order->where ( "orderid=" . $orderid )->getField ( "shopid" )) {
+				if ($auid != $order->where ( "orderid=" . $id )->getField ( "shopid" )) {
 					$message ["msg"] = "Unauthorized";
 					$this->response ( $message, 'json', '401' );
 				}
 			}
 		}
 		
-		if ($orderid) {
-			if ($order->where ( "orderid=" . $orderid )->setField ( "orderstatus", 2 ) && $order->where ( "orderid=" . $orderid )->setField ( "ordernotes", $ordernotes )) {
-				$userid = $order->where ( "orderid=" . $orderid )->getField ( "userid" );
+		if ($id) {
+			if ($order->where ( "orderid=" . $id )->setField ( "orderstatus", 2 ) && $order->where ( "orderid=" . $id )->setField ( "ordernotes", $ordernotes )) {
+				$userid = $order->where ( "orderid=" . $id )->getField ( "userid" );
 				if (intval ( $userid )) {
 					$user = M ( "user" );
 					$phone = '暂无';
@@ -467,21 +581,47 @@ class OrderApiController extends RestController {
 						$shopname = $shop ['spn'];
 						$phone = $shop ['phone'];
 					}
-					$bddata = $user->where ( 'userid=' . $userid )->find ();
+					$userinfo = $user->where ( 'userid=' . $userid )->find ();
 					
-					if (count ( $bddata ) && ! empty ( $bddata ['openid'] )) {
+					if (count ( $userinfo ) && ! empty ( $userinfo ['openid'] )) {
 						$current = date ( 'y年m月d日H:i' );
 						$msg = $shopname . "已于" . $current . "取消订单";
-						$totalprice = "订单取消原因:" . $ordernotes . " 商家电话:" . $phone;
-						if (count ( $bddata ) && ! empty ( $bddata ["openid"] )) {
-						    $this->weixintop($weixin,$bddata, $msg, $orderid, $totalprice, $totalprice);
+						$errormsg = "订单取消原因:" . $ordernotes . " 商家电话:" . $phone;
+						if (count ( $userinfo ) && ! empty ( $userinfo ["openid"] )) {
+							$template = array (
+									'touser' => trim ( $userinfo ["openid"] ),
+									'template_id' => C ( 'ORDERSTATUS_TEMPID' ),
+									'url' => "http://www.shuwow.com/Home/Index/index/#/order",
+									'topcolor' => "#009900",
+									'data' => array (
+											'first' => array (
+													'value' => urlencode ( $msg ),
+													'color' => "#FF0000" 
+											),
+											'OrderSn' => array (
+													'value' => urlencode ( $id ),
+													'color' => "#009900" 
+											),
+											'OrderStatus' => array (
+													'value' => urlencode ( $errormsg ),
+													'color' => "#009900" 
+											),
+											'remark' => array (
+													'value' => urlencode ( "\\n信息来自树窝小店" ),
+													'color' => "#cccccc" 
+											) 
+									) 
+							);
+							$weixin = new Weixin ();
+							$token = $weixin->getusersGlobalAccessToken ();
+							$weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
 						}
 					}
 				}
 			}
 			
 			// 通知BD
-			$shopid = $order->where ( "orderid=" . $orderid )->getField ( "shopid" );
+			$shopid = $order->where ( "orderid=" . $id )->getField ( "shopid" );
 			if ($shopid) {
 				$shop = M ( "shop" );
 				$shopname = $shop->where ( "shopid=" . $shopid )->getField ( "spn" );
@@ -494,9 +634,32 @@ class OrderApiController extends RestController {
 						if (count ( $bddata ) && ! empty ( $bddata [BDConst::OPENID] )) {
 							$current = date ( 'y年m月d日H:i' );
 							$msg = $shopname."已于" . $current . "取消订单";
-							$totalprice = "订单取消原因:" . $ordernotes . " 商家电话:" . $phone;
-							$topcolor = "#FF0000";
-							$this->weixindetail($weixin,$topcolor,$bddata, $msg, $orderid, $totalprice);
+							$errormsg = "订单取消原因:" . $ordernotes . " 商家电话:" . $phone;
+							$bdtemplate = array (
+									'touser' => trim ( $bddata [BDConst::OPENID]),
+									'template_id' => C ( 'BDORDERSTATUS_TEMPID' ),
+									'topcolor' => "#FF0000",
+									'data' => array (
+											'first' => array (
+													'value' => urlencode ( $msg ),
+													'color' => "#FF0000"
+											),
+											'OrderSn' => array (
+													'value' => urlencode ( $id ),
+													'color' => "#009900"
+											),
+											'OrderStatus' => array (
+													'value' => urlencode ( $errormsg ),
+													'color' => "#009900"
+											),
+											'remark' => array (
+													'value' => urlencode ( "\\n信息来自树窝小店" ),
+													'color' => "#cccccc"
+											)
+									)
+							);
+							$token = $weixin->getshopGlobalAccessToken ();
+							$weixin->sendtemplatemsg ( urldecode ( json_encode ( $bdtemplate ) ), $token );
 						}
 					}
 				}
@@ -560,100 +723,5 @@ class OrderApiController extends RestController {
 	        $data [$i] ['productdetail'] = $data_order_product;
 	    }
 	    $this->response ( $data, 'json' );
-	}
-	private function weixindetail($weixin,$topcolor,$bddata,$msg, $orderid,$totalprice){
-	    $template = array (
-	        'touser' => trim ( $bddata [BDConst::OPENID]),
-	        'template_id' => C ( 'BDORDERSTATUS_TEMPID' ),
-	        'topcolor' => $topcolor,
-	        									'data' => array (
-	            											'first' => array (
-	                													'value' => urlencode ( $msg ),
-	                													'color' => "#FF0000"
-	                											),
-	            											'OrderSn' => array (
-	                													'value' => urlencode ( $orderid ),
-	                													'color' => "#009900"
-	                											),
-	            											'OrderStatus' => array (
-	                													'value' => urlencode ( $totalprice ),
-	                													'color' => "#009900"
-	                											),
-	            											'remark' => array (
-	                													'value' => urlencode ( "\\n信息来自树窝小店" ),
-	                													'color' => "#cccccc"
-	                											)
-	            								)
-	    );
-	    $this->weixinfuzhu($weixin, $template);
-	}
-	private function weixintop($weixin,$bddata,$msg,$orderid,$totalprice,$totalprice){
-	    						$template = array (
-	    								'touser' => trim ( $bddata ["openid"] ),
-	    								'template_id' => C ( 'ORDERSTATUS_TEMPID' ),
-	    								'url' => "http://www.shuwow.com/Home/Index/index/#/order",
-	    								'topcolor' => "#009900",
-	    								'data' => array (
-	    										'first' => array (
-	    												'value' => urlencode ( $msg ),
-	    												'color' => "#FF0000"
-	    										),
-	    										'OrderSn' => array (
-	    												'value' => urlencode ( $orderid ),
-	    												'color' => "#009900"
-	    										),
-	    										'OrderStatus' => array (
-	    												'value' => urlencode ( $totalprice ),
-	    												'color' => "#009900"
-	    										),
-	    										'remark' => array (
-	    												'value' => urlencode ( "\\n信息来自树窝小店" ),
-	    												'color' => "#cccccc"
-	    										)
-	    								)
-	    						);
-	    						$this->weixinfuzhu($weixin, $template);
-	}
-	private function weixinmain($weixin,$bddata,$url,$orderNum,$current,$msgstr,$contact,$address){
-	    							$template = array (
-	    									'touser' => $bddata [BDConst::OPENID],
-	    									'template_id' => C ( 'NEWORDER_TEMPID' ),
-	    							        'url' => $url,
-	    									'topcolor' => "#009900",
-	    									'data' => array (
-	    											'first' => array (
-	    													'value' => urlencode ( $orderNum ),
-	    													'color' => "#FF0000"
-	    											),
-	    											'tradeDateTime' => array (
-	    													'value' => urlencode ( $current ),
-	    													'color' => "#009900"
-	    											),
-	    											'orderType' => array (
-	    													'value' => urlencode ( $msgstr ),
-	    													'color' => "#FF0000"
-	    											),
-	    											'customerInfo' => array (
-	    													'value' => urlencode ( $contact ),
-	    													'color' => "#009900"
-	    											),
-	    											'orderItemName' => array (
-	    													'value' => urlencode ( "发货地址&配送时间" )
-	    											),
-	    											'orderItemData' => array (
-	    													'value' => urlencode ( $address ),
-	    													'color' => "#009900"
-	    											),
-	    											'remark' => array (
-	    													'value' => urlencode ( "\\n信息来自树窝小店" ),
-	    													'color' => "#cccccc"
-	    											)
-	    									)
-	    							);
-	    							$this->weixinfuzhu($weixin, $template);
-	}
-	private function weixinfuzhu($weixin,$template){
-	    $token = $weixin->getusersGlobalAccessToken ();
-	    $weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
 	}
 }
