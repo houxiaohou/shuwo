@@ -28,10 +28,6 @@ class BDApiController extends RestController {
 				   {
 				   	   $data[$i]['shops'] = $shops;
 				   }
-				   else 
-				   {
-				   		$data[$i]['shops'] = [];
-				   }
 				}
 			}
 			
@@ -74,6 +70,19 @@ class BDApiController extends RestController {
 				$bdshop->where("bdid=".$bdid.' And shopid='.$shopid)->delete();
 			}
 		} else {
+			$message ["msg"] = "Unauthorized";
+			$this->response ( $message, 'json', '401' );
+		}
+	}
+	public function getshopbybdid(){
+	    $authorize = new Authorize ();
+	    $auid = $authorize->Filter ( 'admin');
+	    $bdid=I('get.id');
+	    if($auid){
+	    $bdshop = M("bdshop");
+	    $shops = $bdshop->join('shop ON bdshop.shopid = shop.shopid')->where("bdid=".$bdid)->field("bdshop.shopid,spn,spadr,simgurl")->select();
+	    $this->response ( $shops, "json" );
+	    }else {
 			$message ["msg"] = "Unauthorized";
 			$this->response ( $message, 'json', '401' );
 		}

@@ -64,6 +64,7 @@ return array(
       	
 		//BD URL配置
 		array('allbds','BDApi/getallbds','',array('method'=>'GET')),//得到所有的BD和店铺
+        array('bd/:id\d','BDApi/getshopbybdid','',array('method'=>'GET')),//根据bdid查询所属店铺信息
 		array('bd/:id\d','BDApi/deletebd','',array('method'=>'DELETE')),//删除bd	
 		array('bdid/:bdid\d/shopid/:shopid\d','BDApi/deletebdshop','',array('method'=>'DELETE')),//删除bdshop
 		
