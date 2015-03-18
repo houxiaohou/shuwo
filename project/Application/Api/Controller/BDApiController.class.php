@@ -80,8 +80,15 @@ class BDApiController extends RestController {
 	    $bdid=I('get.id');
 	    if($auid){
 	    $bdshop = M("bdshop");
-	    $shops = $bdshop->join('shop ON bdshop.shopid = shop.shopid')->where("bdid=".$bdid)->field("bdshop.shopid,spn,spadr,simgurl")->select();
-	    $this->response ( $shops, "json" );
+	    $shops = $bdshop->join('shop ON bdshop.shopid = shop.shopid')->where("bdid =".$bdid)->field("bdshop.shopid,spn,spadr,simgurl")->select();
+	    if($shops){
+	        $data['shops'] = $shops;
+	       }
+	    $unshops = $bdshop->join('shop ON bdshop.shopid = shop.shopid')->where("bdid !=".$bdid)->field("bdshop.shopid,spn,spadr,simgurl")->select();
+	    if($unshops){
+	        $data['unshops'] = $unshops;
+	    }
+	    $this->response ( $data, "json" );
 	    }else {
 			$message ["msg"] = "Unauthorized";
 			$this->response ( $message, 'json', '401' );
