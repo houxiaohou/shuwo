@@ -165,6 +165,8 @@ class ShopApiController extends RestController {
 			$data [ShopConst::CITY] = I ( $post . ShopConst::CITY, '' );
 			$data [ShopConst::PROVINCE] = I ( $post . ShopConst::PROVINCE, '' );
 			$data [ShopConst::DISTRICT] = I ( $post . ShopConst::DISTRICT, '' );
+			$data [ShopConst::ISDESCOUNT] = I ( $post . ShopConst::ISDESCOUNT, '' );
+			$data [ShopConst::DESCOUNT] = I ( $post . ShopConst::DESCOUNT, '' );
 			$lat = $data [ShopConst::LATITUDE] = doubleval ( I ( $post . ShopConst::LATITUDE, 0 ) );
 			$lng = $data [ShopConst::LONGITUDE] = doubleval ( I ( $post . ShopConst::LONGITUDE, 0 ) );
 			if ($lat > 0 & $lng > 0) {
@@ -225,6 +227,12 @@ class ShopApiController extends RestController {
 				}
 				if (I ( $post . ShopConst::DISTRICT ) != null) {
 					$data [ShopConst::DISTRICT] = I ( $post . ShopConst::DISTRICT );
+				}
+				if (I ( $post . ShopConst::ISDESCOUNT ) != null) {
+				    $data [ShopConst::ISDESCOUNT] = I ( $post . ShopConst::ISDESCOUNT );
+				}
+				if (I ( $post . ShopConst::DESCOUNT ) != null) {
+				    $data [ShopConst::DESCOUNT] = I ( $post . ShopConst::DESCOUNT );
 				}
 				if (doubleval ( I ( $post . ShopConst::LATITUDE ) ) & doubleval ( I ( $post . ShopConst::LONGITUDE ) )) {
 					$lat = $data [ShopConst::LATITUDE] = I ( $post . ShopConst::LATITUDE );
@@ -288,6 +296,12 @@ class ShopApiController extends RestController {
 				}
 				if (I ( $post . ShopConst::DISTRICT ) != null) {
 					$data [ShopConst::DISTRICT] = I ( $post . ShopConst::DISTRICT );
+				}
+				if (I ( $post . ShopConst::ISDESCOUNT ) != null) {
+				    $data [ShopConst::ISDESCOUNT] = I ( $post . ShopConst::ISDESCOUNT );
+				}
+				if (I ( $post . ShopConst::DESCOUNT ) != null) {
+				    $data [ShopConst::DESCOUNT] = I ( $post . ShopConst::DESCOUNT );
 				}
 				if (doubleval ( I ( $post . ShopConst::LATITUDE ) ) & doubleval ( I ( $post . ShopConst::LONGITUDE ) )) {
 					$lat = $data [ShopConst::LATITUDE] = I ( $post . ShopConst::LATITUDE );

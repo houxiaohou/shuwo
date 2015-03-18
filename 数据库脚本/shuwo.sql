@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-03-09 11:20:43
+Date: 2015-03-18 11:44:51
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -100,11 +100,14 @@ CREATE TABLE `categorypic` (
   `imgurl` varchar(255) NOT NULL DEFAULT '',
   `des` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of categorypic
 -- ----------------------------
+INSERT INTO `categorypic` VALUES ('1', '1', '123', '用着很方');
+INSERT INTO `categorypic` VALUES ('3', '1', 'adw', '是的');
+INSERT INTO `categorypic` VALUES ('4', '2', '阿斯达', '谁打我');
 
 -- ----------------------------
 -- Table structure for `orderproduct`
@@ -118,11 +121,12 @@ CREATE TABLE `orderproduct` (
   `realweight` int(10) DEFAULT '0',
   `realprice` decimal(10,2) DEFAULT '0.00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of orderproduct
 -- ----------------------------
+INSERT INTO `orderproduct` VALUES ('1', '12', '1', '1', '1', '1.00');
 
 -- ----------------------------
 -- Table structure for `orders`
@@ -240,20 +244,22 @@ CREATE TABLE `shop` (
   `notice` text,
   `dlprice` int(3) DEFAULT '0',
   `isopen` tinyint(2) DEFAULT '0',
+  `isdescount` tinyint(2) DEFAULT '0',
+  `descount` int(3) DEFAULT '0',
   PRIMARY KEY (`shopid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of shop
 -- ----------------------------
-INSERT INTO `shop` VALUES ('1', '', '南翔镇古猗园东北方向民主东街78-80', '', '佳远水果店', '李大牛', '15821691728', '31.300663', '121.323178', 'wtw60f0gdfqret9nn', '上海', '嘉定区', '南翔镇', '本店绝对值得关注', '12', '1');
-INSERT INTO `shop` VALUES ('2', '', '德华社区德华路332号', '', '德华水果店', '李二牛', '13838137911', '31.301179', '121.319461', 'wtw60dnns6dv8rwgd', '上海', '嘉定区', '南翔镇', '相信我们绝对是首选', '10', '1');
-INSERT INTO `shop` VALUES ('3', '', '德园社区德华路456', '', '乡巴佬水果店(德华路店)', '媚娘', '18239260081', '31.300153', '121.317207', 'wtw60dh2xg6j3vjeq', '上海', '嘉定区', '南翔镇', '我们值得信赖', '16', '0');
-INSERT INTO `shop` VALUES ('4', '', '德园社区德园路337号', '', '小郭水果超市', '小郭', '15537618477', '31.300408', '121.315492', 'wtw60d54pfgq83mus', '上海', '嘉定区', '南翔镇', '凸比难保完', '6', '0');
-INSERT INTO `shop` VALUES ('5', '', '翔华社区靠近南翔镇火车站路108号', '', '翔华水果店', '啊翔', '13838137911', '31.291413', '121.313805', 'wtw6086j8w1m70cmr', '上海', '嘉定区', '南翔镇', '维瑞古德', '9', '0');
-INSERT INTO `shop` VALUES ('6', '', '上海市普陀区宜川路街道中远两湾城第一西方向靠近中潭路65号', '', '中潭水果店', '倪三妮', '15000933310', '31.25852', '121.449285', 'wtw3gdkwj6qwcu82n', '上海', '普陀区', '宜川路', '吼吼吼', '8', '1');
-INSERT INTO `shop` VALUES ('7', '', '上海市虹口区曲阳路街道上农一西南方向靠近中山北一路652-3临', '', '胖子精品水果店 ', '胖纸', '13162344458', '31.289122', '121.489802', 'wtw6h840me44zjc3d', '上海', '虹口区', '曲阳路', '胖纸都是潜力股', '8', '1');
-INSERT INTO `shop` VALUES ('8', '', '上海市普陀区桃浦镇李子园六村东方向靠近真南路215', '', '绿缘水果店', '媛媛', '13761902139', '31.27437', '121.402472', 'wtw3ft6d6th7b467m', '上海', '普陀区', '桃浦镇李子园六村', '缘来是你', '12', '1');
+INSERT INTO `shop` VALUES ('1', '', '南翔镇古猗园东北方向民主东街78-80', '', '佳远水果店', '李大牛', '15821691728', '31.300663', '121.323178', 'wtw60f0gdfqret9nn', '上海', '嘉定区', '南翔镇', '本店绝对值得关注', '12', '1', '0', '0');
+INSERT INTO `shop` VALUES ('2', '', '德华社区德华路332号', '', '德华水果店', '李二牛', '13838137911', '31.301179', '121.319461', 'wtw60dnns6dv8rwgd', '上海', '嘉定区', '南翔镇', '相信我们绝对是首选', '10', '1', '0', '0');
+INSERT INTO `shop` VALUES ('3', '', '德园社区德华路456', '', '乡巴佬水果店(德华路店)', '媚娘', '18239260081', '31.300153', '121.317207', 'wtw60dh2xg6j3vjeq', '上海', '嘉定区', '南翔镇', '我们值得信赖', '16', '0', '0', '0');
+INSERT INTO `shop` VALUES ('4', '', '德园社区德园路337号', '', '小郭水果超市', '小郭', '15537618477', '31.300408', '121.315492', 'wtw60d54pfgq83mus', '上海', '嘉定区', '南翔镇', '凸比难保完', '6', '0', '0', '0');
+INSERT INTO `shop` VALUES ('5', '', '翔华社区靠近南翔镇火车站路108号', '', '翔华水果店', '啊翔', '13838137911', '31.291413', '121.313805', 'wtw6086j8w1m70cmr', '上海', '嘉定区', '南翔镇', '维瑞古德', '9', '0', '0', '0');
+INSERT INTO `shop` VALUES ('6', '', '上海市普陀区宜川路街道中远两湾城第一西方向靠近中潭路65号', '', '中潭水果店', '倪三妮', '15000933310', '31.25852', '121.449285', 'wtw3gdkwj6qwcu82n', '上海', '普陀区', '宜川路', '吼吼吼', '8', '1', '0', '0');
+INSERT INTO `shop` VALUES ('7', '', '上海市虹口区曲阳路街道上农一西南方向靠近中山北一路652-3临', '', '胖子精品水果店 ', '胖纸', '13162344458', '31.289122', '121.489802', 'wtw6h840me44zjc3d', '上海', '虹口区', '曲阳路', '胖纸都是潜力股', '8', '1', '0', '0');
+INSERT INTO `shop` VALUES ('8', '', '上海市普陀区桃浦镇李子园六村东方向靠近真南路215', '', '绿缘水果店', '媛媛', '13761902139', '31.27437', '121.402472', 'wtw3ft6d6th7b467m', '上海', '普陀区', '桃浦镇李子园六村', '缘来是你', '12', '1', '0', '0');
 
 -- ----------------------------
 -- Table structure for `user`
