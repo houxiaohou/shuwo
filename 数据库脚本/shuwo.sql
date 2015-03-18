@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-03-18 15:52:16
+Date: 2015-03-18 16:10:43
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -48,12 +48,14 @@ CREATE TABLE `bd` (
   `createdtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `openid` varchar(255) DEFAULT '',
   `headimgurl` varchar(255) DEFAULT '',
+  `bdname` varchar(255) DEFAULT '',
   PRIMARY KEY (`bdid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bd
 -- ----------------------------
+INSERT INTO `bd` VALUES ('1', '', 'dx', '', '', '0', '', '', '', '2015-03-18 16:09:11', '', '', '');
 
 -- ----------------------------
 -- Table structure for bdshop
