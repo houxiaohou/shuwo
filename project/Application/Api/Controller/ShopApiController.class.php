@@ -82,8 +82,8 @@ class ShopApiController extends RestController {
 		$lat = doubleval ( I ( $get . ShopConst::LATITUDE, 0 ) );
 		$lng = doubleval ( I ( $get . ShopConst::LONGITUDE, 0 ) );
 		$start = intval ( I ( 'get.start', 0 ) );
-		$count = intval ( I ( 'get.count', 0 ) );
-		$n = 4;
+		$count = intval ( I ( 'get.count', 3 ) );
+		$n = 3;
 		if ($lat > 0 & $lng > 0 & $start >= 0 & $count > 0) {
 			$geohashcode = $geohash->encode ( $lat, $lng );
 			$likegeo = substr ( $geohashcode, 0, $n );
@@ -165,8 +165,8 @@ class ShopApiController extends RestController {
 			$data [ShopConst::CITY] = I ( $post . ShopConst::CITY, '' );
 			$data [ShopConst::PROVINCE] = I ( $post . ShopConst::PROVINCE, '' );
 			$data [ShopConst::DISTRICT] = I ( $post . ShopConst::DISTRICT, '' );
-			$data [ShopConst::ISDISCOUNT] = I ( $post . ShopConst::ISDESCOUNT, '' );
-			$data [ShopConst::DISCOUNT] = I ( $post . ShopConst::DESCOUNT, '' );
+			$data [ShopConst::ISDISCOUNT] = I ( $post . ShopConst::ISDISCOUNT, '' );
+			$data [ShopConst::DISCOUNT] = I ( $post . ShopConst::DISCOUNT, '' );
 			$lat = $data [ShopConst::LATITUDE] = doubleval ( I ( $post . ShopConst::LATITUDE, 0 ) );
 			$lng = $data [ShopConst::LONGITUDE] = doubleval ( I ( $post . ShopConst::LONGITUDE, 0 ) );
 			if ($lat > 0 & $lng > 0) {
@@ -229,10 +229,10 @@ class ShopApiController extends RestController {
 					$data [ShopConst::DISTRICT] = I ( $post . ShopConst::DISTRICT );
 				}
 				if (I ( $post . ShopConst::ISDISCOUNT ) != null) {
-				    $data [ShopConst::ISDISCOUNT] = I ( $post . ShopConst::ISDESCOUNT );
+				    $data [ShopConst::ISDISCOUNT] = I ( $post . ShopConst::ISDISCOUNT );
 				}
 				if (I ( $post . ShopConst::DISCOUNT ) != null) {
-				    $data [ShopConst::DISCOUNT] = I ( $post . ShopConst::DESCOUNT );
+				    $data [ShopConst::DISCOUNT] = I ( $post . ShopConst::DISCOUNT );
 				}
 				if (doubleval ( I ( $post . ShopConst::LATITUDE ) ) & doubleval ( I ( $post . ShopConst::LONGITUDE ) )) {
 					$lat = $data [ShopConst::LATITUDE] = I ( $post . ShopConst::LATITUDE );
@@ -298,10 +298,10 @@ class ShopApiController extends RestController {
 					$data [ShopConst::DISTRICT] = I ( $post . ShopConst::DISTRICT );
 				}
 				if (I ( $post . ShopConst::ISDISCOUNT ) != null) {
-				    $data [ShopConst::ISDISCOUNT] = I ( $post . ShopConst::ISDESCOUNT );
+				    $data [ShopConst::ISDISCOUNT] = I ( $post . ShopConst::ISDISCOUNT );
 				}
 				if (I ( $post . ShopConst::DISCOUNT ) != null) {
-				    $data [ShopConst::DISCOUNT] = I ( $post . ShopConst::DESCOUNT );
+				    $data [ShopConst::DISCOUNT] = I ( $post . ShopConst::DISCOUNT );
 				}
 				if (doubleval ( I ( $post . ShopConst::LATITUDE ) ) & doubleval ( I ( $post . ShopConst::LONGITUDE ) )) {
 					$lat = $data [ShopConst::LATITUDE] = I ( $post . ShopConst::LATITUDE );
