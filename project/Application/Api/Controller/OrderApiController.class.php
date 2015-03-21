@@ -298,50 +298,60 @@ class OrderApiController extends RestController {
 		$shopid = intval ( $data [OrderConst::SHOPID] );
 		if ($shopid) {
 			$user = M ( "user" );
-			$userinfo = $user->where ( 'shopid=' . $shopid )->find ();
+// 			$userinfo = $user->where ( 'shopid=' . $shopid )->find ();
+			$userinfo = $user->where ( 'shopid=' . $shopid )->select();
+
+				
 			$current = date ( 'y年m月d日 H:i' );
 			$contact = $data [OrderConst::USERNAME] . " 电话" . $data [OrderConst::PHONE];
 			$address = "发货地址: " . $data [OrderConst::ADDRESS] . "   配送时间: " . $data [OrderConst::DLTIME];
 			$orderNum = "订单编号：" . $orderid;
-			if (count ( $userinfo ) && ! empty ( $userinfo ["openid"] )) {
-				$template = array (
-						'touser' => $userinfo ["openid"],
-						'template_id' => C ( 'NEWORDER_TEMPID' ),
-						'url' => "http://www.shuwow.com/Home/Index/shop",
-						'topcolor' => "#009900",
-						'data' => array (
-								'first' => array (
-										'value' => urlencode ( $orderNum ),
-										'color' => "#FF0000" 
-								),
-								'tradeDateTime' => array (
-										'value' => urlencode ( $current ),
-										'color' => "#009900" 
-								),
-								'orderType' => array (
-										'value' => urlencode ( "新的订单" ),
-										'color' => "#009900" 
-								),
-								'customerInfo' => array (
-										'value' => urlencode ( $contact ),
-										'color' => "#009900" 
-								),
-								'orderItemName' => array (
-										'value' => urlencode ( "发货地址&配送时间" ) 
-								),
-								'orderItemData' => array (
-										'value' => urlencode ( $address ),
-										'color' => "#009900" 
-								),
-								'remark' => array (
-										'value' => urlencode ( "\\n信息来自树窝小店" ),
-										'color' => "#cccccc" 
-								) 
-						) 
-				);
-				$weixin = new Weixin ();
-				$token = $weixin->getshopGlobalAccessToken ();
-				$weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
+			
+// 			if (count ( $userinfo ) && ! empty ( $userinfo ["openid"] )) {
+			if (count ( $userinfo )) {	
+				for ($i=0;$i<count($userinfo);$i++){
+					if (! empty( $userinfo[$i]["openid"])){
+							$template = array (
+									'touser' => $userinfo[$i]["openid"],
+									'template_id' => C ( 'NEWORDER_TEMPID' ),
+									'url' => "http://www.shuwow.com/Home/Index/shop",
+									'topcolor' => "#009900",
+									'data' => array (
+											'first' => array (
+													'value' => urlencode ( $orderNum ),
+													'color' => "#FF0000" 
+											),
+											'tradeDateTime' => array (
+													'value' => urlencode ( $current ),
+													'color' => "#009900" 
+											),
+											'orderType' => array (
+													'value' => urlencode ( "新的订单" ),
+													'color' => "#009900" 
+											),
+											'customerInfo' => array (
+													'value' => urlencode ( $contact ),
+													'color' => "#009900" 
+											),
+											'orderItemName' => array (
+													'value' => urlencode ( "发货地址&配送时间" ) 
+											),
+											'orderItemData' => array (
+													'value' => urlencode ( $address ),
+													'color' => "#009900" 
+											),
+											'remark' => array (
+													'value' => urlencode ( "\\n信息来自树窝小店" ),
+													'color' => "#cccccc" 
+											) 
+									) 
+							);
+							$weixin = new Weixin ();
+							$token = $weixin->getshopGlobalAccessToken ();
+							$weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
+					}
+				}
+				
 				
 				
 				//通知BD
@@ -395,6 +405,10 @@ class OrderApiController extends RestController {
 					}
 				}
 			}
+			
+			
+			
+			
 		}
 		
 		$this->response ( $data2, 'json' );

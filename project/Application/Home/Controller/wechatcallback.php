@@ -223,7 +223,7 @@ class wechatcallback {
 				$userInfo = $weixin->getshopbyglobaltoken ( $object->FromUserName, $token );
 				if (count ( $userInfo )) {
 					$user = M ( 'user' );
-					$userid = $user->where ( "shopid=" . $data )->getField ( "userid" );
+// 					$userid = $user->where ( "shopid=" . $data )->getField ( "userid" );
 					$data_user [UserConst::OPENID] = $userInfo [UserConst::OPENID];
 					$data_user [UserConst::UNIOID] = $userInfo [UserConst::UNIOID] ? $userInfo [UserConst::UNIOID] : "";
 					$data_user [UserConst::NICKNAME] = $userInfo [UserConst::NICKNAME];
@@ -236,16 +236,18 @@ class wechatcallback {
 					$data_user [UserConst::PASSWORD] = '';
 					$data_user [UserConst::ROLES] = 1;
 					$data_user [UserConst::SHOPID] = $data;
+					$userid = $user->where ( "openid='" . trim ( $data_user [UserConst::OPENID] ) . "'" )->getField ( "userid" );
 					if ($userid) {
 						$data_user [UserConst::USERID] = $userid;
 						$shopid = $user->where ( "openid='" . trim ( $data_user [UserConst::OPENID] ) . "'" )->getField ( "shopid" );
-						if (! intval ( $shopid )) {
-							if ($user->save ( $data_user ) !== false) {
-								$content = "授权成功";
-							} else {
-								$content = "授权未成功";
-							}
-						} else if (intval ( $shopid ) == intval ( $data )) {
+// 						if (! intval ( $shopid )) {
+// 							if ($user->save ( $data_user ) !== false) {
+// 								$content = "授权成功";
+// 							} else {
+// 								$content = "授权未成功";
+// 							}
+// 						} else 
+							if (intval ( $shopid ) == intval ( $data )) {
 							if ($user->save ( $data_user ) !== false) {
 								$content = "授权成功";
 							} else {
@@ -255,15 +257,15 @@ class wechatcallback {
 							$content = "该账号已被授权。若要取消授权或获得新的授权，请联系商务经理。";
 						}
 					} else {
-						if (! $user->where ( "openid='" . trim ( $data_user [UserConst::OPENID] ) . "'" )->find ()) {
+// 						if (! $user->where ( "openid='" . trim ( $data_user [UserConst::OPENID] ) . "'" )->find ()) {
 							if ($user->add ( $data_user )) {
 								$content = "授权成功";
 							} else {
 								$content = "授权未成功";
 							}
-						} else {
-							$content = "该账号已被授权。若要取消授权或获得新的授权，请联系商务经理。";
-						}
+// 						} else {
+// 							$content = "该账号已被授权。若要取消授权或获得新的授权，请联系商务经理。";
+// 						}
 					}
 				} else {
 					$content = "授权未成功";
