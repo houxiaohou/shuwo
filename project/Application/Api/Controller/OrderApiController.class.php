@@ -525,7 +525,7 @@ class OrderApiController extends RestController {
 						$bddata = $bd->where ( "bdid=" . $bdshops [$i] [BDConst::BDID] )->find ();
 						if (count ( $bddata ) && ! empty ( $bddata [BDConst::OPENID] )) {
 							$current = date ( 'y年m月d日H:i' );
-							$msg = $shopname."已于" . $current . "确认订单";
+							$msg = $shopname."--" . $current . "确认订单";
 							$realtotal = $order->where ( $where4 )->getField ( 'rtotalprice' );
 							$totalprice = "实际价格:" . $realtotal . "元";
 							$bdtemplate = array (
@@ -535,15 +535,15 @@ class OrderApiController extends RestController {
 									'data' => array (
 											'first' => array (
 													'value' => urlencode ( $msg ),
-													'color' => "#FF0000" 
+													'color' => "#0000FF" 
 											),
 											'OrderSn' => array (
 													'value' => urlencode ( $orderid ),
-													'color' => "#009900" 
+													'color' => "#000000" 
 											),
 											'OrderStatus' => array (
 													'value' => urlencode ( $totalprice ),
-													'color' => "#009900" 
+													'color' => "#000000" 
 											),
 											'remark' => array (
 													'value' => urlencode ( "\\n信息来自树窝小店" ),
@@ -646,7 +646,7 @@ class OrderApiController extends RestController {
 						$bddata = $bd->where ( "bdid=" . $bdshops [$i] [BDConst::BDID] )->find ();
 						if (count ( $bddata ) && ! empty ( $bddata [BDConst::OPENID] )) {
 							$current = date ( 'y年m月d日H:i' );
-							$msg = $shopname."已于" . $current . "取消订单";
+							$msg = $shopname."--" . $current . "取消订单";
 							$errormsg = "订单取消原因:" . $ordernotes . " 商家电话:" . $phone;
 							$bdtemplate = array (
 									'touser' => trim ( $bddata [BDConst::OPENID]),
@@ -655,7 +655,7 @@ class OrderApiController extends RestController {
 									'data' => array (
 											'first' => array (
 													'value' => urlencode ( $msg ),
-													'color' => "#FF0000"
+													'color' => "#FFFF00"
 											),
 											'OrderSn' => array (
 													'value' => urlencode ( $id ),
