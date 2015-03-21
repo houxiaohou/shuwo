@@ -20,13 +20,12 @@ class OrderApiController extends RestController {
 		$isAdmin = $authorize->Filter ( "admin" );
 		if ($isAdmin) {
 		$order = M ( "orders" );
-		$product = M ( "product" );
-		$orderproduct = M ( "orderproduct" );
-		$start = I ( 'get.start' );
-		$count = I ( 'get.count' );
+		$start = I ( 'get.start' ,0);
+		$count = I ( 'get.count' ,5);
 		
 		$orderdata = $order->order ( '-createdtime' )->limit ( $start, $count )->select ();
-		$this->orderdetail($orderdata, $orderproduct, $count, $product);
+		$data = $this->orderdetail($orderdata, $count);
+		$this->response($data,'json');
 		}else{
 		    $message ["msg"] = "Unauthorized";
 		    $this->response ( $message, 'json', '401' );
@@ -124,14 +123,13 @@ class OrderApiController extends RestController {
 	 */
 	public function getordersbyuser() {
 		$authorize = new Authorize ();
-		$userid = 2;
+		$userid = $authorize->Filter("user");
 		if ($userid) {
 			$status = I ( 'get.status', - 1 );
-			$start = I ( 'get.start' );
-			$count = I ( 'get.count' );
+			$start = I ( 'get.start',0 );
+			$count = I ( 'get.count',5 );
 			$order = M ( 'orders' );
-			$orderproduct = M ( 'orderproduct' );
-			$product = M ( 'product' );
+
 			
 			$where [OrderConst::USERID] = $userid;
 			if (intval ( $start ) > - 1) {
@@ -149,13 +147,15 @@ class OrderApiController extends RestController {
 			$orderdata = $order->where ( $where )->order ( '-createdtime' )->limit ( $start, $count )->select ();
 			$data = [ ];
 			if ($orderdata && count ( $orderdata ) > 0) {
-               $this->orderdetail($orderdata, $orderproduct, $count, $product);
-		} else {
+               $data = $this->orderdetail($orderdata, $count);
+		      } 
+		     $this->response($data,'json');
+		} 
+		else {
 			$message ["msg"] = "Unauthorized";
 			$this->response ( $message, 'json', '401' );
 		  }
 		}
-	}
 	/*
 	 * 获取当前店铺的订单
 	 */
@@ -172,8 +172,6 @@ class OrderApiController extends RestController {
 			$start = I ( 'get.start' );
 			$count = I ( 'get.count' );
 			$order = M ( 'orders' );
-			$orderproduct = M ( 'orderproduct' );
-			$product = M ( 'product' );
 			
 			$where_order [OrderConst::SHOPID] = $shopid;
 			if (intval ( $status ) > - 1) {
@@ -188,7 +186,8 @@ class OrderApiController extends RestController {
 				}
 			}
 			$orderdata = $order->where ( $where_order )->order ( '-createdtime' )->limit ( $start, $count )->select ();
-			$this->orderdetail($orderdata, $orderproduct, $count, $product);
+			$data = $this->orderdetail($orderdata, $count);
+			$this->response($data,'json');
 		} else {
 			$message ["msg"] = "Unauthorized";
 			$this->response ( $message, 'json', '401' );
@@ -250,12 +249,12 @@ class OrderApiController extends RestController {
 		$totalprice = 0;
 		
 		$orderdetail_json = $_POST ['orderdetail'];
-		$orderdetail = json_decode ( $orderdetail_json, true );
+		$orderdetails = json_decode ( $orderdetail_json, true );
 		
-		$count = count ( $orderdetail );
+		$count = count ( $orderdetails );
 		for($i = 0; $i < $count; $i ++) {
-			$productid = $orderdetail [$i] ['productid'];
-			$quantity = $orderdetail [$i] ['quantity'];
+			$productid = $orderdetails [$i] ['productid'];
+			$quantity = $orderdetails [$i] ['quantity'];
 			
 			$data1 [OrderProductConst::ORDERID] = $orderid;
 			$data1 [OrderProductConst::PRODUCTID] = $productid;
@@ -670,8 +669,12 @@ class OrderApiController extends RestController {
 			$this->response ( $data, 'json' );
 		}
 	}
-	private function orderdetail( $orderdata, $orderproduct,$count,$product){
-	    for($i = 0; $i < $count; $i ++) {
+	private function orderdetail( $orderdata,$count){
+
+		$orderproduct = M ( 'orderproduct' );
+		$product = M ( 'product' );
+		$data=[];
+		for($i = 0; $i < $count; $i ++) {
 	        $data_order_product = [ ];
 	        if ($orderdata [$i] [OrderConst::ORDERID] == null) {
 	            break;
@@ -722,6 +725,6 @@ class OrderApiController extends RestController {
 	        }
 	        $data [$i] ['productdetail'] = $data_order_product;
 	    }
-	    $this->response ( $data, 'json' );
+	    return $data;
 	}
 }
