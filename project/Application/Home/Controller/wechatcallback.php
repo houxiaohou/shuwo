@@ -319,33 +319,31 @@ class wechatcallback {
               $bdshop = M ( 'bdshop' );
               $shops = $bdshop->where ( 'bdid =' . $bdid )->select ();
               $num = count ( $shops );
-             
+              $shopmsg = '';
              if ($num && !empty($bdinfos[BDConst::OPENID])) {
 					$current = date ( 'H:i' );
 					$curdate = date('Y-m-d');
-					$msg = "截至".$current."订单:" ;
-					$shopmsg = '';
+					$msg = "截至".$current."订单" ;
+					$shopinfo = M('shop');
+					$order = M('orders');	
 					for($i = 0; $i < $num; $i ++) {
-						$shopinfo = M('shop');
-						$order = M('orders');
-						$shopname = $shopinfo->where("shopid=".$shops[0]['shopid'])->getField("spn");
+						$shopdata = $shopinfo->where("shopid =".$shops[$i]['shopid'])->find();
 						$totalorders = $order->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND shopid=".$shops[$i]['shopid']);
                         $unorders = $order->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND orderstatus = 0 AND shopid=".$shops[$i]['shopid']);
 						$corders = $order->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND orderstatus = 2 AND shopid=".$shops[$i]['shopid']);
-						$shopmsg = $shopmsg.$shops[$i]['spn'].$msg."\n";
-						$shopmsg = $shopmsg."店铺电话:".$shops[$i]['phone']."\n".
-						$shopmsg = $shopmsg."收到".count($totalorders)."单\n";	
-						$shopmsg = $shopmsg."未确认".count($unorders)."单\n";
-						$mesg ='';
+                        $shopmsg = $shopmsg.$shopdata['spn'].$msg."\n";
+                        $shopmsg = $shopmsg."店铺电话:".$shopdata['phone']."\n";
+                        $shopmsg = $shopmsg."收到".count($totalorders)."单\n";	
+                        $shopmsg = $shopmsg."未确认".count($unorders)."单\n";
+                        $mesg ='';
 						foreach($unorders as $item)
 						{   
 							$mesg = $mesg.$item['orderid']."\n";
 						}
-						$shopmsg = $shopmsg.$msg;
-						$shopmsg = $shopmsg."已取消".count($corders)."单\n\n";
-						
+						$shopmsg = $shopmsg.$mesg;
+                        $shopmsg = $shopmsg."已取消".count($corders)."单\n\n";
 					}	
-					$content =$shopmsg;
+					$content = $shopmsg;
 				}
 				
 			} else {
