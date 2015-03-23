@@ -223,7 +223,7 @@ class wechatcallback {
 				$userInfo = $weixin->getshopbyglobaltoken ( $object->FromUserName, $token );
 				if (count ( $userInfo )) {
 					$user = M ( 'user' );
-// 					$userid = $user->where ( "shopid=" . $data )->getField ( "userid" );
+					// $userid = $user->where ( "shopid=" . $data )->getField ( "userid" );
 					$data_user [UserConst::OPENID] = $userInfo [UserConst::OPENID];
 					$data_user [UserConst::UNIOID] = $userInfo [UserConst::UNIOID] ? $userInfo [UserConst::UNIOID] : "";
 					$data_user [UserConst::NICKNAME] = $userInfo [UserConst::NICKNAME];
@@ -240,14 +240,14 @@ class wechatcallback {
 					if ($userid) {
 						$data_user [UserConst::USERID] = $userid;
 						$shopid = $user->where ( "openid='" . trim ( $data_user [UserConst::OPENID] ) . "'" )->getField ( "shopid" );
-// 						if (! intval ( $shopid )) {
-// 							if ($user->save ( $data_user ) !== false) {
-// 								$content = "授权成功";
-// 							} else {
-// 								$content = "授权未成功";
-// 							}
-// 						} else 
-							if (intval ( $shopid ) == intval ( $data )) {
+						// if (! intval ( $shopid )) {
+						// if ($user->save ( $data_user ) !== false) {
+						// $content = "授权成功";
+						// } else {
+						// $content = "授权未成功";
+						// }
+						// } else
+						if (intval ( $shopid ) == intval ( $data )) {
 							if ($user->save ( $data_user ) !== false) {
 								$content = "授权成功";
 							} else {
@@ -257,15 +257,15 @@ class wechatcallback {
 							$content = "该账号已被授权。若要取消授权或获得新的授权，请联系商务经理。";
 						}
 					} else {
-// 						if (! $user->where ( "openid='" . trim ( $data_user [UserConst::OPENID] ) . "'" )->find ()) {
-							if ($user->add ( $data_user )) {
-								$content = "授权成功";
-							} else {
-								$content = "授权未成功";
-							}
-// 						} else {
-// 							$content = "该账号已被授权。若要取消授权或获得新的授权，请联系商务经理。";
-// 						}
+						// if (! $user->where ( "openid='" . trim ( $data_user [UserConst::OPENID] ) . "'" )->find ()) {
+						if ($user->add ( $data_user )) {
+							$content = "授权成功";
+						} else {
+							$content = "授权未成功";
+						}
+						// } else {
+						// $content = "该账号已被授权。若要取消授权或获得新的授权，请联系商务经理。";
+						// }
 					}
 				} else {
 					$content = "授权未成功";
@@ -308,6 +308,45 @@ class wechatcallback {
 				}
 			} else {
 				$content = "BD授权未成功";
+			}
+		} else if (count ( $strarray ) == 2 && $strarray [0] == 'check' && $strarray [1] == 'orders') {
+			$bd = M ( "bd" );
+			$openid = trim ( $object->FromUserName );
+		    $bdinfos = $bd->where ("openid = '".$openid."'")->find();
+			
+			if (count ( $bdinfos )) {
+              $bdid = $bdinfos [BDConst::BDID];
+              $bdshop = M ( 'bdshop' );
+              $shops = $bdshop->where ( 'bdid =' . $bdid )->select ();
+              $num = count ( $shops );
+             
+             if ($num && !empty($bdinfos[BDConst::OPENID])) {
+					$current = date ( 'H:i' );
+					$curdate = date('Y-m-d');
+					$msg = "截至".$current."订单:" ;
+					$shopmsg = '';
+					for($i = 0; $i < $num; $i ++) {
+						$shopinfo = M('shop');
+						$order = M('orders');
+						$shopname = $shopinfo->where("shopid=".$shops[0]['shopid'])->getField("spn");
+						$totalorders = $order->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND shopid=".$shops[$i]['shopid']);
+                        $unorders = $order->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND orderstatus = 0 AND shopid=".$shops[$i]['shopid']);
+						$corders = $order->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND orderstatus = 2 AND shopid=".$shops[$i]['shopid']);
+						$shopmsg = $shopmsg.$shopname.$msg."\n";
+						$shopmsg = $shopmsg."收到".count($totalorders)."单\n";	
+						$shopmsg = $shopmsg."未确认".count($unorders)."单\n";
+						foreach($unorders as $item)
+						{
+							$shopmsg = $shopmsg."订单号:".$item['orderid']."\n";
+						}
+						$shopmsg = $shopmsg."已取消".count($corders)."单\n\n";
+						
+					}	
+					$content =$shopmsg;
+				}
+				
+			} else {
+				$content = "BD未授权";
 			}
 		} else {
 			$content = "请输入正确的店铺授权码格式 (add+shop+授权码)";
