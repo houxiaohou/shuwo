@@ -336,10 +336,12 @@ class wechatcallback {
 						$shopmsg = $shopmsg."店铺电话:".$shops[$i]['phone']."\n".
 						$shopmsg = $shopmsg."收到".count($totalorders)."单\n";	
 						$shopmsg = $shopmsg."未确认".count($unorders)."单\n";
+						$msg ='';
 						foreach($unorders as $item)
 						{   
-							$shopmsg = $shopmsg.$item['orderid']."\n";
+							$msg = $msg.$item['orderid']."\n";
 						}
+						$shopmsg = $shopmsg.$msg;
 						$shopmsg = $shopmsg."已取消".count($corders)."单\n\n";
 						
 					}	
