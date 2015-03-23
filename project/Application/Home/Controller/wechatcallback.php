@@ -343,9 +343,11 @@ class wechatcallback {
 						$shopmsg = $shopmsg.$mesg;
                         $shopmsg = $shopmsg."已取消".count($corders)."单\n\n";
 					}	
-					$content = $shopmsg;
 				}
-				
+				if(!empty($shopmsg))
+					$content = $shopmsg;
+				else 
+					$content = "暂无内容";
 			} else {
 				$content = "BD未授权";
 			}
