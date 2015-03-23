@@ -333,11 +333,13 @@ class wechatcallback {
                         $unorders = $order->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND orderstatus = 0 AND shopid=".$shops[$i]['shopid']);
 						$corders = $order->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND orderstatus = 2 AND shopid=".$shops[$i]['shopid']);
 						$shopmsg = $shopmsg.$shopname.$msg."\n";
+						$shopmsg = $shopmsg."店铺电话:".$shops[$i]['phone'].
 						$shopmsg = $shopmsg."收到".count($totalorders)."单\n";	
 						$shopmsg = $shopmsg."未确认".count($unorders)."单\n";
+						$shopmsg = $shopmsg."订单号:";
 						foreach($unorders as $item)
-						{
-							$shopmsg = $shopmsg."订单号:".$item['orderid']."\n";
+						{   
+							$shopmsg = $shopmsg.$item['orderid']."\n";
 						}
 						$shopmsg = $shopmsg."已取消".count($corders)."单\n\n";
 						
