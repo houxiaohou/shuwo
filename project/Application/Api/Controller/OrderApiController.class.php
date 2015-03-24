@@ -11,6 +11,7 @@ require_once 'OrderProductConst.php';
 require_once 'ShippingaddressConst.php';
 require_once 'Authorize.php';
 require_once 'Weixin.php';
+require_once 'ShopConst.php';
 class OrderApiController extends RestController {
 	/*
 	 * 查询所有的订单
@@ -211,6 +212,7 @@ class OrderApiController extends RestController {
 	 */
 	public function createorder() {
 		$order = M ( 'orders' );
+		$shop = M('shop');
 		// 生成16位唯一订单号
 		$orderid = date ( 'Ymd' ) . substr ( implode ( NULL, array_map ( 'ord', str_split ( substr ( uniqid (), 7, 13 ), 1 ) ) ), 0, 8 );
 		$data [OrderConst::ORDERID] = $orderid;
@@ -224,11 +226,19 @@ class OrderApiController extends RestController {
 			$orders = M ( 'orders' );
 			if ($orders->where ( "userid = {$userid}" )->find ()) {
 				$data [OrderConst::ISFIRST] = 0;
+				
 			} else {
 				$data [OrderConst::ISFIRST] = 1;
 			}
 		}
 		$data [OrderConst::SHOPID] = I ( 'post.shopid' );
+		
+		$where_shop[ShopConst::SHOPID] = I( 'post.shopid');
+		$shopdetail = $shop->where($where_shop)->find();
+		//获取店铺的优惠信息
+		$shop_isdiscount = $shopdetail[ShopConst::ISDISCOUNT];
+		$shop_discount = $shopdetail[ShopConst::DISCOUNT];
+		
 		// 订单的支付状态默认为0待支付，为1时支付成功，为2时支付失败
 		$data [OrderConst::PAYSTATUS] = 0;
 		$where1 [ShippingaddressConst::SAID] = I ( 'post.said' );
@@ -289,6 +299,11 @@ class OrderApiController extends RestController {
 			$data1 [OrderProductConst::REALPRICE] = $productprice;
 			$orderproduct->add ( $data1 );
 		}
+		if ($data [OrderConst::ISFIRST] == 0 && $shop_isdiscount == 1)
+		{
+			$totalprice -= $shop_discount;
+		}
+		
 		$data [OrderConst::TOTALPRICE] = $totalprice;
 		$order->add ( $data );
 		$data2 ['orderid'] = $orderid;
@@ -355,7 +370,7 @@ class OrderApiController extends RestController {
 				
 				
 				//通知BD
-				$shop = M('shop');
+// 				$shop = M('shop');
 				$shopname = $shop->where("shopid=".$shopid)->getField("spn");
 				$bdshop = M ( 'bdshop' );
 				$bdshops = $bdshop->where ( "shopid=" . $shopid )->select ();
