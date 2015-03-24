@@ -483,7 +483,25 @@ class OrderApiController extends RestController {
 		}
 		// 将真实总价写入对应的order表中的rtotalprice字段中
 		$order = M ( 'orders' );
+		$shop = M('shop');
 		$where4 [OrderConst::ORDERID] = $orderid;
+		
+		//获取订单优惠信息
+		$shop_id = $order->where($where4)->getField('shopid');
+		$whereshop[ShopConst::SHOPID] = $shop_id;
+		$shopdetail = $shop->where($whereshop)->find();
+		$shop_isdiscount = $shopdetail[ShopConst::ISDISCOUNT];
+		$shop_discount = $shopdetail[ShopConst::DISCOUNT];
+		
+		//获取是否首购
+		$order_isfirst = $order->where($where4)->getField('isfirst');
+		
+		if ($order_isfirst == 0 && $shop_isdiscount == 1){
+			$rtotalprice -= $shop_isdiscount;
+		}
+		
+		
+		
 		$order->where ( $where4 )->setField ( 'rtotalprice', $rtotalprice );
 		// 将订单状态由0变成1(订单确认)
 		if ($order->where ( $where4 )->setField ( 'orderstatus', 1 )) {
