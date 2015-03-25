@@ -25,7 +25,7 @@ class Weixin
     public  function getshopGlobalAccessToken()
     {
     	$weixinshop  = M('weixinshop');
-    	if(time()>intval($weixinshop->where("id ='wxshop'")->getField("expires")))
+    	if(time()>intval($weixinshop->where("id ='wxshop'")->getField("expires")) || empty(($weixinshop->where("id ='wxshop'")->getField("accesstoken"))))
     	{
     		$this->appid = C ( 'SHOP_APPID' );
 	        $this->appsecret = C ( 'SHOP_APPSECRET' );

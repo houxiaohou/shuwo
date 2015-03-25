@@ -309,7 +309,7 @@ class wechatcallback {
 			} else {
 				$content = "BD授权未成功";
 			}
-		} else if (count ( $strarray ) == 2 && $strarray [0] == 'check' && $strarray [1] == 'orders') {
+		} else if (count ( $strarray ) <=3 && $strarray [0] == 'check' && $strarray [1] == 'orders') {
 			$bd = M ( "bd" );
 			$openid = trim ( $object->FromUserName );
 		    $bdinfos = $bd->where ("openid = '".$openid."'")->find();
@@ -324,6 +324,11 @@ class wechatcallback {
 					$current = date ( 'H:i' );
 					$curdate = date('Y-m-d');
 					$msg = "截至".$current."订单" ;
+					if(count ( $strarray )==3&&!empty($strarray [2]) &&$strarray [2]=='last' )
+					{
+						$curdate = $yesterday=date("Y-m-d",strtotime("-1 day"));
+						$msg = "昨日订单";
+					}
 					$shopinfo = M('shop');
 					$order = M('orders');	
 					for($i = 0; $i < $num; $i ++) {
