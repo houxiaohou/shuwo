@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : shuwo
-Source Server Version : 50541
-Source Host           : www.shuwow.com:3306
+Source Server         : localhost_3306
+Source Server Version : 50617
+Source Host           : localhost:3306
 Source Database       : shuwo
 
 Target Server Type    : MYSQL
-Target Server Version : 50541
+Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-03-25 20:48:25
+Date: 2015-03-25 21:37:26
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -136,7 +136,7 @@ CREATE TABLE `orderproduct` (
   `realweight` int(10) DEFAULT '0',
   `realprice` decimal(10,1) DEFAULT '0.0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2054 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2062 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of orderproduct
@@ -1716,20 +1716,28 @@ INSERT INTO `orderproduct` VALUES ('2036', '2015032549101971', '260', '1', '1', 
 INSERT INTO `orderproduct` VALUES ('2037', '2015032549101971', '14', '1', '280', '4.9');
 INSERT INTO `orderproduct` VALUES ('2038', '2015032549101971', '13', '2', '700', '13.7');
 INSERT INTO `orderproduct` VALUES ('2039', '2015032597549949', '418', '9', '0', '32.3');
-INSERT INTO `orderproduct` VALUES ('2040', '2015032597529753', '302', '2', '0', '5.0');
-INSERT INTO `orderproduct` VALUES ('2041', '2015032597529753', '350', '3', '0', '3.4');
-INSERT INTO `orderproduct` VALUES ('2042', '2015032597529753', '300', '2', '0', '12.8');
-INSERT INTO `orderproduct` VALUES ('2043', '2015032597529753', '290', '2', '0', '5.8');
-INSERT INTO `orderproduct` VALUES ('2044', '2015032597529753', '291', '1', '0', '3.5');
-INSERT INTO `orderproduct` VALUES ('2045', '2015032597529753', '319', '2', '0', '8.8');
-INSERT INTO `orderproduct` VALUES ('2046', '2015032597529753', '359', '1', '0', '4.4');
+INSERT INTO `orderproduct` VALUES ('2040', '2015032597529753', '302', '2', '500', '5.0');
+INSERT INTO `orderproduct` VALUES ('2041', '2015032597529753', '350', '3', '1160', '8.8');
+INSERT INTO `orderproduct` VALUES ('2042', '2015032597529753', '300', '2', '500', '12.8');
+INSERT INTO `orderproduct` VALUES ('2043', '2015032597529753', '290', '2', '500', '5.8');
+INSERT INTO `orderproduct` VALUES ('2044', '2015032597529753', '291', '1', '1', '3.5');
+INSERT INTO `orderproduct` VALUES ('2045', '2015032597529753', '319', '2', '500', '8.8');
+INSERT INTO `orderproduct` VALUES ('2046', '2015032597529753', '359', '1', '250', '4.4');
 INSERT INTO `orderproduct` VALUES ('2047', '2015032510053489', '418', '9', '0', '32.3');
 INSERT INTO `orderproduct` VALUES ('2048', '2015032597525699', '45', '1', '250', '6.9');
 INSERT INTO `orderproduct` VALUES ('2049', '2015032597525699', '40', '1', '750', '28.2');
 INSERT INTO `orderproduct` VALUES ('2050', '2015032597525699', '38', '1', '130', '3.1');
-INSERT INTO `orderproduct` VALUES ('2051', '2015032550975057', '436', '12', '0', '32.0');
-INSERT INTO `orderproduct` VALUES ('2052', '2015032554541025', '417', '12', '0', '43.1');
+INSERT INTO `orderproduct` VALUES ('2051', '2015032550975057', '436', '12', '2760', '32.0');
+INSERT INTO `orderproduct` VALUES ('2052', '2015032554541025', '417', '12', '2760', '43.1');
 INSERT INTO `orderproduct` VALUES ('2053', '2015032549489753', '280', '5', '1250', '32.0');
+INSERT INTO `orderproduct` VALUES ('2054', '2015032555515254', '280', '5', '1250', '32.0');
+INSERT INTO `orderproduct` VALUES ('2055', '2015032553535055', '449', '3', '1800', '49.7');
+INSERT INTO `orderproduct` VALUES ('2056', '2015032550514948', '14', '1', '280', '4.9');
+INSERT INTO `orderproduct` VALUES ('2057', '2015032550514948', '18', '1', '240', '4.7');
+INSERT INTO `orderproduct` VALUES ('2058', '2015032550514948', '19', '7', '1050', '22.7');
+INSERT INTO `orderproduct` VALUES ('2059', '2015032599579910', '446', '3', '3', '30.0');
+INSERT INTO `orderproduct` VALUES ('2060', '2015032553559755', '260', '1', '0', '15.0');
+INSERT INTO `orderproduct` VALUES ('2061', '2015032553559755', '13', '5', '0', '34.3');
 
 -- ----------------------------
 -- Table structure for `orders`
@@ -2270,7 +2278,7 @@ INSERT INTO `orders` VALUES ('2015032499491024', '1', '754', '18', '0', '38.1', 
 INSERT INTO `orders` VALUES ('2015032499515451', '1', '433', '12', '0', '32.5', '上海南翔明洞公寓2号808', '18817274743', '2015-03-24 20:15:40', '32.5', '立即送出', '', '张', '', '0');
 INSERT INTO `orders` VALUES ('2015032499975457', '1', '421', '12', '0', '30.3', '民主街86号', '18918614606', '2015-03-24 22:23:56', '30.3', '立即送出', '', '赵', '', '0');
 INSERT INTO `orders` VALUES ('2015032510048971', '1', '797', '12', '0', '36.0', '翔华新村29号402', '18916178349', '2015-03-25 17:31:57', '36.0', '立即送出', '', '王', '', '1');
-INSERT INTO `orders` VALUES ('2015032510053489', '0', '819', '18', '0', '32.3', '铜川路2060弄2号', '15801865390', '2015-03-25 20:26:53', '0.0', '立即送出', '', '许蓉', '', '1');
+INSERT INTO `orders` VALUES ('2015032510053489', '1', '819', '18', '0', '32.3', '铜川路2060弄2号', '15801865390', '2015-03-25 20:26:53', '32.3', '立即送出', '', '许蓉', '', '1');
 INSERT INTO `orders` VALUES ('2015032510055100', '1', '454', '12', '0', '30.8', '宝翔路191弄7号楼510', '13611807231', '2015-03-25 19:41:01', '30.8', '立即送出', '', '路先生', '', '0');
 INSERT INTO `orders` VALUES ('2015032510097551', '1', '365', '14', '0', '43.1', '南翔镇佳通路31号5号楼909', '13764431001', '2015-03-25 10:06:53', '42.5', '立即送出', '', '吴婷婷', '', '0');
 INSERT INTO `orders` VALUES ('2015032510149529', '2', '42', '15', '0', '30.1', '日本', '15502187076', '2015-03-25 12:24:30', '0.0', '立即送出', '', '王立', '其他', '0');
@@ -2289,10 +2297,12 @@ INSERT INTO `orders` VALUES ('2015032549515399', '1', '782', '12', '0', '35.5', 
 INSERT INTO `orders` VALUES ('2015032549555554', '1', '358', '12', '0', '31.9', '民主东街民东公寓27弄', '13311669936', '2015-03-25 19:34:57', '31.9', '立即送出', '', '廖小姐', '', '0');
 INSERT INTO `orders` VALUES ('2015032550485748', '1', '777', '18', '0', '31.8', '·真光七街坊', '13818733618', '2015-03-25 12:32:18', '31.8', '立即送出', '', 'i老师', '', '1');
 INSERT INTO `orders` VALUES ('2015032550505510', '1', '767', '12', '0', '31.2', '南翔镇沪宜公路185号', '18667193160', '2015-03-25 10:13:38', '31.2', '立即送出', '', '孙鹏', '', '1');
+INSERT INTO `orders` VALUES ('2015032550514948', '1', '826', '12', '0', '32.3', '南翔镇高平羊肉官', '13818128486', '2015-03-25 21:01:38', '32.3', '立即送出', '', '王', '', '1');
 INSERT INTO `orders` VALUES ('2015032550515553', '1', '444', '16', '0', '44.8', '桃浦五村18号401', '15821374702', '2015-03-25 19:50:42', '44.8', '立即送出', '', '李', '', '0');
+INSERT INTO `orders` VALUES ('2015032550515597', '0', '830', '12', '0', '31.2', '南翔镇民主衘3号（柒加护肤造型）', '13454000942', '2015-03-25 21:16:34', '0.0', '立即送出', '', '骆志云', '', '1');
 INSERT INTO `orders` VALUES ('2015032550555249', '1', '766', '18', '0', '39.0', '铜川路100号', '15902113266', '2015-03-25 09:49:54', '39.0', '立即送出', '', '邹老师', '', '1');
 INSERT INTO `orders` VALUES ('2015032550555348', '1', '804', '18', '0', '37.0', '高陵路，六十六号', '13813767001', '2015-03-25 18:34:10', '37.0', '立即送出', '', '沈荣', '', '1');
-INSERT INTO `orders` VALUES ('2015032550975057', '0', '820', '18', '0', '32.0', '金汤路', '18018674363', '2015-03-25 20:30:26', '0.0', '立即送出', '', 'core', '', '1');
+INSERT INTO `orders` VALUES ('2015032550975057', '1', '820', '18', '0', '32.0', '金汤路', '18018674363', '2015-03-25 20:30:26', '32.0', '立即送出', '', 'core', '', '1');
 INSERT INTO `orders` VALUES ('2015032551101100', '1', '784', '18', '0', '34.8', '铜川路', '18921406220', '2015-03-25 13:51:31', '34.8', '立即送出', '', '丽丽', '', '1');
 INSERT INTO `orders` VALUES ('2015032551102519', '1', '791', '18', '0', '32.6', '铜川路', '13681638097', '2015-03-25 15:48:51', '32.6', '立即送出', '', '随心', '', '1');
 INSERT INTO `orders` VALUES ('2015032551534857', '1', '692', '14', '0', '120.6', '芳林路333弄19大街1855高级会馆', '13482224613', '2015-03-25 16:27:31', '142.1', '立即送出', '给我打个电话', '杨娟', '', '1');
@@ -2304,14 +2314,17 @@ INSERT INTO `orders` VALUES ('2015032552535354', '1', '809', '18', '0', '33.4', 
 INSERT INTO `orders` VALUES ('2015032552565397', '0', '813', '18', '0', '35.9', '铜川路', '15921234189', '2015-03-25 19:37:08', '0.0', '立即送出', '', '圆圆', '', '1');
 INSERT INTO `orders` VALUES ('2015032552975054', '1', '802', '18', '0', '33.1', '金汤路353弄7号601', '13061668997', '2015-03-25 18:18:44', '33.1', '立即送出', '', '任我飞', '', '1');
 INSERT INTO `orders` VALUES ('2015032553100100', '1', '412', '12', '0', '31.6', '民主东街125', '13916162718', '2015-03-25 18:23:17', '31.6', '立即送出', '', '赵', '', '0');
+INSERT INTO `orders` VALUES ('2015032553535055', '1', '827', '18', '0', '49.7', '铜川路1898弄18号902', '13917225726', '2015-03-25 21:01:25', '49.7', '立即送出', '', '奇奇', '', '1');
 INSERT INTO `orders` VALUES ('2015032553545099', '1', '810', '18', '0', '32.3', '上海市普陀区铜川路2059', '13795273619', '2015-03-25 19:09:57', '32.3', '立即送出', '', '王义兴', '', '1');
+INSERT INTO `orders` VALUES ('2015032553559755', '0', '829', '12', '0', '49.3', '南翔镇民主街3号（柒加护肤造型）', '18116318820', '2015-03-25 21:16:21', '0.0', '立即送出', '', '赵玉', '', '1');
 INSERT INTO `orders` VALUES ('2015032553981015', '1', '807', '18', '0', '30.1', '铜川路2059弄46号', '18616886183', '2015-03-25 18:40:05', '30.1', '立即送出', '', '祝先生', '', '1');
 INSERT INTO `orders` VALUES ('2015032554100101', '1', '640', '12', '0', '35.4', '南翔镇德华一村316弄21号204', '13681948175', '2015-03-25 14:05:42', '35.4', '立即送出', '', '印晓清', '', '0');
 INSERT INTO `orders` VALUES ('2015032554481015', '1', '770', '16', '0', '42.1', '真南路3489弄6号1603室阳光水岸苑', '13818568680', '2015-03-25 11:01:58', '67.2', '立即送出', '', '杨集辉', '', '1');
-INSERT INTO `orders` VALUES ('2015032554541025', '0', '823', '18', '0', '43.1', '铜川路', '13585921908', '2015-03-25 20:44:06', '0.0', '立即送出', '', 'lili', '', '1');
+INSERT INTO `orders` VALUES ('2015032554541025', '1', '823', '18', '0', '43.1', '铜川路', '13585921908', '2015-03-25 20:44:06', '43.1', '立即送出', '', 'lili', '', '1');
 INSERT INTO `orders` VALUES ('2015032555100574', '1', '811', '18', '0', '30.8', '子洲路58弄', '13032177727', '2015-03-25 19:17:27', '30.8', '立即送出', '', '石杨', '', '1');
 INSERT INTO `orders` VALUES ('2015032555101101', '1', '789', '18', '0', '30.5', '铜川路2059弄78号601室', '15201733336', '2015-03-25 15:18:15', '30.5', '立即送出', '', 'OWEN', '', '1');
 INSERT INTO `orders` VALUES ('2015032555505357', '0', '787', '15', '0', '32.4', 'lol 路', '18692245999', '2015-03-25 14:56:07', '0.0', '立即送出', '', '孙高', '', '1');
+INSERT INTO `orders` VALUES ('2015032555515254', '1', '825', '16', '0', '32.0', '绿杨路51弄303', '18717908073', '2015-03-25 20:54:47', '32.0', '立即送出', '', '王', '', '1');
 INSERT INTO `orders` VALUES ('2015032555991025', '1', '411', '12', '0', '31.2', '民主街495弄4号202', '18221113397', '2015-03-25 14:41:43', '31.2', '立即送出', '', '郭', '', '0');
 INSERT INTO `orders` VALUES ('2015032555994898', '1', '632', '16', '0', '32.0', '三村161号202', '13167247061', '2015-03-25 12:03:03', '32.0', '立即送出', '', '杨', '', '0');
 INSERT INTO `orders` VALUES ('2015032555995553', '1', '497', '18', '0', '30.6', '南翔商务中心705', '18692245999', '2015-03-25 12:00:39', '30.6', '立即送出', '', '孙豪泰', '', '0');
@@ -2324,7 +2337,7 @@ INSERT INTO `orders` VALUES ('2015032557481025', '1', '801', '18', '0', '34.2', 
 INSERT INTO `orders` VALUES ('2015032557541005', '2', '40', '15', '0', '32.1', 'a a', '15502187076', '2015-03-25 12:13:13', '0.0', '立即送出', '', '戴西', '其他', '0');
 INSERT INTO `orders` VALUES ('2015032597101571', '1', '793', '18', '0', '32.3', '金汤路353弄84号302室', '13816985671', '2015-03-25 16:11:06', '32.3', '立即送出', '已买', '嵇桦', '', '1');
 INSERT INTO `orders` VALUES ('2015032597525699', '1', '438', '12', '0', '38.2', '翔江公路1185号9门', '18917506029', '2015-03-25 20:28:58', '38.2', '立即送出', '', '秦', '', '0');
-INSERT INTO `orders` VALUES ('2015032597529753', '0', '670', '16', '0', '43.7', '普陀区白丽路99弄55号201', '15901938356', '2015-03-25 20:12:42', '0.0', '立即送出', '', '石卫', '', '1');
+INSERT INTO `orders` VALUES ('2015032597529753', '1', '670', '16', '0', '43.7', '普陀区白丽路99弄55号201', '15901938356', '2015-03-25 20:12:42', '49.1', '立即送出', '', '石卫', '', '1');
 INSERT INTO `orders` VALUES ('2015032597549949', '0', '816', '18', '0', '32.3', '佳丽房', '13761686620', '2015-03-25 20:10:50', '0.0', '立即送出', '', 'George', '', '1');
 INSERT INTO `orders` VALUES ('2015032597575356', '1', '808', '18', '0', '32.6', '高陵路铜川路2060弄150号402', '18634889731', '2015-03-25 18:54:18', '32.6', '立即送出', '', '王转转', '', '1');
 INSERT INTO `orders` VALUES ('2015032597999799', '1', '292', '12', '0', '35.5', '嘉定区南翔4368弄5号', '18321778335', '2015-03-25 13:00:26', '35.5', '立即送出', '', '王茜', '', '0');
@@ -2335,6 +2348,7 @@ INSERT INTO `orders` VALUES ('2015032598989751', '1', '774', '18', '0', '32.6', 
 INSERT INTO `orders` VALUES ('2015032599499955', '1', '764', '18', '0', '37.0', '普陀区桃浦路300弄88号', '13817362110', '2015-03-25 07:50:20', '37.0', '立即送出', '', '黄丽花', '', '1');
 INSERT INTO `orders` VALUES ('2015032599525656', '2', '42', '15', '0', '51.8', '日本', '15502187076', '2015-03-25 12:07:24', '0.0', '立即送出', '', '王立', '其他', '0');
 INSERT INTO `orders` VALUES ('2015032599541025', '1', '806', '18', '0', '35.9', '铜川路', '13826094520', '2015-03-25 18:35:40', '35.9', '立即送出', '', '周慧金', '', '1');
+INSERT INTO `orders` VALUES ('2015032599579910', '1', '828', '18', '0', '30.0', '不知道。。', '13681983324', '2015-03-25 21:04:28', '30.0', '立即送出', '', '李沐庭', '', '1');
 INSERT INTO `orders` VALUES ('2015032599999910', '1', '769', '12', '0', '40.0', '沪宜公路250号', '13917562066', '2015-03-25 10:29:32', '40.0', '立即送出', '', '何志伟', '', '1');
 
 -- ----------------------------
@@ -2355,7 +2369,7 @@ CREATE TABLE `product` (
   `unitweight` int(6) DEFAULT '0',
   `shopid` int(11) DEFAULT NULL,
   PRIMARY KEY (`productid`)
-) ENGINE=InnoDB AUTO_INCREMENT=468 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=475 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of product
@@ -2810,6 +2824,13 @@ INSERT INTO `product` VALUES ('464', '国产猕猴桃', 'http://7u2out.com1.z0.g
 INSERT INTO `product` VALUES ('465', '小台农芒果', 'http://7u2out.com1.z0.glb.clouddn.com/o_19h57ba7k1fjar2l1v5k5b010bgos.jpg', '1', '0', '8.8', '8.8', '1', '3', '斤', '120', '18');
 INSERT INTO `product` VALUES ('466', '大台农芒果', 'http://7u2out.com1.z0.glb.clouddn.com/o_19h57eoi61f94adu2i616mn5tjq5.jpg', '1', '0', '12.8', '12.8', '1', '3', '斤', '280', '18');
 INSERT INTO `product` VALUES ('467', '天山雪莲果', 'http://7u2out.com1.z0.glb.clouddn.com/o_19h57ea9c19q8jh33or1f7513v1pp.jpg', '1', '0', '4.0', '4.0', '1', '3', '斤', '530', '18');
+INSERT INTO `product` VALUES ('468', '陕西富士', 'http://7u2out.com1.z0.glb.clouddn.com/o_19h8gboggo981hh3175717f0nbfl.jpg', '1', '0', '5.8', '5.8', '1', '1', '斤', '240', '19');
+INSERT INTO `product` VALUES ('469', '陕高小富士', 'http://7u2out.com1.z0.glb.clouddn.com/o_19h8geaiajk9jc63ttbnq11jh11.jpg', '1', '0', '7.8', '7.8', '1', '1', '斤', '240', '19');
+INSERT INTO `product` VALUES ('470', '新疆阿克苏（促）', '', '1', '0', '3.9', '3.9', '1', '1', '斤', '240', '19');
+INSERT INTO `product` VALUES ('471', '陕西富士王', 'http://7u2out.com1.z0.glb.clouddn.com/o_19h8gjhtn1a5f1qpakng1d851l649.jpg', '1', '0', '9.8', '9.8', '1', '1', '斤', '350', '19');
+INSERT INTO `product` VALUES ('472', '美国蛇果', 'http://7u2out.com1.z0.glb.clouddn.com/o_19h8gnds11h1m13691b34tl317jeg.jpg', '1', '0', '12.8', '12.8', '1', '1', '斤', '260', '19');
+INSERT INTO `product` VALUES ('473', '永春芦柑（精品）', 'http://7u2out.com1.z0.glb.clouddn.com/o_19h8grvl51ahg1n6o3t51kf6ct5s.jpg', '1', '0', '3.3', '3.3', '1', '4', '斤', '150', '19');
+INSERT INTO `product` VALUES ('474', '永春金牌芦柑', 'http://7u2out.com1.z0.glb.clouddn.com/o_19h8gtqan1ltl160p1mt51sfdjth18.jpg', '1', '0', '5.5', '5.5', '1', '4', '斤', '150', '19');
 
 -- ----------------------------
 -- Table structure for `shippingaddress`
@@ -2827,7 +2848,7 @@ CREATE TABLE `shippingaddress` (
   `isdefault` tinyint(3) unsigned DEFAULT '1',
   PRIMARY KEY (`said`),
   KEY `shippingaddress_ibfk_userid` (`userid`)
-) ENGINE=InnoDB AUTO_INCREMENT=426 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=433 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of shippingaddress
@@ -3209,6 +3230,13 @@ INSERT INTO `shippingaddress` VALUES ('422', '816', 'George', '上海', '上海�
 INSERT INTO `shippingaddress` VALUES ('423', '819', '许蓉', '上海', '上海市区', '上海', '铜川路2060弄2号', '15801865390', '1');
 INSERT INTO `shippingaddress` VALUES ('424', '820', 'core', '上海', '上海市区', '上海', '金汤路', '18018674363', '1');
 INSERT INTO `shippingaddress` VALUES ('425', '823', 'lili', '上海', '上海市区', '上海', '铜川路', '13585921908', '1');
+INSERT INTO `shippingaddress` VALUES ('426', '825', '王', '上海', '上海市区', '上海', '绿杨路51弄303', '18717908073', '1');
+INSERT INTO `shippingaddress` VALUES ('427', '827', '奇奇', '上海', '上海市区', '上海', '铜川路1898弄18号902', '13917225726', '1');
+INSERT INTO `shippingaddress` VALUES ('428', '826', '王', '上海', '上海市区', '上海', '南翔镇高平羊肉官', '13818128486', '1');
+INSERT INTO `shippingaddress` VALUES ('429', '828', '李沐庭', '上海', '上海市区', '上海', '不知道。。', '13681983324', '1');
+INSERT INTO `shippingaddress` VALUES ('430', '829', '赵玉', '上海', '上海市区', '上海', '南翔镇民主街3号（柒加护肤造型）', '18116318820', '1');
+INSERT INTO `shippingaddress` VALUES ('431', '830', '骆志云', '上海', '上海市区', '上海', '南翔镇民主衘3号（柒加护肤造型）', '13454000942', '1');
+INSERT INTO `shippingaddress` VALUES ('432', '822', '李倩', '上海', '上海市区', '上海', '金迈路路交中心', '13399101220', '1');
 
 -- ----------------------------
 -- Table structure for `shop`
@@ -3234,7 +3262,7 @@ CREATE TABLE `shop` (
   `isdiscount` tinyint(2) DEFAULT '0',
   `discount` tinyint(3) DEFAULT '0',
   PRIMARY KEY (`shopid`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of shop
@@ -3245,6 +3273,7 @@ INSERT INTO `shop` VALUES ('14', 'kw14', '栖林路302弄19号', 'http://7u2out.
 INSERT INTO `shop` VALUES ('15', 'ls15', '北京市景山前街4号', 'http://7u2out.com1.z0.glb.clouddn.com/o_19dts4l4cce21bgfake1cimu3i9.jpg', '树窝水果直营店', '壁垒', '13918210924', '40.00205', '116.327985', 'wx4ex45kyd86', '北京', '故宫', '北京', '壁垒！', '30', '1', '0', '0');
 INSERT INTO `shop` VALUES ('16', 'wu16', '桃浦新村绿杨路76号', 'http://7u2out.com1.z0.glb.clouddn.com/o_19g3tmr8rsck1ive6fhgt9ju19.jpg', '百家乐果园', '蔡老板', '13817715984', '31.289858', '121.352377', 'wtw612nhek69', '上海', '桃浦', '上海', '精品水果，味美鲜甜，还有干货和小零食噢，价格和实体店同步，支持首单立减10元活动。', '30', '1', '0', '0');
 INSERT INTO `shop` VALUES ('18', 'le18', '铜川路高陵路十字路口', 'http://7u2out.com1.z0.glb.clouddn.com/o_19h5gmci31v5e5fdqt13fr1uc2g.jpg', '甜果园水果卖场', '姚老板', '15952291867', '31.258969', '121.389159', 'wtw3f68bsqjm', '上海', '普陀区', '上海', '免费送货上门，货到付款，价格和实体店同步，支持首单立减10元活动。', '30', '1', '0', '0');
+INSERT INTO `shop` VALUES ('19', 'aq19', '泾阳路370号', 'http://7u2out.com1.z0.glb.clouddn.com/o_19h8fjtncs579lrnqi1b8332p9.jpg', '王氏果业', '王老板', '18601713217', '31.24168', '121.366549', 'wtw39z27vx60', '上海', '普陀区', '上海', '精品水果，味美鲜甜。价格和实体店同步，支持首单立减10元活动。', '30', '0', '0', '0');
 
 -- ----------------------------
 -- Table structure for `user`
@@ -3266,7 +3295,7 @@ CREATE TABLE `user` (
   `roles` tinyint(2) DEFAULT '0',
   `shopid` int(11) DEFAULT '0',
   PRIMARY KEY (`userid`)
-) ENGINE=InnoDB AUTO_INCREMENT=824 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=831 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
@@ -4048,6 +4077,13 @@ INSERT INTO `user` VALUES ('820', '', '酷睿4K', '', '', '1', '普陀', '上海
 INSERT INTO `user` VALUES ('821', '', '吃布丁的猫', '', '', '2', '徐汇', '上海', '中国', '2015-03-25 20:28:13', 'oeRy5szQe4B6X_XGL7QtoA-ztBgw', 'http://wx.qlogo.cn/mmopen/ibwFHvvnm5FokMI7ZwHJMW9e3EE4hibsdyp3bG1p3wq0fKYo2YH6jBMaZebg1EorQaCUP940j1OmaPIzT8vAicuzXBoUWlfkibxq/0', '0', '0');
 INSERT INTO `user` VALUES ('822', '', 'Katrina ', '', '', '1', '圣诞岛', '其他', '', '2015-03-25 20:34:58', 'oeRy5s2_p5BoUcIyQVBCHNlG2DZM', 'http://wx.qlogo.cn/mmopen/PiajxSqBRaELwheGyJtV572f99IPbLuAym3bOGZia1sd3KNLib8qjzo8jfxQS8YWUWNojicdFHbmG5WYXkDdW2p4EA/0', '0', '0');
 INSERT INTO `user` VALUES ('823', '', 'L.J', '', '', '2', '静安', '上海', '中国', '2015-03-25 20:40:01', 'oeRy5swLqOqOs1lF9qarR-a6eE7w', 'http://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLCm8OWkDoutSudgHqIoz4ELmS7wBdkfTLMeic5wWsadTHIicnicxoWdePEGdaAl8BUMJkfvrm5ib7jxw/0', '0', '0');
+INSERT INTO `user` VALUES ('824', '', '寶呗', '', '', '2', '', '上海', '中国', '2015-03-25 20:48:41', 'oeRy5s4Ckj0CrzL36cTtLgFKm0No', 'http://wx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqHqw9gU7QzTthaZAEDtJM97iaG9Qn3S7ibHmYiamYMlJQVUzm1o1uzR9fgX7kaDP5iahYhemGyCicPnYA/0', '0', '0');
+INSERT INTO `user` VALUES ('825', '', '寻找海水的淡水鱼', '', '', '1', '浦东新区', '上海', '中国', '2015-03-25 20:51:56', 'oeRy5s8Vtdjb8-At2GFFv6ziP-98', 'http://wx.qlogo.cn/mmopen/JnkugDHhW4hGx8wMeMQv09BjgibRmwQagdJicpQzgc8kfhoJOJvaep7E5qglUNou1L7CHpE6uIugUFyS7S7hsQPlw6d78fS7Ge/0', '0', '0');
+INSERT INTO `user` VALUES ('826', '', '我是一切的根源', '', '', '1', '嘉定', '上海', '中国', '2015-03-25 20:58:15', 'oeRy5sxiLzeipCAM3kNbRuz9nlug', 'http://wx.qlogo.cn/mmopen/V52btXJKaLMAuDcJPuWE9YKb3ibjwbpgjLPROyeibLn24wtfwqM7qCETYuSLaSap51PMaib1z7EW3uHzjwsxOLTQgDb059AGqSM/0', '0', '0');
+INSERT INTO `user` VALUES ('827', '', '余大可', '', '', '1', '普陀', '上海', '中国', '2015-03-25 20:59:31', 'oeRy5s6kV-GuZvzwGVikfJJ9Ww8g', 'http://wx.qlogo.cn/mmopen/Q3auHgzwzM6YUVYicZds4WbDKVfvgHBJKh71BlVtKZyn3dWJdDPx7YI9NBe1a1rzeI4OI3YzdicPV0yegibcvSskw/0', '0', '0');
+INSERT INTO `user` VALUES ('828', '', '李沐庭。', '', '', '1', '沈阳', '辽宁', '中国', '2015-03-25 21:00:58', 'oeRy5s6U2UaJr7n-XOluIS2BOxYA', 'http://wx.qlogo.cn/mmopen/V52btXJKaLMiakcwcIqGrQicZqdzjsSbNH3o3aF6YDjycLdI0kh8FkuAuDcuFoRJ3efCLQD40dttXXg5icSJQ4h3DoUrrz1ia7hj/0', '0', '0');
+INSERT INTO `user` VALUES ('829', '', '赵玉', '', '', '2', '嘉定', '上海', '中国', '2015-03-25 21:13:21', 'oeRy5s_cfuDa1T6Sx9SY9WzbUqTU', 'http://wx.qlogo.cn/mmopen/Q3auHgzwzM5cqulTIeMg4pwk7iae6nynVu9E2wVuWiccekbARmKk4uqJNA6IrqNdo6Ls8alwFN1iaJS6gR3hygeQbO8Xppg8qfO8nLXuxZmVDg/0', '0', '0');
+INSERT INTO `user` VALUES ('830', '', '雪海', '', '', '2', '', '上海', '中国', '2015-03-25 21:14:26', 'oeRy5swkIX-R6dMzvqVbC7_yk8Hw', 'http://wx.qlogo.cn/mmopen/ibwFHvvnm5FokMI7ZwHJMW14yOXbYIXTHQYdZSLYtJjpth7VuVvLicUkRyEzbtvh3pbQ8uphjdxOUYcgHBPQH2ibvLY8rGuulll/0', '0', '0');
 
 -- ----------------------------
 -- Table structure for `weixinshop`
@@ -4066,7 +4102,7 @@ CREATE TABLE `weixinshop` (
 -- ----------------------------
 -- Records of weixinshop
 -- ----------------------------
-INSERT INTO `weixinshop` VALUES ('wx17a8c83f5b2f6540', '432fb4827de4de9c2038ebcd2c5f064a', 'dwSIoZz_eXHwp7NLK-xmy3C4InQEPQNfasGkIJzra642kQyYNTioeWinkZ-MH68_u3ikmY9AIvUyEZADev_eyvavy3DMgDQbOTc3ZuxfCBk', '', '1427288058', 'wxshop');
+INSERT INTO `weixinshop` VALUES ('wx17a8c83f5b2f6540', '432fb4827de4de9c2038ebcd2c5f064a', 'nnyWZj8ovBA6EW9bmdmVqQDnPIjlPMbwOp0cl1d1jfg-kwd_8kzftAlpWsrcACQXjsQ0hDECErqCXzRTQHahErwh6wk64fRMa5N9vgNEyKg', '', '1427295287', 'wxshop');
 
 -- ----------------------------
 -- Table structure for `weixinuser`
@@ -4092,7 +4128,38 @@ INSERT INTO `weixinuser` VALUES ('wx17a029b44c383634', '0f0d1caf3e84edbf61fc28fe
 -- ----------------------------
 DROP FUNCTION IF EXISTS `GETDISTANCE`;
 DELIMITER ;;
-
+CREATE DEFINER=`root`@`localhost` FUNCTION `GETDISTANCE`(lat1 DOUBLE, lng1 DOUBLE, lat2 DOUBLE, lng2 DOUBLE) RETURNS double
+BEGIN
+	DECLARE RAD DOUBLE;
+ 
+DECLARE EARTH_RADIUS DOUBLE DEFAULT 6378137;
+ 
+DECLARE radLat1 DOUBLE;
+ 
+DECLARE radLat2 DOUBLE;
+ 
+DECLARE radLng1 DOUBLE;
+ 
+DECLARE radLng2 DOUBLE;
+ 
+DECLARE s INT;
+ 
+SET RAD = PI() / 180.0;
+ 
+SET radLat1 = lat1 * RAD;
+ 
+SET radLat2 = lat2 * RAD;
+ 
+SET radLng1 = lng1 * RAD;
+ 
+SET radLng2 = lng2 * RAD;
+ 
+SET s = ACOS(COS(radLat1)*COS(radLat2)*COS(radLng1-radLng2)+SIN(radLat1)*SIN(radLat2))*EARTH_RADIUS;
+ 
+SET s = ROUND(s * 10000) / 10000;
+ 
+RETURN s;
+END
 ;;
 DELIMITER ;
 
@@ -4101,6 +4168,37 @@ DELIMITER ;
 -- ----------------------------
 DROP FUNCTION IF EXISTS `NewProc`;
 DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `NewProc`(lat1 DOUBLE, lng1 DOUBLE, lat2 DOUBLE, lng2 DOUBLE) RETURNS double
+BEGIN
+	DECLARE RAD DOUBLE;
+ 
+DECLARE EARTH_RADIUS DOUBLE DEFAULT 6378137;
+ 
+DECLARE radLat1 DOUBLE;
+ 
+DECLARE radLat2 DOUBLE;
+ 
+DECLARE radLng1 DOUBLE;
+ 
+DECLARE radLng2 DOUBLE;
+ 
+DECLARE s DOUBLE;
+ 
+SET RAD = PI() / 180.0;
+ 
+SET radLat1 = lat1 * RAD;
+ 
+SET radLat2 = lat2 * RAD;
+ 
+SET radLng1 = lng1 * RAD;
+ 
+SET radLng2 = lng2 * RAD;
+ 
+SET s = ACOS(COS(radLat1)*COS(radLat2)*COS(radLng1-radLng2)+SIN(radLat1)*SIN(radLat2))*EARTH_RADIUS;
+ 
+SET s = ROUND(s * 10000) / 10000;
 
+	RETURN s;
+END
 ;;
 DELIMITER ;
