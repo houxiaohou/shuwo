@@ -240,20 +240,21 @@ class wechatcallback {
 					if ($userid) {
 						$data_user [UserConst::USERID] = $userid;
 						$shopid = $user->where ( "openid='" . trim ( $data_user [UserConst::OPENID] ) . "'" )->getField ( "shopid" );
-						// if (! intval ( $shopid )) {
-						// if ($user->save ( $data_user ) !== false) {
-						// $content = "授权成功";
-						// } else {
-						// $content = "授权未成功";
-						// }
-						// } else
 						if (intval ( $shopid ) == intval ( $data )) {
 							if ($user->save ( $data_user ) !== false) {
 								$content = "授权成功";
 							} else {
 								$content = "授权未成功";
 							}
-						} else {
+						} else if (intval ( $shopid ) == 0) {
+							if ($user->save ( $data_user ) !== false) {
+								$content = "授权成功";
+							} else {
+								$content = "授权未成功";
+							}
+						}
+						else 
+						{
 							$content = "该账号已被授权。若要取消授权或获得新的授权，请联系商务经理。";
 						}
 					} else {
@@ -272,8 +273,39 @@ class wechatcallback {
 				}
 			} else {
 				$content = "授权未成功";
-			}
-		} else if (count ( $strarray ) == 3 && $strarray [0] == 'add' && $strarray [1] == 'bd') {
+			}		
+		}
+	    else if (count ( $strarray ) == 3 && $strarray [0] == 'cancel' && $strarray [1] == 'shop')
+	    {
+	    	$where ['shopsn'] = $strarray [2];
+	    	$shop = M ( "shop" );
+	    	$user = M ( 'user' );
+	    	$data = $shop->where ( $where )->getField ( "shopid" );
+	    	if (intval ( $data )) 
+	    	{
+	    		$openid = trim ( $object->FromUserName );
+	    		$userinfos = $user->where ("openid = '".$openid."'"." AND shopid =".$data)->find();
+	    		if (count($userinfos))
+	    		{
+	    			$updatedata = array('roles'=>0,'shopid'=>0);
+	    			if ($user->where('userid = '.$userinfos[UserConst::USERID])->setField($updatedata)!== false)
+	    			{
+	    				$content = "取消授权成功";
+	    			}
+	    			else 
+	    			{
+	    				$content = "取消授权失败";
+	    			}
+	    			
+	    		}
+	    	}
+	    	else 
+	    	{
+	    		$content = "取消授权失败";
+	    	}
+            
+	    }
+		else if (count ( $strarray ) == 3 && $strarray [0] == 'add' && $strarray [1] == 'bd') {
 			$weixin = new Weixin ();
 			$token = $weixin->getshopGlobalAccessToken ();
 			$userInfo = $weixin->getshopbyglobaltoken ( $object->FromUserName, $token );
