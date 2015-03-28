@@ -356,62 +356,67 @@ class wechatcallback {
 					$current = date ( 'H:i' );
 					$curdate = date('Y-m-d');
 					$msg = "截至".$current."订单" ;
+					$flag = flase;
 					if( !empty($strarray[2]) )
 					{
 						if (preg_match("/^\d{4}$/", $strarray[2])){
-							$strdate = explode ( "+", $strarray[2] );
-							$curM = $strdate[0]+$strdate[1];
-							$curD = $strdate[2]+$strdate[3];
+							$strdate = $strarray[2] ;
+							$curM = $strdate[0].$strdate[1];
+							$curD = $strdate[2].$strdate[3];
 							$curyear = date('Y');
-							$curdate = $curyear + '-' + curM + '-' + curD;
-							$msg = curM + '-' + curD +'日订单';
+							$curdate = $curyear.'-'.$curM .'-'.$curD;
+							$msg = $curM.'-'.$curD.'日订单';
+							$flag = true;
 						}
 						else {
 							$content = '输入的日期格式不正确！';
+							$flag = false;
 						}
 						
 						if (!empty($strarray[3])){
 							$found = false;
 							for ($k=0; $k<$num; $k++){
-								if ($shops[$k]['shopsn'] == $strarray[3])
+								if ($shops[$k]['shopid'] == intval($strarray[3]))
 								{
 									$found = true;
 									$num = 1;
-									$shops = $shops[$k];
+									$shops[0] = $shops[$k];
 									break;
 								}
 							}
 							if (!$found){
-								$content = '输入的店铺授权码不正确！';
+								$content = '输入的店铺id不正确！';
+								$flag = false;
 							}
 						}
 					}
 					
-					
-					$shopinfo = M('shop');
-					$order = M('orders');	
-					for($i = 0; $i < $num; $i ++) {
-						$shopdata = $shopinfo->where("shopid =".$shops[$i]['shopid'])->find();
-						$totalorders = $order->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND shopid=".$shops[$i]['shopid']);
-                        $unorders = $order->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND orderstatus = 0 AND shopid=".$shops[$i]['shopid']);
-						$corders = $order->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND orderstatus = 2 AND shopid=".$shops[$i]['shopid']);
-                        $shopmsg = $shopmsg.$shopdata['spn'].$msg."\n";
-                        $shopmsg = $shopmsg."店铺电话:".$shopdata['phone']."\n";
-                        $shopmsg = $shopmsg."收到".count($totalorders)."单\n";	
-                        $shopmsg = $shopmsg."未确认".count($unorders)."单\n";
-                        $mesg ='';
-						foreach($unorders as $item)
-						{   
-							$mesg = $mesg.$item['orderid']."\n";
+					if ($flag){
+						$shopinfo = M('shop');
+						$order = M('orders');	
+						for($i = 0; $i < $num; $i ++) {
+							$shopdata = $shopinfo->where("shopid =".$shops[$i]['shopid'])->find();
+							$totalorders = $order->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND shopid=".$shops[$i]['shopid']);
+	                        $unorders = $order->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND orderstatus = 0 AND shopid=".$shops[$i]['shopid']);
+							$corders = $order->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND orderstatus = 2 AND shopid=".$shops[$i]['shopid']);
+	                        $shopmsg = $shopmsg.$shopdata['spn'].$msg."\n";
+	                        $shopmsg = $shopmsg."店铺电话:".$shopdata['phone']."\n";
+	                        $shopmsg = $shopmsg."收到".count($totalorders)."单\n";	
+	                        $shopmsg = $shopmsg."未确认".count($unorders)."单\n";
+	                        $mesg ='';
+							foreach($unorders as $item)
+							{   
+								$mesg = $mesg.$item['orderid']."\n";
+							}
+							$shopmsg = $shopmsg.$mesg;
+	                        $shopmsg = $shopmsg."已取消".count($corders)."单\n\n";
 						}
-						$shopmsg = $shopmsg.$mesg;
-                        $shopmsg = $shopmsg."已取消".count($corders)."单\n\n";
-					}	
+             		}	
 				}
 				if(!empty($shopmsg))
 					$content = $shopmsg;
-				else 
-					$content = "暂无内容";
+// 				else 
+// 					$content = "暂无内容";
 			} else {
 				$content = "BD未授权";
 			}
