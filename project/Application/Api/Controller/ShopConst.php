@@ -20,6 +20,6 @@ class ShopConst
 	const NOTICE ="notice";
 	const DELIVERYPRICE ="dlprice";
 	const ISOPEN = "isopen";
-	const ISDISCOUNT = 'isdiscount';
+	const ISDISCOUNT = 'isdiscound';
 	const DISCOUNT = 'discount';
 }
