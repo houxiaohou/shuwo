@@ -52,15 +52,15 @@ return array(
       // array('admin','AdminApi/addadmin', '', array('method' => 'POST')),//添加管理员
 
        //订单URL配置
-//       	array('allorder','OrderApi/getallorder','',array('method'=>'GET')),//查询所有的订单
-//       	array('order/:id','OrderApi/getorderbyid', '', array('method' => 'GET')),//根据GET传的id查询对应的订单
-//       	array('ordershop/:id','OrderApi/getorderbyshopid', '', array('method' => 'GET')),//根据GET传的shopid查询对应店铺的的订单
-//       	array('user/orders','OrderApi/getordersbyuser', '', array('method' => 'GET')),//获取当前用户的订单
-//       	array('shop/orders','OrderApi/getordersbyshop', '', array('method' => 'GET')),//获取当前店铺的订单
-//       	array('order/:id','OrderApi/deleteorder', '', array('method' => 'DELETE')),   //删除订单
-//         array('ordercancel','OrderApi/cancelorder', '', array('method' => 'POST')),//撤销订单
-         array('order','OrderApi/createorder', '', array('method' => 'GET')),//生成新订单
-//       	array('weight','OrderApi/getweight', '', array('method' => 'POST')),//称重
+      	array('allorder','OrderApi/getallorder','',array('method'=>'GET')),//查询所有的订单
+      	array('order/:id','OrderApi/getorderbyid', '', array('method' => 'GET')),//根据GET传的id查询对应的订单
+      	array('ordershop/:id','OrderApi/getorderbyshopid', '', array('method' => 'GET')),//根据GET传的shopid查询对应店铺的的订单
+      	array('user/orders','OrderApi/getordersbyuser', '', array('method' => 'GET')),//获取当前用户的订单
+      	array('shop/orders','OrderApi/getordersbyshop', '', array('method' => 'GET')),//获取当前店铺的订单
+      	array('order/:id','OrderApi/deleteorder', '', array('method' => 'DELETE')),   //删除订单
+        array('ordercancel','OrderApi/cancelorder', '', array('method' => 'POST')),//撤销订单
+        array('order','OrderApi/createorder', '', array('method' => 'POST')),//生成新订单
+      	array('weight','OrderApi/getweight', '', array('method' => 'POST')),//称重
       	
 		//BD URL配置
 		array('allbds','BDApi/getallbds','',array('method'=>'GET')),//得到所有的BD和店铺

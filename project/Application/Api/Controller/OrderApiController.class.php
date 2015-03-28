@@ -70,6 +70,7 @@ class OrderApiController extends RestController {
 				$data [OrderConst::SHOPID] = $orderdata [OrderConst::SHOPID];
 				$data [OrderConst::DLTIME] = $orderdata [OrderConst::DLTIME];
 				$data [OrderConst::ISFIRST] = $orderdata [OrderConst::ISFIRST];
+				$data[OrderConst::DISCOUNT] = $orderdata[OrderConst::DISCOUNT];
 				
 				if ($orderdata [OrderConst::RTOTALPRICE] > 0) {
 					$data ['price'] = $orderdata [OrderConst::RTOTALPRICE];
@@ -236,12 +237,12 @@ class OrderApiController extends RestController {
 		// 获取店铺的优惠信息
 		$shop_isdiscount =  $shopdetail [ShopConst::ISDISCOUNT];
 		$shop_discount = $shopdetail [ShopConst::DISCOUNT];
-		if($shop_isdiscount =1){
+		if($shop_isdiscount == 1){
 		    $data[OrderConst::DISCOUNT] = $shop_discount;
 		}
 		// 订单的支付状态默认为0待支付，为1时支付成功，为2时支付失败
 		$data [OrderConst::PAYSTATUS] = 0;
-		$where1 [ShippingaddressConst::SAID] = 66;//I ( 'post.said' );
+		$where1 [ShippingaddressConst::SAID] = I ( 'post.said' );
 		// 根据获得的said访问shippingaddress表得到相应的address和phone
 		$shippingaddress = M ( 'shippingaddress' );
 		$shippingaddressdata = $shippingaddress->where ( $where1 )->find ();
