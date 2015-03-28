@@ -341,7 +341,7 @@ class wechatcallback {
 			} else {
 				$content = "BD授权未成功";
 			}
-		} else if (count ( $strarray ) <=3 && $strarray [0] == 'check' && $strarray [1] == 'orders') {
+		} else if (count ( $strarray ) <=4 && $strarray [0] == 'check' && $strarray [1] == 'orders') {
 			$bd = M ( "bd" );
 			$openid = trim ( $object->FromUserName );
 		    $bdinfos = $bd->where ("openid = '".$openid."'")->find();
@@ -356,11 +356,38 @@ class wechatcallback {
 					$current = date ( 'H:i' );
 					$curdate = date('Y-m-d');
 					$msg = "截至".$current."订单" ;
-					if(count ( $strarray )==3&&!empty($strarray [2]) &&$strarray [2]=='last' )
+					if( !empty($strarray[2]) )
 					{
-						$curdate = $yesterday=date("Y-m-d",strtotime("-1 day"));
-						$msg = "昨日订单";
+						if (preg_match("/^\d{4}$/", $strarray[2])){
+							$strdate = explode ( "+", $strarray[2] );
+							$curM = $strdate[0]+$strdate[1];
+							$curD = $strdate[2]+$strdate[3];
+							$curyear = date('Y');
+							$curdate = $curyear + '-' + curM + '-' + curD;
+							$msg = curM + '-' + curD +'日订单';
+						}
+						else {
+							$content = '输入的日期格式不正确！';
+						}
+						
+						if (!empty($strarray[3])){
+							$found = false;
+							for ($k=0; $k<$num; $k++){
+								if ($shops[$k]['shopsn'] == $strarray[3])
+								{
+									$found = true;
+									$num = 1;
+									$shops = $shops[$k];
+									break;
+								}
+							}
+							if (!$found){
+								$content = '输入的店铺授权码不正确！';
+							}
+						}
 					}
+					
+					
 					$shopinfo = M('shop');
 					$order = M('orders');	
 					for($i = 0; $i < $num; $i ++) {
