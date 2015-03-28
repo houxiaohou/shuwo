@@ -18,4 +18,6 @@ class OrderConst
     const NOTES = "notes";
     const ORDERNOTES = "ordernotes";
     const ISFIRST = "isfirst";
+    const DISCOUNT = 'discount';
+    const COUNT = 10;
 }

@@ -211,34 +211,37 @@ class OrderApiController extends RestController {
 	public function createorder() {
 		$order = M ( 'orders' );
 		$shop = M ( 'shop' );
+		$count = OrderConst::COUNT;
 		// 生成16位唯一订单号
 		$orderid = date ( 'Ymd' ) . substr ( implode ( NULL, array_map ( 'ord', str_split ( substr ( uniqid (), 7, 13 ), 1 ) ) ), 0, 8 );
 		$data [OrderConst::ORDERID] = $orderid;
 		// 新生成的订单状态默认为0，为1时下单成功，为2时订单取消
 		$data [OrderConst::ORDERSTATUS] = 0;
 		$authorize = new Authorize ();
-		// $data[OrderConst::USERID] = I('post.userid');
-		$userid = $authorize->Filter ( "user" );
+ 		$userid = $authorize->Filter ( "user" );
 		$data [OrderConst::USERID] = $userid;
 		if ($userid) {
 			$orders = M ( 'orders' );
 			if ($orders->where ( "userid = {$userid}" )->find ()) {
 				$data [OrderConst::ISFIRST] = 0;
 			} else {
+			    $data[OrderConst::DISCOUNT] = $count;
 				$data [OrderConst::ISFIRST] = 1;
 			}
 		}
 		$data [OrderConst::SHOPID] = I ( 'post.shopid' );
 		
-		$where_shop [ShopConst::SHOPID] = I ( 'post.shopid' );
+		$where_shop [ShopConst::SHOPID] = $data [OrderConst::SHOPID];
 		$shopdetail = $shop->where ( $where_shop )->find ();
 		// 获取店铺的优惠信息
-		$shop_isdiscount = $shopdetail [ShopConst::ISDISCOUNT];
+		$shop_isdiscount =  $shopdetail [ShopConst::ISDISCOUNT];
 		$shop_discount = $shopdetail [ShopConst::DISCOUNT];
-		
+		if($shop_isdiscount =1){
+		    $data[OrderConst::DISCOUNT] = $shop_discount;
+		}
 		// 订单的支付状态默认为0待支付，为1时支付成功，为2时支付失败
 		$data [OrderConst::PAYSTATUS] = 0;
-		$where1 [ShippingaddressConst::SAID] = I ( 'post.said' );
+		$where1 [ShippingaddressConst::SAID] = 66;//I ( 'post.said' );
 		// 根据获得的said访问shippingaddress表得到相应的address和phone
 		$shippingaddress = M ( 'shippingaddress' );
 		$shippingaddressdata = $shippingaddress->where ( $where1 )->find ();
@@ -293,12 +296,14 @@ class OrderApiController extends RestController {
 					break;
 			}
 			$totalprice += $productprice;
-			// 将每个产品的价格(含预估)写入orderproduct表中的realprice字段
+			//将每个产品的价格(含预估)写入orderproduct表中的realprice字段
 			$data1 [OrderProductConst::REALPRICE] = $productprice;
 			$orderproduct->add ( $data1 );
 		}
 		if ($data [OrderConst::ISFIRST] == 0 && $shop_isdiscount == 1) {
 			$totalprice -= $shop_discount;
+		}else if($data [OrderConst::ISFIRST] == 0){
+		    $totalprice -= $count;
 		}
 		
 		$data [OrderConst::TOTALPRICE] = $totalprice;
@@ -416,7 +421,7 @@ class OrderApiController extends RestController {
 					}
 				}
 			}
-		}
+ 		}
 		
 		$this->response ( $data2, 'json' );
 	}
@@ -429,7 +434,7 @@ class OrderApiController extends RestController {
 		$orderproduct = M ( 'orderproduct' );
 		$product = M ( 'product' );
 		$rtotalprice = 0; // 真实总价
-		
+		$counts = OrderConst::COUNT;
 		$weightdetail_json = $_POST ['weightdetail'];
 		$weightdetail = json_decode ( $weightdetail_json, true );
 		$count = count ( $weightdetail );
@@ -490,6 +495,8 @@ class OrderApiController extends RestController {
 		
 		if ($order_isfirst == 0 && $shop_isdiscount == 1) {
 			$rtotalprice -= $shop_isdiscount;
+		}else if($order_isfirst == 1){
+		    $rtotalprice -= $counts;
 		}
 		
 		$order->where ( $where4 )->setField ( 'rtotalprice', $rtotalprice );
