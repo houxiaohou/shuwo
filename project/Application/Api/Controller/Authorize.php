@@ -37,7 +37,7 @@ class Authorize
  		$data = $xcrpt->decrypt($utoken,'base64');
 		if($data)
 		{
-			$str = explode("_", $data);
+			$str = explode("#", $data);
 			if($str&&count($str)>=2)
 			{
 				$id = $str[0];

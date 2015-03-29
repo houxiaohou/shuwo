@@ -30,8 +30,17 @@ class Weixin
     		$this->appid = C ( 'SHOP_APPID' );
 	        $this->appsecret = C ( 'SHOP_APPSECRET' );
 	        $token = $this->getGlobalAccessToken();
-	        $weixinshop->where("id ='wxshop'")->setField("accesstoken",$token['access_token']);
-	        $weixinshop->where("id ='wxshop'")->setField("expires",time()+7200);
+	        if(!empty($token['access_token']))
+	        {
+	        	$weixinshop->where("id ='wxshop'")->setField("accesstoken",$token['access_token']);
+	        	$weixinshop->where("id ='wxshop'")->setField("expires",time()+7100);
+	        }
+	        else
+	        {
+	        	$token = $this->getGlobalAccessToken();
+	        	$weixinshop->where("id ='wxshop'")->setField("accesstoken",$token['access_token']);
+	        	$weixinshop->where("id ='wxshop'")->setField("expires",time()+7100);
+	        }
 	        return $token['access_token'];
     	}
     	else 
@@ -43,13 +52,22 @@ class Weixin
     public  function getusersGlobalAccessToken()
     {
     	$weixinshop  = M('weixinuser');
-    	if(time()>intval($weixinshop->where("id ='wxuser'")->getField("expires")))
+    	if(time()>intval($weixinshop->where("id ='wxuser'")->getField("expires")) || empty(($weixinshop->where("id ='wxshop'")->getField("accesstoken"))))
     	{
     		$this->appid = C ( 'SHUWO_APPID' );
     		$this->appsecret = C ( 'SHUWO_APPSECRET' );
     		$token = $this->getGlobalAccessToken();
-    		$weixinshop->where("id ='wxuser'")->setField("accesstoken",$token['access_token']);
-    		$weixinshop->where("id ='wxuser'")->setField("expires",time()+7200);
+    		if (!empty($token['access_token']))
+    		{
+    			$weixinshop->where("id ='wxuser'")->setField("accesstoken",$token['access_token']);
+    			$weixinshop->where("id ='wxuser'")->setField("expires",time()+7100);
+    		}
+    		else 
+    		{
+    			$token = $this->getGlobalAccessToken();
+    			$weixinshop->where("id ='wxshop'")->setField("accesstoken",$token['access_token']);
+    			$weixinshop->where("id ='wxshop'")->setField("expires",time()+7100);
+    		}
     		return $token['access_token'];
     	}
     	else

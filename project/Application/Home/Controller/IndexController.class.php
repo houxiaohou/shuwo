@@ -20,10 +20,11 @@ class IndexController extends Controller {
 		$xcrpt = new Xcrypt ( $key, 'cbc', $key );
 		if (cookie ( 'utoken' )) {
 			$value = cookie ( 'utoken' );
-			$data = $xcrpt->decrypt ( $value, 'base64' );
+            $data = $xcrpt->decrypt ( $value, 'base64' );
 			if ($data) {
-				$str = explode ( "_", $data );
-				if ($str && count ( $str ) == 2) {
+				$str = explode ( "#", $data );
+				if ($str && count ( $str ) == 2) 
+				{
 					$userid = intval ( $str [0] );
 					if ($userid) {
 						$user = M ( 'user' );
@@ -41,7 +42,12 @@ class IndexController extends Controller {
 						}
 
 					}
-				}
+			    }
+			    else {
+			    	$redircturl = "Location:".$url;
+			    	header($redircturl);
+			    	exit;
+			    }
 			} else {
 				$redircturl = "Location:".$url;
 				header($redircturl);
@@ -95,7 +101,7 @@ class IndexController extends Controller {
 					if (count ( $data )) {
 						$userid = $data [UserConst::USERID];
 						$datetime = date ( 'Ymd', strtotime ( '+14 day' ) );
-						$str = $userid . "_" . $datetime;
+						$str = $userid . "#" . $datetime;
 						$xcrptstr = $xcrpt->encrypt ( $str, 'base64' );
 						cookie ( 'utoken', $xcrptstr, 1209600 );
 					} else {
@@ -112,7 +118,7 @@ class IndexController extends Controller {
 						$data [UserConst::ROLES] = 0;
 						$userid = $user->add ( $data );
 						$datetime = date ( 'Ymd', strtotime ( '+14 day' ) );
-						$str = $userid . "_" . $datetime;
+						$str = $userid . "#" . $datetime;
 						$xcrptstr = $xcrpt->encrypt ( $str, 'base64' );
 						cookie ( 'utoken', $xcrptstr, 1209600 );
 					}
@@ -141,7 +147,7 @@ class IndexController extends Controller {
 	        $value = cookie ( 'stoken' );
 	        $data = $xcrpt->decrypt ( $value, 'base64' );
 	        if ($data) {
-	            $str = explode ( "_", $data );
+	            $str = explode ( "#", $data );
 	            if ($str && count ( $str ) >= 2) {
 	                $userid = intval ( $str [0] );
 	                if ($userid) {
@@ -159,6 +165,11 @@ class IndexController extends Controller {
 	                      $this->display ();
 	                    }
 	                }
+	            }
+	            else {
+	            	$redircturl = "Location:".$url;
+	            	header($redircturl);
+	            	exit;
 	            }
 	        } else {
 	            $redircturl = "Location:".$url;
@@ -212,7 +223,7 @@ class IndexController extends Controller {
 	                if (count ( $data )) {
                         $userid = $data [UserConst::USERID];
 	                    $shopid = $data [UserConst::SHOPID];
-	                    $str = $userid . "_" . $shopid."_".$openid;
+	                    $str = $userid . "#" . $shopid."#".$openid;
 	                    $xcrptstr = $xcrpt->encrypt ( $str, 'base64' );
 	                    cookie ( 'stoken', $xcrptstr, 1209600 );
 	                    $this->redirect ( "shop" );
