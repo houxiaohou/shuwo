@@ -74,7 +74,7 @@ public function adminlogin(){
         $name=$data[AdminConst::NAME];
         $password=$data[AdminConst::PASSWORD];
         
-        $str=$name."_".$password;
+        $str=$name."#".$password;
         $token['utoken'] = $xcrpt->encrypt($str,'base64');
         $this->response($token,'json');
         }      
