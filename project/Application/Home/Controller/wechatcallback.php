@@ -399,9 +399,30 @@ class wechatcallback {
 							$totalorders = $order->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND shopid=".$shops[$i]['shopid']);
 	                        $unorders = $order->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND orderstatus = 0 AND shopid=".$shops[$i]['shopid']);
 							$corders = $order->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND orderstatus = 2 AND shopid=".$shops[$i]['shopid']);
+							$checkorders = $order->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND orderstatus = 1 AND shopid=".$shops[$i]['shopid']);
 	                        $shopmsg = $shopmsg.$shopdata['spn'].$msg."\n";
 	                        $shopmsg = $shopmsg."店铺电话:".$shopdata['phone']."\n";
-	                        $shopmsg = $shopmsg."收到".count($totalorders)."单\n";	
+	                        $shopmsg = $shopmsg."收到".count($totalorders)."单\n";
+	                        $shopmsg = $shopmsg."已确认".count($checkorders)."单\n";
+	                        $firstorders = [];
+	                        $discountorders = [];
+	                        $totaldiscount = 0;
+	                        if(count($checkorders))
+	                        {
+	                          foreach ($checkorders as $itemorder)
+	                          {
+	                          	if($itemorder["isfirst"] == 1)
+	                          	{
+	                          		array_push($firstorders, $itemorder);
+	                          	}
+	                          	else if($itemorder["isfirst"] == 0 && $itemorder["discount"] > 0)
+	                          	{
+	                          		array_push($discountorders,$itemorder);
+	                          		$totaldiscount = $totaldiscount + $itemorder["discount"];
+	                          	}
+	                          }
+	                        }
+	                        
 	                        $shopmsg = $shopmsg."未确认".count($unorders)."单\n";
 	                        $mesg ='';
 							foreach($unorders as $item)
