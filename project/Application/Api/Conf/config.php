@@ -73,5 +73,10 @@ return array(
         array('categorypic/:id\d','CategorypicApi/getcategorypicbycategoryid', '', array('method' => 'GET')),//根据GET传的categoryid查询对应的信息
         array('categorypic/:id\d','CategorypicApi/deletecategorypic','',array('method'=>'DELETE')),//删除        
         array('categorypic','CategorypicApi/addcategorypic','',array('method'=>'POST')),//添加
+        
+        //用户日期查询URL配置
+       array('alluser','UserApi/allUserbydaytime', '', array('method' => 'GET')),//查询每日的用户数
+       array('getuser','UserApi/getUserbymothtime', '', array('method' => 'POST')),//查询每月的用户量
+       array('yearuser','UserApi/getUserbyyeartime', '', array('method' => 'POST')),//查询每年的用户量
 )
 );
