@@ -74,9 +74,12 @@ return array(
         array('categorypic/:id\d','CategorypicApi/deletecategorypic','',array('method'=>'DELETE')),//删除        
         array('categorypic','CategorypicApi/addcategorypic','',array('method'=>'POST')),//添加
         
-        //用户日期查询URL配置
-       array('alluser','UserApi/allUserbydaytime', '', array('method' => 'GET')),//查询每日的用户数
-       array('getuser','UserApi/getUserbymothtime', '', array('method' => 'POST')),//查询每月的用户量
-       array('yearuser','UserApi/getUserbyyeartime', '', array('method' => 'POST')),//查询每年的用户量
+        //用户日数以及订单数期查询URL配置
+       array('alluser','SurveyApi/allUserbydaytime', '', array('method' => 'GET')),//查询每日的用户数
+       array('getuser','SurveyApi/getUserbymothtime', '', array('method' => 'POST')),//查询每月的用户量
+       array('yearuser','SurveyApi/getUserbyyeartime', '', array('method' => 'POST')),//查询每年的用户量
+       array('allorders','SurveyApi/allOrderbydaytime', '', array('method' => 'GET')),//查询每日的订单数
+       array('getorders','SurveyApi/getOrderbymothtime', '', array('method' => 'POST')),//查询每月的订单量
+       array('yearorders','SurveyApi/getOrderbyyeartime', '', array('method' => 'POST')),//查询每年的订单量
 )
 );

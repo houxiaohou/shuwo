@@ -9,9 +9,6 @@ require_once 'Authorize.php';
 class ShippingaddressApiController extends RestController {
 	// 根据id查询对应的用户地址
 	public function getaddressbyid() {
-		$authorize = new Authorize ();
-		$userid = $authorize->Filter ( "user" );
-		if ($userid) {
 			$address = M ( 'shippingaddress' );
 			$said = intval ( I ( 'get.id', 0 ) );
 			if ($said) {
@@ -27,10 +24,6 @@ class ShippingaddressApiController extends RestController {
 					$this->response ( $data, "json" );
 				}
 			}
-		} else {
-			$message ["msg"] = "Unauthorized";
-			$this->response ( $message, 'json', '401' );
-		}
 	}
 	// 更新用户地址
 	public function updateaddress() {
