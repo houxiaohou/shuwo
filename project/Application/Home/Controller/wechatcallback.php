@@ -1,7 +1,6 @@
 <?php
 
 namespace Home\Controller;
-
 define ( "TOKEN", "weixin" );
 
 require_once 'Weixin.php';
@@ -88,28 +87,68 @@ class wechatcallback {
 						$openid = $object->FromUserName;
 						if ($openid) {
 							$user = M ( 'user' );
-							$data = $user->where ( "openid='" . $openid . "'" )->find ();
+							$data = $user->where ( "openid='" . $openid . "' AND roles = 1" )->find ();
 							if (count ( $data )) {
 								$orders = M ( 'orders' );
 								$shopid = $data ["shopid"];
 								
-								// 当日收益
-								$today = date ( "Y-m-d" );
-								$sql = "select SUM(totalprice) as cincome from orders where DATE_FORMAT(createdtime,'%Y-%m-%d')='" . $today . "' AND shopid = {$shopid} AND orderstatus != 2";
-								$item = $orders->query ( $sql );
-								$todayincome = doubleval ( $item [0] ['cincome'] );
+// 								// 当日收益
+// 								$today = date ( "Y-m-d" );
+// 								$sql = "select SUM(totalprice) as cincome from orders where DATE_FORMAT(createdtime,'%Y-%m-%d')='" . $today . "' AND shopid = {$shopid} AND orderstatus != 2";
+// 								$item = $orders->query ( $sql );
+// 								$todayincome = doubleval ( $item [0] ['cincome'] );
 								
-								// 当月收益
-								$Month = date ( "Y-m" );
-								$sql = "select SUM(totalprice) as mincome from orders where DATE_FORMAT(createdtime,'%Y-%m')='" . $Month . "' AND shopid = {$shopid} AND orderstatus != 2";
-								$item = $orders->query ( $sql );
-								$monthincome = doubleval ( $item [0] ['mincome'] );
+// 								// 当月收益
+// 								$Month = date ( "Y-m" );
+// 								$sql = "select SUM(totalprice) as mincome from orders where DATE_FORMAT(createdtime,'%Y-%m')='" . $Month . "' AND shopid = {$shopid} AND orderstatus != 2";
+// 								$item = $orders->query ( $sql );
+// 								$monthincome = doubleval ( $item [0] ['mincome'] );
 								
-								// 当前总收益
-								$sql = "select SUM(totalprice) as tincome from orders where shopid = {$shopid} AND orderstatus != 2";
-								$item = $orders->query ( $sql );
-								$totalincome = doubleval ( $item [0] ['tincome'] );
-								$content = "当日收益: " . $todayincome . "元 \n\n" . "当月收益: " . $monthincome . "元 \n\n" . "目前总收益: " . $totalincome . "元 \n\n";
+// 								// 当前总收益
+// 								$sql = "select SUM(totalprice) as tincome from orders where shopid = {$shopid} AND orderstatus != 2";
+// 								$item = $orders->query ( $sql );
+// 								$totalincome = doubleval ( $item [0] ['tincome'] );
+// 								$content = "当日收益: " . $todayincome . "元 \n\n" . "当月收益: " . $monthincome . "元 \n\n" . "目前总收益: " . $totalincome . "元 \n\n";
+                                if ($shopid)
+                                {
+                                	$shopmsg = '';
+                                	$current = date ( 'H:i' );
+                                	$curdate = date('Y-m-d');
+                                	$msg = "截至".$current."订单" ;
+                                	$totalorders = $orders->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND shopid=".$shopid);
+                                	$unorders = $orders->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND orderstatus = 0 AND shopid=".$shopid);
+                                	$corders = $orders->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND orderstatus = 2 AND shopid=".$shopid);
+                                	$checkorders = $orders->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND orderstatus = 1 AND shopid=".$shopid);
+                                	$shopmsg = $shopmsg.$msg."\n";
+                                	$shopmsg = $shopmsg."收到".count($totalorders)."单\n";
+                                	$shopmsg = $shopmsg."已确认".count($checkorders)."单\n";
+                                	$shopmsg = $shopmsg."未确认".count($unorders)."单\n";
+                                	$mesg ='';
+                                	foreach($unorders as $item)
+                                	{
+                                		//  								if($item['isfirst']==1)
+                                			// 							    {
+                                			// 									$mesg = $mesg.$item['orderid']."--首\n";
+                                			// 							    }
+                                		// 							    else if($itemorder["isfirst"] == 0 && $itemorder["discount"] > 0)
+                                			// 							    {
+                                			// 							    	$mesg = $mesg.$item['orderid']."--惠\n";
+                                			// 							    }
+                                		// 							    else
+                                			// 							    {
+                                			// 							    	$mesg = $mesg.$item['orderid']."\n";
+                                			// 							    }
+                                		$mesg = $mesg.$item['orderid']."\n";
+                                	}
+                                	$shopmsg = $shopmsg.$mesg;
+                                	$shopmsg = $shopmsg."已取消".count($corders)."单\n";
+                                	$content = $shopmsg;
+                                }
+                                else 
+                                {
+                                	$content = "请确定该账号是否授权。\n店铺授权码格式 \n(add+shop+授权码)";
+                                }
+                              
 							} else {
 								$content = "请确定该账号是否授权。\n店铺授权码格式 \n(add+shop+授权码)";
 							}
@@ -345,18 +384,17 @@ class wechatcallback {
 			$bd = M ( "bd" );
 			$openid = trim ( $object->FromUserName );
 		    $bdinfos = $bd->where ("openid = '".$openid."'")->find();
-			
 			if (count ( $bdinfos )) {
               $bdid = $bdinfos [BDConst::BDID];
               $bdshop = M ( 'bdshop' );
               $shops = $bdshop->where ( 'bdid =' . $bdid )->select ();
               $num = count ( $shops );
               $shopmsg = '';
-             if ($num && !empty($bdinfos[BDConst::OPENID])) {
+              if ($num && !empty($bdinfos[BDConst::OPENID])) {
 					$current = date ( 'H:i' );
 					$curdate = date('Y-m-d');
 					$msg = "截至".$current."订单" ;
-					$flag = flase;
+					$flag = true;
 					if( !empty($strarray[2]) )
 					{
 						if (preg_match("/^\d{4}$/", $strarray[2])){
@@ -394,6 +432,7 @@ class wechatcallback {
 					if ($flag){
 						$shopinfo = M('shop');
 						$order = M('orders');	
+						$totals = 0;
 						for($i = 0; $i < $num; $i ++) {
 							$shopdata = $shopinfo->where("shopid =".$shops[$i]['shopid'])->find();
 							$totalorders = $order->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND shopid=".$shops[$i]['shopid']);
@@ -404,30 +443,48 @@ class wechatcallback {
 	                        $shopmsg = $shopmsg."店铺电话:".$shopdata['phone']."\n";
 	                        $shopmsg = $shopmsg."收到".count($totalorders)."单\n";
 	                        $shopmsg = $shopmsg."已确认".count($checkorders)."单\n";
-	                        $firstorders = [];
-	                        $discountorders = [];
-	                        $totaldiscount = 0;
-	                        if(count($checkorders))
-	                        {
-	                          foreach ($checkorders as $itemorder)
-	                          {
-	                          	if($itemorder["isfirst"] == 1)
-	                          	{
-	                          		array_push($firstorders, $itemorder);
-	                          	}
-	                          	else if($itemorder["isfirst"] == 0 && $itemorder["discount"] > 0)
-	                          	{
-	                          		array_push($discountorders,$itemorder);
-	                          		$totaldiscount = $totaldiscount + $itemorder["discount"];
-	                          	}
-	                          }
-	                        }
-	                        
+	                        $totals += count($totalorders);
+//                             $countfirst = 0;
+//                             $countdiscount = 0;
+// 	                        $totalfirst=0;
+// 	                        $totaldiscount = 0;
+// 	                        if(count($checkorders))
+// 	                        {
+// 	                          foreach ($checkorders as $itemorder)
+// 	                          {
+// 	                          	if($itemorder["isfirst"] == 1)
+// 	                          	{
+// 	                          		$countfirst++;
+// 	                          		$totalfirst += 10;
+// 	                          	}
+// 	                          	else if($itemorder["isfirst"] == 0 && $itemorder["discount"] > 0)
+// 	                          	{
+// 	                          		$countdiscount++;
+// 	                          		$totaldiscount = $totaldiscount + $itemorder["discount"];
+// 	                          	}
+// 	                          }
+//                             }
+//  	                        $shopmsg = $shopmsg."--".$countfirst."单首购单-应补贴".$totalfirst."元\n";
+//  	                        $shopmsg = $shopmsg."--".$countdiscount."单优惠单-应补贴".$totaldiscount."元\n";
+//  	                        $total = $totalfirst+$totaldiscount;
+//  	                        $shopmsg = $shopmsg."--总共补贴".$total."元\n";
 	                        $shopmsg = $shopmsg."未确认".count($unorders)."单\n";
 	                        $mesg ='';
 							foreach($unorders as $item)
-							{   
-								$mesg = $mesg.$item['orderid']."\n";
+ 							{  
+//  								if($item['isfirst']==1)
+// 							    {
+// 									$mesg = $mesg.$item['orderid']."--首\n";
+// 							    }
+// 							    else if($itemorder["isfirst"] == 0 && $itemorder["discount"] > 0)
+// 							    {
+// 							    	$mesg = $mesg.$item['orderid']."--惠\n";
+// 							    }
+// 							    else 
+// 							    {
+// 							    	$mesg = $mesg.$item['orderid']."\n";
+// 							    }
+							    $mesg = $mesg.$item['orderid']."\n";
 							}
 							$shopmsg = $shopmsg.$mesg;
 	                        $shopmsg = $shopmsg."已取消".count($corders)."单\n\n";
@@ -435,9 +492,14 @@ class wechatcallback {
              		}	
 				}
 				if(!empty($shopmsg))
+				{	
+					$shopmsg = $shopmsg."总订单数".$totals."单";
 					$content = $shopmsg;
-// 				else 
-// 					$content = "暂无内容";
+				}
+				else 
+				{
+					$content = '暂无消息';
+				}
 			} else {
 				$content = "BD未授权";
 			}
