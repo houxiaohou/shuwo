@@ -301,9 +301,9 @@ class OrderApiController extends RestController {
 			$data1 [OrderProductConst::REALPRICE] = $productprice;
 			$orderproduct->add ( $data1 );
 		}
-		if ($data [OrderConst::ISFIRST] == 0 && $shop_isdiscount == 1) {
+		if ($data [OrderConst::ISFIRST] == 0 && $shop_isdiscount == 1 && $data [OrderConst::SHOPID] == 15) {
 			$totalprice -= $shop_discount;
-		}else if($data [OrderConst::ISFIRST] == 1){
+		}else if($data [OrderConst::ISFIRST] == 1 && $data [OrderConst::SHOPID] == 15){
 		    $totalprice -= $dns;
 		}
 		
@@ -314,125 +314,125 @@ class OrderApiController extends RestController {
 			$order->add ( $data );
 			$data2 ['orderid'] = $orderid;
 			
-// 			//构造模板消息
+			//构造模板消息
 			
-// 			$shopid = intval ( $data [OrderConst::SHOPID] );
-// 			if ($shopid) {
-// 				$user = M ( "user" );
+			$shopid = intval ( $data [OrderConst::SHOPID] );
+			if ($shopid) {
+				$user = M ( "user" );
                 
-// 				$userinfo = $user->where ( 'shopid=' . $shopid )->select ();
+				$userinfo = $user->where ( 'shopid=' . $shopid )->select ();
 				
-// 				$current = date ( 'y年m月d日 H:i' );
-// 				$contact = $data [OrderConst::USERNAME] . " 电话" . $data [OrderConst::PHONE];
-// 				$address = "发货地址: " . $data [OrderConst::ADDRESS] . "   配送时间: " . $data [OrderConst::DLTIME];
-// 				$orderNum = "订单编号：" . $orderid;
+				$current = date ( 'y年m月d日 H:i' );
+				$contact = $data [OrderConst::USERNAME] . " 电话" . $data [OrderConst::PHONE];
+				$address = "发货地址: " . $data [OrderConst::ADDRESS] . "   配送时间: " . $data [OrderConst::DLTIME];
+				$orderNum = "订单编号：" . $orderid;
 				
-// 				$ordertype="新的订单";
-// 				if ($data [OrderConst::ISFIRST] == 0 && $data [OrderConst::DISCOUNT] >0) {
-// 					$ordertype = $ordertype.'--优惠订单';
-// 				}else if($data [OrderConst::ISFIRST] == 1){
-// 					$ordertype=$ordertype.'--首购订单';
-// 				}
-// 				// if (count ( $userinfo ) && ! empty ( $userinfo ["openid"] )) {
-// 				if (count ( $userinfo )) {
-// 					for($i = 0; $i < count ( $userinfo ); $i ++) {
-// 						if (! empty ( $userinfo [$i] ["openid"] )) {
-// 							$template = array (
-// 									'touser' => $userinfo [$i] ["openid"],
-// 									'template_id' => C ( 'NEWORDER_TEMPID' ),
-// 									'url' => "http://www.shuwow.com/Home/Index/shop",
-// 									'topcolor' => "#009900",
-// 									'data' => array (
-// 											'first' => array (
-// 													'value' => urlencode ( $orderNum ),
-// 													'color' => "#FF0000" 
-// 											),
-// 											'tradeDateTime' => array (
-// 													'value' => urlencode ( $current ),
-// 													'color' => "#009900" 
-// 											),
-// 											'orderType' => array (
-// 													'value' => urlencode ($ordertype),
-// 													'color' => "#009900" 
-// 											),
-// 											'customerInfo' => array (
-// 													'value' => urlencode ( $contact ),
-// 													'color' => "#009900" 
-// 											),
-// 											'orderItemName' => array (
-// 													'value' => urlencode ( "发货地址&配送时间" ) 
-// 											),
-// 											'orderItemData' => array (
-// 													'value' => urlencode ( $address ),
-// 													'color' => "#009900" 
-// 											),
-// 											'remark' => array (
-// 													'value' => urlencode ( "\\n信息来自树窝小店" ),
-// 													'color' => "#cccccc" 
-// 											) 
-// 									) 
-// 							);
-// 							$weixin = new Weixin ();
-// 							$token = $weixin->getshopGlobalAccessToken ();
-// 							$weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
-// 						}
-// 					}
+				$ordertype="新的订单";
+				if ($data [OrderConst::ISFIRST] == 0 && $data [OrderConst::DISCOUNT] >0 && $data [OrderConst::SHOPID] == 15) {
+					$ordertype = $ordertype.'--优惠订单';
+				}else if($data [OrderConst::ISFIRST] == 1 && $data[OrderConst::SHOPID] == 15){
+					$ordertype=$ordertype.'--首购订单';
+				}
+				// if (count ( $userinfo ) && ! empty ( $userinfo ["openid"] )) {
+				if (count ( $userinfo )) {
+					for($i = 0; $i < count ( $userinfo ); $i ++) {
+						if (! empty ( $userinfo [$i] ["openid"] )) {
+							$template = array (
+									'touser' => $userinfo [$i] ["openid"],
+									'template_id' => C ( 'NEWORDER_TEMPID' ),
+									'url' => "http://www.shuwow.com/Home/Index/shop",
+									'topcolor' => "#009900",
+									'data' => array (
+											'first' => array (
+													'value' => urlencode ( $orderNum ),
+													'color' => "#FF0000" 
+											),
+											'tradeDateTime' => array (
+													'value' => urlencode ( $current ),
+													'color' => "#009900" 
+											),
+											'orderType' => array (
+													'value' => urlencode ($ordertype),
+													'color' => "#009900" 
+											),
+											'customerInfo' => array (
+													'value' => urlencode ( $contact ),
+													'color' => "#009900" 
+											),
+											'orderItemName' => array (
+													'value' => urlencode ( "发货地址&配送时间" ) 
+											),
+											'orderItemData' => array (
+													'value' => urlencode ( $address ),
+													'color' => "#009900" 
+											),
+											'remark' => array (
+													'value' => urlencode ( "\\n信息来自树窝小店" ),
+													'color' => "#cccccc" 
+											) 
+									) 
+							);
+							$weixin = new Weixin ();
+							$token = $weixin->getshopGlobalAccessToken ();
+							$weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
+						}
+					}
 					
-// 					$shopname = $shop->where ( "shopid=" . $shopid )->getField ( "spn" );
-// 					$bdshop = M ( 'bdshop' );
-// 					$bdshops = $bdshop->where ( "shopid=" . $shopid )->select ();
-// 					if (count ( $bdshops )) {
-// 						$bd = M ( 'bd' );
-// 						for($i = 0; $i < count ( $bdshops ); $i ++) {
-// 							$bddata = $bd->where ( "bdid=" . $bdshops [$i] [BDConst::BDID] )->find ();
-// 							if (count ( $bddata ) && ! empty ( $bddata [BDConst::OPENID] )) {
-// 								$msgstr = $shopname . "收到新的订单";
-// 								if ($data [OrderConst::ISFIRST] == 0 && $data [OrderConst::DISCOUNT] >0) {
-// 									$msgstr = $msgstr.'--优惠订单';
-// 								}else if($data [OrderConst::ISFIRST] == 1){
-// 									$msgstr= $msgstr.'--首购订单';
-// 								}
-// 								$bdtemplate = array (
-// 										'touser' => $bddata [BDConst::OPENID],
-// 										'template_id' => C ( 'NEWORDER_TEMPID' ),
-// 										'topcolor' => "#009900",
-// 										'data' => array (
-// 												'first' => array (
-// 														'value' => urlencode ( $orderNum ),
-// 														'color' => "#FF0000" 
-// 												),
-// 												'tradeDateTime' => array (
-// 														'value' => urlencode ( $current ),
-// 														'color' => "#009900" 
-// 												),
-// 												'orderType' => array (
-// 														'value' => urlencode ( $msgstr ),
-// 														'color' => "#FF0000" 
-// 												),
-// 												'customerInfo' => array (
-// 														'value' => urlencode ( $contact ),
-// 														'color' => "#009900" 
-// 												),
-// 												'orderItemName' => array (
-// 														'value' => urlencode ( "发货地址&配送时间" ) 
-// 												),
-// 												'orderItemData' => array (
-// 														'value' => urlencode ( $address ),
-// 														'color' => "#009900" 
-// 												),
-// 												'remark' => array (
-// 														'value' => urlencode ( "\\n信息来自树窝小店" ),
-// 														'color' => "#cccccc" 
-// 												) 
-// 										) 
-// 								);
-// 								$token = $weixin->getshopGlobalAccessToken ();
-// 								$weixin->sendtemplatemsg ( urldecode ( json_encode ( $bdtemplate ) ), $token );
-// 							}
-// 						}
-// 					}
-// 				}
-// 			}
+					$shopname = $shop->where ( "shopid=" . $shopid )->getField ( "spn" );
+					$bdshop = M ( 'bdshop' );
+					$bdshops = $bdshop->where ( "shopid=" . $shopid )->select ();
+					if (count ( $bdshops )) {
+						$bd = M ( 'bd' );
+						for($i = 0; $i < count ( $bdshops ); $i ++) {
+							$bddata = $bd->where ( "bdid=" . $bdshops [$i] [BDConst::BDID] )->find ();
+							if (count ( $bddata ) && ! empty ( $bddata [BDConst::OPENID] )) {
+								$msgstr = $shopname . "收到新的订单";
+								if ($data [OrderConst::ISFIRST] == 0 && $data [OrderConst::DISCOUNT] >0 && $data[OrderConst::SHOPID] == 15) {
+									$msgstr = $msgstr.'--优惠订单';
+								}else if($data [OrderConst::ISFIRST] == 1 && $data [OrderConst::SHOPID] == 15){
+									$msgstr= $msgstr.'--首购订单';
+								}
+								$bdtemplate = array (
+										'touser' => $bddata [BDConst::OPENID],
+										'template_id' => C ( 'NEWORDER_TEMPID' ),
+										'topcolor' => "#009900",
+										'data' => array (
+												'first' => array (
+														'value' => urlencode ( $orderNum ),
+														'color' => "#FF0000" 
+												),
+												'tradeDateTime' => array (
+														'value' => urlencode ( $current ),
+														'color' => "#009900" 
+												),
+												'orderType' => array (
+														'value' => urlencode ( $msgstr ),
+														'color' => "#FF0000" 
+												),
+												'customerInfo' => array (
+														'value' => urlencode ( $contact ),
+														'color' => "#009900" 
+												),
+												'orderItemName' => array (
+														'value' => urlencode ( "发货地址&配送时间" ) 
+												),
+												'orderItemData' => array (
+														'value' => urlencode ( $address ),
+														'color' => "#009900" 
+												),
+												'remark' => array (
+														'value' => urlencode ( "\\n信息来自树窝小店" ),
+														'color' => "#cccccc" 
+												) 
+										) 
+								);
+								$token = $weixin->getshopGlobalAccessToken ();
+								$weixin->sendtemplatemsg ( urldecode ( json_encode ( $bdtemplate ) ), $token );
+							}
+						}
+					}
+				}
+			}
  		}
 		
 		$this->response ( $data2, 'json' );
@@ -507,9 +507,9 @@ class OrderApiController extends RestController {
 		
 		if($rtotalprice>0)
 		{
-		if ($order_isfirst == 0 && $shop_isdiscount == 1) {
+		if ($order_isfirst == 0 && $shop_isdiscount == 1 && $shop_id == 15 ) {
 			$rtotalprice -= $shop_discount ;
-		}else if($order_isfirst == 1){
+		}else if($order_isfirst == 1 && $shop_id == 15){
 		    $rtotalprice -= $counts;
 		}
 		}
@@ -521,91 +521,91 @@ class OrderApiController extends RestController {
 		$order->where ( $where4 )->setField ( 'rtotalprice', $rtotalprice );
 		// 将订单状态由0变成1(订单确认)
 		if ($order->where ( $where4 )->setField ( 'orderstatus', 1 )) {
-// 			$userid = $order->where ( $where4 )->getField ( "userid" );
-// 			if (intval ( $userid )) {
-// 				$user = M ( "user" );
-// 				$userinfo = $user->where ( 'userid=' . $userid )->find ();
-// 				if (count ( $userinfo ) && ! empty ( $userinfo ['openid'] )) {
-// 					$current = date ( 'y年m月d日H:i' );
-// 					$msg = "您所购买的水果,商家已于" . $current . "称重";
-// 					$realtotal = $order->where ( $where4 )->getField ( 'rtotalprice' );
-// 					$totalprice = "实际价格:" . $realtotal . "元";
-// 					if (count ( $userinfo ) && ! empty ( $userinfo ["openid"] )) {
-// 						$template = array (
-// 								'touser' => trim ( $userinfo ["openid"] ),
-// 								'template_id' => C ( 'ORDERSTATUS_TEMPID' ),
-// 								'url' => "http://www.shuwow.com/Home/Index/index/#/order",
-// 								'topcolor' => "#009900",
-// 								'data' => array (
-// 										'first' => array (
-// 												'value' => urlencode ( $msg ),
-// 												'color' => "#FF0000" 
-// 										),
-// 										'OrderSn' => array (
-// 												'value' => urlencode ( $orderid ),
-// 												'color' => "#009900" 
-// 										),
-// 										'OrderStatus' => array (
-// 												'value' => urlencode ( $totalprice ),
-// 												'color' => "#009900" 
-// 										),
-// 										'remark' => array (
-// 												'value' => urlencode ( "\\n信息来自树窝小店" ),
-// 												'color' => "#cccccc" 
-// 										) 
-// 								) 
-// 						);
-// 						$token = $weixin->getusersGlobalAccessToken ();
-// 						$weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
-// 					}
-// 				}
-// 			}
+			$userid = $order->where ( $where4 )->getField ( "userid" );
+			if (intval ( $userid )) {
+				$user = M ( "user" );
+				$userinfo = $user->where ( 'userid=' . $userid )->find ();
+				if (count ( $userinfo ) && ! empty ( $userinfo ['openid'] )) {
+					$current = date ( 'y年m月d日H:i' );
+					$msg = "您所购买的水果,商家已于" . $current . "称重";
+					$realtotal = $order->where ( $where4 )->getField ( 'rtotalprice' );
+					$totalprice = "实际价格:" . $realtotal . "元";
+					if (count ( $userinfo ) && ! empty ( $userinfo ["openid"] )) {
+						$template = array (
+								'touser' => trim ( $userinfo ["openid"] ),
+								'template_id' => C ( 'ORDERSTATUS_TEMPID' ),
+								'url' => "http://www.shuwow.com/Home/Index/index/#/order",
+								'topcolor' => "#009900",
+								'data' => array (
+										'first' => array (
+												'value' => urlencode ( $msg ),
+												'color' => "#FF0000" 
+										),
+										'OrderSn' => array (
+												'value' => urlencode ( $orderid ),
+												'color' => "#009900" 
+										),
+										'OrderStatus' => array (
+												'value' => urlencode ( $totalprice ),
+												'color' => "#009900" 
+										),
+										'remark' => array (
+												'value' => urlencode ( "\\n信息来自树窝小店" ),
+												'color' => "#cccccc" 
+										) 
+								) 
+						);
+						$token = $weixin->getusersGlobalAccessToken ();
+						$weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
+					}
+				}
+			}
 			
-// 			// 通知BD
-// 			$shopid = $order->where ( $where4 )->getField ( "shopid" );
-// 			if ($shopid) {
-// 				$shop = M ( "shop" );
-// 				$shopname = $shop->where ( "shopid=" . $shopid )->getField ( "spn" );
-// 				$bdshop = M ( "bdshop" );
-// 				$bdshops = $bdshop->where ( "shopid=" . $shopid )->select ();
-// 				if (count ( $bdshops )) {
-// 					$bd = M ( 'bd' );
-// 					for($i = 0; $i < count ( $bdshops ); $i ++) {
-// 						$bddata = $bd->where ( "bdid=" . $bdshops [$i] [BDConst::BDID] )->find ();
-// 						if (count ( $bddata ) && ! empty ( $bddata [BDConst::OPENID] )) {
-// 							$current = date ( 'y年m月d日H:i' );
-// 							$msg = $shopname . "--" . $current . "确认订单";
-// 							$realtotal = $order->where ( $where4 )->getField ( 'rtotalprice' );
-// 							$totalprice = "实际价格:" . $realtotal . "元";
-// 							$bdtemplate = array (
-// 									'touser' => trim ( $bddata [BDConst::OPENID] ),
-// 									'template_id' => C ( 'BDORDERSTATUS_TEMPID' ),
-// 									'topcolor' => "#0000CD",
-// 									'data' => array (
-// 											'first' => array (
-// 													'value' => urlencode ( $msg ),
-// 													'color' => "#0000FF" 
-// 											),
-// 											'OrderSn' => array (
-// 													'value' => urlencode ( $orderid ),
-// 													'color' => "#000000" 
-// 											),
-// 											'OrderStatus' => array (
-// 													'value' => urlencode ( $totalprice ),
-// 													'color' => "#000000" 
-// 											),
-// 											'remark' => array (
-// 													'value' => urlencode ( "\\n信息来自树窝小店" ),
-// 													'color' => "#cccccc" 
-// 											) 
-// 									) 
-// 							);
-// 							$token = $weixin->getshopGlobalAccessToken ();
-// 							$weixin->sendtemplatemsg ( urldecode ( json_encode ( $bdtemplate ) ), $token );
-// 						}
-// 					}
-// 				}
-// 			}
+			// 通知BD
+			$shopid = $order->where ( $where4 )->getField ( "shopid" );
+			if ($shopid) {
+				$shop = M ( "shop" );
+				$shopname = $shop->where ( "shopid=" . $shopid )->getField ( "spn" );
+				$bdshop = M ( "bdshop" );
+				$bdshops = $bdshop->where ( "shopid=" . $shopid )->select ();
+				if (count ( $bdshops )) {
+					$bd = M ( 'bd' );
+					for($i = 0; $i < count ( $bdshops ); $i ++) {
+						$bddata = $bd->where ( "bdid=" . $bdshops [$i] [BDConst::BDID] )->find ();
+						if (count ( $bddata ) && ! empty ( $bddata [BDConst::OPENID] )) {
+							$current = date ( 'y年m月d日H:i' );
+							$msg = $shopname . "--" . $current . "确认订单";
+							$realtotal = $order->where ( $where4 )->getField ( 'rtotalprice' );
+							$totalprice = "实际价格:" . $realtotal . "元";
+							$bdtemplate = array (
+									'touser' => trim ( $bddata [BDConst::OPENID] ),
+									'template_id' => C ( 'BDORDERSTATUS_TEMPID' ),
+									'topcolor' => "#0000CD",
+									'data' => array (
+											'first' => array (
+													'value' => urlencode ( $msg ),
+													'color' => "#0000FF" 
+											),
+											'OrderSn' => array (
+													'value' => urlencode ( $orderid ),
+													'color' => "#000000" 
+											),
+											'OrderStatus' => array (
+													'value' => urlencode ( $totalprice ),
+													'color' => "#000000" 
+											),
+											'remark' => array (
+													'value' => urlencode ( "\\n信息来自树窝小店" ),
+													'color' => "#cccccc" 
+											) 
+									) 
+							);
+							$token = $weixin->getshopGlobalAccessToken ();
+							$weixin->sendtemplatemsg ( urldecode ( json_encode ( $bdtemplate ) ), $token );
+						}
+					}
+				}
+			}
 		}
 	}
 	/*
