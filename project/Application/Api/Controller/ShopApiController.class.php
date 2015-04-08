@@ -139,7 +139,7 @@ class ShopApiController extends RestController {
 		$product = M ( "product" );
 		$shopid = intval ( I ( 'get.id', 0 ) );
 		if ($shopid) {
-			$data = $product->where ( "shopid=".$shopid." AND issale=1" )->order ( 'num desc' )->select ();
+			$data = $product->where ( "shopid=".$shopid." AND issale=1" )->order ( 'categoryid asc' )->select ();
 			if (! count ( $data )) {
 				$data = [ ];
 			}

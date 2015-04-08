@@ -19,5 +19,7 @@ class OrderConst
     const ORDERNOTES = "ordernotes";
     const ISFIRST = "isfirst";
     const DISCOUNT = 'discount';
+    const TOTALPRICEBEFORE = "totalpricebefore";
+    const RTOTALPRICEBEFORE = "rtotalpricebefore";
     const COUNT = 10;
 }

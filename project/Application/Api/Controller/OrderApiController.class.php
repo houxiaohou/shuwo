@@ -77,6 +77,12 @@ class OrderApiController extends RestController {
 				} else {
 					$data ['price'] = $orderdata [OrderConst::TOTALPRICE];
 				}
+				
+				if ($orderdata [OrderConst::RTOTALPRICEBEFORE] >= 0 && $orderdata[OrderConst::ORDERSTATUS] == 1 ) {
+					$data ['beforeprice'] = $orderdata [OrderConst::RTOTALPRICEBEFORE];
+				} else {
+					$data ['beforeprice'] = $orderdata [OrderConst::TOTALPRICEBEFORE];
+				}
 				$where_order_product [OrderProductConst::ORDERID] = $orderdata [OrderConst::ORDERID];
 				$orderproductdata = $orderproduct->where ( $where_order_product )->field ( 'id,productid,quantity,realweight,realprice' )->select ();
 				$count_order_product = count ( $orderproductdata );
@@ -301,6 +307,8 @@ class OrderApiController extends RestController {
 			$data1 [OrderProductConst::REALPRICE] = $productprice;
 			$orderproduct->add ( $data1 );
 		}
+		$data[OrderConst::TOTALPRICEBEFORE] = $totalprice;
+		
 		if ($data [OrderConst::ISFIRST] == 0 && $shop_isdiscount == 1 && $data [OrderConst::SHOPID] == 15) {
 			$totalprice -= $shop_discount;
 		}else if($data [OrderConst::ISFIRST] == 1 && $data [OrderConst::SHOPID] == 15){
@@ -430,8 +438,8 @@ class OrderApiController extends RestController {
 								$weixin->sendtemplatemsg ( urldecode ( json_encode ( $bdtemplate ) ), $token );
 							}
 						}
-					}
-				}
+               }
+		}
 			}
  		}
 		
@@ -504,6 +512,8 @@ class OrderApiController extends RestController {
 		
 		// 获取是否首购
 		$order_isfirst = $order->where ( $where4 )->getField ( 'isfirst' );
+		$order->where ( $where4 )->setField ( 'rtotalpricebefore', $rtotalprice );
+		
 		
 		if($rtotalprice>0)
 		{
@@ -750,13 +760,19 @@ class OrderApiController extends RestController {
 				$data [$i] [OrderConst::SHOPID] = $orderdata [$i] [OrderConst::SHOPID];
 				$data [$i] [OrderConst::DLTIME] = $orderdata [$i] [OrderConst::DLTIME];
 				$data [$i] [OrderConst::ISFIRST] = $orderdata [$i] [OrderConst::ISFIRST];
-				$data [$i][OrderConst::DISCOUNT]= $orderdata[$i][OrderConst::DISCOUNT];
+           		$data [$i][OrderConst::DISCOUNT]= $orderdata[$i][OrderConst::DISCOUNT];
 				
 				if ($orderdata [$i] [OrderConst::RTOTALPRICE] >= 0 && $orderdata [$i] [OrderConst::ORDERSTATUS] == 1 ) {
 					$data [$i] ['price'] = $orderdata [$i] [OrderConst::RTOTALPRICE];
 				} else {
 					$data [$i] ['price'] = $orderdata [$i] [OrderConst::TOTALPRICE];
 				}
+				if ($orderdata [$i] [OrderConst::RTOTALPRICEBEFORE] >= 0 && $orderdata [$i] [OrderConst::ORDERSTATUS] == 1 ) {
+					$data [$i] ['beforeprice'] = $orderdata [$i] [OrderConst::RTOTALPRICEBEFORE];
+				} else {
+					$data [$i] ['beforeprice'] = $orderdata [$i] [OrderConst::TOTALPRICEBEFORE];
+				}
+				
 				if ($orderdata [$i] [OrderConst::ORDERNOTES] != null) {
 					$data [$i] [OrderConst::ORDERNOTES] = $orderdata [$i] [OrderConst::ORDERNOTES];
 				}
