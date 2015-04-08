@@ -469,37 +469,49 @@ class wechatcallback {
 //  	                        $total = $totalfirst+$totaldiscount;
 //  	                        $shopmsg = $shopmsg."--总共补贴".$total."元\n";
 	                        $shopmsg = $shopmsg."未确认".count($unorders)."单\n";
-	                        $mesg ='';
-							foreach($unorders as $item)
- 							{  
-//  								if($item['isfirst']==1)
-// 							    {
-// 									$mesg = $mesg.$item['orderid']."--首\n";
-// 							    }
-// 							    else if($itemorder["isfirst"] == 0 && $itemorder["discount"] > 0)
-// 							    {
-// 							    	$mesg = $mesg.$item['orderid']."--惠\n";
-// 							    }
-// 							    else 
-// 							    {
-// 							    	$mesg = $mesg.$item['orderid']."\n";
-// 							    }
-							    $mesg = $mesg.$item['orderid']."\n";
-							}
-							$shopmsg = $shopmsg.$mesg;
+// 	                        $mesg ='';
+// 							foreach($unorders as $item)
+//  							{  
+// //  								if($item['isfirst']==1)
+// // 							    {
+// // 									$mesg = $mesg.$item['orderid']."--首\n";
+// // 							    }
+// // 							    else if($itemorder["isfirst"] == 0 && $itemorder["discount"] > 0)
+// // 							    {
+// // 							    	$mesg = $mesg.$item['orderid']."--惠\n";
+// // 							    }
+// // 							    else 
+// // 							    {
+// // 							    	$mesg = $mesg.$item['orderid']."\n";
+// // 							    }
+// 							    $mesg = $mesg.$item['orderid']."\n";
+// 							}
+// 							$shopmsg = $shopmsg.$mesg;
 	                        $shopmsg = $shopmsg."已取消".count($corders)."单\n\n";
 						}
+             		}
+             		if(!empty($shopmsg))
+             		{
+             			$shopmsg = $shopmsg."总订单数".$totals."单";
+             			if(strlen($shopmsg)<2047)
+             			{
+             			    $content = $shopmsg;
+             			}
+             			else
+             			{
+             				
+             			}
+             		}
+             		else
+             		{
+             			$content = "暂无消息";
              		}	
 				}
-				if(!empty($shopmsg))
-				{	
-					$shopmsg = $shopmsg."总订单数".$totals."单";
-					$content = $shopmsg;
-				}
-				else 
+				else
 				{
-					$content = '暂无消息';
+					$content = "BD未授权";
 				}
+				
 			} else {
 				$content = "BD未授权";
 			}
@@ -725,7 +737,5 @@ class wechatcallback {
 </xml>";
 		$result = sprintf ( $xmlTpl, $object->FromUserName, $object->ToUserName, time () );
 		return $result;
-	}
-	private function SetBD() {
 	}
 }
