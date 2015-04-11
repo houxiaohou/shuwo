@@ -1,6 +1,7 @@
 <?php
 
 namespace Home\Controller;
+
 define ( "TOKEN", "weixin" );
 
 require_once 'Weixin.php';
@@ -76,7 +77,7 @@ class wechatcallback {
 				$content = "欢迎关注树窝小店 ";
 				break;
 			case "unsubscribe" :
-				$content = "取消关注";  
+				$content = "取消关注";
 				break;
 			// case "SCAN":
 			// $content = "扫描场景 ".$object->EventKey;
@@ -92,103 +93,96 @@ class wechatcallback {
 								$orders = M ( 'orders' );
 								$shopid = $data ["shopid"];
 								
-// 								// 当日收益
-// 								$today = date ( "Y-m-d" );
-// 								$sql = "select SUM(totalprice) as cincome from orders where DATE_FORMAT(createdtime,'%Y-%m-%d')='" . $today . "' AND shopid = {$shopid} AND orderstatus != 2";
-// 								$item = $orders->query ( $sql );
-// 								$todayincome = doubleval ( $item [0] ['cincome'] );
+								// // 当日收益
+								// $today = date ( "Y-m-d" );
+								// $sql = "select SUM(totalprice) as cincome from orders where DATE_FORMAT(createdtime,'%Y-%m-%d')='" . $today . "' AND shopid = {$shopid} AND orderstatus != 2";
+								// $item = $orders->query ( $sql );
+								// $todayincome = doubleval ( $item [0] ['cincome'] );
 								
-// 								// 当月收益
-// 								$Month = date ( "Y-m" );
-// 								$sql = "select SUM(totalprice) as mincome from orders where DATE_FORMAT(createdtime,'%Y-%m')='" . $Month . "' AND shopid = {$shopid} AND orderstatus != 2";
-// 								$item = $orders->query ( $sql );
-// 								$monthincome = doubleval ( $item [0] ['mincome'] );
+								// // 当月收益
+								// $Month = date ( "Y-m" );
+								// $sql = "select SUM(totalprice) as mincome from orders where DATE_FORMAT(createdtime,'%Y-%m')='" . $Month . "' AND shopid = {$shopid} AND orderstatus != 2";
+								// $item = $orders->query ( $sql );
+								// $monthincome = doubleval ( $item [0] ['mincome'] );
 								
-// 								// 当前总收益
-// 								$sql = "select SUM(totalprice) as tincome from orders where shopid = {$shopid} AND orderstatus != 2";
-// 								$item = $orders->query ( $sql );
-// 								$totalincome = doubleval ( $item [0] ['tincome'] );
-// 								$content = "当日收益: " . $todayincome . "元 \n\n" . "当月收益: " . $monthincome . "元 \n\n" . "目前总收益: " . $totalincome . "元 \n\n";
-                                if ($shopid)
-                                {
-                                	$shopmsg = '';
-                                	$current = date ( 'H:i' );
-                                	$curdate = date('Y-m-d');
-                                	$yesterday = date("Y-m-d",strtotime("-1 day"));
-                                	$msg = "截至".$current."订单" ;
-                                	$msg_yest = "昨日订单";
-                                	$totalorders = $orders->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND shopid=".$shopid);
-                                	$totalorders_yest = $orders->query("SELECT * FROM orders WHERE date(createdtime) = '".$yesterday."' AND shopid=".$shopid);
-                                	$unorders = $orders->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND orderstatus = 0 AND shopid=".$shopid);
-                                	$unorders_yest = $orders->query("SELECT * FROM orders WHERE date(createdtime) = '".$yesterday."' AND orderstatus = 0 AND shopid=".$shopid);
-                                	$corders = $orders->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND orderstatus = 2 AND shopid=".$shopid);
-                                	$corders_yest = $orders->query("SELECT * FROM orders WHERE date(createdtime) = '".$yesterday."' AND orderstatus = 2 AND shopid=".$shopid);
-                                	$checkorders = $orders->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND orderstatus = 1 AND shopid=".$shopid);
-                                	$checkorders_yest = $orders->query("SELECT * FROM orders WHERE date(createdtime) = '".$yesterday."' AND orderstatus = 1 AND shopid=".$shopid);
-                                	 
-                                	$first = $orders->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND isfirst = 1 AND shopid=".$shopid );
-                                	$first_discuont = count($first)*C('FIRST_DISCOUNT');
-                                	$first_yest = $orders->query("SELECT * FROM orders WHERE date(createdtime) = '".$yesterday."' AND isfirst = 1 AND shopid=".$shopid );
-                                	$first_yest_discount = count($first_yest)*C('FIRST_DISCOUNT'); 
-                                	$discount = $orders->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND isfirst = 0 AND discount > 0 AND shopid=".$shopid);
-                                	$dis_discount = 0;
-                                	$dis_yest_discount = 0;
-                                	foreach ($discount as $dis){
-                                		$dis_discount +=  $dis['discount'];
-                                	}
-                                	$discount_yest = $orders->query("SELECT * FROM orders WHERE date(createdtime) = '".$yesterday."' AND isfirst = 0 AND discount > 0 AND shopid=".$shopid);
-                                	 foreach ($discount_yest as $dis){
-                                	 	$dis_yest_discount += $dis['discount'];
-                                	 }
-                                	$shopmsg = $shopmsg.$msg."\n";
-                                	$msg_yest=$msg_yest."\n";
-                                	$shopmsg = $shopmsg."收到".count($totalorders)."单\n";
-                                	$msg_yest = $msg_yest."收到".count($totalorders_yest)."单\n";
-                                	 
-                                	$shopmsg = $shopmsg."已确认".count($checkorders)."单(首购".count($first)."单|优惠".count($discount)."单)\n";
-                                	$msg_yest = $msg_yest."已确认".count($checkorders_yest)."单(首购".count($first_yest)."单|优惠".count($discount_yest)."单)\n";
-                                	 
-                                	$shopmsg = $shopmsg."未确认".count($unorders)."单\n";
-                                	$msg_yest = $msg_yest."未确认".count($unorders_yest)."单\n";
-                                	 
-                                	$mesg ='';
-                                	$mesg_yest='';
-                                	foreach($unorders as $item)
-                                	{
-                                		//  								if($item['isfirst']==1)
-                                			// 							    {
-                                			// 									$mesg = $mesg.$item['orderid']."--首\n";
-                                			// 							    }
-                                		// 							    else if($itemorder["isfirst"] == 0 && $itemorder["discount"] > 0)
-                                			// 							    {
-                                			// 							    	$mesg = $mesg.$item['orderid']."--惠\n";
-                                			// 							    }
-                                		// 							    else
-                                			// 							    {
-                                			// 							    	$mesg = $mesg.$item['orderid']."\n";
-                                			// 							    }
-                                		$mesg = $mesg.$item['orderid']."\n";
-                                	}
-                                	
-                                	foreach ($unorders_yest as $item)
-                                	{
-                                		$mesg_yest = $mesg_yest.$item['orderid']."\n";
-                                	}
-                                	$shopmsg = $shopmsg.$mesg;
-                                	$msg_yest = $msg_yest.$mesg_yest;
-                                	$shopmsg = $shopmsg."已取消".count($corders)."单\n";
-                                	$shopmsg = $shopmsg."实际补贴".($first_discuont+$dis_discount)."元\n";
-                                	$mesg_yest = $mesg_yest."已取消".count($corders_yest)."单\n";
-                                	$msg_yest = $msg_yest."实际补贴".($first_yest_discount+$dis_yest_discount)."元\n";
-                                	
-                                	
-                                	$content = $shopmsg."\n".$msg_yest;
-                                }
-                                else 
-                                {
-                                	$content = "请确定该账号是否授权。\n店铺授权码格式 \n(add+shop+授权码)";
-                                }
-                              
+								// // 当前总收益
+								// $sql = "select SUM(totalprice) as tincome from orders where shopid = {$shopid} AND orderstatus != 2";
+								// $item = $orders->query ( $sql );
+								// $totalincome = doubleval ( $item [0] ['tincome'] );
+								// $content = "当日收益: " . $todayincome . "元 \n\n" . "当月收益: " . $monthincome . "元 \n\n" . "目前总收益: " . $totalincome . "元 \n\n";
+								if ($shopid) {
+									$shopmsg = '';
+									$current = date ( 'H:i' );
+									$curdate = date ( 'Y-m-d' );
+									$yesterday = date ( "Y-m-d", strtotime ( "-1 day" ) );
+									$msg = "截至" . $current . "订单";
+									$msg_yest = "昨日订单";
+									$totalorders = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND shopid=" . $shopid );
+									$totalorders_yest = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $yesterday . "' AND shopid=" . $shopid );
+									$unorders = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND orderstatus = 0 AND shopid=" . $shopid );
+									$unorders_yest = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $yesterday . "' AND orderstatus = 0 AND shopid=" . $shopid );
+									$corders = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND orderstatus = 2 AND shopid=" . $shopid );
+									$corders_yest = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $yesterday . "' AND orderstatus = 2 AND shopid=" . $shopid );
+									$checkorders = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND orderstatus = 1 AND shopid=" . $shopid );
+									$checkorders_yest = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $yesterday . "' AND orderstatus = 1 AND shopid=" . $shopid );
+									
+									$first = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND isfirst = 1 AND shopid=" . $shopid );
+									$first_discuont = count ( $first ) * C ( 'FIRST_DISCOUNT' );
+									$first_yest = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $yesterday . "' AND isfirst = 1 AND shopid=" . $shopid );
+									$first_yest_discount = count ( $first_yest ) * C ( 'FIRST_DISCOUNT' );
+									$discount = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND isfirst = 0 AND discount > 0 AND shopid=" . $shopid );
+									$dis_discount = 0;
+									$dis_yest_discount = 0;
+									foreach ( $discount as $dis ) {
+										$dis_discount += $dis ['discount'];
+									}
+									$discount_yest = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $yesterday . "' AND isfirst = 0 AND discount > 0 AND shopid=" . $shopid );
+									foreach ( $discount_yest as $dis ) {
+										$dis_yest_discount += $dis ['discount'];
+									}
+									$shopmsg = $shopmsg . $msg . "\n";
+									$msg_yest = $msg_yest . "\n";
+									$shopmsg = $shopmsg . "收到" . count ( $totalorders ) . "单\n";
+									$msg_yest = $msg_yest . "收到" . count ( $totalorders_yest ) . "单\n";
+									
+									$shopmsg = $shopmsg . "已确认" . count ( $checkorders ) . "单(首购" . count ( $first ) . "单|优惠" . count ( $discount ) . "单)\n";
+									$msg_yest = $msg_yest . "已确认" . count ( $checkorders_yest ) . "单(首购" . count ( $first_yest ) . "单|优惠" . count ( $discount_yest ) . "单)\n";
+									
+									$shopmsg = $shopmsg . "未确认" . count ( $unorders ) . "单\n";
+									$msg_yest = $msg_yest . "未确认" . count ( $unorders_yest ) . "单\n";
+									
+									$mesg = '';
+									$mesg_yest = '';
+									foreach ( $unorders as $item ) {
+										// if($item['isfirst']==1)
+										// {
+										// $mesg = $mesg.$item['orderid']."--首\n";
+										// }
+										// else if($itemorder["isfirst"] == 0 && $itemorder["discount"] > 0)
+										// {
+										// $mesg = $mesg.$item['orderid']."--惠\n";
+										// }
+										// else
+										// {
+										// $mesg = $mesg.$item['orderid']."\n";
+										// }
+										$mesg = $mesg . $item ['orderid'] . "\n";
+									}
+									
+									foreach ( $unorders_yest as $item ) {
+										$mesg_yest = $mesg_yest . $item ['orderid'] . "\n";
+									}
+									$shopmsg = $shopmsg . $mesg;
+									$msg_yest = $msg_yest . $mesg_yest;
+									$shopmsg = $shopmsg . "已取消" . count ( $corders ) . "单\n";
+									$shopmsg = $shopmsg . "实际补贴" . ($first_discuont + $dis_discount) . "元\n";
+									$mesg_yest = $mesg_yest . "已取消" . count ( $corders_yest ) . "单\n";
+									$msg_yest = $msg_yest . "实际补贴" . ($first_yest_discount + $dis_yest_discount) . "元\n";
+									
+									$content = $shopmsg . "\n" . $msg_yest;
+								} else {
+									$content = "请确定该账号是否授权。\n店铺授权码格式 \n(add+shop+授权码)";
+								}
 							} else {
 								$content = "请确定该账号是否授权。\n店铺授权码格式 \n(add+shop+授权码)";
 							}
@@ -331,9 +325,7 @@ class wechatcallback {
 							} else {
 								$content = "授权未成功";
 							}
-						}
-						else 
-						{
+						} else {
 							$content = "该账号已被授权。若要取消授权或获得新的授权，请联系商务经理。";
 						}
 					} else {
@@ -352,39 +344,30 @@ class wechatcallback {
 				}
 			} else {
 				$content = "授权未成功";
-			}		
-		}
-	    else if (count ( $strarray ) == 3 && $strarray [0] == 'cancel' && $strarray [1] == 'shop')
-	    {
-	    	$where ['shopsn'] = $strarray [2];
-	    	$shop = M ( "shop" );
-	    	$user = M ( 'user' );
-	    	$data = $shop->where ( $where )->getField ( "shopid" );
-	    	if (intval ( $data )) 
-	    	{
-	    		$openid = trim ( $object->FromUserName );
-	    		$userinfos = $user->where ("openid = '".$openid."'"." AND shopid =".$data)->find();
-	    		if (count($userinfos))
-	    		{
-	    			$updatedata = array('roles'=>0,'shopid'=>0);
-	    			if ($user->where('userid = '.$userinfos[UserConst::USERID])->setField($updatedata)!== false)
-	    			{
-	    				$content = "取消授权成功";
-	    			}
-	    			else 
-	    			{
-	    				$content = "取消授权失败";
-	    			}
-	    			
-	    		}
-	    	}
-	    	else 
-	    	{
-	    		$content = "取消授权失败";
-	    	}
-            
-	    }
-		else if (count ( $strarray ) == 3 && $strarray [0] == 'add' && $strarray [1] == 'bd') {
+			}
+		} else if (count ( $strarray ) == 3 && $strarray [0] == 'cancel' && $strarray [1] == 'shop') {
+			$where ['shopsn'] = $strarray [2];
+			$shop = M ( "shop" );
+			$user = M ( 'user' );
+			$data = $shop->where ( $where )->getField ( "shopid" );
+			if (intval ( $data )) {
+				$openid = trim ( $object->FromUserName );
+				$userinfos = $user->where ( "openid = '" . $openid . "'" . " AND shopid =" . $data )->find ();
+				if (count ( $userinfos )) {
+					$updatedata = array (
+							'roles' => 0,
+							'shopid' => 0 
+					);
+					if ($user->where ( 'userid = ' . $userinfos [UserConst::USERID] )->setField ( $updatedata ) !== false) {
+						$content = "取消授权成功";
+					} else {
+						$content = "取消授权失败";
+					}
+				}
+			} else {
+				$content = "取消授权失败";
+			}
+		} else if (count ( $strarray ) == 3 && $strarray [0] == 'add' && $strarray [1] == 'bd') {
 			$weixin = new Weixin ();
 			$token = $weixin->getshopGlobalAccessToken ();
 			$userInfo = $weixin->getshopbyglobaltoken ( $object->FromUserName, $token );
@@ -420,142 +403,128 @@ class wechatcallback {
 			} else {
 				$content = "BD授权未成功";
 			}
-		} else if (count ( $strarray ) <=4 && $strarray [0] == 'check' && $strarray [1] == 'orders') {
+		} else if (count ( $strarray ) <= 4 && $strarray [0] == 'check' && $strarray [1] == 'orders') {
 			$bd = M ( "bd" );
 			$openid = trim ( $object->FromUserName );
-		    $bdinfos = $bd->where ("openid = '".$openid."'")->find();
+			$bdinfos = $bd->where ( "openid = '" . $openid . "'" )->find ();
 			if (count ( $bdinfos )) {
-              $bdid = $bdinfos [BDConst::BDID];
-              $bdshop = M ( 'bdshop' );
-              $shops = $bdshop->where ( 'bdid =' . $bdid )->select ();
-              $num = count ( $shops );
-              $shopmsg = '';
-              if ($num && !empty($bdinfos[BDConst::OPENID])) {
+				$bdid = $bdinfos [BDConst::BDID];
+				$bdshop = M ( 'bdshop' );
+				$shops = $bdshop->where ( 'bdid =' . $bdid )->select ();
+				$num = count ( $shops );
+				$shopmsg = '';
+				if ($num && ! empty ( $bdinfos [BDConst::OPENID] )) {
 					$current = date ( 'H:i' );
-					$curdate = date('Y-m-d');
-					$msg = "截至".$current."订单" ;
+					$curdate = date ( 'Y-m-d' );
+					$msg = "截至" . $current . "订单";
 					$flag = true;
-					if( !empty($strarray[2]) )
-					{
-						if (preg_match("/^\d{4}$/", $strarray[2])){
-							$strdate = $strarray[2] ;
-							$curM = $strdate[0].$strdate[1];
-							$curD = $strdate[2].$strdate[3];
-							$curyear = date('Y');
-							$curdate = $curyear.'-'.$curM .'-'.$curD;
-							$msg = $curM.'-'.$curD.'日订单';
+					if (! empty ( $strarray [2] )) {
+						if (preg_match ( "/^\d{4}$/", $strarray [2] )) {
+							$strdate = $strarray [2];
+							$curM = $strdate [0] . $strdate [1];
+							$curD = $strdate [2] . $strdate [3];
+							$curyear = date ( 'Y' );
+							$curdate = $curyear . '-' . $curM . '-' . $curD;
+							$msg = $curM . '-' . $curD . '日订单';
 							$flag = true;
-						}
-						else {
+						} else {
 							$content = '输入的日期格式不正确！';
 							$flag = false;
 						}
 						
-						if (!empty($strarray[3])){
+						if (! empty ( $strarray [3] )) {
 							$found = false;
-							for ($k=0; $k<$num; $k++){
-								if ($shops[$k]['shopid'] == intval($strarray[3]))
-								{
+							for($k = 0; $k < $num; $k ++) {
+								if ($shops [$k] ['shopid'] == intval ( $strarray [3] )) {
 									$found = true;
 									$num = 1;
-									$shops[0] = $shops[$k];
+									$shops [0] = $shops [$k];
 									break;
 								}
 							}
-							if (!$found){
+							if (! $found) {
 								$content = '输入的店铺id不正确！';
 								$flag = false;
 							}
 						}
 					}
 					
-					if ($flag){
-						$shopinfo = M('shop');
-						$order = M('orders');	
+					if ($flag) {
+						$shopinfo = M ( 'shop' );
+						$order = M ( 'orders' );
 						$totals = 0;
 						for($i = 0; $i < $num; $i ++) {
-							$shopdata = $shopinfo->where("shopid =".$shops[$i]['shopid'])->find();
-							$totalorders = $order->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND shopid=".$shops[$i]['shopid']);
-	                        $unorders = $order->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND orderstatus = 0 AND shopid=".$shops[$i]['shopid']);
-							$corders = $order->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND orderstatus = 2 AND shopid=".$shops[$i]['shopid']);
-							$checkorders = $order->query("SELECT * FROM orders WHERE date(createdtime) = '".$curdate."' AND orderstatus = 1 AND shopid=".$shops[$i]['shopid']);
-	                        $shopmsg = $shopmsg.$shopdata['spn'].$msg."\n";
-	                        $shopmsg = $shopmsg."电话:".$shopdata['phone']."\n";
-// 	                        $shopmsg = $shopmsg."总-已-未-取"."\n";
-	                        $shopmsg = $shopmsg.count($totalorders)."-".count($checkorders);
-// 	                        $shopmsg = $shopmsg."收到".count($totalorders)."单\n";
-// 	                        $shopmsg = $shopmsg."已确认".count($checkorders)."单\n";
-	                        $totals += count($totalorders);
-//                             $countfirst = 0;
-//                             $countdiscount = 0;
-// 	                        $totalfirst=0;
-// 	                        $totaldiscount = 0;
-// 	                        if(count($checkorders))
-// 	                        {
-// 	                          foreach ($checkorders as $itemorder)
-// 	                          {
-// 	                          	if($itemorder["isfirst"] == 1)
-// 	                          	{
-// 	                          		$countfirst++;
-// 	                          		$totalfirst += 10;
-// 	                          	}
-// 	                          	else if($itemorder["isfirst"] == 0 && $itemorder["discount"] > 0)
-// 	                          	{
-// 	                          		$countdiscount++;
-// 	                          		$totaldiscount = $totaldiscount + $itemorder["discount"];
-// 	                          	}
-// 	                          }
-//                             }
-//  	                        $shopmsg = $shopmsg."--".$countfirst."单首购单-应补贴".$totalfirst."元\n";
-//  	                        $shopmsg = $shopmsg."--".$countdiscount."单优惠单-应补贴".$totaldiscount."元\n";
-//  	                        $total = $totalfirst+$totaldiscount;
-//  	                        $shopmsg = $shopmsg."--总共补贴".$total."元\n";
-// 	                        $shopmsg = $shopmsg."未确认".count($unorders)."单\n";
-							$shopmsg = $shopmsg."-".count($unorders);
-// 	                        $mesg ='';
-// 							foreach($unorders as $item)
-//  							{  
-// //  								if($item['isfirst']==1)
-// // 							    {
-// // 									$mesg = $mesg.$item['orderid']."--首\n";
-// // 							    }
-// // 							    else if($itemorder["isfirst"] == 0 && $itemorder["discount"] > 0)
-// // 							    {
-// // 							    	$mesg = $mesg.$item['orderid']."--惠\n";
-// // 							    }
-// // 							    else 
-// // 							    {
-// // 							    	$mesg = $mesg.$item['orderid']."\n";
-// // 							    }
-// 							    $mesg = $mesg.$item['orderid']."\n";
-// 							}
-// 							$shopmsg = $shopmsg.$mesg;
-// 	                        $shopmsg = $shopmsg."已取消".count($corders)."单\n\n";
-							$shopmsg = $shopmsg."-".count($corders)."\n\n";
+							$shopdata = $shopinfo->where ( "shopid =" . $shops [$i] ['shopid'] )->find ();
+							$totalorders = $order->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND shopid=" . $shops [$i] ['shopid'] );
+							$unorders = $order->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND orderstatus = 0 AND shopid=" . $shops [$i] ['shopid'] );
+							$corders = $order->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND orderstatus = 2 AND shopid=" . $shops [$i] ['shopid'] );
+							$checkorders = $order->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND orderstatus = 1 AND shopid=" . $shops [$i] ['shopid'] );
+							$shopmsg = $shopmsg . $shopdata ['spn'] . $msg . "\n";
+							$shopmsg = $shopmsg . "电话:" . $shopdata ['phone'] . "\n";
+							// $shopmsg = $shopmsg."总-已-未-取"."\n";
+							$shopmsg = $shopmsg . count ( $totalorders ) . "-" . count ( $checkorders )."-" . count ( $unorders ). "-" . count ( $corders ) . "\n";
+							// $shopmsg = $shopmsg."收到".count($totalorders)."单\n";
+							// $shopmsg = $shopmsg."已确认".count($checkorders)."单\n";
+							$totals += count ( $totalorders );
+							$countfirst = 0;
+							$countdiscount = 0;
+							$totalfirst = 0;
+							$totaldiscount = 0;
+							if ($shops [$i] ['shopid'] == 15) {
+								if (count ( $checkorders )) {
+									foreach ( $checkorders as $itemorder ) {
+										if ($itemorder ["isfirst"] == 1) {
+											$countfirst ++;
+											$totalfirst += intval(C('FIRST_DISCOUNT'));
+										} else if ($itemorder ["isfirst"] == 0 && $itemorder ["discount"] > 0) {
+											$countdiscount ++;
+											$totaldiscount = $totaldiscount + $itemorder ["discount"];
+										}
+									}
+								}
+								$refunds = $totalfirst + $totaldiscount;
+								$shopmsg = $shopmsg.$countfirst."-".$countdiscount."-".$refunds."\n\n";
+							}
+							
+							// $shopmsg = $shopmsg."--".$countfirst."单首购单-应补贴".$totalfirst."元\n";
+							// $shopmsg = $shopmsg."--".$countdiscount."单优惠单-应补贴".$totaldiscount."元\n";
+							// $total = $totalfirst+$totaldiscount;
+							// $shopmsg = $shopmsg."--总共补贴".$total."元\n";
+							// $shopmsg = $shopmsg."未确认".count($unorders)."单\n";
+							// $mesg ='';
+							// foreach($unorders as $item)
+							// {
+							// // if($item['isfirst']==1)
+							// // {
+							// // $mesg = $mesg.$item['orderid']."--首\n";
+							// // }
+							// // else if($itemorder["isfirst"] == 0 && $itemorder["discount"] > 0)
+							// // {
+							// // $mesg = $mesg.$item['orderid']."--惠\n";
+							// // }
+							// // else
+							// // {
+							// // $mesg = $mesg.$item['orderid']."\n";
+							// // }
+							// $mesg = $mesg.$item['orderid']."\n";
+							// }
+							// $shopmsg = $shopmsg.$mesg;
+							// $shopmsg = $shopmsg."已取消".count($corders)."单\n\n";
+							
 						}
-             		}
-             		if(!empty($shopmsg))
-             		{
-             			$shopmsg = $shopmsg."总数".$totals;
-             			if(strlen($shopmsg)<2047)
-             			{
-             			    $content = "总-已-未-取"."\n".$shopmsg;
-             			}
-             			else
-             			{
-             				
-             			}
-             		}
-             		else
-             		{
-             			$content = "暂无消息";
-             		}	
-				}
-				else
-				{
+					}
+					if (! empty ( $shopmsg )) {
+						$shopmsg = $shopmsg . "总数" . $totals;
+						if (strlen ( $shopmsg ) < 2047) {
+							$content = "总-已-未-取\n" . $shopmsg;
+						} else {
+						}
+					} else {
+						$content = "暂无消息";
+					}
+				} else {
 					$content = "BD未授权";
 				}
-				
 			} else {
 				$content = "BD未授权";
 			}
