@@ -470,8 +470,7 @@ class wechatcallback {
 							$countdiscount = 0;
 							$totalfirst = 0;
 							$totaldiscount = 0;
-							if ($shops [$i] ['shopid'] == 15) {
-								if (count ( $checkorders )) {
+							if (count ( $checkorders )) {
 									foreach ( $checkorders as $itemorder ) {
 										if ($itemorder ["isfirst"] == 1) {
 											$countfirst ++;
@@ -484,7 +483,6 @@ class wechatcallback {
 								}
 								$refunds = $totalfirst + $totaldiscount;
 								$shopmsg = $shopmsg.$countfirst."-".$countdiscount."-".$refunds."\n\n";
-							}
 							
 							// $shopmsg = $shopmsg."--".$countfirst."单首购单-应补贴".$totalfirst."元\n";
 							// $shopmsg = $shopmsg."--".$countdiscount."单优惠单-应补贴".$totaldiscount."元\n";
@@ -516,7 +514,7 @@ class wechatcallback {
 					if (! empty ( $shopmsg )) {
 						$shopmsg = $shopmsg . "总数" . $totals;
 						if (strlen ( $shopmsg ) < 2047) {
-							$content = "总-已-未-取\n" . $shopmsg;
+							$content = "总-已-未-取\n首-惠-补" . $shopmsg;
 						} else {
 						}
 					} else {

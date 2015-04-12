@@ -107,25 +107,7 @@ class OrderApiController extends RestController {
 		}
 		$this->response ( $data, 'json' );
 	}
-	
-	/*
-	 * 根据GET传的shopid查询对应店铺的的订单
-	 */
-	// public function getorderbyshopid(){
-	// $order = M('order');
-	// $id = intval(I('get.id',0));
-	// if ($id){
-	// $where[OrderConst::SHOPID] =$id;
-	// $data = $order->where($where)->select();
-	// if (!count($data)){
-	// $data = [];
-	// }
-	// } else {
-	// $data = [];
-	// }
-	// $this->response($data,"json");
-	// }
-	
+
 	/*
 	 * 获取当前用户的订单
 	 */
@@ -309,9 +291,9 @@ class OrderApiController extends RestController {
 		}
 		$data[OrderConst::TOTALPRICEBEFORE] = $totalprice;
 		
-		if ($data [OrderConst::ISFIRST] == 0 && $shop_isdiscount == 1 && $data [OrderConst::SHOPID] == 15) {
+		if ($data [OrderConst::ISFIRST] == 0 && $shop_isdiscount == 1) {
 			$totalprice -= $shop_discount;
-		}else if($data [OrderConst::ISFIRST] == 1 && $data [OrderConst::SHOPID] == 15){
+		}else if($data [OrderConst::ISFIRST] == 1){
 		    $totalprice -= $dns;
 		}
 		
@@ -336,10 +318,10 @@ class OrderApiController extends RestController {
 				$orderNum = "订单编号：" . $orderid;
 				
 				$ordertype="新的订单";
-				if ($data [OrderConst::ISFIRST] == 0 && $data [OrderConst::DISCOUNT] >0 && $data [OrderConst::SHOPID] == 15) {
-					$ordertype = $ordertype.'--优惠订单';
-				}else if($data [OrderConst::ISFIRST] == 1 && $data[OrderConst::SHOPID] == 15){
-					$ordertype=$ordertype.'--首购订单';
+				if ($data [OrderConst::ISFIRST] == 0 && $data [OrderConst::DISCOUNT] >0) {
+					$ordertype = "优惠订单减免".$data[OrderConst::DISCOUNT]."元";
+				}else if($data [OrderConst::ISFIRST] == 1 ){
+					$ordertype= "首购订单减免".$data [OrderConst::DISCOUNT]."元";
 				}
 				// if (count ( $userinfo ) && ! empty ( $userinfo ["openid"] )) {
 				if (count ( $userinfo )) {
@@ -395,10 +377,10 @@ class OrderApiController extends RestController {
 							$bddata = $bd->where ( "bdid=" . $bdshops [$i] [BDConst::BDID] )->find ();
 							if (count ( $bddata ) && ! empty ( $bddata [BDConst::OPENID] )) {
 								$msgstr = $shopname . "收到新的订单";
-								if ($data [OrderConst::ISFIRST] == 0 && $data [OrderConst::DISCOUNT] >0 && $data[OrderConst::SHOPID] == 15) {
-									$msgstr = $msgstr.'--优惠订单';
-								}else if($data [OrderConst::ISFIRST] == 1 && $data [OrderConst::SHOPID] == 15){
-									$msgstr= $msgstr.'--首购订单';
+								if ($data [OrderConst::ISFIRST] == 0 && $data [OrderConst::DISCOUNT] >0) {
+									$msgstr = $msgstr.'--优惠订单减免'.$data[OrderConst::DISCOUNT].'元';
+								}else if($data [OrderConst::ISFIRST] == 1){
+									$msgstr= $msgstr.'--首购订单减免'.$data[OrderConst::DISCOUNT].'元';
 								}
 								$bdtemplate = array (
 										'touser' => $bddata [BDConst::OPENID],
@@ -517,9 +499,9 @@ class OrderApiController extends RestController {
 		
 		if($rtotalprice>0)
 		{
-		if ($order_isfirst == 0 && $shop_isdiscount == 1 && $shop_id == 15 ) {
+		if ($order_isfirst == 0 && $shop_isdiscount == 1) {
 			$rtotalprice -= $shop_discount ;
-		}else if($order_isfirst == 1 && $shop_id == 15){
+		}else if($order_isfirst == 1){
 		    $rtotalprice -= $counts;
 		}
 		}
