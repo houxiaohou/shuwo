@@ -106,7 +106,8 @@ class ShopApiController extends RestController {
 		$authorize = new Authorize ();
 		$auid = $authorize->Filter ( 'admin');
 		if ($auid) {
-			$data = $product->where ( "shopid= ".$shopid )->select ();
+			$sql = "select * from product join category on product.categoryid = category.categoryid where shopid=".$shopid." order by productid DESC";
+			$data = $product->query($sql);
 			if (! count ( $data )) {
 				$data = [ ];
 			}
