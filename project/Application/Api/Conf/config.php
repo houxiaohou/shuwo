@@ -52,6 +52,7 @@ return array(
       // array('admin','AdminApi/addadmin', '', array('method' => 'POST')),//添加管理员
 
        //订单URL配置
+        array('allorders','OrderApi/allorder', '', array('method' => 'POST')),//综合查询
       	array('allorder','OrderApi/getallorder','',array('method'=>'GET')),//查询所有的订单
       	array('order/:id','OrderApi/getorderbyid', '', array('method' => 'GET')),//根据GET传的id查询对应的订单
       	array('ordershop/:id','OrderApi/getorderbyshopid', '', array('method' => 'GET')),//根据GET传的shopid查询对应店铺的的订单
