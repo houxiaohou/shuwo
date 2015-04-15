@@ -453,6 +453,7 @@ class wechatcallback {
 						$shopinfo = M ( 'shop' );
 						$order = M ( 'orders' );
 						$totals = 0;
+						$totalrefunds  = 0;
 						for($i = 0; $i < $num; $i ++) {
 							$shopdata = $shopinfo->where ( "shopid =" . $shops [$i] ['shopid'] )->find ();
 							$totalorders = $order->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND shopid=" . $shops [$i] ['shopid'] );
@@ -482,6 +483,7 @@ class wechatcallback {
 									}
 								}
 								$refunds = $totalfirst + $totaldiscount;
+								$totalrefunds += $refunds;
 								$shopmsg = $shopmsg.$countfirst."-".$countdiscount."-".$refunds."\n\n";
 							
 							// $shopmsg = $shopmsg."--".$countfirst."单首购单-应补贴".$totalfirst."元\n";
@@ -512,9 +514,10 @@ class wechatcallback {
 						}
 					}
 					if (! empty ( $shopmsg )) {
-						$shopmsg = $shopmsg . "总数" . $totals;
+						$shopmsg = $shopmsg . "总数" . $totals."\n";
+						$shopmsg = $shopmsg.'总补贴'.$totalrefunds;
 						if (strlen ( $shopmsg ) < 2047) {
-							$content = "总-已-未-取\n首-惠-补" . $shopmsg;
+							$content = "总-已-未-取\n首-惠-补\n" . $shopmsg;
 						} else {
 						}
 					} else {

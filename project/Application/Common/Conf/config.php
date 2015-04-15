@@ -5,6 +5,7 @@ return array(
 	'URL_PATHINFO_DEPR'     => '/',	// PATHINFO模式下，各参数之间的分割符号
 	'TMPL_L_DELIM'			=> '{',//修改左定界符
 	'TMPL_R_DELIM'			=> '}',//修改右定界符
+    'URL_HTML_SUFFIX'=>'',
 	'DB_TYPE'               => 'mysql',     // 数据库类型
 	'DB_HOST'               => 'localhost', // 服务器地址
 	'DB_NAME'               => 'shuwo',          // 数据库名
