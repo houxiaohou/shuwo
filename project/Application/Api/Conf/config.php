@@ -52,7 +52,6 @@ return array(
       // array('admin','AdminApi/addadmin', '', array('method' => 'POST')),//添加管理员
 
        //订单URL配置
-        array('allorders','OrderApi/allorder', '', array('method' => 'POST')),//综合查询
       	array('allorder','OrderApi/getallorder','',array('method'=>'GET')),//查询所有的订单
       	array('order/:id','OrderApi/getorderbyid', '', array('method' => 'GET')),//根据GET传的id查询对应的订单
       	array('ordershop/:id','OrderApi/getorderbyshopid', '', array('method' => 'GET')),//根据GET传的shopid查询对应店铺的的订单
@@ -64,6 +63,7 @@ return array(
       	array('weight','OrderApi/getweight', '', array('method' => 'POST')),//称重
       	
 		//BD URL配置
+        array('queryorders','BDApi/queryorders','',array('method'=>'GET')),//得到所有的BD和店铺
 		array('allbds','BDApi/getallbds','',array('method'=>'GET')),//得到所有的BD和店铺
         array('bd/:id\d','BDApi/getshopbybdid','',array('method'=>'GET')),//根据bdid查询所属店铺信息
 		array('bd/:id\d','BDApi/deletebd','',array('method'=>'DELETE')),//删除bd	
@@ -82,5 +82,8 @@ return array(
        array('allorders','SurveyApi/allOrderbydaytime', '', array('method' => 'GET')),//查询每日的订单数
        array('getorders','SurveyApi/getOrderbymothtime', '', array('method' => 'POST')),//查询每月的订单量
        array('yearorders','SurveyApi/getOrderbyyeartime', '', array('method' => 'POST')),//查询每年的订单量
+       
+      //查询URL配置
+      array('usorders','SearchApi/allorder', '', array('method' => 'POST')),//综合查询
 )
 );

@@ -13,43 +13,23 @@ require_once 'Authorize.php';
 require_once 'Weixin.php';
 require_once 'ShopConst.php';
 class OrderApiController extends RestController {
-    /*
-     * 综合查询
-     */
-    public function allorder(){
-     $orders = M('orders');
-    $orderid = I('post.orderid');
-    $phone = I('post.phone');
-    $username = I('post.username');
-    if(!empty($orderid)){
-    $where[OrderConst::ORDERID] = $orderid;
-    } 
-    if(!empty($phone)){
-    $where[OrderConst::PHONE] = $phone;
-    }
-    if(!empty($username)){
-    $where[OrderConst::USERNAME] = $username;
-    }
-    $data = $orders->where($where)->find();
-    $this->response ( $data, 'json' );
-    }
 	/*
 	 * 查询所有的订单
 	 */
 	public function getallorder() {
 		$authorize = new Authorize ();
 		$isAdmin = $authorize->Filter ( "admin" );
-		if ($isAdmin) {
-			$order = M ( "orders" );
-			$start = I ( 'get.start', 0 );
-			$count = I ( 'get.count', 5 );
+		  if ($isAdmin) {
+			     $order = M ( "orders" );
+			     $start = I ( 'get.start', 0 );
+			     $count = I ( 'get.count', 5 );
 			
-			$orderdata = $order->order ( '-createdtime' )->limit ( $start, $count )->select ();
-			$data = $this->orderdetail ( $orderdata, $count );
-			$this->response ( $data, 'json' );
-		} else {
-			$message ["msg"] = "Unauthorized";
-			$this->response ( $message, 'json', '401' );
+			     $orderdata = $order->order ( '-createdtime' )->limit ( $start, $count )->select ();
+			     $data = $this->orderdetail ( $orderdata, $count );
+			     $this->response ( $data, 'json' );
+		          } else {
+		      	$message ["msg"] = "Unauthorized";
+		     	$this->response ( $message, 'json', '401' );
 		}
 	}
 	

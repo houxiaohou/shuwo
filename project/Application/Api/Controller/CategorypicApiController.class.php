@@ -46,7 +46,7 @@ class CategorypicApiController extends RestController {
 	//根据CATEGORIID 查询对应的信息
 	public function getcategorypicbycategoryid() {
 	    $authorize = new Authorize ();
-	    $auid = $authorize->Filter ( 'admin,shop' );
+	    $auid = $authorize->Filter ( 'admin','shop' );
 	    if ($auid) {
 	    $category = M ( "categorypic" );
 	    $categoryid = intval ( I ( 'get.id', 0 ) );
@@ -67,7 +67,7 @@ class CategorypicApiController extends RestController {
 	//更新
 	public function updatecategorypic(){
 	    $authorize = new Authorize ();
-	    $auid = $authorize->Filter ( 'admin,shop' );
+	    $auid = $authorize->Filter ( 'admin','shop');
 	    if ($auid) {
 	        $category = M ( 'categorypic' );
 	        $id = intval ( I ( 'get.id', 0 ) );
