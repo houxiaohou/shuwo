@@ -13,7 +13,7 @@ class SearchApiController  extends RestController {
      */
     public function allorder(){
         $authorize = new Authorize ();
-        $auid = $authorize->Filter ( 'admin','shop');
+        $auid = $authorize->Filter ( "admin,shop");
         if($auid){
             $orders = M('orders');
             $orderid = I('post.orderid');

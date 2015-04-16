@@ -166,7 +166,7 @@ class ShopApiController extends RestController {
 			$data [ShopConst::CITY] = I ( $post . ShopConst::CITY, '' );
 			$data [ShopConst::PROVINCE] = I ( $post . ShopConst::PROVINCE, '' );
 			$data [ShopConst::DISTRICT] = I ( $post . ShopConst::DISTRICT, '' );
-			$data [ShopConst::ISDISCOUNT] = I ( $post . ShopConst::ISDISCOUNT, '' );
+			$data [ShopConst::ISDISCOUNT] = I ( $post . ShopConst::ISDISCOUNT, 0 );
 			$data [ShopConst::DISCOUNT] = I ( $post . ShopConst::DISCOUNT, '' );
 			$lat = $data [ShopConst::LATITUDE] = doubleval ( I ( $post . ShopConst::LATITUDE, 0 ) );
 			$lng = $data [ShopConst::LONGITUDE] = doubleval ( I ( $post . ShopConst::LONGITUDE, 0 ) );

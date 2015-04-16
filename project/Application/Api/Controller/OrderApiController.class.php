@@ -19,17 +19,17 @@ class OrderApiController extends RestController {
 	public function getallorder() {
 		$authorize = new Authorize ();
 		$isAdmin = $authorize->Filter ( "admin" );
-		  if ($isAdmin) {
-			     $order = M ( "orders" );
-			     $start = I ( 'get.start', 0 );
-			     $count = I ( 'get.count', 5 );
+		if ($isAdmin) {
+			$order = M ( "orders" );
+			$start = I ( 'get.start', 0 );
+			$count = I ( 'get.count', 5 );
 			
-			     $orderdata = $order->order ( '-createdtime' )->limit ( $start, $count )->select ();
-			     $data = $this->orderdetail ( $orderdata, $count );
-			     $this->response ( $data, 'json' );
-		          } else {
-		      	$message ["msg"] = "Unauthorized";
-		     	$this->response ( $message, 'json', '401' );
+			$orderdata = $order->order ( '-createdtime' )->limit ( $start, $count )->select ();
+			$data = $this->orderdetail ( $orderdata, $count );
+			$this->response ( $data, 'json' );
+		} else {
+			$message ["msg"] = "Unauthorized";
+			$this->response ( $message, 'json', '401' );
 		}
 	}
 	
@@ -70,15 +70,15 @@ class OrderApiController extends RestController {
 				$data [OrderConst::SHOPID] = $orderdata [OrderConst::SHOPID];
 				$data [OrderConst::DLTIME] = $orderdata [OrderConst::DLTIME];
 				$data [OrderConst::ISFIRST] = $orderdata [OrderConst::ISFIRST];
-				$data[OrderConst::DISCOUNT] = $orderdata[OrderConst::DISCOUNT];
+				$data [OrderConst::DISCOUNT] = $orderdata [OrderConst::DISCOUNT];
 				
-				if ($orderdata [OrderConst::RTOTALPRICE] >= 0 && $data [OrderConst::ORDERSTATUS] ==1 ) {
+				if ($orderdata [OrderConst::RTOTALPRICE] >= 0 && $data [OrderConst::ORDERSTATUS] == 1) {
 					$data ['price'] = $orderdata [OrderConst::RTOTALPRICE];
 				} else {
 					$data ['price'] = $orderdata [OrderConst::TOTALPRICE];
 				}
 				
-				if ($orderdata [OrderConst::RTOTALPRICEBEFORE] >= 0 && $orderdata[OrderConst::ORDERSTATUS] == 1 ) {
+				if ($orderdata [OrderConst::RTOTALPRICEBEFORE] >= 0 && $orderdata [OrderConst::ORDERSTATUS] == 1) {
 					$data ['beforeprice'] = $orderdata [OrderConst::RTOTALPRICEBEFORE];
 				} else {
 					$data ['beforeprice'] = $orderdata [OrderConst::TOTALPRICEBEFORE];
@@ -107,7 +107,7 @@ class OrderApiController extends RestController {
 		}
 		$this->response ( $data, 'json' );
 	}
-
+	
 	/*
 	 * 获取当前用户的订单
 	 */
@@ -198,6 +198,7 @@ class OrderApiController extends RestController {
 	 * 创建新订单
 	 */
 	public function createorder() {
+		$currentdate = date ( 'Y-m-d' );
 		$order = M ( 'orders' );
 		$shop = M ( 'shop' );
 		$dns = OrderConst::COUNT;
@@ -207,14 +208,14 @@ class OrderApiController extends RestController {
 		// 新生成的订单状态默认为0，为1时下单成功，为2时订单取消
 		$data [OrderConst::ORDERSTATUS] = 0;
 		$authorize = new Authorize ();
- 		$userid = $authorize->Filter ( "user" );
+		$userid = $authorize->Filter ( "user" );
 		$data [OrderConst::USERID] = $userid;
 		if ($userid) {
 			$orders = M ( 'orders' );
 			if ($orders->where ( "userid = {$userid}" )->find ()) {
 				$data [OrderConst::ISFIRST] = 0;
 			} else {
-			    $data[OrderConst::DISCOUNT] = $dns;
+				$data [OrderConst::DISCOUNT] = $dns;
 				$data [OrderConst::ISFIRST] = 1;
 			}
 		}
@@ -223,11 +224,9 @@ class OrderApiController extends RestController {
 		$where_shop [ShopConst::SHOPID] = $data [OrderConst::SHOPID];
 		$shopdetail = $shop->where ( $where_shop )->find ();
 		// 获取店铺的优惠信息
-		$shop_isdiscount =  $shopdetail [ShopConst::ISDISCOUNT];
+		$shop_isdiscount = $shopdetail [ShopConst::ISDISCOUNT];
 		$shop_discount = $shopdetail [ShopConst::DISCOUNT];
-		if($shop_isdiscount == 1 &&  $data [OrderConst::ISFIRST]!=1){
-		    $data[OrderConst::DISCOUNT] = $shop_discount;
-		}
+		
 		// 订单的支付状态默认为0待支付，为1时支付成功，为2时支付失败
 		$data [OrderConst::PAYSTATUS] = 0;
 		$where1 [ShippingaddressConst::SAID] = I ( 'post.said' );
@@ -285,16 +284,24 @@ class OrderApiController extends RestController {
 					break;
 			}
 			$totalprice += $productprice;
-			//将每个产品的价格(含预估)写入orderproduct表中的realprice字段
+			// 将每个产品的价格(含预估)写入orderproduct表中的realprice字段
 			$data1 [OrderProductConst::REALPRICE] = $productprice;
 			$orderproduct->add ( $data1 );
 		}
-		$data[OrderConst::TOTALPRICEBEFORE] = $totalprice;
+		$data [OrderConst::TOTALPRICEBEFORE] = $totalprice;
 		
 		if ($data [OrderConst::ISFIRST] == 0 && $shop_isdiscount == 1) {
-			$totalprice -= $shop_discount;
-		}else if($data [OrderConst::ISFIRST] == 1){
-		    $totalprice -= $dns;
+			$sql = "select * from orders where userid =" . $userid . " AND date(createdtime)='" . $currentdate . "'";
+			$orders = $order->query ( $sql );
+			if (count ( $orders )) {
+				$data [OrderConst::DISCOUNT] = 0;
+			} else {
+				$data [OrderConst::DISCOUNT] = $shop_discount;
+				$totalprice -= $shop_discount;
+			}
+		} else if ($data [OrderConst::ISFIRST] == 1) {
+			
+			$totalprice -= $dns;
 		}
 		
 		$data [OrderConst::TOTALPRICE] = $totalprice;
@@ -304,12 +311,12 @@ class OrderApiController extends RestController {
 			$order->add ( $data );
 			$data2 ['orderid'] = $orderid;
 			
-			//构造模板消息
+			// 构造模板消息
 			
 			$shopid = intval ( $data [OrderConst::SHOPID] );
 			if ($shopid) {
 				$user = M ( "user" );
-                
+				
 				$userinfo = $user->where ( 'shopid=' . $shopid )->select ();
 				
 				$current = date ( 'y年m月d日 H:i' );
@@ -317,11 +324,11 @@ class OrderApiController extends RestController {
 				$address = "发货地址: " . $data [OrderConst::ADDRESS] . "   配送时间: " . $data [OrderConst::DLTIME];
 				$orderNum = "订单编号：" . $orderid;
 				
-				$ordertype="新的订单";
-				if ($data [OrderConst::ISFIRST] == 0 && $data [OrderConst::DISCOUNT] >0) {
-					$ordertype = "优惠订单减免".$data[OrderConst::DISCOUNT]."元";
-				}else if($data [OrderConst::ISFIRST] == 1 ){
-					$ordertype= "首购订单减免".$data [OrderConst::DISCOUNT]."元";
+				$ordertype = "新的订单";
+				if ($data [OrderConst::ISFIRST] == 0 && $data [OrderConst::DISCOUNT] > 0) {
+					$ordertype = "优惠订单减免" . $data [OrderConst::DISCOUNT] . "元";
+				} else if ($data [OrderConst::ISFIRST] == 1) {
+					$ordertype = "首购订单减免" . $data [OrderConst::DISCOUNT] . "元";
 				}
 				// if (count ( $userinfo ) && ! empty ( $userinfo ["openid"] )) {
 				if (count ( $userinfo )) {
@@ -342,7 +349,7 @@ class OrderApiController extends RestController {
 													'color' => "#009900" 
 											),
 											'orderType' => array (
-													'value' => urlencode ($ordertype),
+													'value' => urlencode ( $ordertype ),
 													'color' => "#009900" 
 											),
 											'customerInfo' => array (
@@ -377,10 +384,10 @@ class OrderApiController extends RestController {
 							$bddata = $bd->where ( "bdid=" . $bdshops [$i] [BDConst::BDID] )->find ();
 							if (count ( $bddata ) && ! empty ( $bddata [BDConst::OPENID] )) {
 								$msgstr = $shopname . "收到新的订单";
-								if ($data [OrderConst::ISFIRST] == 0 && $data [OrderConst::DISCOUNT] >0) {
-									$msgstr = $msgstr.'--优惠订单减免'.$data[OrderConst::DISCOUNT].'元';
-								}else if($data [OrderConst::ISFIRST] == 1){
-									$msgstr= $msgstr.'--首购订单减免'.$data[OrderConst::DISCOUNT].'元';
+								if ($data [OrderConst::ISFIRST] == 0 && $data [OrderConst::DISCOUNT] > 0) {
+									$msgstr = $msgstr . '--优惠订单减免' . $data [OrderConst::DISCOUNT] . '元';
+								} else if ($data [OrderConst::ISFIRST] == 1) {
+									$msgstr = $msgstr . '--首购订单减免' . $data [OrderConst::DISCOUNT] . '元';
 								}
 								$bdtemplate = array (
 										'touser' => $bddata [BDConst::OPENID],
@@ -420,10 +427,10 @@ class OrderApiController extends RestController {
 								$weixin->sendtemplatemsg ( urldecode ( json_encode ( $bdtemplate ) ), $token );
 							}
 						}
-               }
-		}
+					}
+				}
 			}
- 		}
+		}
 		
 		$this->response ( $data2, 'json' );
 	}
@@ -450,7 +457,7 @@ class OrderApiController extends RestController {
 			$realprice = $orderproduct->where ( $where )->getField ( OrderProductConst::REALPRICE );
 			
 			// 如果重量不为0，插入到orderproduct表的realweight字段中
-			if (intval($weight)>=0) {
+			if (intval ( $weight ) >= 0) {
 				$data [OrderProductConst::REALWEIGHT] = $weight;
 				// 根据orderproductid从orderproduct表中获得对应的productid 和orderid
 				$where2 [OrderProductConst::ID] = $orderproductid;
@@ -496,18 +503,15 @@ class OrderApiController extends RestController {
 		$order_isfirst = $order->where ( $where4 )->getField ( 'isfirst' );
 		$order->where ( $where4 )->setField ( 'rtotalpricebefore', $rtotalprice );
 		
-		
-		if($rtotalprice>0)
-		{
-		if ($order_isfirst == 0 && $shop_isdiscount == 1) {
-			$rtotalprice -= $shop_discount ;
-		}else if($order_isfirst == 1){
-		    $rtotalprice -= $counts;
+		if ($rtotalprice > 0) {
+			if ($order_isfirst == 0 && $shop_isdiscount == 1) {
+				$rtotalprice -= $shop_discount;
+			} else if ($order_isfirst == 1) {
+				$rtotalprice -= $counts;
+			}
 		}
-		}
-		if( $rtotalprice<=0)
-		{
-			$rtotalprice=0;
+		if ($rtotalprice <= 0) {
+			$rtotalprice = 0;
 		}
 		
 		$order->where ( $where4 )->setField ( 'rtotalprice', $rtotalprice );
@@ -553,51 +557,51 @@ class OrderApiController extends RestController {
 				}
 			}
 			
-			// 通知BD
-			$shopid = $order->where ( $where4 )->getField ( "shopid" );
-			if ($shopid) {
-				$shop = M ( "shop" );
-				$shopname = $shop->where ( "shopid=" . $shopid )->getField ( "spn" );
-				$bdshop = M ( "bdshop" );
-				$bdshops = $bdshop->where ( "shopid=" . $shopid )->select ();
-				if (count ( $bdshops )) {
-					$bd = M ( 'bd' );
-					for($i = 0; $i < count ( $bdshops ); $i ++) {
-						$bddata = $bd->where ( "bdid=" . $bdshops [$i] [BDConst::BDID] )->find ();
-						if (count ( $bddata ) && ! empty ( $bddata [BDConst::OPENID] )) {
-							$current = date ( 'y年m月d日H:i' );
-							$msg = $shopname . "--" . $current . "确认订单";
-							$realtotal = $order->where ( $where4 )->getField ( 'rtotalprice' );
-							$totalprice = "实际价格:" . $realtotal . "元";
-							$bdtemplate = array (
-									'touser' => trim ( $bddata [BDConst::OPENID] ),
-									'template_id' => C ( 'BDORDERSTATUS_TEMPID' ),
-									'topcolor' => "#0000CD",
-									'data' => array (
-											'first' => array (
-													'value' => urlencode ( $msg ),
-													'color' => "#0000FF" 
-											),
-											'OrderSn' => array (
-													'value' => urlencode ( $orderid ),
-													'color' => "#000000" 
-											),
-											'OrderStatus' => array (
-													'value' => urlencode ( $totalprice ),
-													'color' => "#000000" 
-											),
-											'remark' => array (
-													'value' => urlencode ( "\\n信息来自树窝小店" ),
-													'color' => "#cccccc" 
-											) 
-									) 
-							);
-							$token = $weixin->getshopGlobalAccessToken ();
-							$weixin->sendtemplatemsg ( urldecode ( json_encode ( $bdtemplate ) ), $token );
-						}
-					}
-				}
-			}
+// 			// 通知BD
+// 			$shopid = $order->where ( $where4 )->getField ( "shopid" );
+// 			if ($shopid) {
+// 				$shop = M ( "shop" );
+// 				$shopname = $shop->where ( "shopid=" . $shopid )->getField ( "spn" );
+// 				$bdshop = M ( "bdshop" );
+// 				$bdshops = $bdshop->where ( "shopid=" . $shopid )->select ();
+// 				if (count ( $bdshops )) {
+// 					$bd = M ( 'bd' );
+// 					for($i = 0; $i < count ( $bdshops ); $i ++) {
+// 						$bddata = $bd->where ( "bdid=" . $bdshops [$i] [BDConst::BDID] )->find ();
+// 						if (count ( $bddata ) && ! empty ( $bddata [BDConst::OPENID] )) {
+// 							$current = date ( 'y年m月d日H:i' );
+// 							$msg = $shopname . "--" . $current . "确认订单";
+// 							$realtotal = $order->where ( $where4 )->getField ( 'rtotalprice' );
+// 							$totalprice = "实际价格:" . $realtotal . "元";
+// 							$bdtemplate = array (
+// 									'touser' => trim ( $bddata [BDConst::OPENID] ),
+// 									'template_id' => C ( 'BDORDERSTATUS_TEMPID' ),
+// 									'topcolor' => "#0000CD",
+// 									'data' => array (
+// 											'first' => array (
+// 													'value' => urlencode ( $msg ),
+// 													'color' => "#0000FF" 
+// 											),
+// 											'OrderSn' => array (
+// 													'value' => urlencode ( $orderid ),
+// 													'color' => "#000000" 
+// 											),
+// 											'OrderStatus' => array (
+// 													'value' => urlencode ( $totalprice ),
+// 													'color' => "#000000" 
+// 											),
+// 											'remark' => array (
+// 													'value' => urlencode ( "\\n信息来自树窝小店" ),
+// 													'color' => "#cccccc" 
+// 											) 
+// 									) 
+// 							);
+// 							$token = $weixin->getshopGlobalAccessToken ();
+// 							$weixin->sendtemplatemsg ( urldecode ( json_encode ( $bdtemplate ) ), $token );
+// 						}
+// 					}
+// 				}
+// 			}
 		}
 	}
 	/*
@@ -675,49 +679,49 @@ class OrderApiController extends RestController {
 			}
 			
 			// 通知BD
-			$shopid = $order->where ( "orderid=" . $id )->getField ( "shopid" );
-			if ($shopid) {
-				$shop = M ( "shop" );
-				$shopname = $shop->where ( "shopid=" . $shopid )->getField ( "spn" );
-				$bdshop = M ( "bdshop" );
-				$bdshops = $bdshop->where ( "shopid=" . $shopid )->select ();
-				if (count ( $bdshops )) {
-					$bd = M ( 'bd' );
-					for($i = 0; $i < count ( $bdshops ); $i ++) {
-						$bddata = $bd->where ( "bdid=" . $bdshops [$i] [BDConst::BDID] )->find ();
-						if (count ( $bddata ) && ! empty ( $bddata [BDConst::OPENID] )) {
-							$current = date ( 'y年m月d日H:i' );
-							$msg = $shopname . "--" . $current . "取消订单";
-							$errormsg = "订单取消原因:" . $ordernotes . " 商家电话:" . $phone;
-							$bdtemplate = array (
-									'touser' => trim ( $bddata [BDConst::OPENID] ),
-									'template_id' => C ( 'BDORDERSTATUS_TEMPID' ),
-									'topcolor' => "#FF0000",
-									'data' => array (
-											'first' => array (
-													'value' => urlencode ( $msg ),
-													'color' => "#FFFF00" 
-											),
-											'OrderSn' => array (
-													'value' => urlencode ( $id ),
-													'color' => "#009900" 
-											),
-											'OrderStatus' => array (
-													'value' => urlencode ( $errormsg ),
-													'color' => "#009900" 
-											),
-											'remark' => array (
-													'value' => urlencode ( "\\n信息来自树窝小店" ),
-													'color' => "#cccccc" 
-											) 
-									) 
-							);
-							$token = $weixin->getshopGlobalAccessToken ();
-							$weixin->sendtemplatemsg ( urldecode ( json_encode ( $bdtemplate ) ), $token );
-						}
-					}
-				}
-			}
+// 			$shopid = $order->where ( "orderid=" . $id )->getField ( "shopid" );
+// 			if ($shopid) {
+// 				$shop = M ( "shop" );
+// 				$shopname = $shop->where ( "shopid=" . $shopid )->getField ( "spn" );
+// 				$bdshop = M ( "bdshop" );
+// 				$bdshops = $bdshop->where ( "shopid=" . $shopid )->select ();
+// 				if (count ( $bdshops )) {
+// 					$bd = M ( 'bd' );
+// 					for($i = 0; $i < count ( $bdshops ); $i ++) {
+// 						$bddata = $bd->where ( "bdid=" . $bdshops [$i] [BDConst::BDID] )->find ();
+// 						if (count ( $bddata ) && ! empty ( $bddata [BDConst::OPENID] )) {
+// 							$current = date ( 'y年m月d日H:i' );
+// 							$msg = $shopname . "--" . $current . "取消订单";
+// 							$errormsg = "订单取消原因:" . $ordernotes . " 商家电话:" . $phone;
+// 							$bdtemplate = array (
+// 									'touser' => trim ( $bddata [BDConst::OPENID] ),
+// 									'template_id' => C ( 'BDORDERSTATUS_TEMPID' ),
+// 									'topcolor' => "#FF0000",
+// 									'data' => array (
+// 											'first' => array (
+// 													'value' => urlencode ( $msg ),
+// 													'color' => "#FFFF00" 
+// 											),
+// 											'OrderSn' => array (
+// 													'value' => urlencode ( $id ),
+// 													'color' => "#009900" 
+// 											),
+// 											'OrderStatus' => array (
+// 													'value' => urlencode ( $errormsg ),
+// 													'color' => "#009900" 
+// 											),
+// 											'remark' => array (
+// 													'value' => urlencode ( "\\n信息来自树窝小店" ),
+// 													'color' => "#cccccc" 
+// 											) 
+// 									) 
+// 							);
+// 							$token = $weixin->getshopGlobalAccessToken ();
+// 							$weixin->sendtemplatemsg ( urldecode ( json_encode ( $bdtemplate ) ), $token );
+// 						}
+// 					}
+// 				}
+// 			}
 		} else {
 			$data = [ ];
 			$this->response ( $data, 'json' );
@@ -742,14 +746,14 @@ class OrderApiController extends RestController {
 				$data [$i] [OrderConst::SHOPID] = $orderdata [$i] [OrderConst::SHOPID];
 				$data [$i] [OrderConst::DLTIME] = $orderdata [$i] [OrderConst::DLTIME];
 				$data [$i] [OrderConst::ISFIRST] = $orderdata [$i] [OrderConst::ISFIRST];
-           		$data [$i][OrderConst::DISCOUNT]= $orderdata[$i][OrderConst::DISCOUNT];
+				$data [$i] [OrderConst::DISCOUNT] = $orderdata [$i] [OrderConst::DISCOUNT];
 				
-				if ($orderdata [$i] [OrderConst::RTOTALPRICE] >= 0 && $orderdata [$i] [OrderConst::ORDERSTATUS] == 1 ) {
+				if ($orderdata [$i] [OrderConst::RTOTALPRICE] >= 0 && $orderdata [$i] [OrderConst::ORDERSTATUS] == 1) {
 					$data [$i] ['price'] = $orderdata [$i] [OrderConst::RTOTALPRICE];
 				} else {
 					$data [$i] ['price'] = $orderdata [$i] [OrderConst::TOTALPRICE];
 				}
-				if ($orderdata [$i] [OrderConst::RTOTALPRICEBEFORE] >= 0 && $orderdata [$i] [OrderConst::ORDERSTATUS] == 1 ) {
+				if ($orderdata [$i] [OrderConst::RTOTALPRICEBEFORE] >= 0 && $orderdata [$i] [OrderConst::ORDERSTATUS] == 1) {
 					$data [$i] ['beforeprice'] = $orderdata [$i] [OrderConst::RTOTALPRICEBEFORE];
 				} else {
 					$data [$i] ['beforeprice'] = $orderdata [$i] [OrderConst::TOTALPRICEBEFORE];
