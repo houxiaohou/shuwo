@@ -244,6 +244,7 @@ class OrderApiController extends RestController {
 			else 
 			{
 				$distance = $this->getDistance($shoplat, $shoplat, $data [OrderConst::LATITUDE], $data [OrderConst::LONGITUDE]);
+				$data[OrderConst::DISTANCE] = intval($distance);
 				if(intval($distance)<=50)
 				{
 					$data [OrderConst::ISDELIVERY] = 0;
