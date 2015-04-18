@@ -84,6 +84,7 @@ return array(
        array('yearorders','SurveyApi/getOrderbyyeartime', '', array('method' => 'POST')),//查询每年的订单量
        
       //查询URL配置
-      array('usorders','SearchApi/allorder', '', array('method' => 'POST')),//综合查询
+      array('searchorderbyadmin','SearchApi/searchorderbyadmin', '', array('method' => 'POST')),//综合查询
+	  array('searchorderbyshop','SearchApi/searchorderbyshop', '', array('method' => 'POST')),//综合查询
 )
 );
