@@ -58,6 +58,7 @@ return array(
       	array('user/orders','OrderApi/getordersbyuser', '', array('method' => 'GET')),//获取当前用户的订单
       	array('shop/orders','OrderApi/getordersbyshop', '', array('method' => 'GET')),//获取当前店铺的订单
       	array('order/:id','OrderApi/deleteorder', '', array('method' => 'DELETE')),   //删除订单
+      	array('ordercomfirm','OrderApi/ordercomfirm', '', array('method' => 'POST')),//用户确认订单
         array('ordercancel','OrderApi/cancelorder', '', array('method' => 'POST')),//撤销订单
         array('order','OrderApi/createorder', '', array('method' => 'POST')),//生成新订单
       	array('weight','OrderApi/getweight', '', array('method' => 'POST')),//称重

@@ -153,25 +153,25 @@ class wechatcallback {
 									
 									$mesg = '';
 									$mesg_yest = '';
-									foreach ( $unorders as $item ) {
-										// if($item['isfirst']==1)
-										// {
-										// $mesg = $mesg.$item['orderid']."--首\n";
-										// }
-										// else if($itemorder["isfirst"] == 0 && $itemorder["discount"] > 0)
-										// {
-										// $mesg = $mesg.$item['orderid']."--惠\n";
-										// }
-										// else
-										// {
-										// $mesg = $mesg.$item['orderid']."\n";
-										// }
-										$mesg = $mesg . $item ['orderid'] . "\n";
-									}
+// 									foreach ( $unorders as $item ) {
+// 										// if($item['isfirst']==1)
+// 										// {
+// 										// $mesg = $mesg.$item['orderid']."--首\n";
+// 										// }
+// 										// else if($itemorder["isfirst"] == 0 && $itemorder["discount"] > 0)
+// 										// {
+// 										// $mesg = $mesg.$item['orderid']."--惠\n";
+// 										// }
+// 										// else
+// 										// {
+// 										// $mesg = $mesg.$item['orderid']."\n";
+// 										// }
+// 										$mesg = $mesg . $item ['orderid'] . "\n";
+// 									}
 									
-									foreach ( $unorders_yest as $item ) {
-										$mesg_yest = $mesg_yest . $item ['orderid'] . "\n";
-									}
+// 									foreach ( $unorders_yest as $item ) {
+// 										$mesg_yest = $mesg_yest . $item ['orderid'] . "\n";
+// 									}
 									$shopmsg = $shopmsg . $mesg;
 									$msg_yest = $msg_yest . $mesg_yest;
 									$shopmsg = $shopmsg . "已取消" . count ( $corders ) . "单\n";

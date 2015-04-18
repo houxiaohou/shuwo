@@ -5,7 +5,7 @@ use Think\Controller\RestController;
 
 require_once 'OrderConst.php';
 require_once 'Weixin.php';
-
+require_once 'BDConst.php';
 class WeixinqueueApiController extends RestController {
 
 	public  function  sendorderinfotouser()
@@ -53,6 +53,74 @@ class WeixinqueueApiController extends RestController {
         $weixin = new Weixin ();
         $token = $weixin->getshopGlobalAccessToken ();
         $weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
+	}
+	
+	public function sendorderinfotobd()
+	{
+		$current = date ( 'y年m月d日 H:i' );
+		$shop = M("shop");
+		$order = M("orders");
+		$poststr = 'post.';
+		$shopid =  I($poststr.OrderConst::SHOPID);
+		$orderid = I($poststr.OrderConst::ORDERID);
+		$orderNum = "订单编号：".$orderid;
+		$data = $order->where("orderid ='".$orderid."'")->find();
+		$contact = $data [OrderConst::USERNAME] . " 电话" . $data [OrderConst::PHONE];
+		$address = "发货地址: " . $data [OrderConst::ADDRESS] . "   配送时间: " . $data [OrderConst::DLTIME];
+		$shopname = $shop->where ( "shopid=" . $shopid )->getField ( "spn" );
+		$bdshop = M ( 'bdshop' );
+		$bdshops = $bdshop->where ( "shopid=" . $shopid )->select ();
+		if (count ( $bdshops )) {
+			$bd = M ( 'bd' );
+			for($i = 0; $i < count ( $bdshops ); $i ++) {
+				$bddata = $bd->where ( "bdid=" . $bdshops [$i] [BDConst::BDID] )->find ();
+				if (count ( $bddata ) && ! empty ( $bddata [BDConst::OPENID] )) {
+					$msgstr = $shopname . "收到新的订单";
+					if ($data [OrderConst::ISFIRST] == 0 && $data [OrderConst::DISCOUNT] > 0) {
+						$msgstr = $msgstr . '--优惠订单减免' . $data [OrderConst::DISCOUNT] . '元';
+					} else if ($data [OrderConst::ISFIRST] == 1) {
+						$msgstr = $msgstr . '--首购订单减免' . $data [OrderConst::DISCOUNT] . '元';
+					}
+					$bdtemplate = array (
+							'touser' => $bddata [BDConst::OPENID],
+							'template_id' => C ( 'NEWORDER_TEMPID' ),
+							'topcolor' => "#009900",
+							'data' => array (
+									'first' => array (
+											'value' => urlencode ( $orderNum ),
+											'color' => "#FF0000"
+									),
+									'tradeDateTime' => array (
+											'value' => urlencode ( $current ),
+											'color' => "#009900"
+									),
+									'orderType' => array (
+											'value' => urlencode ( $msgstr ),
+											'color' => "#FF0000"
+									),
+									'customerInfo' => array (
+											'value' => urlencode ( $contact ),
+											'color' => "#009900"
+									),
+									'orderItemName' => array (
+											'value' => urlencode ( "发货地址&配送时间" )
+									),
+									'orderItemData' => array (
+											'value' => urlencode ( $address ),
+											'color' => "#009900"
+									),
+									'remark' => array (
+											'value' => urlencode ( "\\n信息来自树窝小店" ),
+											'color' => "#cccccc"
+									)
+							)
+					);
+					$weixin = new Weixin ();
+					$token = $weixin->getshopGlobalAccessToken ();
+					$weixin->sendtemplatemsg ( urldecode ( json_encode ( $bdtemplate ) ), $token );
+				}
+			}
+		}
 	}
         
 	

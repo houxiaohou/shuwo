@@ -21,5 +21,8 @@ class OrderConst
     const DISCOUNT = 'discount';
     const TOTALPRICEBEFORE = "totalpricebefore";
     const RTOTALPRICEBEFORE = "rtotalpricebefore";
+    const LATITUDE  = 'lat';
+	const LONGITUDE = 'lng';
+	const ISDElIVERY = 'isdelivery';
     const COUNT = 10;
 }
