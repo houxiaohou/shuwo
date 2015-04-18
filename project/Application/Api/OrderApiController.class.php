@@ -211,7 +211,6 @@ class OrderApiController extends RestController {
 		$userid = $authorize->Filter ( "user" );
 		$data [OrderConst::USERID] = $userid;
 		if ($userid) {
-			$poststr = 'post.';
 			$orders = M ( 'orders' );
 			if ($orders->where ( "userid = {$userid}" )->find ()) {
 				$data [OrderConst::ISFIRST] = 0;
@@ -219,156 +218,180 @@ class OrderApiController extends RestController {
 				$data [OrderConst::DISCOUNT] = $dns;
 				$data [OrderConst::ISFIRST] = 1;
 			}
+		}
+		$data [OrderConst::SHOPID] = I ( 'post.shopid' );
+		
+		$where_shop [ShopConst::SHOPID] = $data [OrderConst::SHOPID];
+		$shopdetail = $shop->where ( $where_shop )->find ();
+		// 获取店铺的优惠信息
+		$shop_isdiscount = $shopdetail [ShopConst::ISDISCOUNT];
+		$shop_discount = $shopdetail [ShopConst::DISCOUNT];
+		
+		// 订单的支付状态默认为0待支付，为1时支付成功，为2时支付失败
+		$data [OrderConst::PAYSTATUS] = 0;
+		$where1 [ShippingaddressConst::SAID] = I ( 'post.said' );
+		// 根据获得的said访问shippingaddress表得到相应的address和phone
+		$shippingaddress = M ( 'shippingaddress' );
+		$shippingaddressdata = $shippingaddress->where ( $where1 )->find ();
+		
+		if (count ( $shippingaddressdata )) {
+			$data [OrderConst::ADDRESS] = $shippingaddressdata [ShippingaddressConst::ADDRESS];
+			$data [OrderConst::PHONE] = $shippingaddressdata [ShippingaddressConst::MOBILE];
+			$data [OrderConst::USERNAME] = $shippingaddressdata [ShippingaddressConst::USERNAME];
+		}
+		$data [OrderConst::CREATEDTIME] = date ( "Y-m-d H:i:s", time () );
+		$data [OrderConst::DLTIME] = I ( 'post.dltime' );
+		$data [OrderConst::NOTES] = I ( 'post.notes' );
+		
+		$product = M ( 'product' );
+		$orderproduct = M ( 'orderproduct' );
+		$totalprice = 0;
+		
+		$orderdetail_json = $_POST ['orderdetail'];
+		$orderdetails = json_decode ( $orderdetail_json, true );
+		
+		$count = count ( $orderdetails );
+		for($i = 0; $i < $count; $i ++) {
+			$productid = $orderdetails [$i] ['productid'];
+			$quantity = $orderdetails [$i] ['quantity'];
 			
+			$data1 [OrderProductConst::ORDERID] = $orderid;
+			$data1 [OrderProductConst::PRODUCTID] = $productid;
+			$data1 [OrderProductConst::QUANTITY] = $quantity;
 			
-			$data [OrderConst::SHOPID] = I ( 'post.shopid' );
-			$where_shop [ShopConst::SHOPID] = $data [OrderConst::SHOPID];
-			$shopdetail = $shop->where ( $where_shop )->find ();
-			//获取店铺经纬度
-			$shoplat = $shopdetail[ShopConst::LATITUDE];
-			$shoplat = $shopdetail[ShopConst::LONGITUDE];
-			
-			
-			$data [OrderConst::LATITUDE]= I($poststr.OrderConst::LATITUDE,0);
-			$data [OrderConst::LONGITUDE] = I($poststr.OrderConst::LONGITUDE,0);
-			$data [OrderConst::ISDELIVERY] = I($poststr.OrderConst::ISDELIVERY,1);
-			$data [OrderConst::ISPICKUP]= I($poststr.OrderConst::ISDELIVERY,0);
-			if($data [OrderConst::LATITUDE]==0 ||$data [OrderConst::LONGITUDE] ==0)
-			{
-				$data[OrderConst::ISDElIVERY] = 1;
+			// 根据产品id从product表中获得对应产品的数据，存储在一个关系数组中
+			$where [ProductConst::PRODUCTID] = $productid;
+			$productdata = $product->where ( $where )->find ();
+			$price = $productdata [ProductConst::PRICE];
+			$discount = $productdata [ProductConst::DISCOUNT];
+			$attribute = $productdata [ProductConst::ATTRIBUTE];
+			$unitweight = $productdata [ProductConst::UNITWEIGHT];
+			if ($discount) {
+				$price = $discount;
 			}
-			else if ($data [OrderConst::ISPICKUP] == 1)
-			{
-				$data [OrderConst::ISDELIVERY] = 1;
+			switch ($attribute) {
+				// attribute为1， 按数量销售，按重量计价
+				case 1 :
+					$productprice = $quantity * $unitweight / 500 * $price;
+					break;
+				// attribute为2， 按重量销售，按重量计价
+				case 2 :
+					$productprice = $quantity * 250 / 500 * $price;
+					break;
+				// attribute为3， 按数量销售，按数量计价
+				case 3 :
+					$productprice = $quantity * $price;
+					break;
 			}
-			else 
-			{
-				$distance = $this->getDistance($shoplat, $shoplat, $data [OrderConst::LATITUDE], $data [OrderConst::LONGITUDE]);
-				if(intval($distance)<=50)
-				{
-					$data [OrderConst::ISDELIVERY] = 0;
+			$totalprice += $productprice;
+			// 将每个产品的价格(含预估)写入orderproduct表中的realprice字段
+			$data1 [OrderProductConst::REALPRICE] = $productprice;
+			$orderproduct->add ( $data1 );
+		}
+		$data [OrderConst::TOTALPRICEBEFORE] = $totalprice;
+		
+		if ($data [OrderConst::ISFIRST] == 0 && $shop_isdiscount == 1) {
+			$sql = "select * from orders where userid =" . $userid . " AND date(createdtime)='" . $currentdate . "'";
+			$orders = $order->query ( $sql );
+			if (count ( $orders )) {
+				$data [OrderConst::DISCOUNT] = 0;
+			} else {
+				$data [OrderConst::DISCOUNT] = $shop_discount;
+				$totalprice -= $shop_discount;
+			}
+		} else if ($data [OrderConst::ISFIRST] == 1) {
+			
+			$totalprice -= $dns;
+		}
+		
+		$data [OrderConst::TOTALPRICE] = $totalprice;
+		$data2 = [ ];
+		if (! empty ( $data [OrderConst::ADDRESS] ) && ! empty ( $data [OrderConst::PHONE] ) && ! empty ( $data [OrderConst::USERNAME] )) {
+			
+			$order->add ( $data );
+			$data2 ['orderid'] = $orderid;
+			
+			// 构造模板消息
+			
+			$shopid = intval ( $data [OrderConst::SHOPID] );
+			if ($shopid) {
+				$user = M ( "user" );
+				
+				$userinfo = $user->where ( 'shopid=' . $shopid )->select ();
+				
+				$current = date ( 'y年m月d日 H:i' );
+				$contact = $data [OrderConst::USERNAME] . " 电话" . $data [OrderConst::PHONE];
+				$address = "发货地址: " . $data [OrderConst::ADDRESS] . "   配送时间: " . $data [OrderConst::DLTIME];
+				$orderNum = "订单编号：" . $orderid;
+				
+				$ordertype = "新的订单";
+				if ($data [OrderConst::ISFIRST] == 0 && $data [OrderConst::DISCOUNT] > 0) {
+					$ordertype = "优惠订单减免" . $data [OrderConst::DISCOUNT] . "元";
+				} else if ($data [OrderConst::ISFIRST] == 1) {
+					$ordertype = "首购订单减免" . $data [OrderConst::DISCOUNT] . "元";
 				}
-				else 
-				{
-					$data [OrderConst::ISDELIVERY] = 1;
-				}
-			}
-
-			// 获取店铺的优惠信息
-			$shop_isdiscount = $shopdetail [ShopConst::ISDISCOUNT];
-			$shop_discount = $shopdetail [ShopConst::DISCOUNT];
-			
-			// 订单的支付状态默认为0待支付，为1时支付成功，为2时支付失败
-			$data [OrderConst::PAYSTATUS] = 0;
-			$where1 [ShippingaddressConst::SAID] = I ( 'post.said' );
-			// 根据获得的said访问shippingaddress表得到相应的address和phone
-			$shippingaddress = M ( 'shippingaddress' );
-			$shippingaddressdata = $shippingaddress->where ( $where1 )->find ();
-			
-			if (count ( $shippingaddressdata )) {
-				$data [OrderConst::ADDRESS] = $shippingaddressdata [ShippingaddressConst::ADDRESS];
-				$data [OrderConst::PHONE] = $shippingaddressdata [ShippingaddressConst::MOBILE];
-				$data [OrderConst::USERNAME] = $shippingaddressdata [ShippingaddressConst::USERNAME];
-			}
-			$data [OrderConst::CREATEDTIME] = date ( "Y-m-d H:i:s", time () );
-			$data [OrderConst::DLTIME] = I ( 'post.dltime' );
-			$data [OrderConst::NOTES] = I ( 'post.notes' );
-			
-			$product = M ( 'product' );
-			$orderproduct = M ( 'orderproduct' );
-			$totalprice = 0;
-			
-			$orderdetail_json = $_POST ['orderdetail'];
-			$orderdetails = json_decode ( $orderdetail_json, true );
-			
-			$count = count ( $orderdetails );
-			for($i = 0; $i < $count; $i ++) {
-				$productid = $orderdetails [$i] ['productid'];
-				$quantity = $orderdetails [$i] ['quantity'];
-				
-				$data1 [OrderProductConst::ORDERID] = $orderid;
-				$data1 [OrderProductConst::PRODUCTID] = $productid;
-				$data1 [OrderProductConst::QUANTITY] = $quantity;
-				
-				// 根据产品id从product表中获得对应产品的数据，存储在一个关系数组中
-				$where [ProductConst::PRODUCTID] = $productid;
-				$productdata = $product->where ( $where )->find ();
-				$price = $productdata [ProductConst::PRICE];
-				$discount = $productdata [ProductConst::DISCOUNT];
-				$attribute = $productdata [ProductConst::ATTRIBUTE];
-				$unitweight = $productdata [ProductConst::UNITWEIGHT];
-				if ($discount) {
-					$price = $discount;
-				}
-				switch ($attribute) {
-					// attribute为1， 按数量销售，按重量计价
-					case 1 :
-						$productprice = $quantity * $unitweight / 500 * $price;
-						break;
-					// attribute为2， 按重量销售，按重量计价
-					case 2 :
-						$productprice = $quantity * 250 / 500 * $price;
-						break;
-					// attribute为3， 按数量销售，按数量计价
-					case 3 :
-						$productprice = $quantity * $price;
-						break;
-				}
-				$totalprice += $productprice;
-				// 将每个产品的价格(含预估)写入orderproduct表中的realprice字段
-				$data1 [OrderProductConst::REALPRICE] = $productprice;
-				$orderproduct->add ( $data1 );
-			}
-			$data [OrderConst::TOTALPRICEBEFORE] = $totalprice;
-			
-			if ($data [OrderConst::ISFIRST] == 0 && $shop_isdiscount == 1) {
-				$sql = "select * from orders where userid =" . $userid . " AND date(createdtime)='" . $currentdate . "'";
-				$orders = $order->query ( $sql );
-				if (count ( $orders )) {
-					$data [OrderConst::DISCOUNT] = 0;
-				} else {
-					$data [OrderConst::DISCOUNT] = $shop_discount;
-					$totalprice -= $shop_discount;
-				}
-			} else if ($data [OrderConst::ISFIRST] == 1) {
-				
-				$totalprice -= $dns;
-			}
-			
-			$data [OrderConst::TOTALPRICE] = $totalprice;
-			$data2 = [ ];
-			if (! empty ( $data [OrderConst::ADDRESS] ) && ! empty ( $data [OrderConst::PHONE] ) && ! empty ( $data [OrderConst::USERNAME] )) {
-				
-				$order->add ( $data );
-				$data2 ['orderid'] = $orderid;
-				
-				// 构造模板消息
-				
-				$shopid = intval ( $data [OrderConst::SHOPID] );
-				if ($shopid) {
-					$user = M ( "user" );
-					
-					$userinfo = $user->where ( 'shopid=' . $shopid )->select ();
-					
-					$current = date ( 'y年m月d日 H:i' );
-					$contact = $data [OrderConst::USERNAME] . " 电话" . $data [OrderConst::PHONE];
-					$address = "发货地址: " . $data [OrderConst::ADDRESS] . "   配送时间: " . $data [OrderConst::DLTIME];
-					$orderNum = "订单编号：" . $orderid;
-					
-					$ordertype = "新的订单";
-					if ($data [OrderConst::ISFIRST] == 0 && $data [OrderConst::DISCOUNT] > 0) {
-						$ordertype = "优惠订单减免" . $data [OrderConst::DISCOUNT] . "元";
-					} else if ($data [OrderConst::ISFIRST] == 1) {
-						$ordertype = "首购订单减免" . $data [OrderConst::DISCOUNT] . "元";
+				// if (count ( $userinfo ) && ! empty ( $userinfo ["openid"] )) {
+				if (count ( $userinfo )) {
+					for($i = 0; $i < count ( $userinfo ); $i ++) {
+						if (! empty ( $userinfo [$i] ["openid"] )) {
+							$template = array (
+									'touser' => $userinfo [$i] ["openid"],
+									'template_id' => C ( 'NEWORDER_TEMPID' ),
+									'url' => "http://www.shuwow.com/Home/Index/shop",
+									'topcolor' => "#009900",
+									'data' => array (
+											'first' => array (
+													'value' => urlencode ( $orderNum ),
+													'color' => "#FF0000" 
+											),
+											'tradeDateTime' => array (
+													'value' => urlencode ( $current ),
+													'color' => "#009900" 
+											),
+											'orderType' => array (
+													'value' => urlencode ( $ordertype ),
+													'color' => "#009900" 
+											),
+											'customerInfo' => array (
+													'value' => urlencode ( $contact ),
+													'color' => "#009900" 
+											),
+											'orderItemName' => array (
+													'value' => urlencode ( "发货地址&配送时间" ) 
+											),
+											'orderItemData' => array (
+													'value' => urlencode ( $address ),
+													'color' => "#009900" 
+											),
+											'remark' => array (
+													'value' => urlencode ( "\\n信息来自树窝小店" ),
+													'color' => "#cccccc" 
+											) 
+									) 
+							);
+							$weixin = new Weixin ();
+							$token = $weixin->getshopGlobalAccessToken ();
+							$weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
+						}
 					}
 					
-					if (count ( $userinfo )) {
-						for($i = 0; $i < count ( $userinfo ); $i ++) {
-							if (! empty ( $userinfo [$i] ["openid"] )) {
-								$template = array (
-										'touser' => $userinfo [$i] ["openid"],
+					$shopname = $shop->where ( "shopid=" . $shopid )->getField ( "spn" );
+					$bdshop = M ( 'bdshop' );
+					$bdshops = $bdshop->where ( "shopid=" . $shopid )->select ();
+					if (count ( $bdshops )) {
+						$bd = M ( 'bd' );
+						for($i = 0; $i < count ( $bdshops ); $i ++) {
+							$bddata = $bd->where ( "bdid=" . $bdshops [$i] [BDConst::BDID] )->find ();
+							if (count ( $bddata ) && ! empty ( $bddata [BDConst::OPENID] )) {
+								$msgstr = $shopname . "收到新的订单";
+								if ($data [OrderConst::ISFIRST] == 0 && $data [OrderConst::DISCOUNT] > 0) {
+									$msgstr = $msgstr . '--优惠订单减免' . $data [OrderConst::DISCOUNT] . '元';
+								} else if ($data [OrderConst::ISFIRST] == 1) {
+									$msgstr = $msgstr . '--首购订单减免' . $data [OrderConst::DISCOUNT] . '元';
+								}
+								$bdtemplate = array (
+										'touser' => $bddata [BDConst::OPENID],
 										'template_id' => C ( 'NEWORDER_TEMPID' ),
-										'url' => "http://www.shuwow.com/Home/Index/shop",
 										'topcolor' => "#009900",
 										'data' => array (
 												'first' => array (
@@ -380,8 +403,8 @@ class OrderApiController extends RestController {
 														'color' => "#009900" 
 												),
 												'orderType' => array (
-														'value' => urlencode ( $ordertype ),
-														'color' => "#009900" 
+														'value' => urlencode ( $msgstr ),
+														'color' => "#FF0000" 
 												),
 												'customerInfo' => array (
 														'value' => urlencode ( $contact ),
@@ -400,27 +423,21 @@ class OrderApiController extends RestController {
 												) 
 										) 
 								);
-								$weixin = new Weixin ();
 								$token = $weixin->getshopGlobalAccessToken ();
-								$weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
+								$weixin->sendtemplatemsg ( urldecode ( json_encode ( $bdtemplate ) ), $token );
 							}
 						}
 					}
 				}
-				
-				$url = U ( "WeixinqueueApi/sendorderinfotobd/", '', '', true );
-				$params = [ 
-						"shopid" => $shopid,
-						"orderid" => $orderid 
-				];
-				$this->curl_request_async ( $url, $params );
 			}
-			$this->response ( $data2, 'json' );
-		} else {
-			$message ["msg"] = "Unauthorized";
-			$this->response ( $message, 'json', '401' );
 		}
+		
+		$this->response ( $data2, 'json' );
 	}
+	
+	/*
+	 * 水果称重
+	 */
 	public function getWeight() {
 		$weixin = new Weixin ();
 		$orderproduct = M ( 'orderproduct' );
@@ -539,6 +556,52 @@ class OrderApiController extends RestController {
 					}
 				}
 			}
+			
+// 			// 通知BD
+// 			$shopid = $order->where ( $where4 )->getField ( "shopid" );
+// 			if ($shopid) {
+// 				$shop = M ( "shop" );
+// 				$shopname = $shop->where ( "shopid=" . $shopid )->getField ( "spn" );
+// 				$bdshop = M ( "bdshop" );
+// 				$bdshops = $bdshop->where ( "shopid=" . $shopid )->select ();
+// 				if (count ( $bdshops )) {
+// 					$bd = M ( 'bd' );
+// 					for($i = 0; $i < count ( $bdshops ); $i ++) {
+// 						$bddata = $bd->where ( "bdid=" . $bdshops [$i] [BDConst::BDID] )->find ();
+// 						if (count ( $bddata ) && ! empty ( $bddata [BDConst::OPENID] )) {
+// 							$current = date ( 'y年m月d日H:i' );
+// 							$msg = $shopname . "--" . $current . "确认订单";
+// 							$realtotal = $order->where ( $where4 )->getField ( 'rtotalprice' );
+// 							$totalprice = "实际价格:" . $realtotal . "元";
+// 							$bdtemplate = array (
+// 									'touser' => trim ( $bddata [BDConst::OPENID] ),
+// 									'template_id' => C ( 'BDORDERSTATUS_TEMPID' ),
+// 									'topcolor' => "#0000CD",
+// 									'data' => array (
+// 											'first' => array (
+// 													'value' => urlencode ( $msg ),
+// 													'color' => "#0000FF" 
+// 											),
+// 											'OrderSn' => array (
+// 													'value' => urlencode ( $orderid ),
+// 													'color' => "#000000" 
+// 											),
+// 											'OrderStatus' => array (
+// 													'value' => urlencode ( $totalprice ),
+// 													'color' => "#000000" 
+// 											),
+// 											'remark' => array (
+// 													'value' => urlencode ( "\\n信息来自树窝小店" ),
+// 													'color' => "#cccccc" 
+// 											) 
+// 									) 
+// 							);
+// 							$token = $weixin->getshopGlobalAccessToken ();
+// 							$weixin->sendtemplatemsg ( urldecode ( json_encode ( $bdtemplate ) ), $token );
+// 						}
+// 					}
+// 				}
+// 			}
 		}
 	}
 	/*
@@ -561,6 +624,7 @@ class OrderApiController extends RestController {
 				}
 			}
 		}
+		
 		if ($id) {
 			if ($order->where ( "orderid=" . $id )->setField ( "orderstatus", 2 ) && $order->where ( "orderid=" . $id )->setField ( "ordernotes", $ordernotes )) {
 				$userid = $order->where ( "orderid=" . $id )->getField ( "userid" );
@@ -613,31 +677,56 @@ class OrderApiController extends RestController {
 					}
 				}
 			}
+			
+			// 通知BD
+// 			$shopid = $order->where ( "orderid=" . $id )->getField ( "shopid" );
+// 			if ($shopid) {
+// 				$shop = M ( "shop" );
+// 				$shopname = $shop->where ( "shopid=" . $shopid )->getField ( "spn" );
+// 				$bdshop = M ( "bdshop" );
+// 				$bdshops = $bdshop->where ( "shopid=" . $shopid )->select ();
+// 				if (count ( $bdshops )) {
+// 					$bd = M ( 'bd' );
+// 					for($i = 0; $i < count ( $bdshops ); $i ++) {
+// 						$bddata = $bd->where ( "bdid=" . $bdshops [$i] [BDConst::BDID] )->find ();
+// 						if (count ( $bddata ) && ! empty ( $bddata [BDConst::OPENID] )) {
+// 							$current = date ( 'y年m月d日H:i' );
+// 							$msg = $shopname . "--" . $current . "取消订单";
+// 							$errormsg = "订单取消原因:" . $ordernotes . " 商家电话:" . $phone;
+// 							$bdtemplate = array (
+// 									'touser' => trim ( $bddata [BDConst::OPENID] ),
+// 									'template_id' => C ( 'BDORDERSTATUS_TEMPID' ),
+// 									'topcolor' => "#FF0000",
+// 									'data' => array (
+// 											'first' => array (
+// 													'value' => urlencode ( $msg ),
+// 													'color' => "#FFFF00" 
+// 											),
+// 											'OrderSn' => array (
+// 													'value' => urlencode ( $id ),
+// 													'color' => "#009900" 
+// 											),
+// 											'OrderStatus' => array (
+// 													'value' => urlencode ( $errormsg ),
+// 													'color' => "#009900" 
+// 											),
+// 											'remark' => array (
+// 													'value' => urlencode ( "\\n信息来自树窝小店" ),
+// 													'color' => "#cccccc" 
+// 											) 
+// 									) 
+// 							);
+// 							$token = $weixin->getshopGlobalAccessToken ();
+// 							$weixin->sendtemplatemsg ( urldecode ( json_encode ( $bdtemplate ) ), $token );
+// 						}
+// 					}
+// 				}
+// 			}
 		} else {
-			$message ["msg"] = "Unauthorized";
-			$this->response ( $message, 'json', '401' );
-		}
-	}
-	
-	// 用户确认订单
-	public function ordercomfirm() {
-		$authorize = new Authorize ();
-		$auid = $authorize->Filter ( "user" );
-		if (intval ( $auid )) {
-			$poststr = "post.";
 			$data = [ ];
-			$orderid = I ( $poststr . OrderConst::ORDERID );
-			$order = M ( 'order' );
-			if ($order->where ( "orderid = '" . $orderid . "' AND userid=" . $auid )->setField ( "orderstatus", 3 ) != false) {
-				$data = $orderid;
-			}
-			$this->response ( $data, "json" );
-		} else {
-			$message ["msg"] = "Unauthorized";
-			$this->response ( $message, 'json', '401' );
+			$this->response ( $data, 'json' );
 		}
 	}
-	
 	private function orderdetail($orderdata, $count) {
 		$orderproduct = M ( 'orderproduct' );
 		$product = M ( 'product' );
@@ -698,51 +787,5 @@ class OrderApiController extends RestController {
 			$data [$i] ['productdetail'] = $data_order_product;
 		}
 		return $data;
-	}
-	
-	
-	private function getDistance($lat1, $lng1, $lat2, $lng2) {
-		
-		$earthRadius = 6367000; // approximate radius of earth in meters
-		$lat1 = ($lat1 * pi ()) / 180;
-		$lng1 = ($lng1 * pi ()) / 180;
-		$lat2 = ($lat2 * pi ()) / 180;
-		$lng2 = ($lng2 * pi ()) / 180;
-		
-		$calcLongitude = $lng2 - $lng1;
-		$calcLatitude = $lat2 - $lat1;
-		$stepOne = pow ( sin ( $calcLatitude / 2 ), 2 ) + cos ( $lat1 ) * cos ( $lat2 ) * pow ( sin ( $calcLongitude / 2 ), 2 );
-		$stepTwo = 2 * asin ( min ( 1, sqrt ( $stepOne ) ) );
-		$calculatedDistance = $earthRadius * $stepTwo;
-		
-		return round ( $calculatedDistance );
-	}
-	private function curl_request_async($url, $params, $type = 'POST') {
-		foreach ( $params as $key => &$val ) {
-			if (is_array ( $val ))
-				$val = implode ( ',', $val );
-			$post_params [] = $key . '=' . urlencode ( $val );
-		}
-		$post_string = implode ( '&', $post_params );
-		
-		$parts = parse_url ( $url );
-		
-		$fp = fsockopen ( $parts ['host'], isset ( $parts ['port'] ) ? $parts ['port'] : 80, $errno, $errstr, 30 );
-		
-		// Data goes in the path for a GET request
-		if ('GET' == $type)
-			$parts ['path'] .= '?' . $post_string;
-		
-		$out = "$type " . $parts ['path'] . " HTTP/1.1\r\n";
-		$out .= "Host: " . $parts ['host'] . "\r\n";
-		$out .= "Content-Type: application/x-www-form-urlencoded\r\n";
-		$out .= "Content-Length: " . strlen ( $post_string ) . "\r\n";
-		$out .= "Connection: Close\r\n\r\n";
-		// Data goes in the request body for a POST request
-		if ('POST' == $type && isset ( $post_string ))
-			$out .= $post_string;
-		
-		fwrite ( $fp, $out );
-		fclose ( $fp );
 	}
 }

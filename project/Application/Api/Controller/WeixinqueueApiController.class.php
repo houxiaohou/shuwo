@@ -12,10 +12,6 @@ class WeixinqueueApiController extends RestController {
 	{
         $poststr = 'post.';
         $address = I($poststr.OrderConst::ADDRESS);
-// 		$phone = I($poststr.OrderConst::PHONE);
-// 		$username = I($poststr.OrderConst::USERNAME);
-
-        
         $template = array (
         									'touser' => 'oR-0TuJI-tC6c33qgzf2ifIrudB8',
         									'template_id' => C ( 'NEWORDER_TEMPID' ),
@@ -124,9 +120,7 @@ class WeixinqueueApiController extends RestController {
 	}
         
 	
-	//$url = U("WeixinqueueApi/sendorderinfotouser/",'','',true);
-	//$params = ["address"=>"123"];
-	//$this->curl_request_async($url,$params);
+
         
 		
 // 	private  function curl_request_async($url, $params, $type='POST')
