@@ -23,7 +23,7 @@ class OrderApiController extends RestController {
 			$order = M ( "orders" );
 			$start = I ( 'get.start', 0 );
 			$count = I ( 'get.count', 5 );
-			
+
 			$orderdata = $order->order ( '-createdtime' )->limit ( $start, $count )->select ();
 			$data = $this->orderdetail ( $orderdata, $count );
 			$this->response ( $data, 'json' );
@@ -32,7 +32,7 @@ class OrderApiController extends RestController {
 			$this->response ( $message, 'json', '401' );
 		}
 	}
-	
+
 	/*
 	 * 根据GET传的id查询对应的订单
 	 */
@@ -40,11 +40,11 @@ class OrderApiController extends RestController {
 		$order = M ( 'orders' );
 		$product = M ( 'product' );
 		$orderproduct = M ( 'orderproduct' );
-		
+
 		$id = I ( 'get.id', 0 );
 		$where [OrderConst::ORDERID] = $id;
 		$orderdata = $order->where ( $where )->find ();
-		
+
 		$authorize = new Authorize ();
 		$isAdmin = $authorize->Filter ( "admin" );
 		if (! $isAdmin) {
@@ -57,7 +57,7 @@ class OrderApiController extends RestController {
 				}
 			}
 		}
-		
+
 		if ($id) {
 			if ($orderdata != null) {
 				$data [OrderConst::ORDERID] = $orderdata [OrderConst::ORDERID];
@@ -71,13 +71,13 @@ class OrderApiController extends RestController {
 				$data [OrderConst::DLTIME] = $orderdata [OrderConst::DLTIME];
 				$data [OrderConst::ISFIRST] = $orderdata [OrderConst::ISFIRST];
 				$data [OrderConst::DISCOUNT] = $orderdata [OrderConst::DISCOUNT];
-				
+
 				if ($orderdata [OrderConst::RTOTALPRICE] >= 0 && $data [OrderConst::ORDERSTATUS] == 1) {
 					$data ['price'] = $orderdata [OrderConst::RTOTALPRICE];
 				} else {
 					$data ['price'] = $orderdata [OrderConst::TOTALPRICE];
 				}
-				
+
 				if ($orderdata [OrderConst::RTOTALPRICEBEFORE] >= 0 && $orderdata [OrderConst::ORDERSTATUS] == 1) {
 					$data ['beforeprice'] = $orderdata [OrderConst::RTOTALPRICEBEFORE];
 				} else {
@@ -107,7 +107,7 @@ class OrderApiController extends RestController {
 		}
 		$this->response ( $data, 'json' );
 	}
-	
+
 	/*
 	 * 获取当前用户的订单
 	 */
@@ -119,7 +119,7 @@ class OrderApiController extends RestController {
 			$start = I ( 'get.start', 0 );
 			$count = I ( 'get.count', 5 );
 			$order = M ( 'orders' );
-			
+
 			$where [OrderConst::USERID] = $userid;
 			if (intval ( $start ) > - 1) {
 				switch (intval ( $status )) {
@@ -132,7 +132,7 @@ class OrderApiController extends RestController {
 						break;
 				}
 			}
-			
+
 			$orderdata = $order->where ( $where )->order ( '-createdtime' )->limit ( $start, $count )->select ();
 			$data = [ ];
 			if ($orderdata && count ( $orderdata ) > 0) {
@@ -160,7 +160,7 @@ class OrderApiController extends RestController {
 			$start = I ( 'get.start' );
 			$count = I ( 'get.count' );
 			$order = M ( 'orders' );
-			
+
 			$where_order [OrderConst::SHOPID] = $shopid;
 			if (intval ( $status ) > - 1) {
 				switch (intval ( $status )) {
@@ -181,7 +181,7 @@ class OrderApiController extends RestController {
 			$this->response ( $message, 'json', '401' );
 		}
 	}
-	
+
 	/*
 	 * 删除订单
 	 */
@@ -193,7 +193,7 @@ class OrderApiController extends RestController {
 			$order->where ( $where )->delete ();
 		}
 	}
-	
+
 	/*
 	 * 创建新订单
 	 */
@@ -219,53 +219,36 @@ class OrderApiController extends RestController {
 				$data [OrderConst::DISCOUNT] = $dns;
 				$data [OrderConst::ISFIRST] = 1;
 			}
-			
-			
+
+
 			$data [OrderConst::SHOPID] = I ( 'post.shopid' );
 			$where_shop [ShopConst::SHOPID] = $data [OrderConst::SHOPID];
 			$shopdetail = $shop->where ( $where_shop )->find ();
 			//获取店铺经纬度
 			$shoplat = $shopdetail[ShopConst::LATITUDE];
-			$shoplat = $shopdetail[ShopConst::LONGITUDE];
-			
-			
-			$data [OrderConst::LATITUDE]= I($poststr.OrderConst::LATITUDE,0);
-			$data [OrderConst::LONGITUDE] = I($poststr.OrderConst::LONGITUDE,0);
-			$data [OrderConst::ISDELIVERY] = I($poststr.OrderConst::ISDELIVERY,1);
-			$data [OrderConst::ISPICKUP]= I($poststr.OrderConst::ISDELIVERY,0);
-			if($data [OrderConst::LATITUDE]==0 ||$data [OrderConst::LONGITUDE] ==0)
-			{
-				$data[OrderConst::ISDElIVERY] = 1;
-			}
-			else if ($data [OrderConst::ISPICKUP] == 1)
-			{
-				$data [OrderConst::ISDELIVERY] = 1;
-			}
-			else 
-			{
-				$distance = $this->getDistance($shoplat, $shoplat, $data [OrderConst::LATITUDE], $data [OrderConst::LONGITUDE]);
-				$data[OrderConst::DISTANCE] = intval($distance);
-				if(intval($distance)<=50)
-				{
-					$data [OrderConst::ISDELIVERY] = 0;
-				}
-				else 
-				{
-					$data [OrderConst::ISDELIVERY] = 1;
-				}
-			}
+			$shoplng = $shopdetail[ShopConst::LONGITUDE];
 
+
+			$data [OrderConst::LATITUDE]= doubleval(I($poststr.OrderConst::LATITUDE,0));
+			$data [OrderConst::LONGITUDE] = doubleval(I($poststr.OrderConst::LONGITUDE,0));
+			$data [OrderConst::ISPICKUP]= intval(I($poststr.OrderConst::ISPICKUP,0));
+
+            $distance = intval($this->getDistance($shoplat, $shoplng, $data [OrderConst::LATITUDE], $data [OrderConst::LONGITUDE]));
+            $data[OrderConst::DISTANCE] = $distance;
+            if ($distance < 50) {
+
+            }
 			// 获取店铺的优惠信息
 			$shop_isdiscount = $shopdetail [ShopConst::ISDISCOUNT];
 			$shop_discount = $shopdetail [ShopConst::DISCOUNT];
-			
+
 			// 订单的支付状态默认为0待支付，为1时支付成功，为2时支付失败
 			$data [OrderConst::PAYSTATUS] = 0;
 			$where1 [ShippingaddressConst::SAID] = I ( 'post.said' );
 			// 根据获得的said访问shippingaddress表得到相应的address和phone
 			$shippingaddress = M ( 'shippingaddress' );
 			$shippingaddressdata = $shippingaddress->where ( $where1 )->find ();
-			
+
 			if (count ( $shippingaddressdata )) {
 				$data [OrderConst::ADDRESS] = $shippingaddressdata [ShippingaddressConst::ADDRESS];
 				$data [OrderConst::PHONE] = $shippingaddressdata [ShippingaddressConst::MOBILE];
@@ -274,23 +257,23 @@ class OrderApiController extends RestController {
 			$data [OrderConst::CREATEDTIME] = date ( "Y-m-d H:i:s", time () );
 			$data [OrderConst::DLTIME] = I ( 'post.dltime' );
 			$data [OrderConst::NOTES] = I ( 'post.notes' );
-			
+
 			$product = M ( 'product' );
 			$orderproduct = M ( 'orderproduct' );
 			$totalprice = 0;
-			
+
 			$orderdetail_json = $_POST ['orderdetail'];
 			$orderdetails = json_decode ( $orderdetail_json, true );
-			
+
 			$count = count ( $orderdetails );
 			for($i = 0; $i < $count; $i ++) {
 				$productid = $orderdetails [$i] ['productid'];
 				$quantity = $orderdetails [$i] ['quantity'];
-				
+
 				$data1 [OrderProductConst::ORDERID] = $orderid;
 				$data1 [OrderProductConst::PRODUCTID] = $productid;
 				$data1 [OrderProductConst::QUANTITY] = $quantity;
-				
+
 				// 根据产品id从product表中获得对应产品的数据，存储在一个关系数组中
 				$where [ProductConst::PRODUCTID] = $productid;
 				$productdata = $product->where ( $where )->find ();
@@ -321,7 +304,7 @@ class OrderApiController extends RestController {
 				$orderproduct->add ( $data1 );
 			}
 			$data [OrderConst::TOTALPRICEBEFORE] = $totalprice;
-			
+
 			if ($data [OrderConst::ISFIRST] == 0 && $shop_isdiscount == 1) {
 				$sql = "select * from orders where userid =" . $userid . " AND date(createdtime)='" . $currentdate . "'";
 				$orders = $order->query ( $sql );
@@ -332,37 +315,37 @@ class OrderApiController extends RestController {
 					$totalprice -= $shop_discount;
 				}
 			} else if ($data [OrderConst::ISFIRST] == 1) {
-				
+
 				$totalprice -= $dns;
 			}
-			
+
 			$data [OrderConst::TOTALPRICE] = $totalprice;
 			$data2 = [ ];
 			if (! empty ( $data [OrderConst::ADDRESS] ) && ! empty ( $data [OrderConst::PHONE] ) && ! empty ( $data [OrderConst::USERNAME] )) {
-				
+
 				$order->add ( $data );
 				$data2 ['orderid'] = $orderid;
-				
+
 				// 构造模板消息
-				
+
 				$shopid = intval ( $data [OrderConst::SHOPID] );
 				if ($shopid) {
 					$user = M ( "user" );
-					
+
 					$userinfo = $user->where ( 'shopid=' . $shopid )->select ();
-					
+
 					$current = date ( 'y年m月d日 H:i' );
 					$contact = $data [OrderConst::USERNAME] . " 电话" . $data [OrderConst::PHONE];
 					$address = "发货地址: " . $data [OrderConst::ADDRESS] . "   配送时间: " . $data [OrderConst::DLTIME];
 					$orderNum = "订单编号：" . $orderid;
-					
+
 					$ordertype = "新的订单";
 					if ($data [OrderConst::ISFIRST] == 0 && $data [OrderConst::DISCOUNT] > 0) {
 						$ordertype = "优惠订单减免" . $data [OrderConst::DISCOUNT] . "元";
 					} else if ($data [OrderConst::ISFIRST] == 1) {
 						$ordertype = "首购订单减免" . $data [OrderConst::DISCOUNT] . "元";
 					}
-					
+
 					if (count ( $userinfo )) {
 						for($i = 0; $i < count ( $userinfo ); $i ++) {
 							if (! empty ( $userinfo [$i] ["openid"] )) {
@@ -374,32 +357,32 @@ class OrderApiController extends RestController {
 										'data' => array (
 												'first' => array (
 														'value' => urlencode ( $orderNum ),
-														'color' => "#FF0000" 
+														'color' => "#FF0000"
 												),
 												'tradeDateTime' => array (
 														'value' => urlencode ( $current ),
-														'color' => "#009900" 
+														'color' => "#009900"
 												),
 												'orderType' => array (
 														'value' => urlencode ( $ordertype ),
-														'color' => "#009900" 
+														'color' => "#009900"
 												),
 												'customerInfo' => array (
 														'value' => urlencode ( $contact ),
-														'color' => "#009900" 
+														'color' => "#009900"
 												),
 												'orderItemName' => array (
-														'value' => urlencode ( "发货地址&配送时间" ) 
+														'value' => urlencode ( "发货地址&配送时间" )
 												),
 												'orderItemData' => array (
 														'value' => urlencode ( $address ),
-														'color' => "#009900" 
+														'color' => "#009900"
 												),
 												'remark' => array (
 														'value' => urlencode ( "\\n信息来自树窝小店" ),
-														'color' => "#cccccc" 
-												) 
-										) 
+														'color' => "#cccccc"
+												)
+										)
 								);
 								$weixin = new Weixin ();
 								$token = $weixin->getshopGlobalAccessToken ();
@@ -408,11 +391,11 @@ class OrderApiController extends RestController {
 						}
 					}
 				}
-				
+
 				$url = U ( "WeixinqueueApi/sendorderinfotobd/", '', '', true );
-				$params = [ 
+				$params = [
 						"shopid" => $shopid,
-						"orderid" => $orderid 
+						"orderid" => $orderid
 				];
 				$this->curl_request_async ( $url, $params );
 			}
@@ -431,15 +414,15 @@ class OrderApiController extends RestController {
 		$weightdetail_json = $_POST ['weightdetail'];
 		$weightdetail = json_decode ( $weightdetail_json, true );
 		$count = count ( $weightdetail );
-		
+
 		for($i = 0; $i < $count; $i ++) {
 			$orderproductid = $weightdetail [$i] ['orderproductid'];
 			$weight = $weightdetail [$i] ['weight'];
-			
+
 			// 获取每个orderproductid对应的产品的realprice(含估计)
 			$where [OrderProductConst::ID] = $orderproductid;
 			$realprice = $orderproduct->where ( $where )->getField ( OrderProductConst::REALPRICE );
-			
+
 			// 如果重量不为0，插入到orderproduct表的realweight字段中
 			if (intval ( $weight ) >= 0) {
 				$data [OrderProductConst::REALWEIGHT] = $weight;
@@ -448,13 +431,13 @@ class OrderApiController extends RestController {
 				$orderproductdata = $orderproduct->where ( $where2 )->find ();
 				$productid = $orderproductdata [OrderProductConst::PRODUCTID];
 				$orderid = $orderproductdata [OrderProductConst::ORDERID];
-				
+
 				// 根据productid从product表中获得对应产品的数据，存储在一个关系数组中
 				$where3 [ProductConst::PRODUCTID] = $productid;
 				$productdata = $product->where ( $where3 )->find ();
 				$price = $productdata [ProductConst::PRICE];
 				$discount = $productdata [ProductConst::DISCOUNT];
-				
+
 				if ($discount) {
 					$price = $discount;
 				}
@@ -464,9 +447,9 @@ class OrderApiController extends RestController {
 					$realprice = $weight * $price;
 				}
 				$data [OrderProductConst::REALPRICE] = $realprice;
-				
+
 				$orderproduct->where ( $where )->save ( $data );
-				
+
 				// 计算真实总价
 				$rtotalprice += $realprice;
 			}
@@ -475,18 +458,18 @@ class OrderApiController extends RestController {
 		$order = M ( 'orders' );
 		$shop = M ( 'shop' );
 		$where4 [OrderConst::ORDERID] = $orderid;
-		
+
 		// 获取订单优惠信息
 		$shop_id = $order->where ( $where4 )->getField ( 'shopid' );
 		$whereshop [ShopConst::SHOPID] = $shop_id;
 		$shopdetail = $shop->where ( $whereshop )->find ();
 		$shop_isdiscount = $shopdetail [ShopConst::ISDISCOUNT];
 		$shop_discount = $shopdetail [ShopConst::DISCOUNT];
-		
+
 		// 获取是否首购
 		$order_isfirst = $order->where ( $where4 )->getField ( 'isfirst' );
 		$order->where ( $where4 )->setField ( 'rtotalpricebefore', $rtotalprice );
-		
+
 		if ($rtotalprice > 0) {
 			if ($order_isfirst == 0 && $shop_isdiscount == 1) {
 				$rtotalprice -= $shop_discount;
@@ -497,7 +480,7 @@ class OrderApiController extends RestController {
 		if ($rtotalprice <= 0) {
 			$rtotalprice = 0;
 		}
-		
+
 		$order->where ( $where4 )->setField ( 'rtotalprice', $rtotalprice );
 		// 将订单状态由0变成1(订单确认)
 		if ($order->where ( $where4 )->setField ( 'orderstatus', 1 )) {
@@ -519,21 +502,21 @@ class OrderApiController extends RestController {
 								'data' => array (
 										'first' => array (
 												'value' => urlencode ( $msg ),
-												'color' => "#FF0000" 
+												'color' => "#FF0000"
 										),
 										'OrderSn' => array (
 												'value' => urlencode ( $orderid ),
-												'color' => "#009900" 
+												'color' => "#009900"
 										),
 										'OrderStatus' => array (
 												'value' => urlencode ( $totalprice ),
-												'color' => "#009900" 
+												'color' => "#009900"
 										),
 										'remark' => array (
 												'value' => urlencode ( "\\n信息来自树窝小店" ),
-												'color' => "#cccccc" 
-										) 
-								) 
+												'color' => "#cccccc"
+										)
+								)
 						);
 						$token = $weixin->getusersGlobalAccessToken ();
 						$weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
@@ -577,7 +560,7 @@ class OrderApiController extends RestController {
 						$phone = $shop ['phone'];
 					}
 					$userinfo = $user->where ( 'userid=' . $userid )->find ();
-					
+
 					if (count ( $userinfo ) && ! empty ( $userinfo ['openid'] )) {
 						$current = date ( 'y年m月d日H:i' );
 						$msg = $shopname . "已于" . $current . "取消订单";
@@ -591,21 +574,21 @@ class OrderApiController extends RestController {
 									'data' => array (
 											'first' => array (
 													'value' => urlencode ( $msg ),
-													'color' => "#FF0000" 
+													'color' => "#FF0000"
 											),
 											'OrderSn' => array (
 													'value' => urlencode ( $id ),
-													'color' => "#009900" 
+													'color' => "#009900"
 											),
 											'OrderStatus' => array (
 													'value' => urlencode ( $errormsg ),
-													'color' => "#009900" 
+													'color' => "#009900"
 											),
 											'remark' => array (
 													'value' => urlencode ( "\\n信息来自树窝小店" ),
-													'color' => "#cccccc" 
-											) 
-									) 
+													'color' => "#cccccc"
+											)
+									)
 							);
 							$weixin = new Weixin ();
 							$token = $weixin->getusersGlobalAccessToken ();
@@ -619,7 +602,7 @@ class OrderApiController extends RestController {
 			$this->response ( $message, 'json', '401' );
 		}
 	}
-	
+
 	// 用户确认订单
 	public function ordercomfirm() {
 		$authorize = new Authorize ();
@@ -628,7 +611,7 @@ class OrderApiController extends RestController {
 			$poststr = "post.";
 			$data = [ ];
 			$orderid = I ( $poststr . OrderConst::ORDERID );
-			$order = M ( 'order' );
+			$order = M ( 'orders' );
 			if ($order->where ( "orderid = '" . $orderid . "' AND userid=" . $auid )->setField ( "orderstatus", 3 ) != false) {
 				$data = $orderid;
 			}
@@ -638,7 +621,7 @@ class OrderApiController extends RestController {
 			$this->response ( $message, 'json', '401' );
 		}
 	}
-	
+
 	private function orderdetail($orderdata, $count) {
 		$orderproduct = M ( 'orderproduct' );
 		$product = M ( 'product' );
@@ -659,7 +642,10 @@ class OrderApiController extends RestController {
 				$data [$i] [OrderConst::DLTIME] = $orderdata [$i] [OrderConst::DLTIME];
 				$data [$i] [OrderConst::ISFIRST] = $orderdata [$i] [OrderConst::ISFIRST];
 				$data [$i] [OrderConst::DISCOUNT] = $orderdata [$i] [OrderConst::DISCOUNT];
-				
+
+				$data [$i] [OrderConst::DISTANCE] = $orderdata [$i] [OrderConst::DISTANCE];
+				$data [$i] [OrderConst::ISPICKUP] = $orderdata [$i] [OrderConst::ISPICKUP];
+
 				if ($orderdata [$i] [OrderConst::RTOTALPRICE] >= 0 && $orderdata [$i] [OrderConst::ORDERSTATUS] == 1) {
 					$data [$i] ['price'] = $orderdata [$i] [OrderConst::RTOTALPRICE];
 				} else {
@@ -670,7 +656,7 @@ class OrderApiController extends RestController {
 				} else {
 					$data [$i] ['beforeprice'] = $orderdata [$i] [OrderConst::TOTALPRICEBEFORE];
 				}
-				
+
 				if ($orderdata [$i] [OrderConst::ORDERNOTES] != null) {
 					$data [$i] [OrderConst::ORDERNOTES] = $orderdata [$i] [OrderConst::ORDERNOTES];
 				}
@@ -700,22 +686,22 @@ class OrderApiController extends RestController {
 		}
 		return $data;
 	}
-	
-	
+
+
 	private function getDistance($lat1, $lng1, $lat2, $lng2) {
-		
+
 		$earthRadius = 6367000; // approximate radius of earth in meters
 		$lat1 = ($lat1 * pi ()) / 180;
 		$lng1 = ($lng1 * pi ()) / 180;
 		$lat2 = ($lat2 * pi ()) / 180;
 		$lng2 = ($lng2 * pi ()) / 180;
-		
+
 		$calcLongitude = $lng2 - $lng1;
 		$calcLatitude = $lat2 - $lat1;
 		$stepOne = pow ( sin ( $calcLatitude / 2 ), 2 ) + cos ( $lat1 ) * cos ( $lat2 ) * pow ( sin ( $calcLongitude / 2 ), 2 );
 		$stepTwo = 2 * asin ( min ( 1, sqrt ( $stepOne ) ) );
 		$calculatedDistance = $earthRadius * $stepTwo;
-		
+
 		return round ( $calculatedDistance );
 	}
 	private function curl_request_async($url, $params, $type = 'POST') {
@@ -725,15 +711,15 @@ class OrderApiController extends RestController {
 			$post_params [] = $key . '=' . urlencode ( $val );
 		}
 		$post_string = implode ( '&', $post_params );
-		
+
 		$parts = parse_url ( $url );
-		
+
 		$fp = fsockopen ( $parts ['host'], isset ( $parts ['port'] ) ? $parts ['port'] : 80, $errno, $errstr, 30 );
-		
+
 		// Data goes in the path for a GET request
 		if ('GET' == $type)
 			$parts ['path'] .= '?' . $post_string;
-		
+
 		$out = "$type " . $parts ['path'] . " HTTP/1.1\r\n";
 		$out .= "Host: " . $parts ['host'] . "\r\n";
 		$out .= "Content-Type: application/x-www-form-urlencoded\r\n";
@@ -742,7 +728,7 @@ class OrderApiController extends RestController {
 		// Data goes in the request body for a POST request
 		if ('POST' == $type && isset ( $post_string ))
 			$out .= $post_string;
-		
+
 		fwrite ( $fp, $out );
 		fclose ( $fp );
 	}

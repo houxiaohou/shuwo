@@ -23,7 +23,6 @@ class OrderConst
     const RTOTALPRICEBEFORE = "rtotalpricebefore";
     const LATITUDE  = 'lat';
 	const LONGITUDE = 'lng';
-	const ISDELIVERY = 'isdelivery';
 	const ISPICKUP = 'ispickup';
 	const DISTANCE = 'distance';
     const COUNT = 10;
