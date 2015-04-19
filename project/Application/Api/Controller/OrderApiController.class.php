@@ -604,7 +604,7 @@ class OrderApiController extends RestController {
 	}
 
 	// 用户确认订单
-	public function ordercomfirm() {
+	public function orderconfirm() {
 		$authorize = new Authorize ();
 		$auid = $authorize->Filter ( "user" );
 		if (intval ( $auid )) {
