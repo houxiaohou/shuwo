@@ -71,6 +71,8 @@ class OrderApiController extends RestController {
 				$data [OrderConst::DLTIME] = $orderdata [OrderConst::DLTIME];
 				$data [OrderConst::ISFIRST] = $orderdata [OrderConst::ISFIRST];
 				$data [OrderConst::DISCOUNT] = $orderdata [OrderConst::DISCOUNT];
+				$data [OrderConst::DISTANCE] = $orderdata [OrderConst::DISTANCE];
+				$data [OrderConst::ISPICKUP] = $orderdata [OrderConst::ISPICKUP];
 
 				if ($orderdata [OrderConst::RTOTALPRICE] >= 0 && $data [OrderConst::ORDERSTATUS] == 1) {
 					$data ['price'] = $orderdata [OrderConst::RTOTALPRICE];
