@@ -73,6 +73,7 @@ class OrderApiController extends RestController {
 				$data [OrderConst::DISCOUNT] = $orderdata [OrderConst::DISCOUNT];
 				$data [OrderConst::DISTANCE] = $orderdata [OrderConst::DISTANCE];
 				$data [OrderConst::ISPICKUP] = $orderdata [OrderConst::ISPICKUP];
+				$data [OrderConst::ISDELIVERY] = $orderdata [OrderConst::ISDELIVERY];
 
 				if ($orderdata [OrderConst::RTOTALPRICE] >= 0 && $data [OrderConst::ORDERSTATUS] == 1) {
 					$data ['price'] = $orderdata [OrderConst::RTOTALPRICE];
@@ -109,6 +110,34 @@ class OrderApiController extends RestController {
 		}
 		$this->response ( $data, 'json' );
 	}
+
+    /**
+     * 修改订单的配送方式，仅限管理员
+     */
+    public function deliveryorder() {
+        $authorize = new Authorize ();
+        $isAdmin = $authorize->Filter ( "admin" );
+        if (!$isAdmin) {
+            $message ["msg"] = "Unauthorized";
+            $this->response ( $message, 'json', '401' );
+        }
+        $poststr = "post.";
+        $orderid = I ( $poststr . OrderConst::ORDERID );
+        $address = I ( $poststr . OrderConst::ADDRESS );
+        $ispickup = I ( $poststr . OrderConst::ISPICKUP );
+        $order = M ( 'orders' );
+        if (intval($ispickup) == 1) {
+            // 到店自提
+            $result = $order->where ( "orderid = '" . $orderid . "'")->setField (OrderConst::ISPICKUP, 1);
+        } else {
+            // 送货到地址
+            $result = $order->where ( "orderid = '" . $orderid . "'")->setField (OrderConst::ADDRESS, $address);
+        }
+        $result = $order->where ( "orderid = '" . $orderid . "'")->setField (OrderConst::ISDELIVERY, 0);
+        $data['success'] = $result;
+        $data['orderid'] = $orderid;
+        $this->response ($data, 'json');
+    }
 
 	/*
 	 * 获取当前用户的订单
@@ -239,13 +268,14 @@ class OrderApiController extends RestController {
             $data[OrderConst::DISTANCE] = $distance;
             if($data [OrderConst::ISPICKUP]==1)
             {
-            	$data [OrderConst::ISDELIVERY] =1;
+            	$data [OrderConst::ISDELIVERY] = 0;
             }
             else 
             {
             	if($distance < 50 )
             	{
             		$data [OrderConst::ISDELIVERY] =1;
+            		$data [OrderConst::ISPICKUP] =1;
             	}
             	else 
             	{
@@ -650,27 +680,23 @@ class OrderApiController extends RestController {
 			$isAdmin = $authorize->Filter ( "admin" );
 			if ($isAdmin) {
 				$order = M ( "orders" );
-				$status = I ( 'get.status', - 1 );
-				$ispickup = I('get.ispickup',0);
-				$isdelivery = I('get.isdelivery',0);
+				$status = I ( 'get.status', -1);
 				$start = I ( 'get.start', 0 );
 				$count = I ( 'get.count', 5 );
-				$where_order[OrderConst::ISPICKUP] = $ispickup;
-				$where_order[OrderConst::ISDELIVERY] = $isdelivery;
-				
-			if (intval ( $status ) > - 1) {
-				switch (intval ( $status )) {
-					case 0 :
-					case 1 :
-					case 2 :
-					case 3 :
-						$where_order [OrderConst::ORDERSTATUS] = $status;
-						break;
-					default :
-						break;
-				}
-			}
-			$orderdata = $order->where ( $where_order )->order ( '-createdtime' )->limit ( $start, $count )->select ();
+
+                if (intval($status) == -2) {
+                    // 筛选差异订单
+                    $where_order[OrderConst::ISDELIVERY] = 1;
+                } elseif(intval($status) == -1) {
+
+                } else {
+                    $where_order [OrderConst::ORDERSTATUS] = intval($status);
+                }
+                if (!empty($where_order)) {
+                    $orderdata = $order->where ( $where_order )->order ( '-createdtime' )->limit ( $start, $count )->select ();
+                } else {
+                    $orderdata = $order->order ( '-createdtime' )->limit ( $start, $count )->select ();
+                }
 			$data = $this->orderdetail ( $orderdata, $count );
 			if(!count($data))
 			{
@@ -706,6 +732,7 @@ class OrderApiController extends RestController {
 
 				$data [$i] [OrderConst::DISTANCE] = $orderdata [$i] [OrderConst::DISTANCE];
 				$data [$i] [OrderConst::ISPICKUP] = $orderdata [$i] [OrderConst::ISPICKUP];
+				$data [$i] [OrderConst::ISDELIVERY] = $orderdata [$i] [OrderConst::ISDELIVERY];
 
 				if ($orderdata [$i] [OrderConst::RTOTALPRICE] >= 0 && $orderdata [$i] [OrderConst::ORDERSTATUS] == 1) {
 					$data [$i] ['price'] = $orderdata [$i] [OrderConst::RTOTALPRICE];
