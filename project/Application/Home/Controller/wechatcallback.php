@@ -125,18 +125,20 @@ class wechatcallback {
 									$corders_yest = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $yesterday . "' AND orderstatus = 2 AND shopid=" . $shopid );
 									$checkorders = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND orderstatus = 1 AND shopid=" . $shopid );
 									$checkorders_yest = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $yesterday . "' AND orderstatus = 1 AND shopid=" . $shopid );
+									$usercheckorders = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND orderstatus = 3 AND shopid=" . $shopid );
+									$usercheckorders_yest = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $yesterday . "' AND orderstatus = 3 AND shopid=" . $shopid );
 									
-									$first = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND isfirst = 1 AND shopid=" . $shopid );
+									$first = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND isfirst = 1 AND shopid=" . $shopid." AND orderstatus=3" );
 									$first_discuont = count ( $first ) * C ( 'FIRST_DISCOUNT' );
-									$first_yest = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $yesterday . "' AND isfirst = 1 AND shopid=" . $shopid );
+									$first_yest = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $yesterday . "' AND isfirst = 1 AND shopid=" . $shopid." AND orderstatus=3" );
 									$first_yest_discount = count ( $first_yest ) * C ( 'FIRST_DISCOUNT' );
-									$discount = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND isfirst = 0 AND discount > 0 AND shopid=" . $shopid );
+									$discount = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND isfirst = 0 AND discount > 0 AND shopid=" . $shopid." AND orderstatus=3" );
 									$dis_discount = 0;
 									$dis_yest_discount = 0;
 									foreach ( $discount as $dis ) {
 										$dis_discount += $dis ['discount'];
 									}
-									$discount_yest = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $yesterday . "' AND isfirst = 0 AND discount > 0 AND shopid=" . $shopid );
+									$discount_yest = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $yesterday . "' AND isfirst = 0 AND discount > 0 AND shopid=" . $shopid." AND orderstatus=3" );
 									foreach ( $discount_yest as $dis ) {
 										$dis_yest_discount += $dis ['discount'];
 									}
@@ -145,33 +147,16 @@ class wechatcallback {
 									$shopmsg = $shopmsg . "收到" . count ( $totalorders ) . "单\n";
 									$msg_yest = $msg_yest . "收到" . count ( $totalorders_yest ) . "单\n";
 									
-									$shopmsg = $shopmsg . "已确认" . count ( $checkorders ) . "单(首购" . count ( $first ) . "单|优惠" . count ( $discount ) . "单)\n";
-									$msg_yest = $msg_yest . "已确认" . count ( $checkorders_yest ) . "单(首购" . count ( $first_yest ) . "单|优惠" . count ( $discount_yest ) . "单)\n";
+									$shopmsg = $shopmsg . "店家已确认" . count ( $checkorders ) . "单)\n";
+									$shopmsg = $shopmsg."用户已确认".count($usercheckorders)."单(首购" . count ( $first ) . "单|优惠" . count ($discount ) . "单)\n";
+									$msg_yest = $msg_yest . "店家已确认" . count ( $checkorders_yest )."单\n";
+									$msg_yest = $msg_yest."用户已确认".count($usercheckorders_yest)."单(首购" . count ( $first_yest ) . "单|优惠" . count ($discount_yest ) . "单)\n";;
 									
 									$shopmsg = $shopmsg . "未确认" . count ( $unorders ) . "单\n";
 									$msg_yest = $msg_yest . "未确认" . count ( $unorders_yest ) . "单\n";
 									
 									$mesg = '';
 									$mesg_yest = '';
-// 									foreach ( $unorders as $item ) {
-// 										// if($item['isfirst']==1)
-// 										// {
-// 										// $mesg = $mesg.$item['orderid']."--首\n";
-// 										// }
-// 										// else if($itemorder["isfirst"] == 0 && $itemorder["discount"] > 0)
-// 										// {
-// 										// $mesg = $mesg.$item['orderid']."--惠\n";
-// 										// }
-// 										// else
-// 										// {
-// 										// $mesg = $mesg.$item['orderid']."\n";
-// 										// }
-// 										$mesg = $mesg . $item ['orderid'] . "\n";
-// 									}
-									
-// 									foreach ( $unorders_yest as $item ) {
-// 										$mesg_yest = $mesg_yest . $item ['orderid'] . "\n";
-// 									}
 									$shopmsg = $shopmsg . $mesg;
 									$msg_yest = $msg_yest . $mesg_yest;
 									$shopmsg = $shopmsg . "已取消" . count ( $corders ) . "单\n";
@@ -460,19 +445,17 @@ class wechatcallback {
 							$unorders = $order->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND orderstatus = 0 AND shopid=" . $shops [$i] ['shopid'] );
 							$corders = $order->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND orderstatus = 2 AND shopid=" . $shops [$i] ['shopid'] );
 							$checkorders = $order->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND orderstatus = 1 AND shopid=" . $shops [$i] ['shopid'] );
+							$usercheckorders = $order->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND orderstatus = 3 AND shopid=" . $shops [$i] ['shopid'] );
 							$shopmsg = $shopmsg . $shopdata ['spn'] . $msg . "\n";
 							$shopmsg = $shopmsg . "电话:" . $shopdata ['phone'] . "\n";
-							// $shopmsg = $shopmsg."总-已-未-取"."\n";
-							$shopmsg = $shopmsg . count ( $totalorders ) . "-" . count ( $checkorders )."-" . count ( $unorders ). "-" . count ( $corders ) . "\n";
-							// $shopmsg = $shopmsg."收到".count($totalorders)."单\n";
-							// $shopmsg = $shopmsg."已确认".count($checkorders)."单\n";
+							$shopmsg = $shopmsg . count ( $totalorders ) . "-(" . count ( $checkorders )."/".count($usercheckorders).")" . count ( $unorders ). "-" . count ( $corders ) . "\n";
 							$totals += count ( $totalorders );
 							$countfirst = 0;
 							$countdiscount = 0;
 							$totalfirst = 0;
 							$totaldiscount = 0;
-							if (count ( $checkorders )) {
-									foreach ( $checkorders as $itemorder ) {
+							if (count ( $usercheckorders )) {
+									foreach ( $usercheckorders as $itemorder ) {
 										if ($itemorder ["isfirst"] == 1) {
 											$countfirst ++;
 											$totalfirst += intval(C('FIRST_DISCOUNT'));
@@ -486,30 +469,6 @@ class wechatcallback {
 								$totalrefunds += $refunds;
 								$shopmsg = $shopmsg.$countfirst."-".$countdiscount."-".$refunds."\n\n";
 							
-							// $shopmsg = $shopmsg."--".$countfirst."单首购单-应补贴".$totalfirst."元\n";
-							// $shopmsg = $shopmsg."--".$countdiscount."单优惠单-应补贴".$totaldiscount."元\n";
-							// $total = $totalfirst+$totaldiscount;
-							// $shopmsg = $shopmsg."--总共补贴".$total."元\n";
-							// $shopmsg = $shopmsg."未确认".count($unorders)."单\n";
-							// $mesg ='';
-							// foreach($unorders as $item)
-							// {
-							// // if($item['isfirst']==1)
-							// // {
-							// // $mesg = $mesg.$item['orderid']."--首\n";
-							// // }
-							// // else if($itemorder["isfirst"] == 0 && $itemorder["discount"] > 0)
-							// // {
-							// // $mesg = $mesg.$item['orderid']."--惠\n";
-							// // }
-							// // else
-							// // {
-							// // $mesg = $mesg.$item['orderid']."\n";
-							// // }
-							// $mesg = $mesg.$item['orderid']."\n";
-							// }
-							// $shopmsg = $shopmsg.$mesg;
-							// $shopmsg = $shopmsg."已取消".count($corders)."单\n\n";
 							
 						}
 					}
@@ -517,7 +476,7 @@ class wechatcallback {
 						$shopmsg = $shopmsg . "总数" . $totals."\n";
 						$shopmsg = $shopmsg.'总补贴'.$totalrefunds;
 						if (strlen ( $shopmsg ) < 2047) {
-							$content = "总-已-未-取\n首-惠-补\n" . $shopmsg;
+							$content = "总-已(店/用户)-未-取\n首-惠-补\n" . $shopmsg;
 						} else {
 						}
 					} else {
