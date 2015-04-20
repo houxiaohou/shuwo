@@ -347,11 +347,11 @@ class OrderApiController extends RestController {
 					$address = "发货地址: " . $data [OrderConst::ADDRESS] . "   配送时间: " . $data [OrderConst::DLTIME];
 					$orderNum = "订单编号：" . $orderid;
 
-					$ordertype = "新的订单(".$ordedeliery.")";
+					$ordertype = "新的订单--".$ordedeliery;
 					if ($data [OrderConst::ISFIRST] == 0 && $data [OrderConst::DISCOUNT] > 0) {
-						$ordertype = "优惠订单减免" . $data [OrderConst::DISCOUNT] . "元";
+						$ordertype = "优惠订单减免" . $data [OrderConst::DISCOUNT] . "元--".$ordedeliery;
 					} else if ($data [OrderConst::ISFIRST] == 1) {
-						$ordertype = "首购订单减免" . $data [OrderConst::DISCOUNT] . "元";
+						$ordertype = "首购订单减免" . $data [OrderConst::DISCOUNT] . "元--".$ordedeliery;
 					}
 
 					if (count ( $userinfo )) {
