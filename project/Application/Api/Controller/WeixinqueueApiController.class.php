@@ -61,12 +61,6 @@ class WeixinqueueApiController extends RestController {
 		$orderid = I($poststr.OrderConst::ORDERID);
 		$orderNum = "订单编号：".$orderid;
 		$data = $order->where("orderid ='".$orderid."'")->find();
-		$orderstype = "(外送)";
-		if($data[OrderConst::ISPICKUP]==1 || $data[OrderConst::DISTANCE] <50)
-		{
-			$orderstype="(自提)";
-		}
-			
 		$contact = $data [OrderConst::USERNAME] . " 电话" . $data [OrderConst::PHONE];
 		$address = "发货地址: " . $data [OrderConst::ADDRESS] . "   配送时间: " . $data [OrderConst::DLTIME];
 		$shopname = $shop->where ( "shopid=" . $shopid )->getField ( "spn" );
@@ -77,7 +71,7 @@ class WeixinqueueApiController extends RestController {
 			for($i = 0; $i < count ( $bdshops ); $i ++) {
 				$bddata = $bd->where ( "bdid=" . $bdshops [$i] [BDConst::BDID] )->find ();
 				if (count ( $bddata ) && ! empty ( $bddata [BDConst::OPENID] )) {
-					$msgstr = $shopname . "收到新的订单".$orderstype;
+					$msgstr = $shopname . "收到新的订单";
 					if ($data [OrderConst::ISFIRST] == 0 && $data [OrderConst::DISCOUNT] > 0) {
 						$msgstr = $msgstr . '--优惠订单减免' . $data [OrderConst::DISCOUNT] . '元';
 					} else if ($data [OrderConst::ISFIRST] == 1) {
