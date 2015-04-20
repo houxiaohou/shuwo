@@ -448,7 +448,7 @@ class wechatcallback {
 							$usercheckorders = $order->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND orderstatus = 3 AND shopid=" . $shops [$i] ['shopid'] );
 							$shopmsg = $shopmsg . $shopdata ['spn'] . $msg . "\n";
 							$shopmsg = $shopmsg . "电话:" . $shopdata ['phone'] . "\n";
-							$shopmsg = $shopmsg . count ( $totalorders ) . "-(" . count ( $checkorders )."/".count($usercheckorders).")" . count ( $unorders ). "-" . count ( $corders ) . "\n";
+							$shopmsg = $shopmsg . count ( $totalorders ) . "-(" . count ( $checkorders )."/".count($usercheckorders).")-" . count ( $unorders ). "-" . count ( $corders ) . "\n";
 							$totals += count ( $totalorders );
 							$countfirst = 0;
 							$countdiscount = 0;
