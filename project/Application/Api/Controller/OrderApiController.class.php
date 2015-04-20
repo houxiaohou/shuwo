@@ -330,7 +330,7 @@ class OrderApiController extends RestController {
 
 				// 构造模板消息
 				$ordedeliery='外送';
-                if($data [OrderConst::ISPICKUP] ==1 || $data[OrderConst::DISTANCE]<=50) 
+                if($data [OrderConst::ISPICKUP] ==1 || $data[OrderConst::DISTANCE]<50) 
                 {
                 	$ordedeliery='自提';
                 }
