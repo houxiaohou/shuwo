@@ -643,6 +643,46 @@ class OrderApiController extends RestController {
 		}
 	}
 
+	//管理员根据状态查询订单
+	public function fliterorder()
+	{
+			$authorize = new Authorize ();
+			$isAdmin = $authorize->Filter ( "admin" );
+			if ($isAdmin) {
+				$order = M ( "orders" );
+				$status = I ( 'get.status', - 1 );
+				$ispickup = I('get.ispickup',0);
+				$isdelivery = I('get.isdelivery',0);
+				$start = I ( 'get.start', 0 );
+				$count = I ( 'get.count', 5 );
+				$where_order[OrderConst::ISPICKUP] = $ispickup;
+				$where_order[OrderConst::ISDELIVERY] = $isdelivery;
+				
+			if (intval ( $status ) > - 1) {
+				switch (intval ( $status )) {
+					case 0 :
+					case 1 :
+					case 2 :
+					case 3 :
+						$where_order [OrderConst::ORDERSTATUS] = $status;
+						break;
+					default :
+						break;
+				}
+			}
+			$orderdata = $order->where ( $where_order )->order ( '-createdtime' )->limit ( $start, $count )->select ();
+			$data = $this->orderdetail ( $orderdata, $count );
+			if(!count($data))
+			{
+				$data = [];
+			}
+			$this->response ( $data, 'json' );
+			} else {
+				$message ["msg"] = "Unauthorized";
+				$this->response ( $message, 'json', '401' );
+			}
+	}
+	
 	private function orderdetail($orderdata, $count) {
 		$orderproduct = M ( 'orderproduct' );
 		$product = M ( 'product' );

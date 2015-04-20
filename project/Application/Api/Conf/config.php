@@ -62,6 +62,7 @@ return array(
         array('ordercancel','OrderApi/cancelorder', '', array('method' => 'POST')),//撤销订单
         array('order','OrderApi/createorder', '', array('method' => 'POST')),//生成新订单
       	array('weight','OrderApi/getweight', '', array('method' => 'POST')),//称重
+      	array('fliterorder','OrderApi/fliterorder', '', array('method' => 'GET')),//称重
       	
 		//BD URL配置
         array('queryorders','BDApi/queryorders','',array('method'=>'GET')),//得到所有的BD和店铺
