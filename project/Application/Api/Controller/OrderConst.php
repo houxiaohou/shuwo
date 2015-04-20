@@ -24,6 +24,7 @@ class OrderConst
     const LATITUDE  = 'lat';
 	const LONGITUDE = 'lng';
 	const ISPICKUP = 'ispickup';
+	const ISDELIVERY = 'isdelivery'; 
 	const DISTANCE = 'distance';
     const COUNT = 10;
 }

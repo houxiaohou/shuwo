@@ -237,9 +237,22 @@ class OrderApiController extends RestController {
 
             $distance = intval($this->getDistance($shoplat, $shoplng, $data [OrderConst::LATITUDE], $data [OrderConst::LONGITUDE]));
             $data[OrderConst::DISTANCE] = $distance;
-            if ($distance < 50) {
-
+            if($data [OrderConst::ISPICKUP]==1)
+            {
+            	$data [OrderConst::ISDELIVERY] =1;
             }
+            else 
+            {
+            	if($distance < 50 )
+            	{
+            		$data [OrderConst::ISDELIVERY] =1;
+            	}
+            	else 
+            	{
+            		$data [OrderConst::ISDELIVERY] =0;
+            	}
+            }
+            
 			// 获取店铺的优惠信息
 			$shop_isdiscount = $shopdetail [ShopConst::ISDISCOUNT];
 			$shop_discount = $shopdetail [ShopConst::DISCOUNT];
