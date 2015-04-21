@@ -61,7 +61,7 @@ return array(
         array('ordercancel','OrderApi/cancelorder', '', array('method' => 'POST')),//撤销订单
         array('order','OrderApi/createorder', '', array('method' => 'POST')),//生成新订单
       	array('weight','OrderApi/getweight', '', array('method' => 'POST')),//称重
-      	array('allorder','OrderApi/fliterorder', '', array('method' => 'GET')),//称重
+      	array('allorder','OrderApi/filterOrder', '', array('method' => 'GET')),//称重
       	array('deliveryorder','OrderApi/deliveryorder', '', array('method' => 'POST')),//更改订单配送方式
 
 		//BD URL配置

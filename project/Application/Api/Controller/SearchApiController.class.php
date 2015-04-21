@@ -42,10 +42,10 @@ class SearchApiController extends RestController {
             $shopid =  $auid;
     		$orders = M ( 'orders' );
     		$search = I ( 'post.search'.'');	
-    		$where = "orderid =" . $search . " AND shopid =".$shopid;
+    		$where = "orderid =" . $search . " or phone = ". $search ." AND shopid =".$shopid;
     		$orderdata = $orders->where ( $where )->select ();
     		$count = count($orderdata);
-    		if(!count($data))
+    		if(!$count)
     		{
     			$data = [];
     		}
