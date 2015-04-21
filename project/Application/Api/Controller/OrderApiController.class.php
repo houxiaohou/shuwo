@@ -270,19 +270,25 @@ class OrderApiController extends RestController {
             {
             	$data [OrderConst::ISDELIVERY] = 0;
             }
-            else 
+            else
             {
             	if($distance < 50 )
             	{
             		$data [OrderConst::ISDELIVERY] =1;
             		$data [OrderConst::ISPICKUP] =1;
             	}
-            	else 
+            	else
             	{
-            		$data [OrderConst::ISDELIVERY] =0;
+                    if ($data [OrderConst::LATITUDE] == 0) {
+                        // 经纬度为0，默认到店自提
+                        $data [OrderConst::ISDELIVERY] =1;
+                        $data [OrderConst::ISPICKUP] =1;
+                    } else {
+                        $data [OrderConst::ISDELIVERY] =0;
+                    }
             	}
             }
-            
+
 			// 获取店铺的优惠信息
 			$shop_isdiscount = $shopdetail [ShopConst::ISDISCOUNT];
 			$shop_discount = $shopdetail [ShopConst::DISCOUNT];
@@ -373,12 +379,12 @@ class OrderApiController extends RestController {
 
 				// 构造模板消息
 				$orderdeliery='(外送)';
-                if($data [OrderConst::ISPICKUP] ==1 || $data[OrderConst::DISTANCE]<50) 
+                if($data [OrderConst::ISPICKUP] ==1 || $data[OrderConst::DISTANCE]<50)
                 {
                 	$orderdeliery='(自提)';
                 }
-                
-				
+
+
 				$shopid = intval ( $data [OrderConst::SHOPID] );
 				if ($shopid) {
 					$user = M ( "user" );
@@ -687,8 +693,12 @@ class OrderApiController extends RestController {
                 if (intval($status) == -2) {
                     // 筛选差异订单
                     $where_order[OrderConst::ISDELIVERY] = 1;
-                } elseif(intval($status) == -1) {
-
+                } elseif(intval($status) == -3) {
+                    // 上门自提
+                    $where_order[OrderConst::ISPICKUP] = 1;
+                } elseif(intval($status) == -4) {
+                    // 送货上门
+                    $where_order[OrderConst::ISPICKUP] = 0;
                 } else {
                     $where_order [OrderConst::ORDERSTATUS] = intval($status);
                 }
@@ -708,7 +718,7 @@ class OrderApiController extends RestController {
 				$this->response ( $message, 'json', '401' );
 			}
 	}
-	
+
 	private function orderdetail($orderdata, $count) {
 		$orderproduct = M ( 'orderproduct' );
 		$product = M ( 'product' );
