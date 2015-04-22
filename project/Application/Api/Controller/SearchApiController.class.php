@@ -20,7 +20,7 @@ class SearchApiController extends RestController {
 			$search = I ( 'post.search'.'');
 			
 			$where = "orderid like '%" . $search . "%' or phone like '%" . $search . "%'";
-			$data = $orders->where ( $where )->select ();
+			$data = $orders->where ( $where )->order('-createdtime')->select ();
 			if(!count($data))
 			{
 			   $data = [];
@@ -43,7 +43,7 @@ class SearchApiController extends RestController {
     		$orders = M ( 'orders' );
     		$search = I ( 'post.search'.'');	
     		$where = "orderid =" . $search . " or phone = ". $search ." AND shopid =".$shopid;
-    		$orderdata = $orders->where ( $where )->select ();
+    		$orderdata = $orders->where ( $where )->order('-createdtime')->select ();
     		$count = count($orderdata);
     		if(!$count)
     		{
