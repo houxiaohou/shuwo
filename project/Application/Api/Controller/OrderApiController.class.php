@@ -300,7 +300,7 @@ class OrderApiController extends RestController
             if ($data [OrderConst::ISPICKUP] == 1) {
                 $data [OrderConst::ISDELIVERY] = 0;
             } else {
-                if ($distance < 50) {
+                if ($distance < 100) {
                     $data [OrderConst::ISDELIVERY] = 1;
                     $data [OrderConst::ISPICKUP] = 1;
                 } else {
@@ -719,10 +719,12 @@ class OrderApiController extends RestController
         }
         $order = M("orders");
         $status = I('get.status', -1);
+        $shopId = I('get.shopId', -1);
         $start = I('get.start', 0);
         $count = I('get.count', 5);
 
         $status = intval($status);
+        $shopId = intval($shopId);
 
         if ($status == -2) {
             // 筛选差异订单
@@ -738,6 +740,10 @@ class OrderApiController extends RestController
         } else {
             $where_order [OrderConst::ORDERSTATUS] = intval($status);
         }
+        if ($shopId != -1) {
+            $where_order[OrderConst::SHOPID] = $shopId;
+        }
+
         if (!empty($where_order)) {
             $orderdata = $order->where($where_order)->order('-createdtime')->limit($start, $count)->select();
         } else {
