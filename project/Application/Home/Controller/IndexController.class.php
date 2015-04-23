@@ -23,7 +23,7 @@ class IndexController extends Controller {
             $data = $xcrpt->decrypt ( $value, 'base64' );
 			if ($data) {
 				$str = explode ( "#", $data );
-				if ($str && count ( $str ) == 2) 
+				if ($str && count ( $str ) == 3)
 				{
 					$userid = intval ( $str [0] );
 					if ($userid) {
@@ -101,7 +101,7 @@ class IndexController extends Controller {
 					if (count ( $data )) {
 						$userid = $data [UserConst::USERID];
 						$datetime = date ( 'Ymd', strtotime ( '+14 day' ) );
-						$str = $userid . "#" . $datetime;
+						$str = $userid . "#" . $datetime . "#new";
 						$xcrptstr = $xcrpt->encrypt ( $str, 'base64' );
 						cookie ( 'utoken', $xcrptstr, 1209600 );
 					} else {
@@ -118,7 +118,7 @@ class IndexController extends Controller {
 						$data [UserConst::ROLES] = 0;
 						$userid = $user->add ( $data );
 						$datetime = date ( 'Ymd', strtotime ( '+14 day' ) );
-						$str = $userid . "#" . $datetime;
+						$str = $userid . "#" . $datetime . "#new";
 						$xcrptstr = $xcrpt->encrypt ( $str, 'base64' );
 						cookie ( 'utoken', $xcrptstr, 1209600 );
 					}
