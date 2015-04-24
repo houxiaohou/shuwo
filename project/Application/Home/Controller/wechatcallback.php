@@ -130,7 +130,7 @@ class wechatcallback {
 									
 									$first = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND isfirst = 1 AND shopid=" . $shopid." AND orderstatus=3" );
 									$first_discuont = count ( $first ) * C ( 'FIRST_DISCOUNT' );
-									$first_yest = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $yesterday . "' AND isfirst = 1 AND shopid=" . $shopid." AND orderstatus=3" );
+									$first_yest = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $yesterday . "' AND isfirst = 1 AND shopid=" . $shopid." AND orderstatus=3 " );
 									$first_yest_discount = count ( $first_yest ) * C ( 'FIRST_DISCOUNT' );
 									$discount = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND isfirst = 0 AND discount > 0 AND shopid=" . $shopid." AND orderstatus=3" );
 									$dis_discount = 0;
@@ -147,7 +147,7 @@ class wechatcallback {
 									$shopmsg = $shopmsg . "收到" . count ( $totalorders ) . "单\n";
 									$msg_yest = $msg_yest . "收到" . count ( $totalorders_yest ) . "单\n";
 									
-									$shopmsg = $shopmsg . "店家已确认" . count ( $checkorders ) . "单)\n";
+									$shopmsg = $shopmsg . "店家已确认" . count ( $checkorders ) . "单\n";
 									$shopmsg = $shopmsg."用户已确认".count($usercheckorders)."单(首购" . count ( $first ) . "单|优惠" . count ($discount ) . "单)\n";
 									$msg_yest = $msg_yest . "店家已确认" . count ( $checkorders_yest )."单\n";
 									$msg_yest = $msg_yest."用户已确认".count($usercheckorders_yest)."单(首购" . count ( $first_yest ) . "单|优惠" . count ($discount_yest ) . "单)\n";;
