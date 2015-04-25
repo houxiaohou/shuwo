@@ -35,6 +35,7 @@ return array(
         array('category/:id\d', 'CategoryApi/updatecategory', '', array('method' => 'POST')),//更新水果类型，以（POST）传参
         array('category', 'CategoryApi/addcategory', '', array('method' => 'POST')),//添加水果类型，以（POST）传参
         array('category/:id\d', 'CategoryApi/deletecategory', '', array('method' => 'DELETE')),   //删除水果类型
+    	array('categoryimg/:id\d','CategoryApi/deletecategoryimgbyurl', '', array('method' => 'DELETE')),   //删除水果种类图片
 
         //用户地址URL配置
         array('address/default', 'ShippingaddressApi/useraddress', '', array('method' => 'GET')),//获取用户的默认地址
