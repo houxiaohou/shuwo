@@ -272,6 +272,13 @@ class OrderApiController extends RestController
         $authorize = new Authorize ();
         $userid = $authorize->Filter("user");
         $data [OrderConst::USERID] = $userid;
+        $userData = M('user')->where('userid='.$userid)->find();
+        if (intval($userData['block']) == 1) {
+            $message['success'] = 0;
+            $message['error'] = 'blocked';
+            $this->response($message, 'json');
+            return;
+        }
         if ($userid) {
             $poststr = 'post.';
             $orders = M('orders');

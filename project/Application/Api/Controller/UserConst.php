@@ -17,4 +17,5 @@ Class UserConst
 	const SHOPID = "shopid";
 	const OPENID = "openid";
 	const ROLES = "roles";
+	const BLOCK = "block";
 }

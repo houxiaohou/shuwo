@@ -48,10 +48,56 @@ class UserApiController extends RestController
                 $d[UserConst::COUNTRY] = $user[UserConst::COUNTRY];
                 $d[UserConst::PROVINCE] = $user[UserConst::PROVINCE];
                 $d[UserConst::CITY] = $user[UserConst::CITY];
+                $d[UserConst::BLOCK] = $user[UserConst::BLOCK];
                 array_push($users, $d);
             }
         }
         $this->response($users, 'json');
+    }
+
+    public function blockedUsers()
+    {
+        // 查询黑名单用户
+        $authorize = new Authorize ();
+        $isAdmin = $authorize->Filter("admin");
+        if (!$isAdmin) {
+            $message ["msg"] = "Unauthorized";
+            $this->response($message, 'json', '401');
+            return;
+        }
+
+        $start = intval(I('get.start', 0));
+        $count = intval(I('get.count', 5));
+
+        $sql = 'select userid from user where block = 1 limit ' . $start . ', ' . $count;
+
+        $dao = M();
+        $userDao = M('user');
+
+        $data = $dao->query($sql);
+        $users = [];
+        for ($i = 0; $i < count($data); $i++) {
+            $user = $userDao->where('userid=' . $data[$i]['userid'])->find();
+            $d['order_num'] = $this->countUserOrderNum($data[$i]['userid']);
+            $d[UserConst::USERID] = $user[UserConst::USERID];
+            $d[UserConst::CREATEDTIME] = $user[UserConst::CREATEDTIME];
+            $d[UserConst::NICKNAME] = $user[UserConst::NICKNAME];
+            $d[UserConst::HEADIMGURL] = $user[UserConst::HEADIMGURL];
+            $d[UserConst::COUNTRY] = $user[UserConst::COUNTRY];
+            $d[UserConst::PROVINCE] = $user[UserConst::PROVINCE];
+            $d[UserConst::CITY] = $user[UserConst::CITY];
+            $d[UserConst::BLOCK] = $user[UserConst::BLOCK];
+            array_push($users, $d);
+        }
+        $this->response($users, 'json');
+    }
+
+    private function countUserOrderNum($userid)
+    {
+        $sql = 'select count(*) as count from orders where userid = ' . $userid;
+        $dao = M();
+        $data = $dao->query($sql);
+        return $data[0]['count'];
     }
 
     public function userOrders()
@@ -78,5 +124,23 @@ class UserApiController extends RestController
         $this->response($data, 'json');
     }
 
+    public function blockUser()
+    {
+        // 加入用户到黑名单或解封
+        $authorize = new Authorize ();
+        $isAdmin = $authorize->Filter("admin");
+        if (!$isAdmin) {
+            $message ["msg"] = "Unauthorized";
+            $this->response($message, 'json', '401');
+            return;
+        }
+        $userid = intval(I('post.userid'));
+        $block = intval(I('post.block'));
+
+        $user = M('user');
+        $data[UserConst::BLOCK] = $block;
+        $user->where('userid=' . $userid)->save($data);
+        $this->response($data, 'json');
+    }
 
 }
