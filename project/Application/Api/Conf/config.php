@@ -69,9 +69,9 @@ return array(
         array('queryorders', 'BDApi/queryorders', '', array('method' => 'GET')),//得到所有的BD和店铺
         array('allbds', 'BDApi/getallbds', '', array('method' => 'GET')),//得到所有的BD和店铺
         array('bd/:id\d/shops', 'BDApi/getshopbybdid', '', array('method' => 'GET')),//根据bdid查询所属店铺信息
-        array('bd/:id\d', 'BDApi/deletebd', '', array('method' => 'DELETE')),//删除bd
-        array('bd/:bdid\d/shop/:shopid\d', 'BDApi/deletebdshop', '', array('method' => 'DELETE')),//删除bdshop
-        array('bd/:bdid\d/shop/:shopid\d', 'BDApi/addBdShop', '', array('method' => 'POST')),//添加bdshop
+        array('bd/:id\d$', 'BDApi/deletebd', '', array('method' => 'DELETE')),//删除bd
+        array('bd/:bdid\d/shop/:shopid\d$', 'BDApi/deletebdshop', '', array('method' => 'DELETE')),//删除bdshop
+        array('bd/:bdid\d/shop/:shopid\d$', 'BDApi/addBdShop', '', array('method' => 'POST')),//添加bdshop
 
         //CATEGORYPIC URL配置
         array('categorypic/:id\d', 'CategorypicApi/updatecategorypic', '', array('method' => 'POST')),//更新
@@ -96,5 +96,6 @@ return array(
         array('analytics/user/orders', 'UserApi/userOrders', '', array('method' => 'GET')),
         array('user/block', 'UserApi/blockUser', '', array('method' => 'POST')),
         array('user/blocked', 'UserApi/blockedUsers', '', array('method' => 'GET')),
+        array('user/search', 'UserApi/search', '', array('method' => 'POST')),
     )
 );

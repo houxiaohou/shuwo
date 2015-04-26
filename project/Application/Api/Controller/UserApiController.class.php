@@ -24,32 +24,18 @@ class UserApiController extends RestController
         $start = intval(I('get.start', 0));
         $count = intval(I('get.count', 5));
         $days = intval(I('get.days', -1)); // $days天前开始
-
         if ($days == -1) {
             // 查询全部
             $sql = 'select userid, count(userid) as count from orders group by userid order by count desc limit ' . $start . ', ' . $count;
         } else {
             $sql = 'select userid, count(userid) as count from orders where to_days(createdtime) >= to_days(now()) - ' . $days . ' group by userid order by count desc limit ' . $start . ', ' . $count;
         }
-
         $dao = M();
-        $userDao = M('user');
-
         $users = [];
         $userInfo = $dao->query($sql);
         if ($userInfo) {
             for ($i = 0; $i < count($userInfo); $i++) {
-                $user = $userDao->where('userid=' . $userInfo[$i]['userid'])->find();
-                $d['order_num'] = $userInfo[$i]['count'];
-                $d[UserConst::USERID] = $user[UserConst::USERID];
-                $d[UserConst::CREATEDTIME] = $user[UserConst::CREATEDTIME];
-                $d[UserConst::NICKNAME] = $user[UserConst::NICKNAME];
-                $d[UserConst::HEADIMGURL] = $user[UserConst::HEADIMGURL];
-                $d[UserConst::COUNTRY] = $user[UserConst::COUNTRY];
-                $d[UserConst::PROVINCE] = $user[UserConst::PROVINCE];
-                $d[UserConst::CITY] = $user[UserConst::CITY];
-                $d[UserConst::BLOCK] = $user[UserConst::BLOCK];
-                array_push($users, $d);
+                array_push($users, $this->orderUser($userInfo[$i]['userid']));
             }
         }
         $this->response($users, 'json');
@@ -65,29 +51,14 @@ class UserApiController extends RestController
             $this->response($message, 'json', '401');
             return;
         }
-
         $start = intval(I('get.start', 0));
         $count = intval(I('get.count', 5));
-
         $sql = 'select userid from user where block = 1 limit ' . $start . ', ' . $count;
-
         $dao = M();
-        $userDao = M('user');
-
         $data = $dao->query($sql);
         $users = [];
         for ($i = 0; $i < count($data); $i++) {
-            $user = $userDao->where('userid=' . $data[$i]['userid'])->find();
-            $d['order_num'] = $this->countUserOrderNum($data[$i]['userid']);
-            $d[UserConst::USERID] = $user[UserConst::USERID];
-            $d[UserConst::CREATEDTIME] = $user[UserConst::CREATEDTIME];
-            $d[UserConst::NICKNAME] = $user[UserConst::NICKNAME];
-            $d[UserConst::HEADIMGURL] = $user[UserConst::HEADIMGURL];
-            $d[UserConst::COUNTRY] = $user[UserConst::COUNTRY];
-            $d[UserConst::PROVINCE] = $user[UserConst::PROVINCE];
-            $d[UserConst::CITY] = $user[UserConst::CITY];
-            $d[UserConst::BLOCK] = $user[UserConst::BLOCK];
-            array_push($users, $d);
+            array_push($users, $this->orderUser($data[$i]['userid']));
         }
         $this->response($users, 'json');
     }
@@ -112,13 +83,10 @@ class UserApiController extends RestController
         }
         $userid = intval(I('get.userid'));
         $where [OrderConst::USERID] = $userid;
-
         $orderDao = M('orders');
         $orders = $orderDao->where($where)->order('-createdtime')->select();
-
         $userDao = M('user');
         $user = $userDao->where('userid=' . $userid)->find();
-
         $data['orders'] = $orders;
         $data['user'] = $user;
         $this->response($data, 'json');
@@ -141,6 +109,54 @@ class UserApiController extends RestController
         $data[UserConst::BLOCK] = $block;
         $user->where('userid=' . $userid)->save($data);
         $this->response($data, 'json');
+    }
+
+    public function search()
+    {
+        // 根据手机号码搜索用户
+        $authorize = new Authorize ();
+        $isAdmin = $authorize->Filter("admin");
+        if (!$isAdmin) {
+            $message ["msg"] = "Unauthorized";
+            $this->response($message, 'json', '401');
+            return;
+        }
+        $phone = I('post.phone');
+
+        $orderDao = M('orders');
+        $where['phone'] = $phone;
+
+        $userIds = [];
+
+        $orders = $orderDao->where($where)->select();
+        for ($i = 0; $i < count($orders); $i++) {
+            $order = $orders[$i];
+            if (!in_array($order[OrderConst::USERID], $userIds)) {
+                array_push($userIds, $order[OrderConst::USERID]);
+            }
+        }
+        $users = [];
+
+        for ($j = 0; $j < count($userIds); $j++) {
+            array_push($users, $this->orderUser($userIds[$j]));
+        }
+        $this->response($users, 'json');
+    }
+
+    private function orderUser($userId)
+    {
+        $userDao = M('user');
+        $user = $userDao->where('userid=' . $userId)->find();
+        $d['order_num'] = $this->countUserOrderNum($userId['userid']);
+        $d[UserConst::USERID] = $user[UserConst::USERID];
+        $d[UserConst::CREATEDTIME] = $user[UserConst::CREATEDTIME];
+        $d[UserConst::NICKNAME] = $user[UserConst::NICKNAME];
+        $d[UserConst::HEADIMGURL] = $user[UserConst::HEADIMGURL];
+        $d[UserConst::COUNTRY] = $user[UserConst::COUNTRY];
+        $d[UserConst::PROVINCE] = $user[UserConst::PROVINCE];
+        $d[UserConst::CITY] = $user[UserConst::CITY];
+        $d[UserConst::BLOCK] = $user[UserConst::BLOCK];
+        return $d;
     }
 
 }
