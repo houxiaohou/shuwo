@@ -272,7 +272,7 @@ class OrderApiController extends RestController
         $authorize = new Authorize ();
         $userid = $authorize->Filter("user");
         $data [OrderConst::USERID] = $userid;
-        $userData = M('user')->where('userid='.$userid)->find();
+        $userData = M('user')->where('userid=' . $userid)->find();
         if (intval($userData['block']) == 1) {
             $message['success'] = 0;
             $message['error'] = 'blocked';
@@ -296,6 +296,21 @@ class OrderApiController extends RestController
             //获取店铺经纬度
             $shoplat = $shopdetail[ShopConst::LATITUDE];
             $shoplng = $shopdetail[ShopConst::LONGITUDE];
+
+
+            // 根据传过来的bag_id查询bag是否可用，如果bag不可用，返回success=0，error='bag_unavailable'
+            $bagId = intval(I('post.bag_id'));
+            if ($bagId) {
+                // 用户选了红包
+                $bagDao = M('bag');
+                $bagCondition['userid'] = $userid;
+                $bagCondition['id'] = $bagId;
+                $bag = $bagDao->where($bagCondition)->find();
+                if (!count($bag)) {
+                    // bag不存在，返回错误
+                    return;
+                }
+            }
 
 
             $data [OrderConst::LATITUDE] = doubleval(I($poststr . OrderConst::LATITUDE, 0));
