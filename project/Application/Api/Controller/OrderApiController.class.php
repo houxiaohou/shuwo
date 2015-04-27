@@ -518,6 +518,19 @@ class OrderApiController extends RestController
         $counts = OrderConst::COUNT;
         $weightdetail_json = $_POST ['weightdetail'];
         $weightdetail = json_decode($weightdetail_json, true);
+
+        /**
+         * 如果两个商家管理员先后确认订单，会造成用户确认收货的订单被修改成已确认的状态
+         */
+        $orderproductid = $weightdetail [0] ['orderproductid'];
+        $oid = $orderproduct->where('id=' . $orderproductid)->find()['orderid'];
+        $orderData = M('orders')->where('orderid=' . $oid)->find();
+        if ($orderData[OrderConst::ORDERSTATUS] == 1 || $orderData[OrderConst::ORDERSTATUS] == '1') {
+            // 如果订单状态为1，返回
+            $message ['success'] = 1;
+            $this->response($message, 'json', '401');
+            return;
+        }
         $count = count($weightdetail);
 
         for ($i = 0; $i < $count; $i++) {
