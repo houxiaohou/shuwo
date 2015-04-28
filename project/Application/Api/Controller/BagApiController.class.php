@@ -15,18 +15,18 @@ class BagApiController extends RestController
     {
         $get = "get.";
         $authorize = new Authorize ();
-        $userId = $authorize->Filter("user");
-        if (!intval($userId)) {
- 			$message ["msg"] = "Unauthorized";
- 			$this->response($message, 'json', '401');
-			return;
- 		}
+        $userId = 2;
+//         if (!intval($userId)) {
+//  			$message ["msg"] = "Unauthorized";
+//  			$this->response($message, 'json', '401');
+// 			return;
+//  		}
 
-        $currenttime = date('Y-m-d H:i:s');
+        $currenttime = date('Y-m-d');
         $bagDao = M('bag');
         $type = I($get.BagConst::TYPE,0); // 1 - 外送，2 - 自提
         
-        $data =  $bagDao->where("type = ".$type." and expires >='".$currenttime."' and user_id =".$userId." and used=0")->order ( 'expires asc' )->select();
+        $data =  $bagDao->where("type = ".$type." and date(expires) >='".$currenttime."' and user_id =".$userId." and used=0")->order ( 'expires desc' )->select();
         if(!count($data))
         {
         	$data = [];
@@ -48,9 +48,9 @@ class BagApiController extends RestController
     		$this->response($message, 'json', '401');
     		return;
     	}
-    	$currenttime = date('Y-m-d H:i:s');
+    	$currenttime = date('Y-m-d');
     	$bagDao = M('bag');
-    	$data =  $bagDao->where( "expires <='".$currenttime."' and user_id =".$userId)->order ( 'expires desc' )->select();
+    	$data =  $bagDao->where( "date(expires) <'".$currenttime."' and user_id =".$userId)->order ( 'expires desc' )->select();
     	if(!count($data))
     	{
     		$data = [];
@@ -71,7 +71,6 @@ class BagApiController extends RestController
     		$this->response($message, 'json', '401');
     		return;
     	}
-    	$currenttime = date('Y-m-d H:i:s');
     	$bagDao = M('bag');
     	$data =  $bagDao->where( "used = 1 and user_id =".$userId)->order ( 'expires desc' )->select();
     	if(!count($data))
