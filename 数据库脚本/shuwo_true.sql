@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-04-08 22:56:36
+Date: 2015-04-28 14:39:26
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -27,24 +27,40 @@ CREATE TABLE `admin` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+-- Table structure for bag
+-- ----------------------------
+DROP TABLE IF EXISTS `bag`;
+CREATE TABLE `bag` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT '0',
+  `used` tinyint(2) DEFAULT '0',
+  `type` tinyint(2) DEFAULT '0',
+  `shop_id` int(11) DEFAULT '0',
+  `expires` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `amount` int(11) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
 -- Table structure for bd
 -- ----------------------------
 DROP TABLE IF EXISTS `bd`;
 CREATE TABLE `bd` (
   `bdid` int(11) NOT NULL AUTO_INCREMENT,
-  `unionid` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '',
-  `nickname` varchar(32) CHARACTER SET utf8 DEFAULT '',
-  `password` varchar(255) CHARACTER SET utf8 DEFAULT '',
-  `mobile` varchar(16) CHARACTER SET utf8 DEFAULT '',
+  `unionid` varchar(255) NOT NULL DEFAULT '',
+  `nickname` varchar(32) DEFAULT '',
+  `password` varchar(255) DEFAULT '',
+  `mobile` varchar(16) DEFAULT '',
   `sex` tinyint(1) DEFAULT '0',
-  `city` varchar(16) CHARACTER SET utf8 DEFAULT '',
-  `province` varchar(16) CHARACTER SET utf8 DEFAULT '',
-  `country` varchar(16) CHARACTER SET utf8 DEFAULT '',
-  `createdtime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `openid` varchar(255) COLLATE utf8_unicode_ci DEFAULT '',
-  `bdname` varchar(255) COLLATE utf8_unicode_ci DEFAULT '',
+  `city` varchar(16) DEFAULT '',
+  `province` varchar(16) DEFAULT '',
+  `country` varchar(16) DEFAULT '',
+  `createdtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `openid` varchar(255) DEFAULT '',
+  `headimgurl` varchar(255) DEFAULT '',
+  `bdname` varchar(255) DEFAULT '',
   PRIMARY KEY (`bdid`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for bdshop
@@ -55,7 +71,7 @@ CREATE TABLE `bdshop` (
   `bdid` int(11) NOT NULL DEFAULT '0',
   `shopid` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for category
@@ -65,7 +81,7 @@ CREATE TABLE `category` (
   `categoryid` int(11) NOT NULL AUTO_INCREMENT,
   `categoryname` varchar(255) DEFAULT '',
   PRIMARY KEY (`categoryid`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for categorypic
@@ -74,10 +90,10 @@ DROP TABLE IF EXISTS `categorypic`;
 CREATE TABLE `categorypic` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `categoryid` int(11) NOT NULL DEFAULT '0',
-  `imgurl` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `des` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `imgurl` varchar(255) NOT NULL DEFAULT '',
+  `des` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for orderproduct
@@ -89,9 +105,9 @@ CREATE TABLE `orderproduct` (
   `productid` int(11) DEFAULT '0',
   `quantity` int(11) DEFAULT '0',
   `realweight` int(10) DEFAULT '0',
-  `realprice` decimal(10,1) DEFAULT '0.0',
+  `realprice` decimal(10,2) DEFAULT '0.00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2144 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for orders
@@ -103,19 +119,18 @@ CREATE TABLE `orders` (
   `userid` int(11) NOT NULL,
   `shopid` int(11) NOT NULL DEFAULT '0',
   `paystatus` int(11) DEFAULT '0',
-  `totalprice` decimal(10,1) DEFAULT '0.0',
+  `totalprice` decimal(10,2) DEFAULT '0.00',
   `address` text,
   `phone` varchar(255) DEFAULT '',
   `createdtime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `rtotalprice` decimal(10,1) DEFAULT '0.0',
+  `rtotalprice` decimal(10,2) DEFAULT '0.00',
   `dltime` varchar(32) DEFAULT NULL,
   `notes` varchar(255) DEFAULT NULL,
   `username` varchar(255) DEFAULT '',
   `ordernotes` varchar(255) DEFAULT '',
   `isfirst` int(3) DEFAULT '0',
-  `discount` decimal(10,1) DEFAULT '0.0',
-  `totalpricebefore` decimal(10,1) DEFAULT '0.0',
-  `rtotalpricebefore` decimal(10,1) DEFAULT '0.0',
+  `bag_amount` int(11) DEFAULT '0',
+  `bag_id` int(11) DEFAULT '0',
   PRIMARY KEY (`orderid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -129,15 +144,15 @@ CREATE TABLE `product` (
   `pimgurl` varchar(255) DEFAULT '',
   `issale` tinyint(2) DEFAULT '0',
   `num` int(11) DEFAULT '0',
-  `price` decimal(5,1) DEFAULT '0.0',
-  `discount` decimal(5,1) DEFAULT '0.0',
+  `price` decimal(5,2) DEFAULT '0.00',
+  `discount` decimal(5,2) DEFAULT '0.00',
   `attribute` int(3) DEFAULT '0',
   `categoryid` int(11) DEFAULT '0',
   `unit` varchar(255) DEFAULT '',
   `unitweight` int(6) DEFAULT '0',
   `shopid` int(11) DEFAULT NULL,
   PRIMARY KEY (`productid`)
-) ENGINE=InnoDB AUTO_INCREMENT=475 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for shippingaddress
@@ -155,7 +170,7 @@ CREATE TABLE `shippingaddress` (
   `isdefault` tinyint(3) unsigned DEFAULT '1',
   PRIMARY KEY (`said`),
   KEY `shippingaddress_ibfk_userid` (`userid`)
-) ENGINE=InnoDB AUTO_INCREMENT=434 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for shop
@@ -179,9 +194,9 @@ CREATE TABLE `shop` (
   `dlprice` int(3) DEFAULT '0',
   `isopen` tinyint(2) DEFAULT '0',
   `isdiscount` tinyint(2) DEFAULT '0',
-  `discount` tinyint(3) DEFAULT '0',
+  `discount` int(3) DEFAULT '0',
   PRIMARY KEY (`shopid`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for user
@@ -198,12 +213,12 @@ CREATE TABLE `user` (
   `province` varchar(16) DEFAULT '',
   `country` varchar(16) DEFAULT '',
   `createdtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `openid` varchar(255) DEFAULT '',
+  `openid` varchar(255) DEFAULT NULL,
   `headimgurl` varchar(255) DEFAULT NULL,
   `roles` tinyint(2) DEFAULT '0',
   `shopid` int(11) DEFAULT '0',
   PRIMARY KEY (`userid`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for weixinshop
@@ -214,8 +229,8 @@ CREATE TABLE `weixinshop` (
   `appsecret` varchar(255) DEFAULT '',
   `accesstoken` text,
   `weiid` varchar(255) DEFAULT '',
-  `expires` int(11) DEFAULT '0',
-  `id` varchar(11) NOT NULL DEFAULT '',
+  `expires` varchar(255) DEFAULT '',
+  `id` varchar(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -228,8 +243,8 @@ CREATE TABLE `weixinuser` (
   `appsecret` varchar(255) DEFAULT '',
   `accesstoken` text,
   `weiid` varchar(255) DEFAULT '',
-  `expires` int(11) DEFAULT '0',
-  `id` varchar(11) NOT NULL,
+  `expires` varchar(255) DEFAULT '',
+  `id` int(11) unsigned zerofill NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

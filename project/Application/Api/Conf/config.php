@@ -97,5 +97,9 @@ return array(
         array('user/block', 'UserApi/blockUser', '', array('method' => 'POST')),
         array('user/blocked', 'UserApi/blockedUsers', '', array('method' => 'GET')),
         array('user/search', 'UserApi/search', '', array('method' => 'POST')),
+    		
+    	// 红包
+    	array('baglist', 'BagApi/listUserAvailableBags', '', array('method' => 'GET')),
+
     )
 );

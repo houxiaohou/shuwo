@@ -93,23 +93,7 @@ class wechatcallback {
 								$orders = M ( 'orders' );
 								$shopid = $data ["shopid"];
 								
-								// // 当日收益
-								// $today = date ( "Y-m-d" );
-								// $sql = "select SUM(totalprice) as cincome from orders where DATE_FORMAT(createdtime,'%Y-%m-%d')='" . $today . "' AND shopid = {$shopid} AND orderstatus != 2";
-								// $item = $orders->query ( $sql );
-								// $todayincome = doubleval ( $item [0] ['cincome'] );
-								
-								// // 当月收益
-								// $Month = date ( "Y-m" );
-								// $sql = "select SUM(totalprice) as mincome from orders where DATE_FORMAT(createdtime,'%Y-%m')='" . $Month . "' AND shopid = {$shopid} AND orderstatus != 2";
-								// $item = $orders->query ( $sql );
-								// $monthincome = doubleval ( $item [0] ['mincome'] );
-								
-								// // 当前总收益
-								// $sql = "select SUM(totalprice) as tincome from orders where shopid = {$shopid} AND orderstatus != 2";
-								// $item = $orders->query ( $sql );
-								// $totalincome = doubleval ( $item [0] ['tincome'] );
-								// $content = "当日收益: " . $todayincome . "元 \n\n" . "当月收益: " . $monthincome . "元 \n\n" . "目前总收益: " . $totalincome . "元 \n\n";
+
 								if ($shopid) {
 									$shopmsg = '';
 									$current = date ( 'H:i' );

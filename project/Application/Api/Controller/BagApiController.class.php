@@ -3,6 +3,9 @@ namespace Api\Controller;
 
 use Think\Controller\RestController;
 
+require_once 'BagConst.php';
+require_once 'Authorize.php';
+
 class BagApiController extends RestController
 {
 
@@ -11,20 +14,26 @@ class BagApiController extends RestController
      */
     public function listUserAvailableBags()
     {
-
+        $get = "get.";
         $authorize = new Authorize ();
         $userId = $authorize->Filter("user");
         if (!intval($userId)) {
-            $message ["msg"] = "Unauthorized";
-            $this->response($message, 'json', '401');
-            return;
-        }
+ 			$message ["msg"] = "Unauthorized";
+ 			$this->response($message, 'json', '401');
+			return;
+ 		}
 
+        $currenttime = date('Y-m-d H:i:s');
         $bagDao = M('bag');
-        $type = I('get.type'); // 1 - 外送，2 - 自提
-
-        // TODO 根据条件查询，列出可用的红包
-
+        $type = I($get.BagConst::TYPE,0); // 1 - 外送，2 - 自提
+        
+        $data =  $bagDao->where("type = ".$type." and expires >='".$currenttime."' and user_id =".$userId." and used=0")->order ( 'expires asc' )->select();
+        if(!count($data))
+        {
+        	$data = [];
+        }
+        $this->response($data, 'json');
+        
     }
 
     /**
@@ -32,7 +41,7 @@ class BagApiController extends RestController
      */
     public function listUserExpiredBags()
     {
-
+    	
     }
 
     /**
