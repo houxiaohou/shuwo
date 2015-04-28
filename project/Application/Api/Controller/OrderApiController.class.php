@@ -525,10 +525,12 @@ class OrderApiController extends RestController
         $orderproductid = $weightdetail [0] ['orderproductid'];
         $oid = $orderproduct->where('id=' . $orderproductid)->find()['orderid'];
         $orderData = M('orders')->where('orderid=' . $oid)->find();
-        if ($orderData[OrderConst::ORDERSTATUS] == 1 || $orderData[OrderConst::ORDERSTATUS] == '1') {
-            // 如果订单状态为1，返回
-            $message ['success'] = 1;
-            $this->response($message, 'json', '401');
+        $status = intval($orderData[OrderConst::ORDERSTATUS]);
+        if ($status != 0) {
+            // 订单状态不是待确认
+            $message ['success'] = 0;
+            $message ['error'] = '已经确认';
+            $this->response($message, 'json');
             return;
         }
         $count = count($weightdetail);
