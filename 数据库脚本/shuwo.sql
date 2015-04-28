@@ -10,13 +10,13 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-04-28 14:39:18
+Date: 2015-04-29 00:05:29
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for admin
+-- Table structure for `admin`
 -- ----------------------------
 DROP TABLE IF EXISTS `admin`;
 CREATE TABLE `admin` (
@@ -32,7 +32,7 @@ CREATE TABLE `admin` (
 INSERT INTO `admin` VALUES ('1', 'admin', 'f38292831df4b230cb982bd44d3e7bef');
 
 -- ----------------------------
--- Table structure for bag
+-- Table structure for `bag`
 -- ----------------------------
 DROP TABLE IF EXISTS `bag`;
 CREATE TABLE `bag` (
@@ -43,17 +43,19 @@ CREATE TABLE `bag` (
   `shop_id` int(11) DEFAULT '0',
   `expires` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `amount` int(11) DEFAULT '0',
+  `start` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of bag
 -- ----------------------------
-INSERT INTO `bag` VALUES ('1', '1', '0', '0', '0', null, '0');
-INSERT INTO `bag` VALUES ('2', '0', '1', '0', '0', '2015-04-28 14:38:25', '0');
+INSERT INTO `bag` VALUES ('1', '2', '0', '0', '0', '2015-04-28 14:34:25', '0', '2015-04-29 00:05:14');
+INSERT INTO `bag` VALUES ('2', '2', '0', '0', '0', '2015-04-28 14:38:25', '0', '2015-04-29 00:05:14');
+INSERT INTO `bag` VALUES ('3', '2', '0', '0', '0', '2015-04-28 20:15:18', '0', '2015-04-29 00:05:14');
 
 -- ----------------------------
--- Table structure for bd
+-- Table structure for `bd`
 -- ----------------------------
 DROP TABLE IF EXISTS `bd`;
 CREATE TABLE `bd` (
@@ -79,7 +81,7 @@ CREATE TABLE `bd` (
 INSERT INTO `bd` VALUES ('1', '', 'dx', '', '', '0', '', '', '', '2015-03-18 16:09:11', '', '', '');
 
 -- ----------------------------
--- Table structure for bdshop
+-- Table structure for `bdshop`
 -- ----------------------------
 DROP TABLE IF EXISTS `bdshop`;
 CREATE TABLE `bdshop` (
@@ -94,7 +96,7 @@ CREATE TABLE `bdshop` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for category
+-- Table structure for `category`
 -- ----------------------------
 DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
@@ -115,7 +117,7 @@ INSERT INTO `category` VALUES ('6', '其他');
 INSERT INTO `category` VALUES ('7', '蔬菜');
 
 -- ----------------------------
--- Table structure for categorypic
+-- Table structure for `categorypic`
 -- ----------------------------
 DROP TABLE IF EXISTS `categorypic`;
 CREATE TABLE `categorypic` (
@@ -134,7 +136,7 @@ INSERT INTO `categorypic` VALUES ('3', '1', 'adw', '是的');
 INSERT INTO `categorypic` VALUES ('4', '2', '阿斯达', '谁打我');
 
 -- ----------------------------
--- Table structure for orderproduct
+-- Table structure for `orderproduct`
 -- ----------------------------
 DROP TABLE IF EXISTS `orderproduct`;
 CREATE TABLE `orderproduct` (
@@ -153,7 +155,7 @@ CREATE TABLE `orderproduct` (
 INSERT INTO `orderproduct` VALUES ('1', '12', '1', '1', '1', '1.00');
 
 -- ----------------------------
--- Table structure for orders
+-- Table structure for `orders`
 -- ----------------------------
 DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (
@@ -185,7 +187,7 @@ INSERT INTO `orders` VALUES ('58da6w5d4a65wd', '0', '2', '1', '0', '100.00', '�
 INSERT INTO `orders` VALUES ('a58wd46a5dadwa', '0', '2', '1', '0', '98.00', '地址', '1521742225', '2015-03-01 15:11:23', '0.00', '规定的时间', '留言', '客户名称', '理由', '0', '0', '0');
 
 -- ----------------------------
--- Table structure for product
+-- Table structure for `product`
 -- ----------------------------
 DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
@@ -238,7 +240,7 @@ INSERT INTO `product` VALUES ('48', '9', 'http://7u2out.com1.z0.glb.clouddn.com/
 INSERT INTO `product` VALUES ('49', '10', 'http://7u2out.com1.z0.glb.clouddn.com/o_19irdueod8rredt11no970fb19.jpg', '1', '0', '10.00', '10.00', '1', '1', '10', '10', '15');
 
 -- ----------------------------
--- Table structure for shippingaddress
+-- Table structure for `shippingaddress`
 -- ----------------------------
 DROP TABLE IF EXISTS `shippingaddress`;
 CREATE TABLE `shippingaddress` (
@@ -267,7 +269,7 @@ INSERT INTO `shippingaddress` VALUES ('11', '1', 'wang', '南翔', '上海', '�
 INSERT INTO `shippingaddress` VALUES ('12', '1', 'wang', '南翔', '上海', '上海', '南翔', '15821691728\r\n', '0');
 
 -- ----------------------------
--- Table structure for shop
+-- Table structure for `shop`
 -- ----------------------------
 DROP TABLE IF EXISTS `shop`;
 CREATE TABLE `shop` (
@@ -289,20 +291,21 @@ CREATE TABLE `shop` (
   `isopen` tinyint(2) DEFAULT '0',
   `isdiscount` tinyint(2) DEFAULT '0',
   `discount` int(3) DEFAULT '0',
+  `isbag` tinyint(2) DEFAULT '0',
   PRIMARY KEY (`shopid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of shop
 -- ----------------------------
-INSERT INTO `shop` VALUES ('13', 're13', '德园路616', 'http://7u2out.com1.z0.glb.clouddn.com/o_19dr6qrrc1v22n4vtsk1f27s4v9.jpg', '阿q果园子', '夏老板', '18321940791', '31.304237', '121.313583', 'wtw60dcb7kez', '上海', '嘉定南翔', '上海', '精品水果，味美鲜甜，欢迎新老顾客品尝。价格和实体店同步精品水果，味美鲜甜，欢迎新老顾客品尝。价格和实体店同步精品水果，味美鲜甜，欢迎新老顾客品尝。价格和实体店同步精品水果，味美鲜甜，欢迎新老顾客品尝。价格和实体店同步', '40', '1', '1', '5');
-INSERT INTO `shop` VALUES ('14', 'kw14', '栖林路302弄19号', 'http://7u2out.com1.z0.glb.clouddn.com/o_19evs2kl81h3r18pd11el1thj1mo3g.jpg', '宝群果业', '周老板', '18721178165', '31.314935', '121.325683', 'wtw60udwtqfp', '上海', '嘉定南翔', '上海', '本店出售各类精品水果，本店出售各类精品水果，欢迎广大顾客前来品尝。价格和实体店同步本店出售各类精品水果，欢迎广大顾客前来品尝。价格和实体店同步本店出售各类精品水果，欢迎广大顾客前来品尝。价格和实体店同步本店出售各类精品水果，欢迎广大顾客前来品尝。价格和实体店同步本店出售各类精品水果，欢迎广大顾客前来品尝。价格和实体店同步欢迎广大顾客前来品尝。价格和实体店同步本店出售各类精品水果，欢迎广大顾客前来品尝。价格和实体店同步本店出售各类精品水果，欢迎广大顾客前来品尝。价格和实体店同步本店出售各类精品水果，欢迎广大顾客前来品尝。价格和实体店同步本店出售各类精品水果，欢迎广大顾客前来品尝。价格和实体店同步 ', '40', '1', '1', '10');
-INSERT INTO `shop` VALUES ('15', 'ls15', '北京市景山前街4号', 'http://7u2out.com1.z0.glb.clouddn.com/o_19dts4l4cce21bgfake1cimu3i9.jpg', '树窝水果直营店', '壁垒', '13918210924', '40.00205', '116.327985', 'wx4ex45kyd86', '北京', '故宫', '北京', '壁垒！', '30', '1', '0', '0');
-INSERT INTO `shop` VALUES ('16', 'wu16', '桃浦新村绿杨路76号', 'http://7u2out.com1.z0.glb.clouddn.com/o_19g3tmr8rsck1ive6fhgt9ju19.jpg', '百家乐果园', '蔡老板', '13817715984', '31.289858', '121.352377', 'wtw612nhek69', '上海', '桃浦', '上海', '精品水果，味美鲜甜，欢迎新老顾客品尝，还有干货和小零食噢，价格和实体店同步', '30', '1', '0', '0');
-INSERT INTO `shop` VALUES ('17', 'jh17', '南翔', '', '士大夫', '歹', '15502187076', '31.245581', '121.486749', 'wtw3u2pfwqmw', '上海', '嘉定', '上海', '你好', '15', '0', '0', '0');
+INSERT INTO `shop` VALUES ('13', 're13', '德园路616', 'http://7u2out.com1.z0.glb.clouddn.com/o_19dr6qrrc1v22n4vtsk1f27s4v9.jpg', '阿q果园子', '夏老板', '18321940791', '31.304237', '121.313583', 'wtw60dcb7kez', '上海', '嘉定南翔', '上海', '精品水果，味美鲜甜，欢迎新老顾客品尝。价格和实体店同步精品水果，味美鲜甜，欢迎新老顾客品尝。价格和实体店同步精品水果，味美鲜甜，欢迎新老顾客品尝。价格和实体店同步精品水果，味美鲜甜，欢迎新老顾客品尝。价格和实体店同步', '40', '1', '1', '5', null);
+INSERT INTO `shop` VALUES ('14', 'kw14', '栖林路302弄19号', 'http://7u2out.com1.z0.glb.clouddn.com/o_19evs2kl81h3r18pd11el1thj1mo3g.jpg', '宝群果业', '周老板', '18721178165', '31.314935', '121.325683', 'wtw60udwtqfp', '上海', '嘉定南翔', '上海', '本店出售各类精品水果，本店出售各类精品水果，欢迎广大顾客前来品尝。价格和实体店同步本店出售各类精品水果，欢迎广大顾客前来品尝。价格和实体店同步本店出售各类精品水果，欢迎广大顾客前来品尝。价格和实体店同步本店出售各类精品水果，欢迎广大顾客前来品尝。价格和实体店同步本店出售各类精品水果，欢迎广大顾客前来品尝。价格和实体店同步欢迎广大顾客前来品尝。价格和实体店同步本店出售各类精品水果，欢迎广大顾客前来品尝。价格和实体店同步本店出售各类精品水果，欢迎广大顾客前来品尝。价格和实体店同步本店出售各类精品水果，欢迎广大顾客前来品尝。价格和实体店同步本店出售各类精品水果，欢迎广大顾客前来品尝。价格和实体店同步 ', '40', '1', '1', '10', null);
+INSERT INTO `shop` VALUES ('15', 'ls15', '北京市景山前街4号', 'http://7u2out.com1.z0.glb.clouddn.com/o_19dts4l4cce21bgfake1cimu3i9.jpg', '树窝水果直营店', '壁垒', '13918210924', '40.00205', '116.327985', 'wx4ex45kyd86', '北京', '故宫', '北京', '壁垒！', '30', '1', '0', '0', null);
+INSERT INTO `shop` VALUES ('16', 'wu16', '桃浦新村绿杨路76号', 'http://7u2out.com1.z0.glb.clouddn.com/o_19g3tmr8rsck1ive6fhgt9ju19.jpg', '百家乐果园', '蔡老板', '13817715984', '31.289858', '121.352377', 'wtw612nhek69', '上海', '桃浦', '上海', '精品水果，味美鲜甜，欢迎新老顾客品尝，还有干货和小零食噢，价格和实体店同步', '30', '1', '0', '0', null);
+INSERT INTO `shop` VALUES ('17', 'jh17', '南翔', '', '士大夫', '歹', '15502187076', '31.245581', '121.486749', 'wtw3u2pfwqmw', '上海', '嘉定', '上海', '你好', '15', '0', '0', '0', null);
 
 -- ----------------------------
--- Table structure for user
+-- Table structure for `user`
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
@@ -330,7 +333,7 @@ INSERT INTO `user` VALUES ('1', 'uninonid', 'test', '', '', '0', '上海', '上�
 INSERT INTO `user` VALUES ('2', 'shopuninonid', 'testshop', '', '', '1', '上海', '上海', '中国', '2015-02-03 17:09:49', 'shopopenid', 'http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46', '1', '1');
 
 -- ----------------------------
--- Table structure for weixinshop
+-- Table structure for `weixinshop`
 -- ----------------------------
 DROP TABLE IF EXISTS `weixinshop`;
 CREATE TABLE `weixinshop` (
@@ -349,7 +352,7 @@ CREATE TABLE `weixinshop` (
 INSERT INTO `weixinshop` VALUES ('wx17a8c83f5b2f6540', '432fb4827de4de9c2038ebcd2c5f064a', 'dwSIoZz_eXHwp7NLK-xmy9A7Gi7l4e-0iimFySdT4xGFWyID5kBxyfcSNZlZe6MRENI0mrluYhNDs1rvjCzJvbY6O25HHUIvye3ZzZTMLMc', '', '1429089678', 'wxshop');
 
 -- ----------------------------
--- Table structure for weixinuser
+-- Table structure for `weixinuser`
 -- ----------------------------
 DROP TABLE IF EXISTS `weixinuser`;
 CREATE TABLE `weixinuser` (
@@ -367,7 +370,7 @@ CREATE TABLE `weixinuser` (
 -- ----------------------------
 
 -- ----------------------------
--- Function structure for GETDISTANCE
+-- Function structure for `GETDISTANCE`
 -- ----------------------------
 DROP FUNCTION IF EXISTS `GETDISTANCE`;
 DELIMITER ;;
@@ -407,7 +410,7 @@ END
 DELIMITER ;
 
 -- ----------------------------
--- Function structure for NewProc
+-- Function structure for `NewProc`
 -- ----------------------------
 DROP FUNCTION IF EXISTS `NewProc`;
 DELIMITER ;;

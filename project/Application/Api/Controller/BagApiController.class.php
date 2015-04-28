@@ -16,17 +16,17 @@ class BagApiController extends RestController
         $get = "get.";
         $authorize = new Authorize ();
         $userId = 2;
-//         if (!intval($userId)) {
-//  			$message ["msg"] = "Unauthorized";
-//  			$this->response($message, 'json', '401');
-// 			return;
-//  		}
+          if (!intval($userId)) {
+       		$message ["msg"] = "Unauthorized";
+ 			$this->response($message, 'json', '401');
+            return;
+ 		}
 
         $currenttime = date('Y-m-d');
         $bagDao = M('bag');
         $type = I($get.BagConst::TYPE,0); // 1 - 外送，2 - 自提
         
-        $data =  $bagDao->where("type = ".$type." and date(expires) >='".$currenttime."' and user_id =".$userId." and used=0")->order ( 'expires desc' )->select();
+        $data =  $bagDao->where("type = ".$type." and date(expires) >='".$currenttime."' and date(start)<='".$currenttime."' and user_id =".$userId." and used=0")->order ( 'expires desc' )->select();
         if(!count($data))
         {
         	$data = [];

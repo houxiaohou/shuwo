@@ -10,4 +10,5 @@ Class BagConst
     const TYPE = 'type'; // 使用限制类型，1 - 外送可用，2 - 自提可用，3 - 首单可用，可按需增加
     const SHOP_ID = 'shop_id'; // 店铺id，默认为0，全部可用，如果设置为某个id，则仅限该店铺可用
     const EXPIRES = 'expires'; // 过期时间，超过该时间则无法使用
+    const START = 'start';//起始时间
 }
