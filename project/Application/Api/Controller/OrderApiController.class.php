@@ -426,9 +426,9 @@ class OrderApiController extends RestController
 
                 $totalprice -= $dns;
             }
-            if($data[OrderConst::BAG_AMOUNT]>0)
+            if(intval($data[OrderConst::BAG_AMOUNT])>0)
             {
-            	$totalprice -= $data[OrderConst::BAG_AMOUNT];
+            	$totalprice -= intval($data[OrderConst::BAG_AMOUNT]);
             }
 
             $data [OrderConst::TOTALPRICE] = $totalprice;
@@ -611,6 +611,12 @@ class OrderApiController extends RestController
                 $rtotalprice -= $counts;
             }
         }
+        if(intval($orderData[OrderConst::BAG_AMOUNT])>0)
+        {
+        	$rtotalprice -= intval($orderData[OrderConst::BAG_AMOUNT]);
+        }
+        
+        
         if ($rtotalprice <= 0) {
             $rtotalprice = 0;
         }
