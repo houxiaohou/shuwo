@@ -12,6 +12,7 @@ require_once 'ShippingaddressConst.php';
 require_once 'Authorize.php';
 require_once 'Weixin.php';
 require_once 'ShopConst.php';
+require_once 'BagConst.php';
 
 class OrderApiController extends RestController
 {
@@ -299,16 +300,25 @@ class OrderApiController extends RestController
 
 
             // 根据传过来的bag_id查询bag是否可用，如果bag不可用，返回success=0，error='bag_unavailable'
-            $bagId = intval(I('post.bag_id'));
+            $bagId = intval(I($poststr.OrderConst::BAG_ID));
             if ($bagId) {
                 // 用户选了红包
                 $bagDao = M('bag');
-                $bagCondition['userid'] = $userid;
-                $bagCondition['id'] = $bagId;
+                $bagCondition[BagConst::USER_ID] = $userid;
+                $bagCondition[BagConst::ID] = $bagId;
+                $bagCondition[BagConst::USED] = 0;
                 $bag = $bagDao->where($bagCondition)->find();
                 if (!count($bag)) {
-                    // bag不存在，返回错误
-                    return;
+                     $message['success'] = 0;
+            		 $message['error'] = 'bag_unavailable';
+            		 $this->response($message, 'json');
+                      return;
+                }
+                else 
+                {
+                	$data[OrderConst::BAG_ID] = $bag[BagConst::ID];
+                	$data[OrderConst::BAG_AMOUNT] = $bag[BagConst::AMOUNT];
+                    $bagDao->where("id=".$bagId)->setField("used",1);
                 }
             }
 
@@ -415,6 +425,10 @@ class OrderApiController extends RestController
             } else if ($data [OrderConst::ISFIRST] == 1) {
 
                 $totalprice -= $dns;
+            }
+            if($data[OrderConst::BAG_AMOUNT]>0)
+            {
+            	$totalprice -= $data[OrderConst::BAG_AMOUNT];
             }
 
             $data [OrderConst::TOTALPRICE] = $totalprice;
