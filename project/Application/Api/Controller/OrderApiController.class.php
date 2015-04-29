@@ -748,6 +748,7 @@ class OrderApiController extends RestController
     // 用户确认订单
     public function orderconfirm()
     {
+    	$totalbags = 4;
         $authorize = new Authorize ();
         $auid = $authorize->Filter("user");
         if (intval($auid)) {
@@ -755,8 +756,33 @@ class OrderApiController extends RestController
             $data = [];
             $orderid = I($poststr . OrderConst::ORDERID);
             $order = M('orders');
-            if ($order->where("orderid = '" . $orderid . "' AND userid=" . $auid)->setField("orderstatus", 3) != false) {
-                $data = $orderid;
+            $bags = M("bag");
+            $orderdata = $order->where("orderid=".$orderid)->find();
+            if(count($orderdata))
+            {
+            	if ($order->where("orderid = '" . $orderid . "' AND userid=" . $auid)->setField("orderstatus", 3) != false) {
+                    //加入送红包
+            	    $userid = $orderdata[OrderConst::USERID];
+            		$bagcount = $bags->where("userid = ".$userid." and used=1")->select();
+            	    if (count($bagcount)<$totalbags)
+            	    {
+            	    	$current = date('Y-m-d',strtotime('+1 days'));
+            	    	$expirdate = date('Y-m-d',strtotime('+7 days'));
+            	    	$expirdate = $expirdate." 23:59:59";
+            	    	$bagitem[BagConst::START] =$current;
+            	    	$bagitem[BagConst::SHOP_ID] = $orderdata[Orderconst::SHOPID];
+            	    	$bagitem[BagConst::TYPE]=1;
+            	    	$bagitem[BagConst::EXPIRES]=$expirdate;
+            	    	$bagitem[BagConst::USED] = 0;
+            	    	$bagitem[BagConst::AMOUNT] = 5;
+            	    	$bagitem[BagConst::USER_ID]= $auid;
+            	    	if($bags->add($bagitem))
+            	    	{
+            	    		//推送模板消息
+            	    	}
+            	    }
+            		$data = $orderid;
+            	}
             }
             $this->response($data, "json");
         } else {
