@@ -4,6 +4,8 @@ namespace Api\Controller;
 use Think\Controller\RestController;
 
 require_once 'OrderConst.php';
+require_once 'BagConst.php';
+require_once 'UserConst.php';
 require_once 'Weixin.php';
 require_once 'BDConst.php';
 class WeixinqueueApiController extends RestController {
@@ -123,6 +125,49 @@ class WeixinqueueApiController extends RestController {
 				}
 			}
 		}
+	}
+	
+	public function sendbagtouser()
+	{
+		$user = M('user');
+		$bag =M('bag');
+		$userid = I("post.userid");
+		$bagid = I("post.bagid");
+		$userinfo = $user->where("userid=".$userid)->find();
+		$baginfo = $bag->where("id=".$bagid)->find();
+		if(count($userinfo) && count($userinfo) && !empty($userinfo['openid']))
+		{
+			$start =  date('Y-m-d',strtotime($baginfo[BagConst::START]));
+			$expire =  date('Y-m-d',strtotime($baginfo[BagConst::EXPIRES]));
+			$content = '恭喜您获得'.$baginfo[BagConst::AMOUNT].'元红包，可使用日期'.$start.'至'.$expire;
+			
+			$template = array (
+					'touser' => $userinfo['openid'],
+					'template_id' =>'NjDObh6wXHfh4scgh29gxtmao5dYu-dtGEvR2sDk_-8',
+					'data' => array (
+							'first' => array (
+									'value' => urlencode ($content),
+									'color' => "#FF0000"
+							),
+							'orderTicketStore' => array (
+									'value' => urlencode ( "树窝水果商城购买水果" ),
+									'color' => "#009900"
+							),
+							'orderTicketRule' => array (
+									'value' => urlencode ("外送订单即可使用红包"),
+									'color' => "#009900"
+							),
+							'remark' => array (
+									'value' => urlencode ( "\\n信息来自树窝小店" ),
+									'color' => "#cccccc"
+							)
+					)
+			);
+			$weixin = new Weixin ();
+			$token = $weixin->getusersGlobalAccessToken();
+			$weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
+		}
+		
 	}
         
 	

@@ -52,7 +52,7 @@ class Weixin
     public  function getusersGlobalAccessToken()
     {
     	$weixinshop  = M('weixinuser');
-    	if(time()>intval($weixinshop->where("id ='wxuser'")->getField("expires")) || empty(($weixinshop->where("id ='wxshop'")->getField("accesstoken"))))
+    	if(time()>intval($weixinshop->where("id ='wxuser'")->getField("expires")) || empty(($weixinshop->where("id ='wxuser'")->getField("accesstoken"))))
     	{
     		$this->appid = C ( 'SHUWO_APPID' );
     		$this->appsecret = C ( 'SHUWO_APPSECRET' );
@@ -65,8 +65,8 @@ class Weixin
     		else 
     		{
     			$token = $this->getGlobalAccessToken();
-    			$weixinshop->where("id ='wxshop'")->setField("accesstoken",$token['access_token']);
-    			$weixinshop->where("id ='wxshop'")->setField("expires",time()+7100);
+    			$weixinshop->where("id ='wxuser'")->setField("accesstoken",$token['access_token']);
+    			$weixinshop->where("id ='wxuser'")->setField("expires",time()+7100);
     		}
     		return $token['access_token'];
     	}

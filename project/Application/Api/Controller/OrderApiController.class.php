@@ -13,6 +13,7 @@ require_once 'Authorize.php';
 require_once 'Weixin.php';
 require_once 'ShopConst.php';
 require_once 'BagConst.php';
+require_once 'UserConst.php';
 
 class OrderApiController extends RestController
 {
@@ -757,9 +758,10 @@ class OrderApiController extends RestController
     // 用户确认订单
     public function orderconfirm()
     {
+    	
     	$totalbags = 4;
         $authorize = new Authorize ();
-        $auid = $authorize->Filter("user");
+        $auid = $authorize->Filter('user');
         if (intval($auid)) {
             $poststr = "post.";
             $data = [];
@@ -769,10 +771,10 @@ class OrderApiController extends RestController
             $orderdata = $order->where("orderid=".$orderid)->find();
             if(count($orderdata))
             {
-            	if ($order->where("orderid = '" . $orderid . "' AND userid=" . $auid)->setField("orderstatus", 3) != false) {
+            	if ($order->where("orderid = '" . $orderid . "' AND userid=" . $auid)->setField("orderstatus", 3) !== false) {
                     //加入送红包
             	    $userid = $orderdata[OrderConst::USERID];
-            		$bagcount = $bags->where("userid = ".$userid." and used=1")->select();
+            		$bagcount = $bags->where("user_id = ".$userid)->select();
             	    if (count($bagcount)<$totalbags)
             	    {
             	    	$current = date('Y-m-d',strtotime('+1 days'));
@@ -785,19 +787,26 @@ class OrderApiController extends RestController
             	    	$bagitem[BagConst::USED] = 0;
             	    	$bagitem[BagConst::AMOUNT] = 5;
             	    	$bagitem[BagConst::USER_ID]= $auid;
-            	    	if($bags->add($bagitem))
+            	    	$bagid = $bags->add($bagitem);
+            	    	if($bagid)
             	    	{
-            	    		//推送模板消息
+            	    		$url = U("WeixinqueueApi/sendbagtouser/", '', '', true);
+            	    		$params = [
+            	    				"userid" => $auid,
+            	    				"bagid" => $bagid
+            	    				];
+            	    		$this->curl_request_async($url, $params);
             	    	}
-            	    }
+            	  }
             		$data = $orderid;
             	}
             }
-            $this->response($data, "json");
+            $this->response($url, "json");
         } else {
             $message ["msg"] = "Unauthorized";
             $this->response($message, 'json', '401');
         }
+
     }
 
     //管理员根据状态查询订单

@@ -24,38 +24,56 @@ class Weixin
 
 	public  function getshopGlobalAccessToken()
 	{
-		$weixinshop  = M('weixinshop');
-		if(time()>intval($weixinshop->where("id ='wxshop'")->getField("expires")))
-		{
-			$this->appid = C ( 'SHOP_APPID' );
-			$this->appsecret = C ( 'SHOP_APPSECRET' );
-			$token = $this->getGlobalAccessToken();
-			$weixinshop->where("id ='wxshop'")->setField("accesstoken",$token['access_token']);
-			$weixinshop->where("id ='wxshop'")->setField("expires",time()+7200);
-			return $token['access_token'];
-		}
-		else
-		{
-			return $weixinshop->where("id ='wxshop'")->getField("accesstoken");
-		}
+	    $weixinshop  = M('weixinshop');
+    	if(time()>intval($weixinshop->where("id ='wxshop'")->getField("expires")) || empty(($weixinshop->where("id ='wxshop'")->getField("accesstoken"))))
+    	{
+    		$this->appid = C ( 'SHOP_APPID' );
+	        $this->appsecret = C ( 'SHOP_APPSECRET' );
+	        $token = $this->getGlobalAccessToken();
+	        if(!empty($token['access_token']))
+	        {
+	        	$weixinshop->where("id ='wxshop'")->setField("accesstoken",$token['access_token']);
+	        	$weixinshop->where("id ='wxshop'")->setField("expires",time()+7100);
+	        }
+	        else
+	        {
+	        	$token = $this->getGlobalAccessToken();
+	        	$weixinshop->where("id ='wxshop'")->setField("accesstoken",$token['access_token']);
+	        	$weixinshop->where("id ='wxshop'")->setField("expires",time()+7100);
+	        }
+	        return $token['access_token'];
+    	}
+    	else 
+    	{
+    	  return $weixinshop->where("id ='wxshop'")->getField("accesstoken");
+    	}
 	}
 	
 	public  function getusersGlobalAccessToken()
 	{
-		$weixinshop  = M('weixinuser');
-		if(time()>intval($weixinshop->where("id ='wxuser'")->getField("expires")))
-		{
-			$this->appid = C ( 'SHUWO_APPID' );
-			$this->appsecret = C ( 'SHUWO_APPSECRET' );
-			$token = $this->getGlobalAccessToken();
-			$weixinshop->where("id ='wxuser'")->setField("accesstoken",$token['access_token']);
-			$weixinshop->where("id ='wxuser'")->setField("expires",time()+7200);
-			return $token['access_token'];
-		}
-		else
-		{
-			return $weixinshop->where("id ='wxuser'")->getField("accesstoken");
-		}
+	    $weixinshop  = M('weixinuser');
+    	if(time()>intval($weixinshop->where("id ='wxuser'")->getField("expires")) || empty(($weixinshop->where("id ='wxuser'")->getField("accesstoken"))))
+    	{
+    		$this->appid = C ( 'SHUWO_APPID' );
+    		$this->appsecret = C ( 'SHUWO_APPSECRET' );
+    		$token = $this->getGlobalAccessToken();
+    		if (!empty($token['access_token']))
+    		{
+    			$weixinshop->where("id ='wxuser'")->setField("accesstoken",$token['access_token']);
+    			$weixinshop->where("id ='wxuser'")->setField("expires",time()+7100);
+    		}
+    		else 
+    		{
+    			$token = $this->getGlobalAccessToken();
+    			$weixinshop->where("id ='wxuser'")->setField("accesstoken",$token['access_token']);
+    			$weixinshop->where("id ='wxuser'")->setField("expires",time()+7100);
+    		}
+    		return $token['access_token'];
+    	}
+    	else
+    	{
+    		return $weixinshop->where("id ='wxuser'")->getField("accesstoken");
+    	}
 	}
 	
     public function sendtemplatemsg($data,$token)
