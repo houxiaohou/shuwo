@@ -318,7 +318,6 @@ class OrderApiController extends RestController
                 {
                 	$data[OrderConst::BAG_ID] = $bag[BagConst::ID];
                 	$data[OrderConst::BAG_AMOUNT] = $bag[BagConst::AMOUNT];
-                    $bagDao->where("id=".$bagId)->setField("used",1);
                 }
             }
 
@@ -335,15 +334,25 @@ class OrderApiController extends RestController
                 if ($distance < 100) {
                     $data [OrderConst::ISDELIVERY] = 1;
                     $data [OrderConst::ISPICKUP] = 1;
+                    $data[OrderConst::BAG_ID] = 0;
+                    $data[OrderConst::BAG_AMOUNT] = 0;
+                    
                 } else {
                     if ($data [OrderConst::LATITUDE] == 0) {
                         // 经纬度为0，默认到店自提
                         $data [OrderConst::ISDELIVERY] = 1;
                         $data [OrderConst::ISPICKUP] = 1;
+                        $data[OrderConst::BAG_ID] = 0;
+                        $data[OrderConst::BAG_AMOUNT] = 0;
                     } else {
                         $data [OrderConst::ISDELIVERY] = 0;
                     }
                 }
+            }
+            
+            if($data [OrderConst::ISDELIVERY] == 0)
+            {
+            	$bagDao->where("id=".$bagId)->setField("used",1);
             }
 
             // 获取店铺的优惠信息
@@ -437,7 +446,7 @@ class OrderApiController extends RestController
 
                 $order->add($data);
                 $data2 ['orderid'] = $orderid;
-
+                $data2 ['conflict'] = $data[OrderConst::ISDELIVERY];
                 // 构造模板消息
                 $orderdeliery = '(外送)';
                 if ($data [OrderConst::ISPICKUP] == 1 || $data[OrderConst::DISTANCE] < 50) {
