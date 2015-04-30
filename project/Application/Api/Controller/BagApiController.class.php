@@ -1,14 +1,16 @@
 <?php
-
 namespace Api\Controller;
 
 use Think\Controller\RestController;
 
 require_once 'BagConst.php';
 require_once 'Authorize.php';
+require_once 'UserConst.php';
+require_once 'OrderConst.php';
 
 class BagApiController extends RestController
 {
+
     /**
      * admin列出所有红包
      */
