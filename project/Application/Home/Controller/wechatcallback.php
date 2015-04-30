@@ -440,18 +440,17 @@ class wechatcallback {
 							$totaldiscount = 0;
 							if (count ( $usercheckorders )) {
 									foreach ( $usercheckorders as $itemorder ) {
-										if ($itemorder ["isfirst"] == 1) {
-											$countfirst ++;
-											$totalfirst += intval(C('FIRST_DISCOUNT'));
-										} else if ($itemorder ["isfirst"] == 0 && $itemorder ["discount"] > 0) {
-											$countdiscount ++;
-											$totaldiscount = $totaldiscount + $itemorder ["discount"];
-										}
+
+                                       if($itemorder ["discount"]>0 && $itemorder ["bag_id"]>0)
+                                       {
+                                       	    $countdiscount ++;
+                                        	$totaldiscount = $totaldiscount + $itemorder ["discount"];
+                                       }
 									}
 								}
-								$refunds = $totalfirst + $totaldiscount;
+								$refunds = $totaldiscount;
 								$totalrefunds += $refunds;
-								$shopmsg = $shopmsg.$countfirst."-".$countdiscount."-".$refunds."\n\n";
+								$shopmsg = $shopmsg.$countdiscount."-".$refunds."\n\n";
 							
 							
 						}
@@ -460,7 +459,7 @@ class wechatcallback {
 						$shopmsg = $shopmsg . "总数" . $totals."\n";
 						$shopmsg = $shopmsg.'总补贴'.$totalrefunds;
 						if (strlen ( $shopmsg ) < 2047) {
-							$content = "总-已(店/用户)-未-取\n首-惠-补\n" . $shopmsg;
+							$content = "总-已(店/用户)-未-取\n红包数-补贴数\n" . $shopmsg;
 						} else {
 						}
 					} else {
