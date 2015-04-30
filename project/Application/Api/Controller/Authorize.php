@@ -33,8 +33,8 @@ class Authorize
 		//测试数据
 
       //$data = "2#15#shopopenid";
-      $data = "1#15";
-      //$data = $xcrpt->decrypt($utoken,'base64');
+      // $data = "1#15";
+       $data = $xcrpt->decrypt($utoken,'base64');
 		if($data)
 		{
 			$str = explode("#", $data);

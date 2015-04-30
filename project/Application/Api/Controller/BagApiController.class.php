@@ -236,22 +236,7 @@ class BagApiController extends RestController
         $this->response($data, 'json');
     }
 
-    //
-    public function searchexpiringbags()
-    {
-        $get = "get.";
-        $count = I("get.num", 0);
-        $authorize = new Authorize ();
-        $auid = $authorize->Filter('admin');
-        if ($auid) {
-            $current = date("Y-m-d", strtotime("-1 day"));
-            $bags = M("bag");
-            $temgdata = $bags->where()->select();
-        }
-
-    }
-    
-
+   
     public function sendbagtouser() {
     	$post = "post.";
     	$authorize = new Authorize ();
@@ -274,9 +259,20 @@ class BagApiController extends RestController
     			$bagitem [BagConst::USER_ID] = $userids[$i];
     			$bagitem [BagConst::ISEVER] = 0;
     			$bagitem [BagConst::ISOUT] = 0;
-    			if ($bag->add ( $bagitem ) === false) {
+    			$bagid =  $bag->add ( $bagitem);
+    			if (intval($bagid)) {
+    				$url = U("WeixinqueueApi/sendbagtouser/", '', '', true);
+    				$params = [
+    						"userid" => $userids[$i],
+    						"bagid" => $bagid
+    						];
+    				$this->curl_request_async($url, $params);
+    			}
+    			else 
+    			{
     				$this->response("error",json);
     			}
+    			
     		}
     		$this->response("success",json);
     	} else {
