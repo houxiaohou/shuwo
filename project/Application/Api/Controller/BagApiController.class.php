@@ -24,30 +24,76 @@ class BagApiController extends RestController
             return;
         }
 
-        $bagDao = M('bag');
-        $start = I('get.start', 0);
-        $count = I('get.count', 10);
-        $condition = intval(I('get.condition', 0));
-        $where = [];
-        if ($condition == 1) {
-            // 未使用
-            $where[BagConst::USED] = 0;
-        } elseif ($condition == 2) {
-            // 已使用
-            $where[BagConst::USED] = 1;
-        }
-        if (count($where) > 0) {
-            $data = $bagDao->where($where)->order('id desc')->limit($start, $count)->select();
-        } else {
-            $data = $bagDao->where('id>0')->order('id desc')->limit($start, $count)->select();
-        }
-        $results = [];
-        if (count($data)) {
-            for ($i = 0; $i < count($data); $i++) {
-                array_push($results, $this->bagInfo($data[$i]));
+        $start = intval(I('get.start', 0));
+        $count = intval(I('get.count', 10));
+        // 查询全部
+        $sql = 'select user_id, count(user_id) as count from bag group by user_id order by count desc limit ' . $start . ', ' . $count;
+        $dao = M();
+        $users = [];
+        $userInfo = $dao->query($sql);
+        if ($userInfo) {
+            for ($i = 0; $i < count($userInfo); $i++) {
+                array_push($users, $this->bagUser($userInfo[$i]['user_id']));
             }
         }
-        $this->response($results, 'json');
+        $this->response($users, 'json');
+    }
+
+    /**
+     * 用户id获取用户信息
+     * @param $userId
+     * @return mixed
+     */
+    private function bagUser($userId)
+    {
+        $userDao = M('user');
+        $user = $userDao->where('userid=' . $userId)->find();
+        $d['bag_num'] = $this->countUserBagNum($userId);
+        $d['used_num'] = $this->countUserUsedBagNum($userId);
+        $d['available_num'] = $this->countUserAvailableBagNum($userId);
+        $d[UserConst::USERID] = $user[UserConst::USERID];
+        $d[UserConst::NICKNAME] = $user[UserConst::NICKNAME];
+        $d[UserConst::HEADIMGURL] = $user[UserConst::HEADIMGURL];
+        return $d;
+    }
+
+    /**
+     * 用户红包总数
+     * @param $userId
+     * @return mixed
+     */
+    private function countUserBagNum($userId)
+    {
+        $sql = 'select count(*) as count from bag where user_id = ' . $userId;
+        $dao = M();
+        $data = $dao->query($sql);
+        return $data[0]['count'];
+    }
+
+    /**
+     * 用户使用过的红包数
+     * @param $userId
+     * @return mixed
+     */
+    private function countUserUsedBagNum($userId)
+    {
+        $sql = 'select count(*) as count from bag where used = 1 and user_id = ' . $userId;
+        $dao = M();
+        $data = $dao->query($sql);
+        return $data[0]['count'];
+    }
+
+    /**
+     * 用户可用红包数
+     * @param $userId
+     * @return mixed
+     */
+    private function countUserAvailableBagNum($userId)
+    {
+        $sql = 'select count(*) as count from bag where used = 0 and to_days(expires) >= to_days(now()) and user_id = ' . $userId;
+        $dao = M();
+        $data = $dao->query($sql);
+        return $data[0]['count'];
     }
 
     /**
@@ -108,13 +154,9 @@ class BagApiController extends RestController
                 array_push($userIds, $order[OrderConst::USERID]);
             }
         }
-        $bagWhere['user_id'] = array('in', $userIds);
-        $data = M('bag')->where($bagWhere)->order('id desc')->select();
         $results = [];
-        if (count($data)) {
-            for ($j = 0; $j < count($userIds); $j++) {
-                array_push($results, $this->bagInfo($data[$j]));
-            }
+        for ($j = 0; $j < count($userIds); $j++) {
+            array_push($results, $this->bagUser($userIds[$j]));
         }
         $this->response($results, 'json');
     }
