@@ -423,22 +423,24 @@ class OrderApiController extends RestController
             }
             $data [OrderConst::TOTALPRICEBEFORE] = $totalprice;
 
-            if ($data [OrderConst::ISFIRST] == 0 && $shop_isdiscount == 1) {
-                $sql = "select * from orders where userid =" . $userid . " AND date(createdtime)='" . $currentdate . "'";
-                $orders = $order->query($sql);
-                if (count($orders)) {
-                    $data [OrderConst::DISCOUNT] = 0;
-                } else {
-                    $data [OrderConst::DISCOUNT] = $shop_discount;
-                    $totalprice -= $shop_discount;
-                }
-            } else if ($data [OrderConst::ISFIRST] == 1) {
-
-                $totalprice -= $dns;
-            }
+//             if ($data [OrderConst::ISFIRST] == 0 && $shop_isdiscount == 1) {
+//                 $sql = "select * from orders where userid =" . $userid . " AND date(createdtime)='" . $currentdate . "'";
+//                 $orders = $order->query($sql);
+//                 if (count($orders)) {
+//                     $data [OrderConst::DISCOUNT] = 0;
+//                 } else {
+//                     $data [OrderConst::DISCOUNT] = $shop_discount;
+//                     $totalprice -= $shop_discount;
+//                 }
+//             } else if ($data [OrderConst::ISFIRST] == 1) {
+                
+//                 $totalprice -= $dns;
+//             }
             if(intval($data[OrderConst::BAG_AMOUNT])>0)
             {
+            	
             	$totalprice -= intval($data[OrderConst::BAG_AMOUNT]);
+            	$data [OrderConst::DISCOUNT] = $data[OrderConst::BAG_AMOUNT];
             }
 
             $data [OrderConst::TOTALPRICE] = $totalprice;
@@ -467,11 +469,9 @@ class OrderApiController extends RestController
                     $orderNum = "订单编号：" . $orderid;
 
                     $ordertype = "新的订单" . $orderdeliery;
-                    if ($data [OrderConst::ISFIRST] == 0 && $data [OrderConst::DISCOUNT] > 0) {
-                        $ordertype = "优惠订单减免" . $data [OrderConst::DISCOUNT] . "元" . $orderdeliery;
-                    } else if ($data [OrderConst::ISFIRST] == 1) {
-                        $ordertype = "首购订单减免" . $data [OrderConst::DISCOUNT] . "元" . $orderdeliery;
-                    }
+                    if ($data [OrderConst::DISCOUNT] > 0) {
+                        $ordertype = "减免" . $data [OrderConst::DISCOUNT] . "元" . $orderdeliery;
+                    } 
 
                     if (count($userinfo)) {
                         for ($i = 0; $i < count($userinfo); $i++) {
@@ -615,17 +615,19 @@ class OrderApiController extends RestController
         $order->where($where4)->setField('rtotalpricebefore', $rtotalprice);
 
         if ($rtotalprice > 0) {
-            if ($order_isfirst == 0 && $shop_isdiscount == 1) {
-                $rtotalprice -= $shop_discount;
-            } else if ($order_isfirst == 1) {
-                $rtotalprice -= $counts;
+//             if ($order_isfirst == 0 && $shop_isdiscount == 1) {
+//                 $rtotalprice -= $shop_discount;
+//             } else if ($order_isfirst == 1) {
+//                 $rtotalprice -= $counts;
+//             }
+            
+            if(intval($orderData[OrderConst::BAG_AMOUNT])>0)
+            {
+            	$rtotalprice -= intval($orderData[OrderConst::BAG_AMOUNT]);
             }
+            
         }
-        if(intval($orderData[OrderConst::BAG_AMOUNT])>0)
-        {
-        	$rtotalprice -= intval($orderData[OrderConst::BAG_AMOUNT]);
-        }
-        
+
         
         if ($rtotalprice <= 0) {
             $rtotalprice = 0;
@@ -788,6 +790,7 @@ class OrderApiController extends RestController
             	    	$bagitem[BagConst::AMOUNT] = 5;
             	    	$bagitem[BagConst::USER_ID]= $auid;
             	    	$bagitem[BagConst::ISEVER] = 0;
+            	    	$bagitem[BagConst::ISOUT]=1;
             	    	$bagid = $bags->add($bagitem);
             	    	if($bagid)
             	    	{

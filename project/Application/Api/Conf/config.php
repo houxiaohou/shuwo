@@ -102,6 +102,7 @@ return array(
     	array('baglist', 'BagApi/listUserAvailableBags', '', array('method' => 'GET')),
     	array('expiredbags', 'BagApi/listUserExpiredBags', '', array('method' => 'GET')),
         array('usedbags', 'BagApi/listUserUsedBags', '', array('method' => 'GET')),
+    	array('sendbags', 'BagApi/sendbagtouser', '', array('method' => 'POST')),
 
     )
 );
