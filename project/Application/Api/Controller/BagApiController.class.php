@@ -26,7 +26,7 @@ class BagApiController extends RestController
         $bagDao = M('bag');
         $type = I($get.BagConst::TYPE,0); // 1 - 外送，2 - 自提
         
-        $data =  $bagDao->where("type = ".$type." and date(expires) >='".$currenttime."' and date(start)<='".$currenttime."' and user_id =".$userId." and used=0")->order ( 'expires desc' )->select();
+        $data =  $bagDao->where("(type = ".$type." and date(expires) >='".$currenttime."' and date(start)<='".$currenttime."' and user_id =".$userId." and used=0) or (used=0 and isever =1)")->order ( 'expires desc' )->select();
         if(!count($data))
         {
         	$data = [];
@@ -50,7 +50,7 @@ class BagApiController extends RestController
     	}
     	$currenttime = date('Y-m-d');
     	$bagDao = M('bag');
-    	$data =  $bagDao->where( "date(expires) <'".$currenttime."' and user_id =".$userId)->order ( 'expires desc' )->select();
+    	$data =  $bagDao->where( "date(expires) <'".$currenttime."' and user_id =".$userId." and isever !=1")->order ( 'expires desc' )->select();
     	if(!count($data))
     	{
     		$data = [];
@@ -79,5 +79,21 @@ class BagApiController extends RestController
     	}
     	$this->response($data, 'json');
     }
+    
+    //
+   public function searchexpiringbags()
+   {
+   	    $get = "get.";
+   	    $count = I("get.num",0);
+   	    $authorize = new Authorize ();
+   	    $auid = $authorize->Filter('admin');
+   	    if($auid)
+   	    {
+   	      $current = date("Y-m-d",strtotime("-1 day"));
+   	      $bags =M("bag");
+   	      $temgdata =$bags->where()->select();
+   	    }
+   	    		
+   }
 
 }

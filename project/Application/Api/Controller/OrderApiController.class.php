@@ -787,6 +787,7 @@ class OrderApiController extends RestController
             	    	$bagitem[BagConst::USED] = 0;
             	    	$bagitem[BagConst::AMOUNT] = 5;
             	    	$bagitem[BagConst::USER_ID]= $auid;
+            	    	$bagitem[BagConst::ISEVER] = 0;
             	    	$bagid = $bags->add($bagitem);
             	    	if($bagid)
             	    	{
