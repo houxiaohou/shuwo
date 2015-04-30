@@ -6,6 +6,7 @@ define ( "TOKEN", "shuwoweixin" );
 require_once 'Weixin.php';
 require_once 'UserConst.php';
 require_once 'BDConst.php';
+require_once 'BagConst.php';
 class shuwowechatcallback {
 	public function valid() {
 		$echoStr = $_GET ["echostr"];
@@ -59,6 +60,38 @@ class shuwowechatcallback {
 		switch ($object->Event) {
 			case "subscribe" :
 				$content = "欢迎关注树窝水果 ";
+				$openid = trim($object->FromUserName);
+				if(!empty($openid))
+				{
+				    $user = M("user");
+				    $userinfo = $user->where("openid='".$openid."'")->select();
+				    if(count($userinfo))
+				    {
+				    	$userid = $userinfo[UserConst::USERID];
+				    	$bags = M("bag");
+				        $baginfo = $bags->where('user_id='.$userid)->select();
+				        if(!count($baginfo))
+				        {
+				        	$current = date('Y-m-d',strtotime('+1 days'));
+				        	$expirdate = date('Y-m-d',strtotime('+7 days'));
+				        	$expirdate = $expirdate." 23:59:59";
+				        	$bagitem[BagConst::START] =$current;
+				        	$bagitem[BagConst::SHOP_ID] = 0;
+				        	$bagitem[BagConst::TYPE]=1;
+				        	$bagitem[BagConst::EXPIRES]=$expirdate;
+				        	$bagitem[BagConst::USED] = 0;
+				        	$bagitem[BagConst::AMOUNT] = 5;
+				        	$bagitem[BagConst::USER_ID]= $userid;
+				        	$bagitem[BagConst::ISEVER] = 0;
+				        	$bagid = $bags->add($bagitem);
+				        }
+				    }
+				    else 
+				    {
+				    	
+				    }
+				}
+				
 				break;
 			case "unsubscribe" :
 				$content = "取消关注";
@@ -68,95 +101,30 @@ class shuwowechatcallback {
 				// break;
 			case "CLICK" :
 				switch ($object->EventKey) {
-					case "income" :
-						$openid = $object->FromUserName;
-						if ($openid) {
-							$user = M ( 'user' );
-							$data = $user->where ( "openid='" . $openid . "' AND roles = 1" )->find ();
-							if (count ( $data )) {
-								$orders = M ( 'orders' );
-								$shopid = $data ["shopid"];
-
-								// // 当日收益
-								// $today = date ( "Y-m-d" );
-								// $sql = "select SUM(totalprice) as cincome from orders where DATE_FORMAT(createdtime,'%Y-%m-%d')='" . $today . "' AND shopid = {$shopid} AND orderstatus != 2";
-								// $item = $orders->query ( $sql );
-								// $todayincome = doubleval ( $item [0] ['cincome'] );
-
-								// // 当月收益
-								// $Month = date ( "Y-m" );
-								// $sql = "select SUM(totalprice) as mincome from orders where DATE_FORMAT(createdtime,'%Y-%m')='" . $Month . "' AND shopid = {$shopid} AND orderstatus != 2";
-								// $item = $orders->query ( $sql );
-								// $monthincome = doubleval ( $item [0] ['mincome'] );
-
-								// // 当前总收益
-								// $sql = "select SUM(totalprice) as tincome from orders where shopid = {$shopid} AND orderstatus != 2";
-								// $item = $orders->query ( $sql );
-								// $totalincome = doubleval ( $item [0] ['tincome'] );
-								// $content = "当日收益: " . $todayincome . "元 \n\n" . "当月收益: " . $monthincome . "元 \n\n" . "目前总收益: " . $totalincome . "元 \n\n";
-								if ($shopid) {
-									$shopmsg = '';
-									$current = date ( 'H:i' );
-									$curdate = date ( 'Y-m-d' );
-									$yesterday = date ( "Y-m-d", strtotime ( "-1 day" ) );
-									$msg = "截至" . $current . "订单";
-									$msg_yest = "昨日订单";
-									$totalorders = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND shopid=" . $shopid );
-									$totalorders_yest = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $yesterday . "' AND shopid=" . $shopid );
-									$unorders = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND orderstatus = 0 AND shopid=" . $shopid );
-									$unorders_yest = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $yesterday . "' AND orderstatus = 0 AND shopid=" . $shopid );
-									$corders = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND orderstatus = 2 AND shopid=" . $shopid );
-									$corders_yest = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $yesterday . "' AND orderstatus = 2 AND shopid=" . $shopid );
-									$checkorders = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND orderstatus = 1 AND shopid=" . $shopid );
-									$checkorders_yest = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $yesterday . "' AND orderstatus = 1 AND shopid=" . $shopid );
-									$usercheckorders = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND orderstatus = 3 AND shopid=" . $shopid );
-									$usercheckorders_yest = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $yesterday . "' AND orderstatus = 3 AND shopid=" . $shopid );
-
-									$first = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND isfirst = 1 AND shopid=" . $shopid." AND orderstatus=3" );
-									$first_discuont = count ( $first ) * C ( 'FIRST_DISCOUNT' );
-									$first_yest = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $yesterday . "' AND isfirst = 1 AND shopid=" . $shopid." AND orderstatus=3" );
-									$first_yest_discount = count ( $first_yest ) * C ( 'FIRST_DISCOUNT' );
-									$discount = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $curdate . "' AND isfirst = 0 AND discount > 0 AND shopid=" . $shopid." AND orderstatus=3" );
-									$dis_discount = 0;
-									$dis_yest_discount = 0;
-									foreach ( $discount as $dis ) {
-										$dis_discount += $dis ['discount'];
-									}
-									$discount_yest = $orders->query ( "SELECT * FROM orders WHERE date(createdtime) = '" . $yesterday . "' AND isfirst = 0 AND discount > 0 AND shopid=" . $shopid." AND orderstatus=3" );
-									foreach ( $discount_yest as $dis ) {
-										$dis_yest_discount += $dis ['discount'];
-									}
-									$shopmsg = $shopmsg . $msg . "\n";
-									$msg_yest = $msg_yest . "\n";
-									$shopmsg = $shopmsg . "收到" . count ( $totalorders ) . "单\n";
-									$msg_yest = $msg_yest . "收到" . count ( $totalorders_yest ) . "单\n";
-
-									$shopmsg = $shopmsg . "店家已确认" . count ( $checkorders ) . "单)\n";
-									$shopmsg = $shopmsg."用户已确认".count($usercheckorders)."单(首购" . count ( $first ) . "单|优惠" . count ($discount ) . "单)\n";
-									$msg_yest = $msg_yest . "店家已确认" . count ( $checkorders_yest )."单\n";
-									$msg_yest = $msg_yest."用户已确认".count($usercheckorders_yest)."单(首购" . count ( $first_yest ) . "单|优惠" . count ($discount_yest ) . "单)\n";;
-
-									$shopmsg = $shopmsg . "未确认" . count ( $unorders ) . "单\n";
-									$msg_yest = $msg_yest . "未确认" . count ( $unorders_yest ) . "单\n";
-
-									$mesg = '';
-									$mesg_yest = '';
-									$shopmsg = $shopmsg . $mesg;
-									$msg_yest = $msg_yest . $mesg_yest;
-									$shopmsg = $shopmsg . "已取消" . count ( $corders ) . "单\n";
-									$shopmsg = $shopmsg . "实际补贴" . ($first_discuont + $dis_discount) . "元\n";
-									$mesg_yest = $mesg_yest . "已取消" . count ( $corders_yest ) . "单\n";
-									$msg_yest = $msg_yest . "实际补贴" . ($first_yest_discount + $dis_yest_discount) . "元\n";
-
-									$content = $shopmsg . "\n" . $msg_yest;
-								} else {
-									$content = "请确定该账号是否授权。\n店铺授权码格式 \n(add+shop+授权码)";
-								}
-							} else {
-								$content = "请确定该账号是否授权。\n店铺授权码格式 \n(add+shop+授权码)";
-							}
-						}
+					case "introduction" :
+						$content = "1.树窝水果合作的店铺，是基于您所在位置，挑选您身边优质的水果店铺，以和店内相同的价格免费配送 
+								    2.您在下单后，水果店会根据您的订单迅速称重，并将详细的重量及价格反馈给您 
+								    3.水果送达后，如果有品质较差的水果，您可以挑出后再称重付款 
+								    4.请务必填写正确的电话号码和详细的送货地址（例如：银翔路515弄705室），方便送水果人员及时送达 
+								    5.首次购买立减10元，后续的优惠方式以水果店公告为准，送货员会在收款时直接减去优惠的价格";
 						break;
+					case "delivery" :
+							$content = "配送条件 1.每单起送价以每个水果店内公告为准 
+									    2.订单达到起送价后，树窝水果平台上所有商品都免费配送 
+									            配送时间 1.水果店营业时间为8:00-22:00，具体时间以水果店内公告为准 
+									    2.下单成功后，送水果人员会在您选择的送货时间内快速送达";
+							break;
+							case "pay" :
+								$content = "1.货到付款，当面验水果，若有品质较差的水果可以拒收 
+										2.网上支付方式会在不久后开放使用 （新用户首次购买减十元活动，送水果人员会在收款时直接减去十元）";
+								break;
+								case "service" :
+									$content = "1.水果当面检查验收，不满意的水果可以让送果园退回，并减去相应价格
+											    2.若送水果人员不予配合，可致电树窝水果客服进行投诉，我们会认真对待您的投诉与建议";
+									break;
+									case "advice" :
+										$content = "若在下单后 1.水果店未能及时确认订单或长时间未送达 2.水果有任何品质问题 （任何造成您不满意的问题，您都可以通过以下方式投诉，我们会及时处理您的问题） 投诉方式： 1.可直接在本公众账号下留言，客服收到消息后会答复您 2.您还可以直接拨打树窝客服热线：021-31277422 （希望您给树窝提出您宝贵的建议，帮助树窝更好得服务于您，采用的意见我们会送出代金券做奖励";
+										break;
 					default :
 						$content = "点击菜单：" . $object->EventKey;
 						break;
@@ -176,28 +144,7 @@ class shuwowechatcallback {
 	// 接收文本消息
 	private function receiveText($object) {
 		$keyword = trim ( $object->Content );
-		$strarray = explode ( "+", $keyword );
-		$openid = $object->FromUserName;
-		if (count ( $strarray ) == 3 && $strarray [0] == 'add' && $strarray [1] == 'bd') {
-			if(intval($strarray[2]))
-			{
-				$data['bdopenid'] = strval($openid);
-				$bdid = intval($strarray[2]);
-				$bds = M('bd');
-				if($bds->where("bdid=".$bdid)->save($data))
-				{
-					$content = "BD加入成功";
-				}
-				else
-				{
-					$content = "BD加入失败";
-				}
-			}
-		}
-		else
-		{
-			$content = "输入格式错误";
-		}
+		$content = $keyword;
 		$result = $this->transmitText ( $object, $content );
 
 		return $result;
