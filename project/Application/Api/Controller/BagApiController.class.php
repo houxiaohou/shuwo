@@ -10,7 +10,6 @@ require_once 'OrderConst.php';
 
 class BagApiController extends RestController
 {
-
     /**
      * admin列出所有红包
      */
@@ -260,6 +259,7 @@ class BagApiController extends RestController
     	if (true) {
     		$bag = M ( "bag" );
     		$userid = I ( "post.userids" );
+    		$amount = I("post.amount");
     		$userids = explode ( ".", $userid );
     		for($i = 0; $i < count ( $userids ); $i ++) {
     			$current = date ( 'Y-m-d' );
@@ -270,7 +270,7 @@ class BagApiController extends RestController
     			$bagitem [BagConst::TYPE] = 1;
     			$bagitem [BagConst::EXPIRES] = $expirdate;
     			$bagitem [BagConst::USED] = 0;
-    			$bagitem [BagConst::AMOUNT] = 5;
+    			$bagitem [BagConst::AMOUNT] = $amount;
     			$bagitem [BagConst::USER_ID] = $userids[$i];
     			$bagitem [BagConst::ISEVER] = 0;
     			$bagitem [BagConst::ISOUT] = 0;
