@@ -22,4 +22,5 @@ class ShopConst
 	const ISOPEN = "isopen";
 	const ISDISCOUNT = 'isdiscount';
 	const DISCOUNT = 'discount';
+	const ISBAG  ='isbag';
 }
