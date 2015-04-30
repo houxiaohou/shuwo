@@ -99,7 +99,7 @@ class Weixin
 	}
 
 	//  通过全局access token 获得用户信息
-	public  function getshopbyglobaltoken($openId,$accesstoken)
+	public  function getinfobyglobaltoken($openId,$accesstoken)
 	{
 		if(!isset($openId)){
 			return false;

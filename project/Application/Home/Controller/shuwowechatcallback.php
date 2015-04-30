@@ -65,30 +65,47 @@ class shuwowechatcallback {
 				{
 				    $user = M("user");
 				    $userinfo = $user->where("openid='".$openid."'")->select();
-				    if(count($userinfo))
+				    if(!count($userinfo))
 				    {
-				    	$userid = $userinfo[UserConst::USERID];
-				    	$bags = M("bag");
-				        $baginfo = $bags->where('user_id='.$userid)->select();
-				        if(!count($baginfo))
-				        {
-				        	$current = date('Y-m-d',strtotime('+1 days'));
-				        	$expirdate = date('Y-m-d',strtotime('+7 days'));
-				        	$expirdate = $expirdate." 23:59:59";
-				        	$bagitem[BagConst::START] =$current;
-				        	$bagitem[BagConst::SHOP_ID] = 0;
-				        	$bagitem[BagConst::TYPE]=1;
-				        	$bagitem[BagConst::EXPIRES]=$expirdate;
-				        	$bagitem[BagConst::USED] = 0;
-				        	$bagitem[BagConst::AMOUNT] = 5;
-				        	$bagitem[BagConst::USER_ID]= $userid;
-				        	$bagitem[BagConst::ISEVER] = 0;
-				        	$bagid = $bags->add($bagitem);
-				        }
-				    }
-				    else 
-				    {
-				    	
+				    	    $weixin = new Weixin();
+				    	    $token = $weixin->getusersGlobalAccessToken();
+				    	    $userdata = $weixin->getinfobyglobaltoken($openid, $token);
+				    	    if(count($userdata))
+				    	    {
+				    	    	$data [UserConst::OPENID] = $userdata [UserConst::OPENID];
+				    	    	$data [UserConst::UNIOID] = $userdata [UserConst::UNIOID] ? $userinfo [UserConst::UNIOID] : "";
+				    	    	$data [UserConst::NICKNAME] = $userdata [UserConst::NICKNAME];
+				    	    	$data [UserConst::SEX] = $userdata [UserConst::SEX];
+				    	    	$data [UserConst::PROVINCE] = $userdata [UserConst::PROVINCE];
+				    	    	$data [UserConst::CITY] = $userdata [UserConst::CITY];
+				    	    	$data [UserConst::COUNTRY] = $userdata [UserConst::COUNTRY];
+				    	    	$data [UserConst::HEADIMGURL] = $userdata [UserConst::HEADIMGURL];
+				    	    	$data [UserConst::MOBILE] = '';
+				    	    	$data [UserConst::PASSWORD] = '';
+				    	    	$data [UserConst::ROLES] = 0;
+				    	    	$userid = $user->add ( $data );
+				    	    	if($userid)
+				    	    	{
+				    	    		$bags = M("bag");
+				    	    		$current = date('Y-m-d',strtotime('+1 days'));
+				    	    		$expirdate = date('Y-m-d',strtotime('+7 days'));
+				    	    		$expirdate = $expirdate." 23:59:59";
+				    	    		$bagitem[BagConst::START] =$current;
+				    	    		$bagitem[BagConst::SHOP_ID] = 0;
+				    	    		$bagitem[BagConst::TYPE]=1;
+				    	    		$bagitem[BagConst::EXPIRES]=$expirdate;
+				    	    		$bagitem[BagConst::USED] = 0;
+				    	    		$bagitem[BagConst::AMOUNT] = 10;
+				    	    		$bagitem[BagConst::USER_ID]= 0;
+				    	    		$bagitem[BagConst::ISEVER] = 1;
+				    	    		$bagitem[BagConst::ISOUT]=1;
+				    	    		$bagid = $bags->add($bagitem);
+	                                if($bagid)
+	                                {
+	                                	$content.="-您已获得红包:".$bagitem[BagConst::AMOUNT].'元,可永久使用';
+	                                }
+				    	    	}
+				    	    }
 				    }
 				}
 				
