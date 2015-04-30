@@ -96,19 +96,19 @@ class shuwowechatcallback {
 				    	    		$bagitem[BagConst::EXPIRES]=$expirdate;
 				    	    		$bagitem[BagConst::USED] = 0;
 				    	    		$bagitem[BagConst::AMOUNT] = 10;
-				    	    		$bagitem[BagConst::USER_ID]= 0;
+				    	    		$bagitem[BagConst::USER_ID]= $userid;
 				    	    		$bagitem[BagConst::ISEVER] = 1;
 				    	    		$bagitem[BagConst::ISOUT]=1;
 				    	    		$bagid = $bags->add($bagitem);
 	                                if($bagid)
 	                                {
-	                                	$content.="-您已获得红包:".$bagitem[BagConst::AMOUNT].'元,可永久使用';
+	                                	$content="谢谢关注树窝水果,您已获得红包:".$bagitem[BagConst::AMOUNT].'元,可永久使用';
 	                                }
 				    	    	}
 				    	    }
 				    }
 				}
-				
+
 				break;
 			case "unsubscribe" :
 				$content = "取消关注";
