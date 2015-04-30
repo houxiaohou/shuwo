@@ -102,6 +102,9 @@ return array(
     	array('baglist', 'BagApi/listUserAvailableBags', '', array('method' => 'GET')),
     	array('expiredbags', 'BagApi/listUserExpiredBags', '', array('method' => 'GET')),
         array('usedbags', 'BagApi/listUserUsedBags', '', array('method' => 'GET')),
+        array('bags/search$', 'BagApi/queryBagsByPhone', '', array('method' => 'POST')),
+        array('bags/all$', 'BagApi/listAllBagsByAdmin', '', array('method' => 'GET')),
 
+        array('finance/shops', 'FinanceApi/shopFinance', '', array('method' => 'GET')),
     )
 );
