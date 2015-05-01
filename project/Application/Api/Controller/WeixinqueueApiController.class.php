@@ -80,11 +80,16 @@ class WeixinqueueApiController extends RestController {
 				$bddata = $bd->where ( "bdid=" . $bdshops [$i] [BDConst::BDID] )->find ();
 				if (count ( $bddata ) && ! empty ( $bddata [BDConst::OPENID] )) {
 					$msgstr = $shopname . "收到新的订单".$orderstype;
-					if ($data [OrderConst::ISFIRST] == 0 && $data [OrderConst::DISCOUNT] > 0) {
-						$msgstr = $msgstr . '--优惠订单减免' . $data [OrderConst::DISCOUNT] . '元';
-					} else if ($data [OrderConst::ISFIRST] == 1) {
-						$msgstr = $msgstr . '--首购订单减免' . $data [OrderConst::DISCOUNT] . '元';
+// 					if ($data [OrderConst::ISFIRST] == 0 && $data [OrderConst::DISCOUNT] > 0) {
+// 						$msgstr = $msgstr . '--优惠订单减免' . $data [OrderConst::DISCOUNT] . '元';
+// 					} else if ($data [OrderConst::ISFIRST] == 1) {
+// 						$msgstr = $msgstr . '--首购订单减免' . $data [OrderConst::DISCOUNT] . '元';
+// 					}
+					if ($data [OrderConst::BAG_ID] >0 && $data [OrderConst::DISCOUNT] > 0)
+					{
+						$msgstr = $msgstr . '--红包减免' . $data [OrderConst::DISCOUNT] . '元';
 					}
+                   
 					$bdtemplate = array (
 							'touser' => $bddata [BDConst::OPENID],
 							'template_id' => C ( 'NEWORDER_TEMPID' ),

@@ -423,20 +423,7 @@ class OrderApiController extends RestController
             }
             $data [OrderConst::TOTALPRICEBEFORE] = $totalprice;
 
-//             if ($data [OrderConst::ISFIRST] == 0 && $shop_isdiscount == 1) {
-//                 $sql = "select * from orders where userid =" . $userid . " AND date(createdtime)='" . $currentdate . "'";
-//                 $orders = $order->query($sql);
-//                 if (count($orders)) {
-//                     $data [OrderConst::DISCOUNT] = 0;
-//                 } else {
-//                     $data [OrderConst::DISCOUNT] = $shop_discount;
-//                     $totalprice -= $shop_discount;
-//                 }
-//             } else if ($data [OrderConst::ISFIRST] == 1) {
-                
-//                 $totalprice -= $dns;
-//             }
-            if(intval($data[OrderConst::BAG_AMOUNT])>0)
+            if(intval($data[OrderConst::BAG_AMOUNT])>0 && $bagId)
             {
             	
             	$totalprice -= intval($data[OrderConst::BAG_AMOUNT]);
@@ -469,8 +456,8 @@ class OrderApiController extends RestController
                     $orderNum = "订单编号：" . $orderid;
 
                     $ordertype = "新的订单" . $orderdeliery;
-                    if ($data [OrderConst::DISCOUNT] > 0) {
-                        $ordertype = "减免" . $data [OrderConst::DISCOUNT] . "元" . $orderdeliery;
+                    if ($data [OrderConst::DISCOUNT] > 0 && $data [OrderConst::BAG_ID] >0) {
+                        $ordertype = "红包减免" . $data [OrderConst::DISCOUNT] . "元" . $orderdeliery;
                     } 
 
                     if (count($userinfo)) {
@@ -603,24 +590,18 @@ class OrderApiController extends RestController
         $shop = M('shop');
         $where4 [OrderConst::ORDERID] = $orderid;
 
-        // 获取订单优惠信息
-        $shop_id = $order->where($where4)->getField('shopid');
-        $whereshop [ShopConst::SHOPID] = $shop_id;
-        $shopdetail = $shop->where($whereshop)->find();
-        $shop_isdiscount = $shopdetail [ShopConst::ISDISCOUNT];
-        $shop_discount = $shopdetail [ShopConst::DISCOUNT];
+//         // 获取订单优惠信息
+//         $shop_id = $order->where($where4)->getField('shopid');
+//         $whereshop [ShopConst::SHOPID] = $shop_id;
+//         $shopdetail = $shop->where($whereshop)->find();
+//         $shop_isdiscount = $shopdetail [ShopConst::ISDISCOUNT];
+//         $shop_discount = $shopdetail [ShopConst::DISCOUNT];
 
-        // 获取是否首购
-        $order_isfirst = $order->where($where4)->getField('isfirst');
+//         // 获取是否首购
+//         $order_isfirst = $order->where($where4)->getField('isfirst');
         $order->where($where4)->setField('rtotalpricebefore', $rtotalprice);
 
         if ($rtotalprice > 0) {
-//             if ($order_isfirst == 0 && $shop_isdiscount == 1) {
-//                 $rtotalprice -= $shop_discount;
-//             } else if ($order_isfirst == 1) {
-//                 $rtotalprice -= $counts;
-//             }
-            
             if(intval($orderData[OrderConst::BAG_AMOUNT])>0)
             {
             	$rtotalprice -= intval($orderData[OrderConst::BAG_AMOUNT]);
