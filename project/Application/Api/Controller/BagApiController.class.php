@@ -114,9 +114,11 @@ class BagApiController extends RestController
         $type = intval(I($get . BagConst::TYPE, 0)); // 1 - 外送，2 - 自提
 
         if ($type != 0) {
-            $data = $bagDao->where("(type = " . $type . " and date(expires) >='" . $currenttime . "' and date(start)<='" . $currenttime . "' and user_id =" . $userId . " and used=0) or (used=0 and isever =1)")->order('expires')->select();
+            // 区分类型，筛选可用红包
+            $data = $bagDao->where("((date(expires) >='" . $currenttime . "' and date(start)<='" . $currenttime . "' and used=0) or (isever =1 and used = 0)) and user_id = " . $userId . " and type = " . $type)->order('expires')->select();
         } else {
-            $data = $bagDao->where("(date(expires) >='" . $currenttime . "' and date(start)<='" . $currenttime . "' and user_id =" . $userId . " and used=0) or (used=0 and isever=1)")->order('expires')->select();
+            // 不区分类型
+            $data = $bagDao->where("((date(expires) >='" . $currenttime . "' and used=0) or (isever =1 and used = 0)) and user_id = " . $userId)->order('expires')->select();
         }
         if (!count($data)) {
             $data = [];
@@ -236,50 +238,49 @@ class BagApiController extends RestController
         $this->response($data, 'json');
     }
 
-   
-    public function sendbagtouser() {
-    	$post = "post.";
-    	$authorize = new Authorize ();
-    	$auid = $authorize->Filter ( "admin" );
-    	if (true) {
-    		$bag = M ( "bag" );
-    		$userid = I ( "post.userids" );
-    		$amount = I("post.amount");
-    		$userids = explode ( ".", $userid );
-    		for($i = 0; $i < count ( $userids ); $i ++) {
-    			$current = date ( 'Y-m-d' );
-    			$expirdate = date ( 'Y-m-d', strtotime ( '+6 days' ) );
-    			$expirdate = $expirdate . " 23:59:59";
-    			$bagitem [BagConst::START] = $current;
-    			$bagitem [BagConst::SHOP_ID] = 0;
-    			$bagitem [BagConst::TYPE] = 1;
-    			$bagitem [BagConst::EXPIRES] = $expirdate;
-    			$bagitem [BagConst::USED] = 0;
-    			$bagitem [BagConst::AMOUNT] = $amount;
-    			$bagitem [BagConst::USER_ID] = $userids[$i];
-    			$bagitem [BagConst::ISEVER] = 0;
-    			$bagitem [BagConst::ISOUT] = 0;
-    			$bagid =  $bag->add ( $bagitem);
-    			if (intval($bagid)) {
-    				$url = U("WeixinqueueApi/sendbagtouser/", '', '', true);
-    				$params = [
-    						"userid" => $userids[$i],
-    						"bagid" => $bagid
-    						];
-    				$this->curl_request_async($url, $params);
-    			}
-    			else 
-    			{
-    				$this->response("error",json);
-    			}
-    			
-    		}
-    		$this->response("success",json);
-    	} else {
-    		$message ["msg"] = "Unauthorized";
-    		$this->response ( $message, 'json', '401' );
-    		return;
-    	}
+
+    public function sendbagtouser()
+    {
+        $post = "post.";
+        $authorize = new Authorize ();
+        $auid = $authorize->Filter("admin");
+        if (true) {
+            $bag = M("bag");
+            $userid = I("post.userids");
+            $amount = I("post.amount");
+            $userids = explode(".", $userid);
+            for ($i = 0; $i < count($userids); $i++) {
+                $current = date('Y-m-d');
+                $expirdate = date('Y-m-d', strtotime('+6 days'));
+                $expirdate = $expirdate . " 23:59:59";
+                $bagitem [BagConst::START] = $current;
+                $bagitem [BagConst::SHOP_ID] = 0;
+                $bagitem [BagConst::TYPE] = 1;
+                $bagitem [BagConst::EXPIRES] = $expirdate;
+                $bagitem [BagConst::USED] = 0;
+                $bagitem [BagConst::AMOUNT] = $amount;
+                $bagitem [BagConst::USER_ID] = $userids[$i];
+                $bagitem [BagConst::ISEVER] = 0;
+                $bagitem [BagConst::ISOUT] = 0;
+                $bagid = $bag->add($bagitem);
+                if (intval($bagid)) {
+                    $url = U("WeixinqueueApi/sendbagtouser/", '', '', true);
+                    $params = [
+                        "userid" => $userids[$i],
+                        "bagid" => $bagid
+                    ];
+                    $this->curl_request_async($url, $params);
+                } else {
+                    $this->response("error", json);
+                }
+
+            }
+            $this->response("success", json);
+        } else {
+            $message ["msg"] = "Unauthorized";
+            $this->response($message, 'json', '401');
+            return;
+        }
     }
 
 }

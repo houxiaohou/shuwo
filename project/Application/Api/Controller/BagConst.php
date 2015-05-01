@@ -12,5 +12,5 @@ Class BagConst
     const EXPIRES = 'expires'; // 过期时间，超过该时间则无法使用
     const START = 'start';//起始时间
     const ISEVER =  "isever";
-    const ISOUT = "isout";
+    const ISAOUT = "isauto";
 }

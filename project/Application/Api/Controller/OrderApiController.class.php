@@ -302,9 +302,9 @@ class OrderApiController extends RestController
 
             // 根据传过来的bag_id查询bag是否可用，如果bag不可用，返回success=0，error='bag_unavailable'
             $bagId = intval(I($poststr.OrderConst::BAG_ID));
+            $bagDao = M('bag');
             if ($bagId) {
                 // 用户选了红包
-                $bagDao = M('bag');
                 $bagCondition[BagConst::USER_ID] = $userid;
                 $bagCondition[BagConst::ID] = $bagId;
                 $bagCondition[BagConst::USED] = 0;
@@ -351,7 +351,7 @@ class OrderApiController extends RestController
                 }
             }
             
-            if($data [OrderConst::ISDELIVERY] == 0)
+            if($data [OrderConst::ISDELIVERY] == 0 && $bagId)
             {
             	$bagDao->where("id=".$bagId)->setField("used",1);
             }
@@ -790,7 +790,7 @@ class OrderApiController extends RestController
             	    	$bagitem[BagConst::AMOUNT] = 5;
             	    	$bagitem[BagConst::USER_ID]= $auid;
             	    	$bagitem[BagConst::ISEVER] = 0;
-            	    	$bagitem[BagConst::ISOUT]=1;
+            	    	$bagitem[BagConst::ISAOUT]=1;
             	    	$bagid = $bags->add($bagitem);
             	    	if($bagid)
             	    	{
