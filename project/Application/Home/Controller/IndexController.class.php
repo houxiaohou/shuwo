@@ -9,163 +9,61 @@ require_once 'Xcrypt.php';
 require_once 'UserConst.php';
 class IndexController extends Controller {
 	public function index() {
-		
+
+		$appid = C ( 'SHUWO_APPID' );
+		$appsecret = C ( 'SHUWO_APPSECRET' );
 		$weixin = new Weixin ();
-		$weixin->appid = C('SHUWO_APPID');
-		$weixin->appsecret=C('SHUWO_APPSECRET');
-		
-		$access_token = $weixin->getGlobalAccessToken();
-		
-$jsonmenu = '{
-      "button":[
-      {
-                           "type": "view", 
-                           "name": "树窝水果", 
-                           "url": "http://www.shuwow.com"
-       },
-       {
-           "name":"帮助中心",
-           "sub_button":[
-            {
-               "type":"click",
-               "name":"买前必读",
-               "key":"introduction"
-            },
-            {
-               "type":"click",
-               "name":"配送服务",
-               "key":"delivery"
-            },
-            {
-               "type":"click",
-               "name":"支付方式",
-               "key":"pay"
-            },
-            {
-               "type":"click",
-               "name":"售后服务",
-               "key":"service"
-            },
-            {
-               "type":"click",
-               "name":"投诉建议",
-               "key":"adivce"
-            }]
-       }]
- }';
-		
-		
-		$url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=".$access_token["access_token"];
-		$weixin->https_request($url,$jsonmenu,"POST");
-		
-// 		                $bags= M("bag");
-//             	    	$current = date('Y-m-d',strtotime('+1 days'));
-//             	    	$expirdate = date('Y-m-d',strtotime('+7 days'));
-//             	    	$expirdate = $expirdate." 23:59:59";
-//             	    	$bagitem["start"] =$current;
-//             	    	$bagitem["shop_id"] = 12;
-//             	    	$bagitem["type"]=1;
-//             	    	$bagitem["expires"]=$expirdate;
-//             	    	$bagitem["used"] = 0;
-//             	    	$bagitem["amount"] = 5;
-//             	    	$bagitem["user_id"]= $auid;
-//             	    	$bagid = $bags->add($bagitem);
-		
-		$auid = 1;
-		$bagid = 15;
-		$user = M("user");
-		$bag = M("bag");
-		$userinfo = $user->where("userid=".$auid)->find();
-		$baginfo = $bag->where("id=".$bagid)->find();
-		if(count($userinfo)&&count($baginfo)&&!empty($userinfo[UserConst::OPENID]))
-		{
-			             	    			$start =  date('Y-m-d',strtotime($baginfo["start"]));
-			            	    			$expire =  date('Y-m-d',strtotime($baginfo["expires"]));
-			            	    			$content = '恭喜您获得'.$baginfo["amount"].'元红包，可使用日期'.$start.'到'.$expire;
-		           
-        
-            	    	$template = array (
-            	    			'touser' => 'oeRy5s_WYCNDwfjpP7rmGhNpsMHE',
-            	    			'template_id' =>'NjDObh6wXHfh4scgh29gxtmao5dYu-dtGEvR2sDk_-8',
-            	    			'data' => array (
-            	    					'first' => array (
-            	    							'value' => urlencode ($content),
-            	    							'color' => "#FF0000"
-            	    					),
-            	    					'orderTicketStore' => array (
-            	    							'value' => urlencode ( "树窝水果商城购买水果" ),
-            	    							'color' => "#009900"
-            	    					),
-            	    					'orderTicketRule' => array (
-            	    							'value' => urlencode ("外送订单即可使用红包"),
-            	    							'color' => "#009900"
-            	    					),
-            	    					'remark' => array (
-            	    							'value' => urlencode ( "\\n信息来自树窝小店" ),
-            	    							'color' => "#cccccc"
-            	    					)
-            	    			)
-            	    	);
-            	    	$weixin = new Weixin ();
-            	    	$token = $weixin->getusersGlobalAccessToken();
-            	    	$weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
-		}
+		$weixin->appid = $appid;
+		$weixin->appsecret = $appsecret;
+		$url = $weixin->getwxurl(C('SHUWO_CALLBACK'));
+		$key = C ( "CRYPT_KEY" );
+		$xcrpt = new Xcrypt ( $key, 'cbc', $key );
+		if (cookie ( 'utoken' )) {
+			$value = cookie ( 'utoken' );
+            $data = $xcrpt->decrypt ( $value, 'base64' );
+			if ($data) {
+				$str = explode ( "#", $data );
+				if ($str && count ( $str ) == 3)
+				{
+					$userid = intval ( $str [0] );
+					if ($userid) {
+						$user = M ( 'user' );
+						$sql = "userid=" . $userid;
+						$userinfo = $user->where ( $sql )->find ();
+						if (! count ( $userinfo )) {
+							cookie ( 'utoken',null );
+							$redircturl = "Location:".$url;
+							header($redircturl);
+							exit;
+						}
+						else 
+						{
+							$this->display ();
+						}
 
-		
-// 		$appid = C ( 'SHUWO_APPID' );
-// 		$appsecret = C ( 'SHUWO_APPSECRET' );
-// 		$weixin = new Weixin ();
-// 		$weixin->appid = $appid;
-// 		$weixin->appsecret = $appsecret;
-// 		$url = $weixin->getwxurl(C('SHUWO_CALLBACK'));
-// 		$key = C ( "CRYPT_KEY" );
-// 		$xcrpt = new Xcrypt ( $key, 'cbc', $key );
-// 		if (cookie ( 'utoken' )) {
-// 			$value = cookie ( 'utoken' );
-//             $data = $xcrpt->decrypt ( $value, 'base64' );
-// 			if ($data) {
-// 				$str = explode ( "#", $data );
-// 				if ($str && count ( $str ) == 3)
-// 				{
-// 					$userid = intval ( $str [0] );
-// 					if ($userid) {
-// 						$user = M ( 'user' );
-// 						$sql = "userid=" . $userid;
-// 						$userinfo = $user->where ( $sql )->find ();
-// 						if (! count ( $userinfo )) {
-// 							cookie ( 'utoken',null );
-// 							$redircturl = "Location:".$url;
-// 							header($redircturl);
-// 							exit;
-// 						}
-// 						else 
-// 						{
-// 							$this->display ();
-// 						}
-
-// 					}
-// 			    }
-// 			    else {
-// 			    	$redircturl = "Location:".$url;
-// 			    	header($redircturl);
-// 			    	exit;
-// 			    }
-// 			} else {
-// 				$redircturl = "Location:".$url;
-// 				header($redircturl);
-// 				exit;
+					}
+			    }
+			    else {
+			    	$redircturl = "Location:".$url;
+			    	header($redircturl);
+			    	exit;
+			    }
+			} else {
+				$redircturl = "Location:".$url;
+				header($redircturl);
+				exit;
 				
-// 				// 测试模拟代码
-// 				//$this->redirect ( "authorize" );
-// 			}
-// 		} else {
-//     		$redircturl = "Location:".$url;
-//             header($redircturl);
-//             exit;
+				// 测试模拟代码
+				//$this->redirect ( "authorize" );
+			}
+		} else {
+    		$redircturl = "Location:".$url;
+            header($redircturl);
+            exit;
 			
-// 			// 测试模拟代码
-// 			//$this->redirect ( "authorize" );
-// 		}
+			// 测试模拟代码
+			//$this->redirect ( "authorize" );
+		}
 	}
 	public function authorize() {
 		$weixin = new Weixin ();
@@ -345,36 +243,4 @@ $jsonmenu = '{
 	public function admin(){
 	    $this->display();
 	}
-	
-	private function curl_request_async($url, $params, $type = 'POST')
-	{
-		foreach ($params as $key => &$val) {
-			if (is_array($val))
-				$val = implode(',', $val);
-			$post_params [] = $key . '=' . urlencode($val);
-		}
-		$post_string = implode('&', $post_params);
-	
-		$parts = parse_url($url);
-	
-		$fp = fsockopen($parts ['host'], isset ($parts ['port']) ? $parts ['port'] : 80, $errno, $errstr, 30);
-	
-		// Data goes in the path for a GET request
-		if ('GET' == $type)
-			$parts ['path'] .= '?' . $post_string;
-	
-		$out = "$type " . $parts ['path'] . " HTTP/1.1\r\n";
-		$out .= "Host: " . $parts ['host'] . "\r\n";
-		$out .= "Content-Type: application/x-www-form-urlencoded\r\n";
-		$out .= "Content-Length: " . strlen($post_string) . "\r\n";
-		$out .= "Connection: Close\r\n\r\n";
-		// Data goes in the request body for a POST request
-		if ('POST' == $type && isset ($post_string))
-			$out .= $post_string;
-	
-		fwrite($fp, $out);
-		fclose($fp);
-	}
 }
-
-

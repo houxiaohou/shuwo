@@ -144,6 +144,7 @@ class WeixinqueueApiController extends RestController {
 			$template = array (
 					'touser' => $userinfo['openid'],
 					'template_id' =>'NjDObh6wXHfh4scgh29gxtmao5dYu-dtGEvR2sDk_-8',
+					'url' => "http://www.shuwow.com/Home/Index/index/#/bag",
 					'data' => array (
 							'first' => array (
 									'value' => urlencode ($content),
