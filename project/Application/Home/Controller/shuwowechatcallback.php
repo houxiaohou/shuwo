@@ -102,7 +102,7 @@ class shuwowechatcallback {
 				    	    		$bagid = $bags->add($bagitem);
 	                                if($bagid)
 	                                {
-	                                	$content=$content."您已获得红包:".$bagitem[BagConst::AMOUNT].'元,可永久使用';
+	                                	$content="谢谢您关注树窝水果，您已获得红包:".$bagitem[BagConst::AMOUNT].'元,可永久使用';
 	                                }
 				    	    	}
 				    	    }

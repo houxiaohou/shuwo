@@ -287,7 +287,6 @@ class OrderApiController extends RestController
             if ($orders->where("userid = {$userid}")->find()) {
                 $data [OrderConst::ISFIRST] = 0;
             } else {
-                $data [OrderConst::DISCOUNT] = $dns;
                 $data [OrderConst::ISFIRST] = 1;
             }
 

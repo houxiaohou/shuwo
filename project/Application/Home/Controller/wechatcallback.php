@@ -239,7 +239,7 @@ class wechatcallback {
 			if (intval ( $data )) {
 				$weixin = new Weixin ();
 				$token = $weixin->getshopGlobalAccessToken ();
-				$userInfo = $weixin->getshopbyglobaltoken ( $object->FromUserName, $token );
+				$userInfo = $weixin->getinfobyglobaltoken( $object->FromUserName, $token );
 				if (count ( $userInfo )) {
 					$user = M ( 'user' );
 					// $userid = $user->where ( "shopid=" . $data )->getField ( "userid" );
