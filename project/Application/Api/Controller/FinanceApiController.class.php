@@ -43,7 +43,7 @@ class FinanceApiController extends RestController
             $d['discount'] = $data[0]['discount'];
 
             // 红包补贴数目
-            $sql = 'select count(*) as total from orders where shopid = ' . $shopid . ' and orderstatus = 3 and to_days(createdtime) = to_days("' . $date . '") and discount != 0';
+            $sql = 'select count(*) as total from orders where shopid = ' . $shopid . ' and orderstatus = 3 and to_days(createdtime) = to_days("' . $date . '") and bag_id > 0';
             $data = M('orders')->query($sql);
             $d['discount_num'] = $data[0]['total'];
 
