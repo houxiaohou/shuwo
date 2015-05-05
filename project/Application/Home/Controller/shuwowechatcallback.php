@@ -89,11 +89,11 @@ class shuwowechatcallback {
 				    	    		$bags = M("bag");
 				    	    		$current = date('Y-m-d');
 				    	    		$expirdate = date('Y-m-d',strtotime('+6 days'));
-				    	    		$expirdate = $expirdate." 23:59:59";
+				    	    		$expirdate1 = $expirdate." 23:59:59";
 				    	    		$bagitem[BagConst::START] =$current;
 				    	    		$bagitem[BagConst::SHOP_ID] = 0;
 				    	    		$bagitem[BagConst::TYPE]=1;
-				    	    		$bagitem[BagConst::EXPIRES]=$expirdate;
+				    	    		$bagitem[BagConst::EXPIRES]=$expirdate1;
 				    	    		$bagitem[BagConst::USED] = 0;
 				    	    		$bagitem[BagConst::AMOUNT] = 10;
 				    	    		$bagitem[BagConst::USER_ID]= $userid;
@@ -103,7 +103,7 @@ class shuwowechatcallback {
 				    	    		$bagitem2[BagConst::START] =$current;
 				    	    		$bagitem2[BagConst::SHOP_ID] = 0;
 				    	    		$bagitem2[BagConst::TYPE]=2;
-				    	    		$bagitem2[BagConst::EXPIRES]=$expirdate;
+				    	    		$bagitem2[BagConst::EXPIRES]=$expirdate1;
 				    	    		$bagitem2[BagConst::USED] = 0;
 				    	    		$bagitem2[BagConst::AMOUNT] = 5;
 				    	    		$bagitem2[BagConst::USER_ID]= $userid;
@@ -114,7 +114,7 @@ class shuwowechatcallback {
 				    	    		$bagid2= $bags->add($bagitem2);
 	                                if($bagid&&$bagid2)
 	                                {
-	                                	$content="谢谢您关注树窝水果，您已获得外送红包:".$bagitem[BagConst::AMOUNT].'元,可永久使用。/n自提红包'.$bagitem2[BagConst::AMOUNT].'元,有效期'.$current.'至'.$expirdate;
+	                                	$content="谢谢关注树窝水果，您已获得外送红包:".$bagitem[BagConst::AMOUNT].'元,可永久使用。自提红包'.$bagitem2[BagConst::AMOUNT].'元,有效期'.$current.'至'.$expirdate;
 	                                }
 				    	    	}
 				    	    }

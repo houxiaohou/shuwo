@@ -422,17 +422,19 @@ class OrderApiController extends RestController
             }
             $data [OrderConst::TOTALPRICEBEFORE] = $totalprice;
 
-            if(intval($data[OrderConst::BAG_AMOUNT])>0 && $bagId)
-            {
-            	
-            	$totalprice -= intval($data[OrderConst::BAG_AMOUNT]);
-            	$data [OrderConst::DISCOUNT] = $data[OrderConst::BAG_AMOUNT];
-            }
+
 
             $data [OrderConst::TOTALPRICE] = $totalprice;
             $data2 = [];
-            if (!empty ($data [OrderConst::ADDRESS]) && !empty ($data [OrderConst::PHONE]) && !empty ($data [OrderConst::USERNAME])) {
+            if (!empty ($data [OrderConst::ADDRESS]) && !empty ($data [OrderConst::PHONE]) && !empty ($data [OrderConst::USERNAME])&& !empty($data[OrderConst::BAG_AMOUNT])&& !empty($data[OrderConst::BAG_ID])) {
 
+            	if(intval($data[OrderConst::BAG_AMOUNT])>0 && $bagId)
+            	{
+            		 
+            		$totalprice -= intval($data[OrderConst::BAG_AMOUNT]);
+            		$data [OrderConst::DISCOUNT] = $data[OrderConst::BAG_AMOUNT];
+            	}
+            	
                 $order->add($data);
                 $data2 ['orderid'] = $orderid;
                 $data2 ['conflict'] = $data[OrderConst::ISDELIVERY];
@@ -756,7 +758,7 @@ class OrderApiController extends RestController
             	if ($order->where("orderid = '" . $orderid . "' AND userid=" . $auid)->setField("orderstatus", 3) !== false) {
                     //加入送红包
             	    $userid = $orderdata[OrderConst::USERID];
-            		$bagcount = $bags->where("user_id = ".$userid)->select();
+            		$bagcount = $bags->where("user_id = ".$userid.' and isauto=1')->select();
             	    if (count($bagcount)<$totalbags)
             	    {
             	    	$current = date('Y-m-d',strtotime('+1 days'));
