@@ -402,6 +402,7 @@ class OrderApiController extends RestController
                 if ($discount) {
                     $price = $discount;
                 }
+      
                 switch ($attribute) {
                     // attribute为1， 按数量销售，按重量计价
                     case 1 :
@@ -427,7 +428,7 @@ class OrderApiController extends RestController
 
             $data [OrderConst::TOTALPRICE] = $totalprice;
             $data2 = [];
-            if (!empty ($data [OrderConst::ADDRESS]) && !empty ($data [OrderConst::PHONE]) && !empty ($data [OrderConst::USERNAME])&& !empty($data[OrderConst::BAG_AMOUNT])&& !empty($data[OrderConst::BAG_ID])) {
+            if (!empty ($data [OrderConst::ADDRESS]) && !empty ($data [OrderConst::PHONE]) && !empty ($data [OrderConst::USERNAME])) {
 
             	if(intval($data[OrderConst::BAG_AMOUNT])>0 && $bagId)
             	{
