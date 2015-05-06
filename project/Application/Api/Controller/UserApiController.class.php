@@ -147,7 +147,7 @@ class UserApiController extends RestController
     {
         $userDao = M('user');
         $user = $userDao->where('userid=' . $userId)->find();
-        $d['order_num'] = $this->countUserOrderNum($userId['userid']);
+        $d['order_num'] = $this->countUserOrderNum($userId);
         $d[UserConst::USERID] = $user[UserConst::USERID];
         $d[UserConst::CREATEDTIME] = $user[UserConst::CREATEDTIME];
         $d[UserConst::NICKNAME] = $user[UserConst::NICKNAME];

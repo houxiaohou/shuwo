@@ -325,10 +325,8 @@ class OrderApiController extends RestController {
 				$orderNum = "订单编号：" . $orderid;
 				
 				$ordertype = "新的订单";
-				if ($data [OrderConst::ISFIRST] == 0 && $data [OrderConst::DISCOUNT] > 0) {
+				if ($data [OrderConst::DISCOUNT] > 0) {
 					$ordertype = "优惠订单减免" . $data [OrderConst::DISCOUNT] . "元";
-				} else if ($data [OrderConst::ISFIRST] == 1) {
-					$ordertype = "首购订单减免" . $data [OrderConst::DISCOUNT] . "元";
 				}
 				// if (count ( $userinfo ) && ! empty ( $userinfo ["openid"] )) {
 				if (count ( $userinfo )) {

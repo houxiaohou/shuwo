@@ -148,10 +148,11 @@ class OrderApiController extends RestController
         $order = M('orders');
         if (intval($ispickup) == 1) {
             // 到店自提
-            $result = $order->where("orderid = '" . $orderid . "'")->setField(OrderConst::ISPICKUP, 1);
+            $order->where("orderid = '" . $orderid . "'")->setField(OrderConst::ISPICKUP, 1);
         } else {
             // 送货到地址
-            $result = $order->where("orderid = '" . $orderid . "'")->setField(OrderConst::ADDRESS, $address);
+            $order->where("orderid = '" . $orderid . "'")->setField(OrderConst::ADDRESS, $address);
+            $order->where("orderid = '" . $orderid . "'")->setField(OrderConst::ISPICKUP, 0);
         }
         $result = $order->where("orderid = '" . $orderid . "'")->setField(OrderConst::ISDELIVERY, 0);
         $data['success'] = $result;
