@@ -7,7 +7,7 @@ require_once 'BagConst.php';
 require_once 'Authorize.php';
 require_once 'UserConst.php';
 require_once 'OrderConst.php';
-
+require_once 'Weixin.php';
 class BagApiController extends RestController
 {
     /**
@@ -261,15 +261,48 @@ class BagApiController extends RestController
                 $bagitem [BagConst::AMOUNT] = $amount;
                 $bagitem [BagConst::USER_ID] = $userids[$i];
                 $bagitem [BagConst::ISEVER] = 0;
-                $bagitem [BagConst::ISOUT] = 0;
+                $bagitem [BagConst::ISAOUT] = 0;
                 $bagid = $bag->add($bagitem);
                 if (intval($bagid)) {
-                    $url = U("WeixinqueueApi/sendbagtouser/", '', '', true);
-                    $params = [
-                        "userid" => $userids[$i],
-                        "bagid" => $bagid
-                    ];
-                    $this->curl_request_async($url, $params);
+                	$user= M('user');
+                	$userinfo = $user->where("userid=".$userids[$i])->find();
+                	$baginfo = $bag->where("id=".$bagid)->find();
+                	if(count($userinfo) && count($userinfo) && !empty($userinfo['openid']))
+                	{
+                		$start =  date('Y-m-d',strtotime($baginfo[BagConst::START]));
+                		$expire =  date('Y-m-d',strtotime($baginfo[BagConst::EXPIRES]));
+                		$content = '恭喜您获得'.$baginfo[BagConst::AMOUNT].'元红包，可使用日期'.$start.'至'.$expire;
+                			
+                		$template = array (
+                				'touser' => $userinfo['openid'],
+                				'template_id' =>'NjDObh6wXHfh4scgh29gxtmao5dYu-dtGEvR2sDk_-8',
+                				'url' => "http://www.shuwow.com/Home/Index/index/#/bag",
+                				'data' => array (
+                						'first' => array (
+                								'value' => urlencode ($content),
+                								'color' => "#FF0000"
+                						),
+                						'orderTicketStore' => array (
+                								'value' => urlencode ( "树窝水果商城购买水果" ),
+                								'color' => "#009900"
+                						),
+                						'orderTicketRule' => array (
+                								'value' => urlencode ("外送订单即可使用红包"),
+                								'color' => "#009900"
+                						),
+                						'remark' => array (
+                								'value' => urlencode ( "\\n信息来自树窝小店" ),
+                								'color' => "#cccccc"
+                						)
+                				)
+                		);
+                		$weixin = new Weixin ();
+                		$token = $weixin->getusersGlobalAccessToken();
+                		$weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
+                	} 
+                	
+                	
+                	
                 } else {
                     $this->response("error", json);
                 }
