@@ -351,9 +351,9 @@ class OrderApiController extends RestController
                 }
             }
             
-            if($data [OrderConst::ISDELIVERY] == 0 && $bagId)
+            if($data [OrderConst::ISDELIVERY] == 0 && intval($data[OrderConst::BAG_ID])>0)
             {
-            	$bagDao->where("id=".$bagId)->setField("used",1);
+            	$bagDao->where("id=".$data[OrderConst::BAG_ID])->setField("used",1);
             }
 
             // 获取店铺的优惠信息
@@ -402,7 +402,7 @@ class OrderApiController extends RestController
                 if ($discount) {
                     $price = $discount;
                 }
-      
+                
                 switch ($attribute) {
                     // attribute为1， 按数量销售，按重量计价
                     case 1 :
@@ -430,7 +430,7 @@ class OrderApiController extends RestController
             $data2 = [];
             if (!empty ($data [OrderConst::ADDRESS]) && !empty ($data [OrderConst::PHONE]) && !empty ($data [OrderConst::USERNAME])) {
 
-            	if(intval($data[OrderConst::BAG_AMOUNT])>0 && $bagId)
+            	if(intval($data[OrderConst::BAG_AMOUNT])>0 && intval($data[OrderConst::BAG_ID])>0)
             	{
             		 
             		$totalprice -= intval($data[OrderConst::BAG_AMOUNT]);
