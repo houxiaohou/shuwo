@@ -23,4 +23,5 @@ class ShopConst
 	const ISDISCOUNT = 'isdiscount';
 	const DISCOUNT = 'discount';
 	const ISBAG  ='isbag';
+	const DISTANCE = 'distance';
 }

@@ -298,11 +298,12 @@ class OrderApiController extends RestController
             //获取店铺经纬度
             $shoplat = $shopdetail[ShopConst::LATITUDE];
             $shoplng = $shopdetail[ShopConst::LONGITUDE];
-
+            $shopdistance = $shopdetail[ShopConst::DISTANCE];
 
             // 根据传过来的bag_id查询bag是否可用，如果bag不可用，返回success=0，error='bag_unavailable'
             $bagId = intval(I($poststr.OrderConst::BAG_ID));
             $bagDao = M('bag');
+            $bagType = 0;
             if ($bagId) {
                 // 用户选了红包
                 $bagCondition[BagConst::USER_ID] = $userid;
@@ -319,6 +320,7 @@ class OrderApiController extends RestController
                 {
                 	$data[OrderConst::BAG_ID] = $bag[BagConst::ID];
                 	$data[OrderConst::BAG_AMOUNT] = $bag[BagConst::AMOUNT];
+                	$bagType = intval($bag[BagConst::AMOUNT])-1;
                 }
             }
 
@@ -332,7 +334,7 @@ class OrderApiController extends RestController
             if ($data [OrderConst::ISPICKUP] == 1) {
                 $data [OrderConst::ISDELIVERY] = 0;
             } else {
-                if ($distance < 100) {
+                if ($distance < intval($shopdistance)) {
                     $data [OrderConst::ISDELIVERY] = 1;
                     $data [OrderConst::ISPICKUP] = 1;
                     $data[OrderConst::BAG_ID] = 0;
@@ -350,12 +352,7 @@ class OrderApiController extends RestController
                     }
                 }
             }
-            
-            if($data [OrderConst::ISDELIVERY] == 0 && intval($data[OrderConst::BAG_ID])>0)
-            {
-            	$bagDao->where("id=".$data[OrderConst::BAG_ID])->setField("used",1);
-            }
-
+           
             // 获取店铺的优惠信息
             $shop_isdiscount = $shopdetail [ShopConst::ISDISCOUNT];
             $shop_discount = $shopdetail [ShopConst::DISCOUNT];
@@ -423,19 +420,23 @@ class OrderApiController extends RestController
                 $orderproduct->add($data1);
             }
             $data [OrderConst::TOTALPRICEBEFORE] = $totalprice;
-
+            
+            if(intval($data[OrderConst::BAG_AMOUNT])>0 && intval($data[OrderConst::BAG_ID])>0)
+            {
+            	if($data [OrderConst::ISDELIVERY] == 0 && $data [OrderConst::ISPICKUP] == $bagType)
+            	{
+            		$bagDao->where("id=".$data[OrderConst::BAG_ID])->setField("used",1);
+            	}
+            	$totalprice -= intval($data[OrderConst::BAG_AMOUNT]);
+            	$data [OrderConst::DISCOUNT] = $data[OrderConst::BAG_AMOUNT];
+            }
 
 
             $data [OrderConst::TOTALPRICE] = $totalprice;
             $data2 = [];
             if (!empty ($data [OrderConst::ADDRESS]) && !empty ($data [OrderConst::PHONE]) && !empty ($data [OrderConst::USERNAME])) {
 
-            	if(intval($data[OrderConst::BAG_AMOUNT])>0 && intval($data[OrderConst::BAG_ID])>0)
-            	{
-            		 
-            		$totalprice -= intval($data[OrderConst::BAG_AMOUNT]);
-            		$data [OrderConst::DISCOUNT] = $data[OrderConst::BAG_AMOUNT];
-            	}
+
             	
                 $order->add($data);
                 $data2 ['orderid'] = $orderid;
@@ -593,15 +594,6 @@ class OrderApiController extends RestController
         $shop = M('shop');
         $where4 [OrderConst::ORDERID] = $orderid;
 
-//         // 获取订单优惠信息
-//         $shop_id = $order->where($where4)->getField('shopid');
-//         $whereshop [ShopConst::SHOPID] = $shop_id;
-//         $shopdetail = $shop->where($whereshop)->find();
-//         $shop_isdiscount = $shopdetail [ShopConst::ISDISCOUNT];
-//         $shop_discount = $shopdetail [ShopConst::DISCOUNT];
-
-//         // 获取是否首购
-//         $order_isfirst = $order->where($where4)->getField('isfirst');
         $order->where($where4)->setField('rtotalpricebefore', $rtotalprice);
 
         if ($rtotalprice > 0) {
