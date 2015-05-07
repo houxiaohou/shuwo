@@ -251,6 +251,9 @@ class ShopApiController extends RestController {
 				if (intval ( I ( $post . ShopConst::DELIVERYPRICE ) )) {
 					$data [ShopConst::DELIVERYPRICE] = I ( $post . ShopConst::DELIVERYPRICE );
 				}
+                if (intval(I( $post . ShopConst::DISTANCE))) {
+                    $data [ShopConst::DISTANCE] = intval(I( $post . ShopConst::DISTANCE));
+                }
 				if (I ( $post . ShopConst::ISOPEN ) != null) {
 					$isopen = intval ( I ( $post . ShopConst::ISOPEN ) );
 					if ($isopen) {
@@ -320,6 +323,9 @@ class ShopApiController extends RestController {
 				if (intval ( I ( $post . ShopConst::DELIVERYPRICE ) )) {
 					$data [ShopConst::DELIVERYPRICE] = I ( $post . ShopConst::DELIVERYPRICE );
 				}
+                if (intval(I( $post . ShopConst::DISTANCE))) {
+                    $data [ShopConst::DISTANCE] = intval(I( $post . ShopConst::DISTANCE));
+                }
 				if (I ( $post . ShopConst::ISOPEN ) != null) {
 					$isopen = intval ( I ( $post . ShopConst::ISOPEN ) );
 					if ($isopen) {
