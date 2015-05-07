@@ -41,7 +41,7 @@ class shuwowechatcallback {
 					$result = $this->receiveEvent ( $postObj );
 					break;
 				case "text" :
-					$result = $this->receiveText ( $postObj );
+					//$result = $this->receiveText ( $postObj );
 					break;
 				default :
 					$result = "unknown msg type: " . $RX_TYPE;
