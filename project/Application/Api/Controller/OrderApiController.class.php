@@ -135,6 +135,7 @@ class OrderApiController extends RestController
      */
     public function deliveryorder()
     {
+        $bagDao = M('bag');
         $authorize = new Authorize ();
         $isAdmin = $authorize->Filter("admin");
         if (!$isAdmin) {
@@ -146,18 +147,71 @@ class OrderApiController extends RestController
         $address = I($poststr . OrderConst::ADDRESS);
         $ispickup = I($poststr . OrderConst::ISPICKUP);
         $order = M('orders');
+        $orderDetail = $order->where("orderid = '" . $orderid . "'")->find();
         if (intval($ispickup) == 1) {
             // 到店自提
             $order->where("orderid = '" . $orderid . "'")->setField(OrderConst::ISPICKUP, 1);
+            // 设置优惠券类型
+            $type = 2;
         } else {
             // 送货到地址
             $order->where("orderid = '" . $orderid . "'")->setField(OrderConst::ADDRESS, $address);
             $order->where("orderid = '" . $orderid . "'")->setField(OrderConst::ISPICKUP, 0);
+            // 设置优惠券类型
+            $type = 1;
+        }
+
+        $bags = $this->queryUserAvailableBagsByType($orderDetail[OrderConst::USERID], $type);
+
+        if (count($bags)) {
+            $bag = $bags[0];
+            // 找到可用优惠券
+            // 设置红包id
+            $order->where("orderid = '" . $orderid . "'")->setField(OrderConst::BAG_ID, $bag[BagConst::ID]);
+            // 设置红包价格
+            $order->where("orderid = '" . $orderid . "'")->setField(OrderConst::BAG_AMOUNT, $bag[BagConst::AMOUNT]);
+            // 设置折扣
+            $order->where("orderid = '" . $orderid . "'")->setField(OrderConst::DISCOUNT, $bag[BagConst::AMOUNT]);
+            // 设置预估价格，减去优惠
+            $order->where("orderid = '" . $orderid . "'")->setField(OrderConst::TOTALPRICE, $orderDetail[OrderConst::TOTALPRICE] - $bag[BagConst::AMOUNT]);
+            if (intval($orderDetail[OrderConst::ORDERSTATUS]) == 1) {
+                // 如果订单已确认，修改最终支付价格
+                $order->where("orderid = '" . $orderid . "'")->setField(OrderConst::RTOTALPRICE, $orderDetail[OrderConst::RTOTALPRICE] - $bag[BagConst::AMOUNT]);
+            }
+            // 设置红包为已用
+            $bagDao->where("id=".$bag[BagConst::ID])->setField("used", 1);
         }
         $result = $order->where("orderid = '" . $orderid . "'")->setField(OrderConst::ISDELIVERY, 0);
         $data['success'] = $result;
         $data['orderid'] = $orderid;
         $this->response($data, 'json');
+    }
+
+    /**
+     * 筛选用户可用红包
+     * @param $userId
+     * @param $type
+     * @return array
+     */
+    private function queryUserAvailableBagsByType($userId, $type)
+    {
+        $bagDao = M('bag');
+        $currentTime = date('Y-m-d');
+        if ($type != 0) {
+            // 区分类型，筛选可用红包
+            $data = $bagDao->where("((date(expires) >='" . $currentTime . "' and date(start)<='" . $currentTime . "' and used=0) or (isever =1 and used = 0)) and user_id = " . $userId . " and type = " . $type)->order('expires')->select();
+        } else {
+            // 不区分类型
+            $data = $bagDao->where("((date(expires) >='" . $currentTime . "' and used=0) or (isever =1 and used = 0)) and user_id = " . $userId)->order('expires')->select();
+        }
+        if (!count($data)) {
+            $data = [];
+        } else {
+            for ($i = 0; $i < count($data); $i++) {
+                $data[$i]['expired'] = 0;
+            }
+        }
+        return $data;
     }
 
     /*
@@ -316,11 +370,11 @@ class OrderApiController extends RestController
             		 $this->response($message, 'json');
                       return;
                 }
-                else 
+                else
                 {
                 	$data[OrderConst::BAG_ID] = $bag[BagConst::ID];
                 	$data[OrderConst::BAG_AMOUNT] = $bag[BagConst::AMOUNT];
-                	$bagType = intval($bag[BagConst::AMOUNT])-1;
+                	$bagType = intval($bag[BagConst::TYPE])-1;
                 }
             }
 
@@ -339,7 +393,7 @@ class OrderApiController extends RestController
                     $data [OrderConst::ISPICKUP] = 1;
                     $data[OrderConst::BAG_ID] = 0;
                     $data[OrderConst::BAG_AMOUNT] = 0;
-                    
+
                 } else {
                     if ($data [OrderConst::LATITUDE] == 0) {
                         // 经纬度为0，默认到店自提
@@ -352,7 +406,7 @@ class OrderApiController extends RestController
                     }
                 }
             }
-           
+
             // 获取店铺的优惠信息
             $shop_isdiscount = $shopdetail [ShopConst::ISDISCOUNT];
             $shop_discount = $shopdetail [ShopConst::DISCOUNT];
@@ -399,7 +453,7 @@ class OrderApiController extends RestController
                 if ($discount) {
                     $price = $discount;
                 }
-                
+
                 switch ($attribute) {
                     // attribute为1， 按数量销售，按重量计价
                     case 1 :
@@ -420,7 +474,7 @@ class OrderApiController extends RestController
                 $orderproduct->add($data1);
             }
             $data [OrderConst::TOTALPRICEBEFORE] = $totalprice;
-            
+
             if(intval($data[OrderConst::BAG_AMOUNT])>0 && intval($data[OrderConst::BAG_ID])>0)
             {
             	if($data [OrderConst::ISDELIVERY] == 0 && $data [OrderConst::ISPICKUP] == $bagType)
@@ -437,7 +491,7 @@ class OrderApiController extends RestController
             if (!empty ($data [OrderConst::ADDRESS]) && !empty ($data [OrderConst::PHONE]) && !empty ($data [OrderConst::USERNAME])) {
 
 
-            	
+
                 $order->add($data);
                 $data2 ['orderid'] = $orderid;
                 $data2 ['conflict'] = $data[OrderConst::ISDELIVERY];
@@ -462,7 +516,7 @@ class OrderApiController extends RestController
                     $ordertype = "新的订单" . $orderdeliery;
                     if ($data [OrderConst::DISCOUNT] > 0 && $data [OrderConst::BAG_ID] >0) {
                         $ordertype = "红包减免" . $data [OrderConst::DISCOUNT] . "元" . $orderdeliery;
-                    } 
+                    }
 
                     if (count($userinfo)) {
                         for ($i = 0; $i < count($userinfo); $i++) {
@@ -601,10 +655,10 @@ class OrderApiController extends RestController
             {
             	$rtotalprice -= intval($orderData[OrderConst::BAG_AMOUNT]);
             }
-            
+
         }
 
-        
+
         if ($rtotalprice <= 0) {
             $rtotalprice = 0;
         }
@@ -736,7 +790,7 @@ class OrderApiController extends RestController
     // 用户确认订单
     public function orderconfirm()
     {
-    	
+
     	$totalbags = 4;
         $authorize = new Authorize ();
         $auid = $authorize->Filter('user');
