@@ -960,6 +960,12 @@ class OrderApiController extends RestController
     
     public  function admincancelorder()
     {
+    	$authorize = new Authorize ();
+    	$isAdmin = $authorize->Filter("admin");
+    	if (!$isAdmin) {
+    		$message ["msg"] = "Unauthorized";
+    		$this->response($message, 'json', '401');
+    	}
     	$orderid = I("post.orderids");
     	$orderids = explode(".", $orderid);
     	$order = M("orders");
