@@ -177,7 +177,58 @@ class WeixinqueueApiController extends RestController {
 	}
         
 	
-
+   public function sendorderinfotoshop()
+   {
+   	
+   	  
+   	
+   }
+   
+   
+   public  function cancelorder()
+   {
+   	$order = M('orders');
+   	$id=I("post.orderid");
+   	$userid = $order->where("orderid=" . $id)->getField("userid");
+   	if (intval($userid)) {
+   		$user = M("user");
+   		$userinfo = $user->where('userid=' . $userid)->find();
+   		if (count($userinfo) && !empty ($userinfo ['openid'])) {
+   			$current = date('y年m月d日H:i');
+   			$msg =  "树窝水果已于" . $current . "取消订单";
+   			$errormsg = "商家电话:4009609670";
+   			if (count($userinfo) && !empty ($userinfo ["openid"])) {
+   				$template = array(
+   						'touser' => trim($userinfo ["openid"]),
+   						'template_id' => C('ORDERSTATUS_TEMPID'),
+   						'url' => "http://www.shuwow.com/Home/Index/index/#/order",
+   						'topcolor' => "#009900",
+   						'data' => array(
+   								'first' => array(
+   										'value' => urlencode($msg),
+   										'color' => "#FF0000"
+   								),
+   								'OrderSn' => array(
+   										'value' => urlencode($id),
+   										'color' => "#009900"
+   								),
+   								'OrderStatus' => array(
+   										'value' => urlencode($errormsg),
+   										'color' => "#009900"
+   								),
+   								'remark' => array(
+   										'value' => urlencode("\\n信息来自树窝小店"),
+   										'color' => "#cccccc"
+   								)
+   						)
+   				);
+   				$weixin = new Weixin ();
+   				$token = $weixin->getusersGlobalAccessToken();
+   				$weixin->sendtemplatemsg(urldecode(json_encode($template)), $token);
+   			}
+   		}
+   	}
+   }
         
 		
 // 	private  function curl_request_async($url, $params, $type='POST')

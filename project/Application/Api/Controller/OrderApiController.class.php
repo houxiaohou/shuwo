@@ -957,6 +957,37 @@ class OrderApiController extends RestController
         }
         return $data;
     }
+    
+    public  function admincancelorder()
+    {
+    	$orderid = I("post.orderids");
+    	$orderids = explode(".", $orderid);
+    	$order = M("orders");
+    	$bag = M("bag");
+    	for ($i = 0;$i<count($orderids);$i++)
+    	{
+    		$orderdata = $order->where("orderid = '".$orderids[$i]."'")->find();
+    		if(count($orderdata))
+    		{
+    			$order->where("orderid='".$orderdata[OrderConst::ORDERID]."'")->setField("orderstatus",2);
+    			if(intval($orderdata[OrderConst::BAG_ID])>0&&intval($orderdata[OrderConst::BAG_AMOUNT])>0)
+    			{
+    				$order->where("orderid='".$orderdata[OrderConst::ORDERID]."'")->setField("bag_id",0);
+    				$order->where("orderid='".$orderdata[OrderConst::ORDERID]."'")->setField("bag_amount",0);
+    				$bag->where("id=".$orderdata[OrderConst::BAG_ID])->setField("used",0);
+    			}
+    			
+    			$url = U("WeixinqueueApi/cancelorder/", '', '', true);
+    			$params = [
+    					"orderid" => $orderdata[OrderConst::ORDERID]
+    					];
+    			$this->curl_request_async($url, $params);
+    			
+    		}
+    	}
+        
+    }
+    
    
     private function getDistance($lat1, $lng1, $lat2, $lng2)
     {
