@@ -29,4 +29,5 @@ class OrderConst
     const COUNT = 10;
     const BAG_ID = 'bag_id';
     const BAG_AMOUNT = 'bag_amount';
+    const CONFIRM_TIME = 'confirm_time';
 }

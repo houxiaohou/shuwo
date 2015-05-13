@@ -8,6 +8,7 @@ require_once 'Authorize.php';
 require_once 'UserConst.php';
 require_once 'OrderConst.php';
 require_once 'Weixin.php';
+
 class BagApiController extends RestController
 {
     /**
@@ -33,6 +34,39 @@ class BagApiController extends RestController
         if ($userInfo) {
             for ($i = 0; $i < count($userInfo); $i++) {
                 array_push($users, $this->bagUser($userInfo[$i]['user_id']));
+            }
+        }
+        $this->response($users, 'json');
+    }
+
+    /**
+     * 根据可用红包数量列出用户
+     */
+    public function listAllBagUsersByAdminByAvailable()
+    {
+        $authorize = new Authorize ();
+        $isAdmin = $authorize->Filter('admin');
+        if (!$isAdmin) {
+            $message ["msg"] = "Unauthorized";
+            $this->response($message, 'json', '401');
+            return;
+        }
+        $num = intval(I('get.num'));
+        $start = intval(I('get.start', 0));
+        $count = intval(I('get.count', 10));
+
+        if ($num == 0) {
+            $sql = 'select userid as user_id from user where userid not in (select user_id from bag where ((used = 0 and to_days(expires) >= to_days(now())) or (used = 0 and isever = 1)) group by user_id having count(*) > 0) order by user_id desc limit ' . $start . ', ' . $count . ';';
+        } else {
+            // 筛选可用红包大于0
+            $sql = 'select user_id from bag where ((used = 0 and to_days(expires) >= to_days(now())) or (used = 0 and isever = 1)) group by user_id having count(*) = ' . $num . ' order by user_id desc limit ' . $start . ', ' . $count . ';';
+        }
+        $dao = M();
+        $users = [];
+        $userIds = $dao->query($sql);
+        if ($userIds) {
+            for ($i = 0; $i < count($userIds); $i++) {
+                array_push($users, $this->bagUser($userIds[$i]['user_id']));
             }
         }
         $this->response($users, 'json');
@@ -89,7 +123,7 @@ class BagApiController extends RestController
      */
     private function countUserAvailableBagNum($userId)
     {
-        $sql = 'select count(*) as count from bag where used = 0 and to_days(expires) >= to_days(now()) and user_id = ' . $userId;
+        $sql = 'select count(*) as count from bag where ((used = 0 and to_days(expires) >= to_days(now())) or (used = 0 and isever = 1)) and user_id = ' . $userId;
         $dao = M();
         $data = $dao->query($sql);
         return $data[0]['count'];
@@ -238,7 +272,9 @@ class BagApiController extends RestController
         $this->response($data, 'json');
     }
 
-
+    /**
+     * 给用户发红包
+     */
     public function sendbagtouser()
     {
         $post = "post.";
@@ -264,45 +300,43 @@ class BagApiController extends RestController
                 $bagitem [BagConst::ISAOUT] = 0;
                 $bagid = $bag->add($bagitem);
                 if (intval($bagid)) {
-                	$user= M('user');
-                	$userinfo = $user->where("userid=".$userids[$i])->find();
-                	$baginfo = $bag->where("id=".$bagid)->find();
-                	if(count($userinfo) && count($userinfo) && !empty($userinfo['openid']))
-                	{
-                		$start =  date('Y-m-d',strtotime($baginfo[BagConst::START]));
-                		$expire =  date('Y-m-d',strtotime($baginfo[BagConst::EXPIRES]));
-                		$content = '恭喜您获得'.$baginfo[BagConst::AMOUNT].'元红包，可使用日期'.$start.'至'.$expire;
-                			
-                		$template = array (
-                				'touser' => $userinfo['openid'],
-                				'template_id' =>'NjDObh6wXHfh4scgh29gxtmao5dYu-dtGEvR2sDk_-8',
-                				'url' => "http://www.shuwow.com/Home/Index/index/#/bag",
-                				'data' => array (
-                						'first' => array (
-                								'value' => urlencode ($content),
-                								'color' => "#FF0000"
-                						),
-                						'orderTicketStore' => array (
-                								'value' => urlencode ( "树窝水果商城购买水果" ),
-                								'color' => "#009900"
-                						),
-                						'orderTicketRule' => array (
-                								'value' => urlencode ("外送订单即可使用红包"),
-                								'color' => "#009900"
-                						),
-                						'remark' => array (
-                								'value' => urlencode ( "\\n信息来自树窝小店" ),
-                								'color' => "#cccccc"
-                						)
-                				)
-                		);
-                		$weixin = new Weixin ();
-                		$token = $weixin->getusersGlobalAccessToken();
-                		$weixin->sendtemplatemsg ( urldecode ( json_encode ( $template ) ), $token );
-                	} 
-                	
-                	
-                	
+                    $user = M('user');
+                    $userinfo = $user->where("userid=" . $userids[$i])->find();
+                    $baginfo = $bag->where("id=" . $bagid)->find();
+                    if (count($userinfo) && count($userinfo) && !empty($userinfo['openid'])) {
+                        $start = date('Y-m-d', strtotime($baginfo[BagConst::START]));
+                        $expire = date('Y-m-d', strtotime($baginfo[BagConst::EXPIRES]));
+                        $content = '恭喜您获得' . $baginfo[BagConst::AMOUNT] . '元红包，可使用日期' . $start . '至' . $expire;
+
+                        $template = array(
+                            'touser' => $userinfo['openid'],
+                            'template_id' => 'NjDObh6wXHfh4scgh29gxtmao5dYu-dtGEvR2sDk_-8',
+                            'url' => "http://www.shuwow.com/Home/Index/index/#/bag",
+                            'data' => array(
+                                'first' => array(
+                                    'value' => urlencode($content),
+                                    'color' => "#FF0000"
+                                ),
+                                'orderTicketStore' => array(
+                                    'value' => urlencode("树窝水果商城购买水果"),
+                                    'color' => "#009900"
+                                ),
+                                'orderTicketRule' => array(
+                                    'value' => urlencode("外送订单即可使用红包"),
+                                    'color' => "#009900"
+                                ),
+                                'remark' => array(
+                                    'value' => urlencode("\\n信息来自树窝小店"),
+                                    'color' => "#cccccc"
+                                )
+                            )
+                        );
+                        $weixin = new Weixin ();
+                        $token = $weixin->getusersGlobalAccessToken();
+                        $weixin->sendtemplatemsg(urldecode(json_encode($template)), $token);
+                    }
+
+
                 } else {
                     $this->response("error", json);
                 }
