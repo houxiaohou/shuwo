@@ -694,9 +694,10 @@ class OrderApiController extends RestController
                                     'value' => urlencode($totalprice),
                                     'color' => "#009900"
                                 ),
+                              
                                 'remark' => array(
-                                    'value' => urlencode("\\n信息来自树窝小店"),
-                                    'color' => "#cccccc"
+                                    'value' => urlencode("您有任何疑问都可以拨打树窝热线：400-960-9670 \\n信息来自树窝小店"),
+                                    'color' => "#666666"
                                 )
                             )
                         );
