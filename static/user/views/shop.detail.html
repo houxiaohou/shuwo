@@ -39,14 +39,14 @@
       <div class="row">
         <div class="col-xs-4" ng-repeat="p in products" ng-click="productCart(p);">
           <div class="well item text-center">
-            <div class="imgae">
-              <img ng-src="{{p.pimgurl}}" alt="" width="100%"/>
+            <div class="image">
+              <img ng-src="{{p.pimgurl}}?imageView2/1/w/180/h/180" width="100%"/>
             </div>
             <div class="info">
               <p class="name">{{p.productname}}</p>
               <p class="description">{{p.description}}</p>
               <p class="color-red">{{p.discount}}/{{p.unit}}</p>
-              <p class="text-small text-grey" ng-show="p.attribute==1&&p.unitweight<1000">(约{{p.unitweight | unitnum}}个)</p>
+              <p class="unit-weight text-small text-grey"><span ng-show="p.attribute==1">(每个约{{p.unitweight}}g)</span></p>
             </div>
             <div class="mask text-center" ng-show="cart.isInCart(p);">
               <i class="fa fa-check"></i>

@@ -17,6 +17,8 @@
           <p>订单状态：<span ng-class="{'color-green': o.orderstatus==1, 'color-red': o.orderstatus==0}">{{o.orderstatus | orderStatus}}</span></p>
           <p>订单编号：{{o.orderid}}</p>
           <p>订单日期：{{o.createdtime}}</p>
+          <p>店铺名称：{{shops[o.shopid].spn}}</p>
+          <p>店铺电话：<a ng-href="tel:{{shops[o.shopid].phone}}" class="tel">{{shops[o.shopid].phone}}（点击拨打）</a></p>
         </div>
         <div class="row text-center price">
           <div class="col-xs-12">

@@ -31,15 +31,15 @@
     <div class="container-fluid item-container">
       <ul class="list-group">
         <li class="list-group-item row" ng-repeat="i in items">
-          <div class="col-xs-4 text-center">
+          <div class="col-xs-4">
             <p class="name">{{i.name}}</p>
           </div>
-          <div class="col-xs-4 text-center">
+          <div class="col-xs-4">
             <p class="text-small color-red" ng-if="i.attribute=='1'">{{i.num}}个<small class="color-grey">（约{{i.weight | weight}}）</small></p>
             <p class="color-red" ng-if="i.attribute=='2'">{{i.weight | weight}}</p>
             <p class="color-red" ng-if="i.attribute=='3'">{{i.num}}{{i.unit}}</p>
           </div>
-          <div class="col-xs-4 text-center">
+          <div class="col-xs-4">
             <p class="color-red" ng-if="i.attribute=='1'">约{{i.price | number:2}}元</p>
             <p class="color-red" ng-if="i.attribute=='2' || i.attribute=='3'">{{i.price | number:2}}元</p>
           </div>

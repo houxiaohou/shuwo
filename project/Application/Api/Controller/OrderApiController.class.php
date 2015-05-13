@@ -806,7 +806,7 @@ class OrderApiController extends RestController
             {
             	if ($order->where("orderid = '" . $orderid . "' AND userid=" . $auid)->setField("orderstatus", 3) !== false) {
                     // 设置确认收货时间
-                    $order->query("update orders set confirm_time = now() where orderid = '". $orderid ."' and userid = " . $auid);
+                    $order->execute("update orders set confirm_time = now() where orderid = '". $orderid ."' and userid = " . $auid);
                     //加入送红包
             	    $userid = $orderdata[OrderConst::USERID];
             		$bagcount = $bags->where("user_id = ".$userid.' and isauto=1')->select();
@@ -838,7 +838,7 @@ class OrderApiController extends RestController
             		$data = $orderid;
             	}
             }
-            $this->response($url, "json");
+            $this->response($data, "json");
         } else {
             $message ["msg"] = "Unauthorized";
             $this->response($message, 'json', '401');
