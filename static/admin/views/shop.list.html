@@ -10,6 +10,7 @@
           <thead>
           <tr role="row">
             <th>id</th>
+            <th>授权码</th>
             <th>店铺logo</th>
             <th>店铺名称</th>
             <th>店铺地址</th>
@@ -22,6 +23,7 @@
           <tbody>
           <tr role="row" ng-class-odd="'odd'" ng-class-even="'even'" ng-repeat="s in shopes">
             <td>{{s.shopid}}</td>
+            <td>{{s.shopsn}}</td>
             <td>
               <img ng-src="{{s.simgurl}}" alt="" ng-show="s.simgurl.length>0" width="60"/>
             </td>

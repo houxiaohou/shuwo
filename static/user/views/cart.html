@@ -23,7 +23,9 @@
             <div class="col-xs-11 info">
               <img ng-src="{{i.product.pimgurl}}?imageView2/1/w/120/h/120" alt="" width="60"/>
               <div class="op">
-                <p class="name">{{i.product.productname}} <small>x {{i.num}}</small> </p>
+                <p class="name" ng-if="i.product.attribute=='1'">{{i.product.productname}}<small>x{{i.num}}个</small></p>
+                <p class="name" ng-if="i.product.attribute=='2'">{{i.product.productname}}</p>
+                <p class="name" ng-if="i.product.attribute=='3'">{{i.product.productname}}<small>x{{i.num}}{{i.unit}}</small></p>
                 <div class="number">
                   <i class="fa fa-minus-circle" ng-click="minus(i);"></i>
                   <span>{{i.num}}</span>
