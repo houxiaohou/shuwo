@@ -117,7 +117,7 @@ class wechatcallback {
 									$dis_discount = 0;	
 									$dis_yest_discount = 0;
 									$dis_delivery_discount = count($deliveryoders)*5;
-									$dis_yest_delivery_discount = count($dis_yest_discount)*5;
+									$dis_yest_delivery_discount = count($deliveryoders_yest)*5;
 									foreach ( $discount as $dis ) {
 										$dis_discount += $dis ['discount'];
 									}

@@ -477,12 +477,16 @@ class OrderApiController extends RestController
 
             if(intval($data[OrderConst::BAG_AMOUNT])>0 && intval($data[OrderConst::BAG_ID])>0)
             {
-            	if($data [OrderConst::ISDELIVERY] == 0 && $data [OrderConst::ISPICKUP] == $bagType)
+            	if($data [OrderConst::ISPICKUP] == $bagType)
             	{
-            		$bagDao->where("id=".$data[OrderConst::BAG_ID])->setField("used",1);
+            		if($data [OrderConst::ISDELIVERY] == 0)
+            		{
+            			$bagDao->where("id=".$data[OrderConst::BAG_ID])->setField("used",1);
+            		}
+            		$totalprice -= intval($data[OrderConst::BAG_AMOUNT]);
+            		$data [OrderConst::DISCOUNT] = $data[OrderConst::BAG_AMOUNT];
             	}
-            	$totalprice -= intval($data[OrderConst::BAG_AMOUNT]);
-            	$data [OrderConst::DISCOUNT] = $data[OrderConst::BAG_AMOUNT];
+
             }
 
 
@@ -732,7 +736,16 @@ class OrderApiController extends RestController
         }
         if ($id) {
             if ($order->where("orderid=" . $id)->setField("orderstatus", 2) && $order->where("orderid=" . $id)->setField("ordernotes", $ordernotes)) {
-                $userid = $order->where("orderid=" . $id)->getField("userid");
+                $bagid = $order->where("orderid=" . $id)->getField("bag_id");
+                if(intval($bagid)>0)
+                {
+                	 $bag = M('bag');
+                	 $bag->where('id='.$bagid)->setField('used',0);
+                	 $order->where("orderid=" . $id)->setField("bag_id", 0);
+                	 $order->where("orderid=" . $id)->setField("bag_amount", 0);
+                }
+            	
+            	$userid = $order->where("orderid=" . $id)->getField("userid");
                 if (intval($userid)) {
                     $user = M("user");
                     $phone = '暂无';
