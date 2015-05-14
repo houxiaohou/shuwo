@@ -344,7 +344,10 @@ class OrderApiController extends RestController
             } else {
                 $data [OrderConst::ISFIRST] = 1;
             }
-
+            
+                $currentdatetime = date('Y-m-d H:i:s',time());
+                $data[OrderConst::CONFIRM_TIME] = $currentdatetime;
+                $data[OrderConst::USER_CONFIRM_TIME] = $currentdatetime;
 
             $data [OrderConst::SHOPID] = I('post.shopid');
             $where_shop [ShopConst::SHOPID] = $data [OrderConst::SHOPID];
@@ -670,7 +673,10 @@ class OrderApiController extends RestController
         $order->where($where4)->setField('rtotalprice', $rtotalprice);
         // 将订单状态由0变成1(订单确认)
         if ($order->where($where4)->setField('orderstatus', 1)) {
-            $userid = $order->where($where4)->getField("userid");
+        	$currentdate = date('Y-m-d H:i:s',time());
+        	$order->where($where4)->setField("confirm_time",$currentdate);
+        	
+        	$userid = $order->where($where4)->getField("userid");
             if (intval($userid)) {
                 $user = M("user");
                 $userinfo = $user->where('userid=' . $userid)->find();
@@ -736,7 +742,10 @@ class OrderApiController extends RestController
         }
         if ($id) {
             if ($order->where("orderid=" . $id)->setField("orderstatus", 2) && $order->where("orderid=" . $id)->setField("ordernotes", $ordernotes)) {
-                $bagid = $order->where("orderid=" . $id)->getField("bag_id");
+            	$currentdate = date('Y-m-d H:i:s',time());
+            	$order->where("orderid=" . $id)->setField("confirm_time",$currentdate);
+            	
+            	$bagid = $order->where("orderid=" . $id)->getField("bag_id");
                 if(intval($bagid)>0)
                 {
                 	 $bag = M('bag');
@@ -818,6 +827,9 @@ class OrderApiController extends RestController
             if(count($orderdata))
             {
             	if ($order->where("orderid = '" . $orderid . "' AND userid=" . $auid)->setField("orderstatus", 3) !== false) {
+            		$currentdate = date('Y-m-d H:i:s',time());
+            		$order->where("orderid=" . $orderid)->setField("user_confirm_time",$currentdate);
+                    
                     // 设置确认收货时间
                     $order->execute("update orders set confirm_time = now() where orderid = '". $orderid ."' and userid = " . $auid);
                     //加入送红包
