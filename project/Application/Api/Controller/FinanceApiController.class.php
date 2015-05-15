@@ -25,9 +25,9 @@ class FinanceApiController extends RestController
         $date = intval(I('get.date'));
 
         $date = date('Y-m-d', $date / 1000);
-
         $shops = M('shop')->order('shopid desc')->select();
         $totals = 0;
+        $data1 = [];
         $results = [];
         for ($i = 0; $i < count($shops); $i++) {
             $shopid = $shops[$i][ShopConst::SHOPID];
@@ -55,8 +55,9 @@ class FinanceApiController extends RestController
 
             array_push($results, $d);
         }
-        $results["totals"] = $totals;
-        $this->response($results, 'json');
+        $data1['shops'] = $results;
+        $data1['totals'] = $totals;
+        $this->response($data1, 'json');
     }
 
 }
