@@ -27,7 +27,7 @@ class FinanceApiController extends RestController
         $date = date('Y-m-d', $date / 1000);
 
         $shops = M('shop')->order('shopid desc')->select();
-
+        $totals = 0;
         $results = [];
         for ($i = 0; $i < count($shops); $i++) {
             $shopid = $shops[$i][ShopConst::SHOPID];
@@ -41,6 +41,7 @@ class FinanceApiController extends RestController
             $data = M('orders')->query($sql);
             $d['total_num'] = $data[0]['total'];
             $d['discount'] = $data[0]['discount'];
+            $totals += $d['discount'];
 
             // 红包补贴数目
             $sql = 'select count(*) as total from orders where shopid = ' . $shopid . ' and orderstatus = 3 and to_days(createdtime) = to_days("' . $date . '") and bag_id > 0';
@@ -54,6 +55,7 @@ class FinanceApiController extends RestController
 
             array_push($results, $d);
         }
+        $results["totals"] = $totals;
         $this->response($results, 'json');
     }
 

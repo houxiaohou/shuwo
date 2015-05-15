@@ -24,4 +24,5 @@ class ShopConst
 	const DISCOUNT = 'discount';
 	const ISBAG  ='isbag';
 	const DISTANCE = 'adistance'; // 反刷单距离
+	const POSTAGE = 'postage';
 }

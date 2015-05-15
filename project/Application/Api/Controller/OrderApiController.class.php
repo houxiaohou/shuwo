@@ -356,6 +356,10 @@ class OrderApiController extends RestController
             $shoplat = $shopdetail[ShopConst::LATITUDE];
             $shoplng = $shopdetail[ShopConst::LONGITUDE];
             $shopdistance = $shopdetail[ShopConst::DISTANCE];
+            $shoppostage = $shopdetail[ShopConst::POSTAGE];
+            $shopdlprice = $shopdetail[ShopConst::DELIVERYPRICE];
+            
+            $data[OrderConst::POSTAGE] =$shoppostage;
 
             // 根据传过来的bag_id查询bag是否可用，如果bag不可用，返回success=0，error='bag_unavailable'
             $bagId = intval(I($poststr.OrderConst::BAG_ID));
@@ -476,7 +480,16 @@ class OrderApiController extends RestController
                 $data1 [OrderProductConst::REALPRICE] = $productprice;
                 $orderproduct->add($data1);
             }
+            
+            
+            
+            
             $data [OrderConst::TOTALPRICEBEFORE] = $totalprice;
+            
+            if ($totalprice < intval($shopdlprice) && intval($shoppostage) >0)
+            {
+            	$totalprice += $shoppostage;
+            }
 
             if(intval($data[OrderConst::BAG_AMOUNT])>0 && intval($data[OrderConst::BAG_ID])>0)
             {
@@ -663,6 +676,11 @@ class OrderApiController extends RestController
             	$rtotalprice -= intval($orderData[OrderConst::BAG_AMOUNT]);
             }
 
+        }
+        
+        if(intval($orderData[OrderConst::POSTAGE]>0))
+        {
+        	$rtotalprice +=intval($orderData[OrderConst::POSTAGE]);
         }
 
 

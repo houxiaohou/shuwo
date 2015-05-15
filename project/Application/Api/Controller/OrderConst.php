@@ -31,4 +31,5 @@ class OrderConst
     const BAG_AMOUNT = 'bag_amount';
     const CONFIRM_TIME = 'confirm_time';
     const USER_CONFIRM_TIME = 'user_confirm_time';
+    const POSTAGE = 'postage';
 }
