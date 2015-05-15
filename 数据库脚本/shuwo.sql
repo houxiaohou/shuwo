@@ -10,13 +10,13 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-05-15 14:12:22
+Date: 2015-05-15 14:45:59
 */
 
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
--- Table structure for `admin`
+-- Table structure for admin
 -- ----------------------------
 DROP TABLE IF EXISTS `admin`;
 CREATE TABLE `admin` (
@@ -32,7 +32,7 @@ CREATE TABLE `admin` (
 INSERT INTO `admin` VALUES ('1', 'admin', 'f38292831df4b230cb982bd44d3e7bef');
 
 -- ----------------------------
--- Table structure for `bag`
+-- Table structure for bag
 -- ----------------------------
 DROP TABLE IF EXISTS `bag`;
 CREATE TABLE `bag` (
@@ -53,7 +53,7 @@ CREATE TABLE `bag` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `bd`
+-- Table structure for bd
 -- ----------------------------
 DROP TABLE IF EXISTS `bd`;
 CREATE TABLE `bd` (
@@ -79,7 +79,7 @@ CREATE TABLE `bd` (
 INSERT INTO `bd` VALUES ('1', '', 'dx', '', '', '0', '', '', '', '2015-03-18 16:09:11', '', '', '');
 
 -- ----------------------------
--- Table structure for `bdshop`
+-- Table structure for bdshop
 -- ----------------------------
 DROP TABLE IF EXISTS `bdshop`;
 CREATE TABLE `bdshop` (
@@ -94,7 +94,7 @@ CREATE TABLE `bdshop` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `category`
+-- Table structure for category
 -- ----------------------------
 DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
@@ -115,7 +115,7 @@ INSERT INTO `category` VALUES ('6', '其他');
 INSERT INTO `category` VALUES ('7', '蔬菜');
 
 -- ----------------------------
--- Table structure for `categorypic`
+-- Table structure for categorypic
 -- ----------------------------
 DROP TABLE IF EXISTS `categorypic`;
 CREATE TABLE `categorypic` (
@@ -134,7 +134,7 @@ INSERT INTO `categorypic` VALUES ('3', '1', 'adw', '是的');
 INSERT INTO `categorypic` VALUES ('4', '2', '阿斯达', '谁打我');
 
 -- ----------------------------
--- Table structure for `orderproduct`
+-- Table structure for orderproduct
 -- ----------------------------
 DROP TABLE IF EXISTS `orderproduct`;
 CREATE TABLE `orderproduct` (
@@ -173,7 +173,7 @@ INSERT INTO `orderproduct` VALUES ('20', '2015043056559999', '39', '12', '3000',
 INSERT INTO `orderproduct` VALUES ('21', '2015043056505357', '39', '5', '1250', '30.00');
 
 -- ----------------------------
--- Table structure for `orders`
+-- Table structure for orders
 -- ----------------------------
 DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (
@@ -219,7 +219,7 @@ INSERT INTO `orders` VALUES ('2015043098495055', '3', '1', '15', '0', '50.00', '
 INSERT INTO `orders` VALUES ('2015043099101999', '3', '1', '15', '0', '84.00', '南翔', '15821691728\r\n', '2015-04-30 01:27:25', '84.00', '立即送出', '', 'wang', '', '0', '0', '0', null, null, '0', '0', '0', '0', '0', '0', '0.0', '0', '0.0');
 
 -- ----------------------------
--- Table structure for `product`
+-- Table structure for product
 -- ----------------------------
 DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
@@ -272,7 +272,7 @@ INSERT INTO `product` VALUES ('48', '9', 'http://7u2out.com1.z0.glb.clouddn.com/
 INSERT INTO `product` VALUES ('49', '10', 'http://7u2out.com1.z0.glb.clouddn.com/o_19irdueod8rredt11no970fb19.jpg', '1', '0', '10.00', '10.00', '1', '1', '10', '10', '15');
 
 -- ----------------------------
--- Table structure for `shippingaddress`
+-- Table structure for shippingaddress
 -- ----------------------------
 DROP TABLE IF EXISTS `shippingaddress`;
 CREATE TABLE `shippingaddress` (
@@ -301,7 +301,7 @@ INSERT INTO `shippingaddress` VALUES ('11', '1', 'wang', '南翔', '上海', '�
 INSERT INTO `shippingaddress` VALUES ('12', '1', 'wang', '南翔', '上海', '上海', '南翔', '15821691728\r\n', '0');
 
 -- ----------------------------
--- Table structure for `shop`
+-- Table structure for shop
 -- ----------------------------
 DROP TABLE IF EXISTS `shop`;
 CREATE TABLE `shop` (
@@ -339,7 +339,7 @@ INSERT INTO `shop` VALUES ('16', 'wu16', '桃浦新村绿杨路76号', 'http://7
 INSERT INTO `shop` VALUES ('17', 'jh17', '南翔', '', '士大夫', '歹', '15502187076', '31.245581', '121.486749', 'wtw3u2pfwqmw', '上海', '嘉定', '上海', '你好', '15', '0', '0', '0', '0', '0', '0');
 
 -- ----------------------------
--- Table structure for `user`
+-- Table structure for user
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
@@ -368,7 +368,7 @@ INSERT INTO `user` VALUES ('1', 'uninonid', 'test', '', '', '0', '上海', '上�
 INSERT INTO `user` VALUES ('2', 'shopuninonid', 'testshop', '', '', '1', '上海', '上海', '中国', '2015-04-29 22:22:37', 'shopopenid', 'http://wx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46', '1', '15', '0');
 
 -- ----------------------------
--- Table structure for `weixinshop`
+-- Table structure for weixinshop
 -- ----------------------------
 DROP TABLE IF EXISTS `weixinshop`;
 CREATE TABLE `weixinshop` (
@@ -387,7 +387,7 @@ CREATE TABLE `weixinshop` (
 INSERT INTO `weixinshop` VALUES ('wx17a8c83f5b2f6540', '432fb4827de4de9c2038ebcd2c5f064a', 'dwSIoZz_eXHwp7NLK-xmy9A7Gi7l4e-0iimFySdT4xGFWyID5kBxyfcSNZlZe6MRENI0mrluYhNDs1rvjCzJvbY6O25HHUIvye3ZzZTMLMc', '', '1429089678', 'wxshop');
 
 -- ----------------------------
--- Table structure for `weixinuser`
+-- Table structure for weixinuser
 -- ----------------------------
 DROP TABLE IF EXISTS `weixinuser`;
 CREATE TABLE `weixinuser` (
@@ -406,7 +406,7 @@ CREATE TABLE `weixinuser` (
 INSERT INTO `weixinuser` VALUES ('wx17a029b44c383634', '0f0d1caf3e84edbf61fc28fecf0c74b9', 'YAQd1neQmMwaMGnOsLaY9PctCuHNXqUDL4ccD5J9QEO2y1ah2DsQnaVO5FjdctlaaqIBYdt3f9PwZBembC4eHvhLdOk2S30vIvJX6QDKKJk', '', '1430412242', 'wxuser');
 
 -- ----------------------------
--- Function structure for `GETDISTANCE`
+-- Function structure for GETDISTANCE
 -- ----------------------------
 DROP FUNCTION IF EXISTS `GETDISTANCE`;
 DELIMITER ;;
@@ -446,7 +446,7 @@ END
 DELIMITER ;
 
 -- ----------------------------
--- Function structure for `NewProc`
+-- Function structure for NewProc
 -- ----------------------------
 DROP FUNCTION IF EXISTS `NewProc`;
 DELIMITER ;;
