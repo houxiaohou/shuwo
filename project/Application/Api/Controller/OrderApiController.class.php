@@ -347,7 +347,6 @@ class OrderApiController extends RestController
             
                 $currentdatetime = date('Y-m-d H:i:s',time());
                 $data[OrderConst::CONFIRM_TIME] = $currentdatetime;
-                $data[OrderConst::USER_CONFIRM_TIME] = $currentdatetime;
 
             $data [OrderConst::SHOPID] = I('post.shopid');
             $where_shop [ShopConst::SHOPID] = $data [OrderConst::SHOPID];
@@ -846,10 +845,9 @@ class OrderApiController extends RestController
             {
             	if ($order->where("orderid = '" . $orderid . "' AND userid=" . $auid)->setField("orderstatus", 3) !== false) {
             		$currentdate = date('Y-m-d H:i:s',time());
-            		$order->where("orderid=" . $orderid)->setField("user_confirm_time",$currentdate);
-                    
+
                     // 设置确认收货时间
-                    $order->execute("update orders set confirm_time = now() where orderid = '". $orderid ."' and userid = " . $auid);
+                    $order->where("orderid=" . $orderid)->setField("user_confirm_time",$currentdate);
                     //加入送红包
             	    $userid = $orderdata[OrderConst::USERID];
             		$bagcount = $bags->where("user_id = ".$userid.' and isauto=1')->select();
@@ -962,6 +960,8 @@ class OrderApiController extends RestController
                 $data [$i] [OrderConst::DISTANCE] = $orderdata [$i] [OrderConst::DISTANCE];
                 $data [$i] [OrderConst::ISPICKUP] = $orderdata [$i] [OrderConst::ISPICKUP];
                 $data [$i] [OrderConst::ISDELIVERY] = $orderdata [$i] [OrderConst::ISDELIVERY];
+                $data [$i] [OrderConst::CONFIRM_TIME] = $orderdata [$i] [OrderConst::CONFIRM_TIME];
+                $data [$i] [OrderConst::USER_CONFIRM_TIME] = $orderdata [$i] [OrderConst::USER_CONFIRM_TIME];
 
                 if ($orderdata [$i] [OrderConst::RTOTALPRICE] >= 0 && $orderdata [$i] [OrderConst::ORDERSTATUS] == 1) {
                     $data [$i] ['price'] = $orderdata [$i] [OrderConst::RTOTALPRICE];
