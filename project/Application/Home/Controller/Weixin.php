@@ -141,7 +141,7 @@ class Weixin
     {
     	$accesstoken = $this->getusersGlobalAccessToken();
     	$url = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=".$accesstoken;
-    	$qrcode = '{"action_name": "QR_LIMIT_SCENE", "action_info": {"scene": {"scene_str": "123"}}}';
+    	$qrcode = '{"action_name": "QR_LIMIT_SCENE", "action_info": {"scene": {"scene_id": "123"}}}';
     	$result = $this->https_request($url,$qrcode,'POST');
     	$jsoninfo = json_decode($result,true);
     	return $jsoninfo["ticket"];
