@@ -160,6 +160,23 @@ class Weixin
 		}
 		return $data;
 	}
+	
+	public function getuserqrticket()
+	{
+		$accesstoken = $this->getusersGlobalAccessToken();
+		$url = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=".$accesstoken;
+		$qrcode = '{"action_name": "QR_LIMIT_SCENE", "action_info": {"scene": {"scene_id": 888}}}';
+		$result = $this->https_request($url,$qrcode,'POST');
+		$jsoninfo = json_decode($result,true);
+	    return $jsoninfo["ticket"];
+	}
+	
+    public  function getuserqrcode($ticket)
+    {
+    	$url  = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=".urlencode($ticket);
+    	return  $url;
+    }
+    
 	 
 	public function https_request($url, $data = null, $method = 'GET')
 	{

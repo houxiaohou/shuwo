@@ -137,6 +137,23 @@ class Weixin
 // 		return  $strjson;
 // 	}
 	
+    public function getuserqrticket()
+    {
+    	$accesstoken = $this->getusersGlobalAccessToken();
+    	$url = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=".$accesstoken;
+    	$qrcode = '{"action_name": "QR_LIMIT_SCENE", "action_info": {"scene": {"scene_str": "123"}}}';
+    	$result = $this->https_request($url,$qrcode,'POST');
+    	$jsoninfo = json_decode($result,true);
+    	return $jsoninfo["ticket"];
+    }
+    
+    public  function getuserqrcode($ticket)
+    {
+    	$url  = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=".urlencode($ticket);
+    	return  $url;
+    }
+    
+    
 	//通过code换取网页授权access_token和用户openid(微信auth2.0 受权)
 	public function getTokenWithCode($code){
 		if(!isset($code)){

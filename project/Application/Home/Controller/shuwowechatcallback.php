@@ -128,6 +128,9 @@ class shuwowechatcallback {
 				// case "SCAN":
 				// $content = "扫描场景 ".$object->EventKey;
 				// break;
+			case "scan" :
+					$content = "取消关注";
+					break;
 			case "CLICK" :
 				switch ($object->EventKey) {
 					case "introduction" :
