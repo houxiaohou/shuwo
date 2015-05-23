@@ -992,11 +992,7 @@ class OrderApiController extends RestController
                     $data_order_product [$j] ['unit'] = $productdata ['unit'];
                     $data_order_product [$j] ['attribute'] = $productdata ['attribute'];
                     $data_order_product [$j] ['unitweight'] = $productdata ['unitweight'];
-                    if (intval($data_order_product [$j] ['discount'])) {
-                        $data_order_product [$j] ['discount'] = $productdata ['discount'];
-                    } else {
-                        $data_order_product [$j] ['discount'] = $productdata ['price'];
-                    }
+                    $data_order_product [$j] ['discount'] = $productdata ['discount'];
                 }
             }
             $data [$i] ['productdetail'] = $data_order_product;
