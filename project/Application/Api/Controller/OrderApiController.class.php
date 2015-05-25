@@ -94,13 +94,14 @@ class OrderApiController extends RestController
                 $data [OrderConst::ISPICKUP] = $orderdata [OrderConst::ISPICKUP];
                 $data [OrderConst::ISDELIVERY] = $orderdata [OrderConst::ISDELIVERY];
 
-                if ($orderdata [OrderConst::RTOTALPRICE] >= 0 && $data [OrderConst::ORDERSTATUS] == 1) {
+                $status = intval($data [OrderConst::ORDERSTATUS]);
+                if ($orderdata [OrderConst::RTOTALPRICE] >= 0 && ($status == 1 || $status == 3)) {
                     $data ['price'] = $orderdata [OrderConst::RTOTALPRICE];
                 } else {
                     $data ['price'] = $orderdata [OrderConst::TOTALPRICE];
                 }
 
-                if ($orderdata [OrderConst::RTOTALPRICEBEFORE] >= 0 && $orderdata [OrderConst::ORDERSTATUS] == 1) {
+                if ($orderdata [OrderConst::RTOTALPRICEBEFORE] >= 0 && ($status == 1 || $status == 3)) {
                     $data ['beforeprice'] = $orderdata [OrderConst::RTOTALPRICEBEFORE];
                 } else {
                     $data ['beforeprice'] = $orderdata [OrderConst::TOTALPRICEBEFORE];
@@ -963,12 +964,13 @@ class OrderApiController extends RestController
                 $data [$i] [OrderConst::CONFIRM_TIME] = $orderdata [$i] [OrderConst::CONFIRM_TIME];
                 $data [$i] [OrderConst::USER_CONFIRM_TIME] = $orderdata [$i] [OrderConst::USER_CONFIRM_TIME];
 
-                if ($orderdata [$i] [OrderConst::RTOTALPRICE] >= 0 && $orderdata [$i] [OrderConst::ORDERSTATUS] == 1) {
+                $status = intval($orderdata [$i] [OrderConst::ORDERSTATUS]);
+                if ($orderdata [$i] [OrderConst::RTOTALPRICE] >= 0 && ($status == 1 || $status == 3)) {
                     $data [$i] ['price'] = $orderdata [$i] [OrderConst::RTOTALPRICE];
                 } else {
                     $data [$i] ['price'] = $orderdata [$i] [OrderConst::TOTALPRICE];
                 }
-                if ($orderdata [$i] [OrderConst::RTOTALPRICEBEFORE] >= 0 && $orderdata [$i] [OrderConst::ORDERSTATUS] == 1) {
+                if ($orderdata [$i] [OrderConst::RTOTALPRICEBEFORE] >= 0 && ($status == 1 || $status == 3)) {
                     $data [$i] ['beforeprice'] = $orderdata [$i] [OrderConst::RTOTALPRICEBEFORE];
                 } else {
                     $data [$i] ['beforeprice'] = $orderdata [$i] [OrderConst::TOTALPRICEBEFORE];

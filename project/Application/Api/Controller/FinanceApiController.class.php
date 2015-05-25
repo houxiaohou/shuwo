@@ -37,27 +37,27 @@ class FinanceApiController extends RestController
             $d['contact'] = $shops[$i]['contacts'];
 
             // 总订单数，总补贴金额
-            $sql = 'select count(*) as total, COALESCE(sum(discount),0) as discount from orders where shopid = ' . $shopid . ' and orderstatus = 3 and to_days(createdtime) = to_days("' . $date . '")';
+            $sql = 'select count(*) as total, COALESCE(sum(discount),0) as discount from orders where shopid = ' . $shopid . ' and orderstatus = 3 and to_days(user_confirm_time) = to_days("' . $date . '")';
             $data = M('orders')->query($sql);
             $d['total_num'] = $data[0]['total'];
             $d['discount'] = $data[0]['discount'];
             $totals += $d['discount'];
 
             // 红包补贴数目
-            $sql = 'select count(*) as total from orders where shopid = ' . $shopid . ' and orderstatus = 3 and to_days(createdtime) = to_days("' . $date . '") and bag_id > 0';
+            $sql = 'select count(*) as total from orders where shopid = ' . $shopid . ' and orderstatus = 3 and to_days(user_confirm_time) = to_days("' . $date . '") and bag_id > 0';
             $data = M('orders')->query($sql);
             $d['discount_num'] = $data[0]['total'];
 
             // 外送单数
-            $sql = 'select count(*) as total from orders where shopid = ' . $shopid . ' and orderstatus = 3 and to_days(createdtime) = to_days("' . $date . '") and ispickup = 0';
+            $sql = 'select count(*) as total from orders where shopid = ' . $shopid . ' and orderstatus = 3 and to_days(user_confirm_time) = to_days("' . $date . '") and ispickup = 0';
             $data = M('orders')->query($sql);
             $d['pickup_num'] = $data[0]['total'];
 
             array_push($results, $d);
         }
-        $data1['shops'] = $results;
-        $data1['totals'] = $totals;
-        $this->response($data1, 'json');
+        //$data1['shops'] = $results;
+        //$data1['totals'] = $totals;
+        $this->response($results, 'json');
     }
 
 }
