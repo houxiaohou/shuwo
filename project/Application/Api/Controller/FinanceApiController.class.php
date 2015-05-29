@@ -55,9 +55,9 @@ class FinanceApiController extends RestController
 
             array_push($results, $d);
         }
-        //$data1['shops'] = $results;
-        //$data1['totals'] = $totals;
-        $this->response($results, 'json');
+        $data1['shops'] = $results;
+        $data1['totals'] = $totals;
+        $this->response($data1, 'json');
     }
 
 }
