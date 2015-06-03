@@ -108,6 +108,7 @@ return array(
         array('bags/search$', 'BagApi/queryBagsByPhone', '', array('method' => 'POST')),
         array('bags/all$', 'BagApi/listAllBagsByAdmin', '', array('method' => 'GET')),
         array('finance/shops', 'FinanceApi/shopFinance', '', array('method' => 'GET')),
+    	array('finance/jiuting', 'FinanceApi/jiutinguserFinance', '', array('method' => 'GET')),
         array('bag/bagUserCount', 'BagApi/listAllBagUsersByAdminByAvailableAndUsed', '', array('method' => 'GET')),
     )
 );

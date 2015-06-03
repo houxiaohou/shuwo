@@ -59,5 +59,24 @@ class FinanceApiController extends RestController
         $data1['totals'] = $totals;
         $this->response($data1, 'json');
     }
-
+     
+    //九亭用户关注统计
+    public function jiutinguserFinance()
+    {
+    	$authorize = new Authorize ();
+    	$isAdmin = $authorize->Filter('admin');
+    	if (!$isAdmin) {
+    		$message ["msg"] = "Unauthorized";
+    		$this->response($message, 'json', '401');
+    		return;
+    	}
+    	$sql = 'select user.userid,user.nickname,user.createdtime FROM user JOIN bag on user.userid = bag.user_id where bag.amount=2';
+    	$user = M('user');
+    	$data = $user->query($sql);
+    	if(!count($data))
+    	{
+    		$data = [];
+    	}
+    	$this->response($data,'json');
+    }
 }
