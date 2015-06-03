@@ -60,6 +60,7 @@ class shuwowechatcallback {
 		$content = "";
 		switch ($object->Event) {
 			case "subscribe" :
+				$content = "您来了，真好:)\n\n树窝是一个联系您和您身边优质水果店的平台。水果店里的所有水果您都可以在家里买到。点击菜单“我要下单”就能开始挑水果啦，每一份都是树窝为您精挑细选的优质水果~\n\n现在开始红包送不停，在家买水果更便宜。快来点击下方链接看看您获得了多少红包：\n http://www.shuwow.com/#/bag";
 				$openid = trim ( $object->FromUserName );
 				if (! empty ( $openid )) {
 					$user = M ( "user" );
@@ -99,21 +100,10 @@ class shuwowechatcallback {
 									$bagitem [BagConst::ISEVER] = 1;
 									$bagitem [BagConst::ISAUTO] = 1;
 									
-									$bagitem2 [BagConst::START] = $current;
-									$bagitem2 [BagConst::SHOP_ID] = 0;
-									$bagitem2 [BagConst::TYPE] = 1;
-									$bagitem2 [BagConst::EXPIRES] = $expirdate1;
-									$bagitem2 [BagConst::USED] = 0;
-									$bagitem2 [BagConst::AMOUNT] = 5;
-									$bagitem2 [BagConst::USER_ID] = $userid;
-									$bagitem2 [BagConst::ISEVER] = 1;
-									$bagitem2 [BagConst::ISAUTO] = 1;
-									
 									$bagid = $bags->add ( $bagitem );
-									$bagid2 = $bags->add ( $bagitem2 );
 									
-									if ($bagid && $bagid2) {
-										$content = "谢谢关注树窝水果，您已获得外送红包:" . $bagitem [BagConst::AMOUNT] . '元,可永久使用。外送红包' . $bagitem2 [BagConst::AMOUNT] . '元,可永久使用';
+									if ($bagid) {
+										$content = "谢谢关注树窝水果，您已获得外送红包:" . $bagitem [BagConst::AMOUNT] . '元,可永久使用。';
 									}
 								} else {
 									$bags = M ( "bag" );
@@ -155,17 +145,15 @@ class shuwowechatcallback {
 			case "unsubscribe" :
 				$content = "取消关注";
 				break;
-			// case "SCAN":
-			// $content = "扫描场景 ".$object->EventKey;
-			// break;
-			case "scan" :
+			case "SCAN" :
 				$eventkey = trim ( $object->EventKey );
-				$keys = explode ( "_", $eventkey );
-				if ($keys [1] == 123)
+				if ($eventkey == 123)
 				{
+					$content = "您来了，真好:) \n\n树窝是一个改变您生活方式的平台。您需要买什么，不用出门，树窝都能帮您买。\n\n无需运费，首次关注还有1毛钱就能买到的超值商品和树窝为你准备的优惠券。\n\n尽情享受宅在家的乐趣吧!";
 				}
 				else 
 				{
+                    $content = "您来了，真好:)\n\n树窝是一个联系您和您身边优质水果店的平台。水果店里的所有水果您都可以在家里买到。点击菜单“我要下单”就能开始挑水果啦，每一份都是树窝为您精挑细选的优质水果~\n\n现在开始红包送不停，在家买水果更便宜。快来点击下方链接看看您获得了多少红包：\n http://www.shuwow.com/#/bag";
 				}
 				break;
 			case "CLICK" :
