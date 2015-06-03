@@ -60,7 +60,6 @@ class shuwowechatcallback {
 		$content = "";
 		switch ($object->Event) {
 			case "subscribe" :
-				$content = "亲爱的，你来了，真好。树窝是周边水果外卖平台，在这里你可以浏览身边的水果商店并下单，我们以和店内同样价格为您精挑细选水果，并免费极速送达！现在开始红包送不停，下单就能用！快来点击下方看看你获得了多少红包 http://www.shuwow.com/#/bag 这是我们水果商城地址：http://www.shuwow.com/#/location 水果店里的水果您都可以在这里买到，足不出户享受健康生活~ ";
 				$openid = trim ( $object->FromUserName );
 				if (! empty ( $openid )) {
 					$user = M ( "user" );
@@ -160,7 +159,14 @@ class shuwowechatcallback {
 			// $content = "扫描场景 ".$object->EventKey;
 			// break;
 			case "scan" :
-				$content = "扫描" . $object->EventKey;
+				$eventkey = trim ( $object->EventKey );
+				$keys = explode ( "_", $eventkey );
+				if ($keys [1] == 123)
+				{
+				}
+				else 
+				{
+				}
 				break;
 			case "CLICK" :
 				switch ($object->EventKey) {
