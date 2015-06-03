@@ -103,7 +103,7 @@ class shuwowechatcallback {
 									$bagid = $bags->add ( $bagitem );
 									
 									if ($bagid) {
-										$content = "谢谢关注树窝水果，您已获得外送红包:" . $bagitem [BagConst::AMOUNT] . '元,可永久使用。';
+										$content = "您来了，真好:) \n\n树窝是一个改变您生活方式的平台。您需要买什么，不用出门，树窝都能帮您买。\n\n无需运费，首次关注还有1毛钱就能买到的超值商品和树窝为你准备的优惠券。\n\n尽情享受宅在家的乐趣吧!\n\n快来点击下方链接看看您获得了多少红包：\n http://www.shuwow.com/#/bag";
 									}
 								} else {
 									$bags = M ( "bag" );
