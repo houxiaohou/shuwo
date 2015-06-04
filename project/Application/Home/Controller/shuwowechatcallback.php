@@ -133,7 +133,7 @@ class shuwowechatcallback {
 									$bagid = $bags->add ( $bagitem );
 									$bagid2 = $bags->add ( $bagitem2 );
 									if ($bagid && $bagid2) {
-										$content = "谢谢关注树窝水果，您已获得外送红包:" . $bagitem [BagConst::AMOUNT] . '元,可永久使用。自提红包' . $bagitem2 [BagConst::AMOUNT] . '元,可永久使用';
+										$content = "您来了，真好:)\n\n树窝是一个联系您和您身边优质水果店的平台。水果店里的所有水果您都可以在家里买到。点击菜单“我要下单”就能开始挑水果啦，每一份都是树窝为您精挑细选的优质水果~\n\n现在开始红包送不停，在家买水果更便宜。快来点击下方链接看看您获得了多少红包：\n http://www.shuwow.com/#/bag";
 									}
 								}
 							}
