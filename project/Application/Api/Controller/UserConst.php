@@ -18,4 +18,5 @@ Class UserConst
 	const OPENID = "openid";
 	const ROLES = "roles";
 	const BLOCK = "block";
+	const USERTYPE = "usertype";
 }

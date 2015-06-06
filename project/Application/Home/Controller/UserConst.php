@@ -17,4 +17,6 @@ Class UserConst
 	const HEADIMGURL ="headimgurl";
 	const ROLES ="roles";
 	const SHOPID = "shopid";
+	const BLOCK = "block";
+	const USERTYPE = "usertype";
 }

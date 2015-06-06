@@ -841,42 +841,50 @@ class OrderApiController extends RestController
             $orderid = I($poststr . OrderConst::ORDERID);
             $order = M('orders');
             $bags = M("bag");
+            $user = M("user");
             $orderdata = $order->where("orderid=".$orderid)->find();
             if(count($orderdata))
             {
             	if ($order->where("orderid = '" . $orderid . "' AND userid=" . $auid)->setField("orderstatus", 3) !== false) {
+            		
+            		
             		$currentdate = date('Y-m-d H:i:s',time());
 
                     // 设置确认收货时间
                     $order->where("orderid=" . $orderid)->setField("user_confirm_time",$currentdate);
                     //加入送红包
             	    $userid = $orderdata[OrderConst::USERID];
-            		$bagcount = $bags->where("user_id = ".$userid.' and isauto=1')->select();
-            	    if (count($bagcount)<$totalbags)
+            	    $usertype = $user->where('userid='.$userid)->getField('usertype');
+            	    if(intval($usertype)!=1)
             	    {
-            	    	$current = date('Y-m-d',strtotime('+1 days'));
-            	    	$expirdate = date('Y-m-d',strtotime('+7 days'));
-            	    	$expirdate = $expirdate." 23:59:59";
-            	    	$bagitem[BagConst::START] =$current;
-            	    	$bagitem[BagConst::SHOP_ID] = $orderdata[Orderconst::SHOPID];
-            	    	$bagitem[BagConst::TYPE]=1;
-            	    	$bagitem[BagConst::EXPIRES]=$expirdate;
-            	    	$bagitem[BagConst::USED] = 0;
-            	    	$bagitem[BagConst::AMOUNT] = 5;
-            	    	$bagitem[BagConst::USER_ID]= $auid;
-            	    	$bagitem[BagConst::ISEVER] = 0;
-            	    	$bagitem[BagConst::ISAOUT]=1;
-            	    	$bagid = $bags->add($bagitem);
-            	    	if($bagid)
+            	    	$bagcount = $bags->where("user_id = ".$userid.' and isauto=1')->select();
+            	    	if (count($bagcount)<$totalbags)
             	    	{
-            	    		$url = U("WeixinqueueApi/sendbagtouser/", '', '', true);
-            	    		$params = [
-            	    				"userid" => $auid,
-            	    				"bagid" => $bagid
-            	    				];
-            	    		$this->curl_request_async($url, $params);
+            	    		$current = date('Y-m-d',strtotime('+1 days'));
+            	    		$expirdate = date('Y-m-d',strtotime('+7 days'));
+            	    		$expirdate = $expirdate." 23:59:59";
+            	    		$bagitem[BagConst::START] =$current;
+            	    		$bagitem[BagConst::SHOP_ID] = $orderdata[Orderconst::SHOPID];
+            	    		$bagitem[BagConst::TYPE]=1;
+            	    		$bagitem[BagConst::EXPIRES]=$expirdate;
+            	    		$bagitem[BagConst::USED] = 0;
+            	    		$bagitem[BagConst::AMOUNT] = 5;
+            	    		$bagitem[BagConst::USER_ID]= $auid;
+            	    		$bagitem[BagConst::ISEVER] = 0;
+            	    		$bagitem[BagConst::ISAOUT]=1;
+            	    		$bagid = $bags->add($bagitem);
+            	    		if($bagid)
+            	    		{
+            	    			$url = U("WeixinqueueApi/sendbagtouser/", '', '', true);
+            	    			$params = [
+            	    					"userid" => $auid,
+            	    					"bagid" => $bagid
+            	    					];
+            	    			$this->curl_request_async($url, $params);
+            	    		}
             	    	}
-            	  }
+            	    }
+
             		$data = $orderid;
             	}
             }
