@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50617
 File Encoding         : 65001
 
-Date: 2015-06-06 17:30:48
+Date: 2015-06-08 21:06:08
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -235,42 +235,43 @@ CREATE TABLE `product` (
   `categoryid` int(11) DEFAULT '0',
   `unit` varchar(255) DEFAULT '',
   `unitweight` int(6) DEFAULT '0',
-  `shopid` int(11) DEFAULT NULL,
+  `shopid` int(11) DEFAULT '0',
+  `weight` int(11) DEFAULT '0',
   PRIMARY KEY (`productid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of product
 -- ----------------------------
-INSERT INTO `product` VALUES ('1', '陕西红富士（大）', '', '1', '100', '5.80', '5.50', '1', '1', '个', '200', '1');
-INSERT INTO `product` VALUES ('2', '秦冠苹果\r\n\r\n', '', '1', '256', '5.20', '5.00', '1', '1', '个', '150', '1');
-INSERT INTO `product` VALUES ('3', '青苹果', '', '1', '198', '1.50', '1.20', '1', '1', '个', '150', '2');
-INSERT INTO `product` VALUES ('4', '嘎啦果', '', '1', '519', '2.50', '2.20', '1', '1', '个', '175', '2');
-INSERT INTO `product` VALUES ('5', '黄金帅苹果 ', '', '1', '520', '5.80', '5.20', '1', '1', '个', '164', '3');
-INSERT INTO `product` VALUES ('6', '雪梨', '', '1', '624', '2.80', '2.50', '1', '1', '个', '200', '4');
-INSERT INTO `product` VALUES ('7', '蜜梨（皇冠梨）', '', '1', '629', '2.00', '1.80', '1', '1', '个', '200', '4');
-INSERT INTO `product` VALUES ('8', '水晶梨1', '', '1', '263', '2.00', '1.80', '1', '1', '个', '182', '4');
-INSERT INTO `product` VALUES ('9', '芦柑', '', '1', '851', '5.80', '5.50', '4', '4', '根', '0', '3');
-INSERT INTO `product` VALUES ('11', '台湾橄榄', 'http://7u2out.com1.z0.glb.clouddn.com/o_19ih5sr4u1iuqsr398d16akalnu.bmp', '1', '8555', '15.00', '0.00', '3', '6', '盒', '0', '15');
-INSERT INTO `product` VALUES ('12', '砂糖桔', '', '1', '7415', '6.80', '6.20', '2', '6', '克', '50', '15');
-INSERT INTO `product` VALUES ('13', '测试', '', '1', '0', '50.00', '50.00', '1', '1', '个', '10', '15');
-INSERT INTO `product` VALUES ('33', '你好', '', '1', '0', '0.00', '0.00', '1', '1', '', '0', '0');
-INSERT INTO `product` VALUES ('34', '你好1', '', '1', '0', '0.00', '0.00', '1', '1', '', '0', '15');
-INSERT INTO `product` VALUES ('35', '到十分', '', '1', '0', '0.00', '0.00', '1', '1', '', '0', '15');
-INSERT INTO `product` VALUES ('36', '代购费', '', '1', '0', '0.00', '0.00', '1', '1', '', '0', '15');
-INSERT INTO `product` VALUES ('37', '发给', '', '1', '0', '0.00', '0.00', '1', '1', '', '0', '15');
-INSERT INTO `product` VALUES ('38', '梵蒂冈', '', '1', '0', '13.00', '21.00', '1', '1', '个', '50', '15');
-INSERT INTO `product` VALUES ('39', '你阿华', '', '1', '0', '15.00', '12.00', '2', '1', '个', '0', '15');
-INSERT INTO `product` VALUES ('40', '我去', '', '1', '0', '35.00', '34.00', '1', '1', '盒', '30', '15');
-INSERT INTO `product` VALUES ('41', '2', '', '0', '0', '2.00', '2.00', '1', '1', '3', '2', '15');
-INSERT INTO `product` VALUES ('42', '天然', '', '1', '0', '3.00', '1.00', '2', '4', '3', '0', '15');
-INSERT INTO `product` VALUES ('43', '2', '', '1', '0', '2.00', '12.00', '2', '1', '3', '0', '15');
-INSERT INTO `product` VALUES ('44', '3', '', '1', '0', '2.00', '2.00', '1', '1', '', '0', '15');
-INSERT INTO `product` VALUES ('45', '3', '', '1', '0', '2.00', '2.00', '1', '1', '2', '30', '15');
-INSERT INTO `product` VALUES ('46', '2', '', '1', '0', '50.00', '20.00', '1', '2', '个', '20', '15');
-INSERT INTO `product` VALUES ('47', '8', '', '1', '0', '8.00', '8.00', '1', '1', '8', '8', '15');
-INSERT INTO `product` VALUES ('48', '9', 'http://7u2out.com1.z0.glb.clouddn.com/o_19irds4ta11391v9422j12qeu1sn.jpg', '1', '0', '9.00', '9.00', '1', '1', '9', '9', '15');
-INSERT INTO `product` VALUES ('49', '10', 'http://7u2out.com1.z0.glb.clouddn.com/o_19irdueod8rredt11no970fb19.jpg', '1', '0', '10.00', '10.00', '1', '1', '10', '10', '15');
+INSERT INTO `product` VALUES ('1', '陕西红富士（大）', '', '1', '100', '5.80', '5.50', '1', '1', '个', '200', '1', '0');
+INSERT INTO `product` VALUES ('2', '秦冠苹果\r\n\r\n', '', '1', '256', '5.20', '5.00', '1', '1', '个', '150', '1', '0');
+INSERT INTO `product` VALUES ('3', '青苹果', '', '1', '198', '1.50', '1.20', '1', '1', '个', '150', '2', '0');
+INSERT INTO `product` VALUES ('4', '嘎啦果', '', '1', '519', '2.50', '2.20', '1', '1', '个', '175', '2', '0');
+INSERT INTO `product` VALUES ('5', '黄金帅苹果 ', '', '1', '520', '5.80', '5.20', '1', '1', '个', '164', '3', '0');
+INSERT INTO `product` VALUES ('6', '雪梨', '', '1', '624', '2.80', '2.50', '1', '1', '个', '200', '4', '0');
+INSERT INTO `product` VALUES ('7', '蜜梨（皇冠梨）', '', '1', '629', '2.00', '1.80', '1', '1', '个', '200', '4', '0');
+INSERT INTO `product` VALUES ('8', '水晶梨1', '', '1', '263', '2.00', '1.80', '1', '1', '个', '182', '4', '0');
+INSERT INTO `product` VALUES ('9', '芦柑', '', '1', '851', '5.80', '5.50', '4', '4', '根', '0', '3', '0');
+INSERT INTO `product` VALUES ('11', '台湾橄榄', 'http://7u2out.com1.z0.glb.clouddn.com/o_19ih5sr4u1iuqsr398d16akalnu.bmp', '1', '8555', '15.00', '0.00', '3', '6', '盒', '0', '15', '0');
+INSERT INTO `product` VALUES ('12', '砂糖桔', '', '1', '7415', '6.80', '6.20', '2', '6', '克', '50', '15', '0');
+INSERT INTO `product` VALUES ('13', '测试', '', '1', '0', '50.00', '50.00', '1', '1', '个', '10', '15', '0');
+INSERT INTO `product` VALUES ('33', '你好', '', '1', '0', '0.00', '0.00', '1', '1', '', '0', '0', '0');
+INSERT INTO `product` VALUES ('34', '你好1', '', '1', '0', '0.00', '0.00', '1', '1', '', '0', '15', '0');
+INSERT INTO `product` VALUES ('35', '到十分', '', '1', '0', '0.00', '0.00', '1', '1', '', '0', '15', '0');
+INSERT INTO `product` VALUES ('36', '代购费', '', '1', '0', '0.00', '0.00', '1', '1', '', '0', '15', '0');
+INSERT INTO `product` VALUES ('37', '发给', '', '1', '0', '0.00', '0.00', '1', '1', '', '0', '15', '0');
+INSERT INTO `product` VALUES ('38', '梵蒂冈', '', '1', '0', '13.00', '21.00', '1', '1', '个', '50', '15', '0');
+INSERT INTO `product` VALUES ('39', '你阿华', '', '1', '0', '15.00', '12.00', '2', '1', '个', '0', '15', '0');
+INSERT INTO `product` VALUES ('40', '我去', '', '1', '0', '35.00', '34.00', '1', '1', '盒', '30', '15', '0');
+INSERT INTO `product` VALUES ('41', '2', '', '0', '0', '2.00', '2.00', '1', '1', '3', '2', '15', '0');
+INSERT INTO `product` VALUES ('42', '天然', '', '1', '0', '3.00', '1.00', '2', '4', '3', '0', '15', '0');
+INSERT INTO `product` VALUES ('43', '2', '', '1', '0', '2.00', '12.00', '2', '1', '3', '0', '15', '0');
+INSERT INTO `product` VALUES ('44', '3', '', '1', '0', '2.00', '2.00', '1', '1', '', '0', '15', '0');
+INSERT INTO `product` VALUES ('45', '3', '', '1', '0', '2.00', '2.00', '1', '1', '2', '30', '15', '0');
+INSERT INTO `product` VALUES ('46', '2', '', '1', '0', '50.00', '20.00', '1', '2', '个', '20', '15', '0');
+INSERT INTO `product` VALUES ('47', '8', '', '1', '0', '8.00', '8.00', '1', '1', '8', '8', '15', '0');
+INSERT INTO `product` VALUES ('48', '9', 'http://7u2out.com1.z0.glb.clouddn.com/o_19irds4ta11391v9422j12qeu1sn.jpg', '1', '0', '9.00', '9.00', '1', '1', '9', '9', '15', '0');
+INSERT INTO `product` VALUES ('49', '10', 'http://7u2out.com1.z0.glb.clouddn.com/o_19irdueod8rredt11no970fb19.jpg', '1', '0', '10.00', '10.00', '1', '1', '10', '10', '15', '0');
 
 -- ----------------------------
 -- Table structure for `shippingaddress`
