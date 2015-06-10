@@ -15,4 +15,5 @@ class ProductConst
 	const UNIT = 'unit';
 	const UNITWEIGHT = 'unitweight';
 	const SHOPID ="shopid";
+    const WEIGHT = 'weight'; # 产品排序
 }

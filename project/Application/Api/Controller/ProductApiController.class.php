@@ -13,7 +13,7 @@ class ProductApiController extends RestController {
 		$authorize = new Authorize ();
 		if ($authorize->Filter ( "admin" )) {
 			$products = M ( 'product' );
-			$data = $products->select ();
+			$data = $products->order('weight desc')->select ();
 			if (! count ( $data )) {
 				$data = [ ];
 			}
@@ -173,6 +173,9 @@ class ProductApiController extends RestController {
 				if (I ( 'post.categoryid' ) != null) {
 					$data [ProductConst::CATEGORYID] = I ( 'post.categoryid' );
 				}
+                if (I ( 'post.weight' ) != null) {
+                    $data [ProductConst::WEIGHT] = I ( 'post.weight' );
+                }
 				if (I ( 'post.unit' ) != null) {
 					$data [ProductConst::UNIT] = I('post.unit');
 			}

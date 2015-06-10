@@ -25,4 +25,5 @@ class ShopConst
 	const ISBAG  ='isbag';
 	const DISTANCE = 'adistance'; // 反刷单距离
 	const POSTAGE = 'postage';
+    const WEIGHT = 'weight'; // 店铺排序，越大越靠前
 }
